@@ -7,6 +7,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-layout',
@@ -18,6 +19,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     MatSidenavModule,
     MatListModule,
     MatIconModule,
+    RouterOutlet,
   ],
 })
 export class LayoutComponent {
