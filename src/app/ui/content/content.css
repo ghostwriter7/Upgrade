@@ -1,0 +1,7 @@
+.content {
+  width: min(95vw, 1200px);
+  padding: 12px;
+  overflow-x: hidden;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
