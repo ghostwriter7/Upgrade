@@ -2,8 +2,11 @@ import { isSkill, Skill } from '../model/skill.model';
 import { createUuid } from '../../common/function/create-uuid.function';
 
 export class SkillFactory {
-  public static createNew(name: string, description: string | null = null): Skill {
-    return new Skill(createUuid(), name, description, new Date().toISOString(), null);
+  public static createNew(name: string,
+                          description: string | null,
+                          exerciseIds: string[],
+                          prerequisiteSkillIds: string[]): Skill {
+    return new Skill(createUuid(), name, description, new Date().toISOString(), null, prerequisiteSkillIds, exerciseIds);
   }
 
   public static fromJSON(input: object): Skill {

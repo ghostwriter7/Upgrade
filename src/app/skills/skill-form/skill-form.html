@@ -7,6 +7,22 @@
     <mat-label>Description</mat-label>
     <textarea formControlName="description" matInput placeholder="Skill Description"></textarea>
   </mat-form-field>
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Prerequisite Skills</mat-label>
+    <mat-select formControlName="prerequisiteSkillIds" multiple>
+      @for (skill of availableSkills(); track skill.uuid) {
+        <mat-option [value]="skill.uuid">{{ skill.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Exercises</mat-label>
+    <mat-select formControlName="exerciseIds" multiple>
+      @for (exercise of exercises(); track exercise.uuid) {
+        <mat-option [value]="exercise.uuid">{{ exercise.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
 </form>
 <div class="actions">
   <button matButton="filled" (click)="save()">Save</button>

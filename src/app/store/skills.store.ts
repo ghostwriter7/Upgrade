@@ -33,13 +33,9 @@ export const SkillStore = signalStore(
 
         if (existingSkillIndex === -1) throw new Error(`Skill with UUID ${skill.uuid} not found`);
 
-        const existingSkill = store.skills()[existingSkillIndex];
         patchState(store, (state) => ({
           ...state,
-          skills: state.skills.with(existingSkillIndex, {
-            ...existingSkill,
-            ...skill,
-          }),
+          skills: state.skills.with(existingSkillIndex, skill),
         }));
       },
     };
