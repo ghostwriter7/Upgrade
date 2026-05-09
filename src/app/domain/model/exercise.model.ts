@@ -4,7 +4,7 @@ export class Exercise {
     public readonly name: string,
     public readonly description: string | null,
     public readonly createdAt: string,
-    public readonly updatedAt: string,
+    public readonly updatedAt: string | null,
   ) {}
 }
 

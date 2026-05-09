@@ -7,10 +7,13 @@ export const routes: Routes = [
     component: HomePage,
     pathMatch: 'full',
   },
-  {
-    path: 'skills',
-    loadComponent: () => import('./skills/skills-page/skills-page'),
-  },
+  { path: 'skills', loadComponent: () => import('./skills/skills-page/skills-page') },
   { path: 'skills/new', loadComponent: () => import('./skills/skill-form/skill-form') },
   { path: 'skills/:uuid', loadComponent: () => import('./skills/skill-form/skill-form') },
+  { path: 'exercises', loadComponent: () => import('./exercises/exercises-page/exercises-page') },
+  { path: 'exercises/new', loadComponent: () => import('./exercises/exercise-form/exercise-form') },
+  {
+    path: 'exercises/:uuid',
+    loadComponent: () => import('./exercises/exercise-form/exercise-form'),
+  },
 ];

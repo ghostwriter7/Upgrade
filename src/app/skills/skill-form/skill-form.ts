@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { SkillStore } from '../../store/skills.store';
@@ -19,6 +19,7 @@ type SkillFormGroup = FormGroup<{
 }>;
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-skill-form',
   imports: [MatFormField, MatLabel, MatInput, MatButton, ReactiveFormsModule, RouterLink],
   templateUrl: './skill-form.html',
@@ -68,7 +69,7 @@ export default class SkillForm {
       );
       this.store.update(skill);
     } else {
-      const skill = SkillFactory.createNew(value.name, value.description ?? null);
+      const skill = SkillFactory.createNew(value.name, value.description);
       this.store.create(skill);
     }
 

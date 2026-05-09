@@ -1,0 +1,11 @@
+<div class="skills">
+  <button class="full-width" matButton="filled" routerLink="new">Add Exercise</button>
+  <mat-divider />
+  <h3>Exercises</h3>
+
+  <mat-action-list>
+    @for (exercise of exercises(); track exercise.uuid) {
+      <button mat-list-item [routerLink]="exercise.uuid">{{ exercise.name }}</button>
+    }
+  </mat-action-list>
+</div>
