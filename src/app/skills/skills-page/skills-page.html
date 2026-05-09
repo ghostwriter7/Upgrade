@@ -1,1 +1,11 @@
-<p>skills-page works!</p>
+<div class="skills">
+  <button class="full-width" matButton="filled" routerLink="new">Add Skill</button>
+  <mat-divider />
+  <h3>Skills</h3>
+
+  <mat-action-list>
+    @for (skill of skills(); track skill.uuid) {
+      <button mat-list-item [routerLink]="skill.uuid">{{ skill.name }}</button>
+    }
+  </mat-action-list>
+</div>
