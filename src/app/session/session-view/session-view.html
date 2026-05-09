@@ -41,4 +41,8 @@
       </mat-card-content>
     </mat-card>
   }
+
+  <button class="full-width" matButton="filled" [disabled]="isSessionInvalid()" (click)="completeSession()">
+    Complete Session
+  </button>
 </div>

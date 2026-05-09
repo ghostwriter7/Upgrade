@@ -58,6 +58,8 @@ export default class SessionView implements OnInit {
   protected readonly editedSession = signal<Session>(Session.createEmpty());
 
   private readonly activeExerciseIds = signal<Set<string>>(new Set());
+  protected readonly isSessionInvalid = computed(() => this.editedSession().exerciseEntries
+    .every((entry) => entry.sets.length === 0));
 
   public ngOnInit(): void {
     const existingSession = this.session();
@@ -89,5 +91,10 @@ export default class SessionView implements OnInit {
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {
 
+  }
+
+  protected completeSession(): void {
+    const session = this.editedSession();
+    session.setFinishedAt(new Date().toISOString());
   }
 }
