@@ -1,0 +1,18 @@
+<mat-button-toggle-group
+  name="viewModel"
+  aria-label="View mode selector"
+  [hideSingleSelectionIndicator]="true"
+  [(value)]="viewMode"
+>
+  <mat-button-toggle value="carousel">Carousel</mat-button-toggle>
+  <mat-button-toggle value="calendar">Calendar</mat-button-toggle>
+</mat-button-toggle-group>
+
+@switch (viewMode()) {
+  @case ('carousel') {
+    <app-session-carousel />
+  }
+  @case ('calendar') {
+    <app-session-calendar />
+  }
+}

@@ -8,6 +8,10 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
+    path: 'session',
+    loadComponent: () => import('./session/session-page/session-page'),
+  },
+  {
     path: 'session/new',
     loadComponent: () => import('./session/session-view/session-view'),
   },
