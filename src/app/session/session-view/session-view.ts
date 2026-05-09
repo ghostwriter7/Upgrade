@@ -18,7 +18,7 @@ import { ExerciseNamePipe } from '../../ui/pipes/exercise-name-pipe';
 import { SetView } from '../set-view/set-view';
 import { AddSetForm } from '../add-set-form/add-set-form';
 import { ExerciseSet } from '../../domain/model/exercise-set.model';
-import { MatDivider, MatList, MatListItem } from '@angular/material/list';
+import { MatList, MatListItem } from '@angular/material/list';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,7 +38,6 @@ import { MatDivider, MatList, MatListItem } from '@angular/material/list';
     AddSetForm,
     MatList,
     MatListItem,
-    MatDivider,
     MatCardHeader,
   ],
   templateUrl: './session-view.html',
@@ -76,17 +75,19 @@ export default class SessionView implements OnInit {
 
     if (value) {
       this.activeExerciseIds.update((ids) => new Set([...ids, value]));
-      this.editedSession.update((session) => {
-        session.addExerciseEntry(value);
-        return session;
-      });
+      this.editedSession().addExerciseEntry(value);
     }
   }
 
   protected handleNewSet(set: ExerciseSet, exerciseId: string): void {
-    this.editedSession.update((session) => {
-      session.addSet(exerciseId, set);
-      return session;
-    });
+    this.editedSession().addSet(exerciseId, set);
+  }
+
+  protected deleteSet(exerciseId: string, index: number): void {
+    this.editedSession().removeSet(exerciseId, index);
+  }
+
+  protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {
+
   }
 }

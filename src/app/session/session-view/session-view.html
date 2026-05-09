@@ -24,7 +24,11 @@
         <mat-list role="list">
           @for (set of exerciseEntry.sets; track $index) {
             <mat-list-item role="listitem">
-              <app-set-view [set]="set" />
+              <app-set-view
+                [set]="set"
+                (deleteSet)="deleteSet(exerciseEntry.exerciseId, $index)"
+                (editSet)="editSet(exerciseEntry.exerciseId, set, $index)"
+              />
             </mat-list-item>
           }
         </mat-list>
