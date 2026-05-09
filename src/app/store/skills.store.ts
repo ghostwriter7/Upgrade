@@ -1,7 +1,8 @@
-import { isSkill, Skill } from '../model/skill.model';
+import { isSkill, Skill } from '../domain/model/skill.model';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { effect, inject } from '@angular/core';
 import { PersistenceService } from '../common/service/persistence.service';
+import { SkillFactory } from '../domain/factory/skill.factory';
 
 interface State {
   skills: Skill[];
@@ -48,7 +49,7 @@ export const SkillStore = signalStore(
       const skills = persistence.retrieve('skills');
 
       if (Array.isArray(skills) && skills.every(isSkill)) {
-        patchState(store, { skills });
+        patchState(store, { skills: skills.map(SkillFactory.fromJSON) });
       }
 
       effect(() => {

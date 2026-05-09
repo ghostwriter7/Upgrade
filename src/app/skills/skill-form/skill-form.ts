@@ -2,10 +2,16 @@ import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { SkillStore } from '../../store/skills.store';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { Skill } from '../../model/skill.model';
-import { createUuid } from '../../common/function/create-uuid.function';
+import { Skill } from '../../domain/model/skill.model';
+import { SkillFactory } from '../../domain/factory/skill.factory';
 
 type SkillFormGroup = FormGroup<{
   name: FormControl<string>;
@@ -32,7 +38,7 @@ export default class SkillForm {
   private readonly existingSkill = computed(() => {
     const uuid = this.uuid();
     return uuid ? this.store.getSkillById(uuid) : null;
-  })
+  });
 
   constructor() {
     effect(() => {
@@ -50,19 +56,19 @@ export default class SkillForm {
   protected save(): void {
     const value = this.form.value as Required<SkillFormGroup['value']>;
     const existingSkill = this.existingSkill();
-    const isExisting = !!this.uuid();
+    const uuid = this.uuid();
 
-    const skill: Skill = {
-      uuid: this.uuid() ?? createUuid(),
-      name: value.name,
-      description: value.description ?? null,
-      createdAt: existingSkill ? existingSkill.createdAt : new Date().toISOString(),
-      updatedAt: existingSkill ? new Date().toISOString() : undefined,
-    }
-
-    if (isExisting) {
+    if (existingSkill && uuid) {
+      const skill = new Skill(
+        uuid,
+        value.name,
+        value.description ?? null,
+        existingSkill.createdAt,
+        new Date().toISOString(),
+      );
       this.store.update(skill);
     } else {
+      const skill = SkillFactory.createNew(value.name, value.description ?? null);
       this.store.create(skill);
     }
 

@@ -3,7 +3,7 @@ import { MatButton } from '@angular/material/button';
 import { MatActionList, MatDivider, MatListItem } from '@angular/material/list';
 import { SkillStore } from '../../store/skills.store';
 import { RouterLink } from '@angular/router';
-import { Skill } from '../../model/skill.model';
+import { Skill } from '../../domain/model/skill.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
