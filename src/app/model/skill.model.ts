@@ -2,6 +2,8 @@ export interface Skill {
   uuid: string;
   name: string;
   description?: string | null;
+  createdAt: string;
+  updatedAt?: string;
 }
 
 export const isSkill = (value: unknown): value is Skill =>

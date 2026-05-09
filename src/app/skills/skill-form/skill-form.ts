@@ -1,4 +1,4 @@
-import { Component, effect, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { SkillStore } from '../../store/skills.store';
@@ -29,17 +29,19 @@ export default class SkillForm {
     description: this.fb.control<string | null>(null),
   });
 
+  private readonly existingSkill = computed(() => {
+    const uuid = this.uuid();
+    return uuid ? this.store.getSkillById(uuid) : null;
+  })
+
   constructor() {
     effect(() => {
-      const uuid = this.uuid();
+      const existingSkill = this.existingSkill();
 
-      if (uuid) {
-        const skill = this.store.getSkillById(uuid);
-
-        if (!skill) throw new Error('Skill not found');
+      if (existingSkill) {
         this.form.setValue({
-          name: skill.name,
-          description: skill.description ?? null,
+          name: existingSkill.name,
+          description: existingSkill.description ?? null,
         });
       }
     });
@@ -47,12 +49,15 @@ export default class SkillForm {
 
   protected save(): void {
     const value = this.form.value as Required<SkillFormGroup['value']>;
+    const existingSkill = this.existingSkill();
     const isExisting = !!this.uuid();
 
     const skill: Skill = {
       uuid: this.uuid() ?? createUuid(),
       name: value.name,
       description: value.description ?? null,
+      createdAt: existingSkill ? existingSkill.createdAt : new Date().toISOString(),
+      updatedAt: existingSkill ? new Date().toISOString() : undefined,
     }
 
     if (isExisting) {
