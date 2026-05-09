@@ -1,0 +1,49 @@
+@if (showForm()) {
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Set Type</mat-label>
+    <mat-select [formControl]="setTypeControl">
+      @for (option of setTypeOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @switch (setTypeControl.value) {
+    @case ('bodyweight') {
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Reps</mat-label>
+        <input [formControl]="quantityControl" matInput type="number" placeholder="Number of reps">
+      </mat-form-field>
+    }
+
+    @case ('weight') {
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Reps</mat-label>
+        <input [formControl]="quantityControl" matInput type="number" placeholder="Number of reps">
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Weight</mat-label>
+        <input [formControl]="weightControl" matInput type="number" placeholder="Weight (kg)">
+      </mat-form-field>
+    }
+
+    @case ('iso') {
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Duration</mat-label>
+        <input [formControl]="quantityControl" type="number" matInput placeholder="Duration in seconds">
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="outline">
+        <mat-label>Weight</mat-label>
+        <input [formControl]="weightControl" type="number" matInput placeholder="Weight (kg)">
+      </mat-form-field>
+    }
+  }
+
+  <div class="actions">
+    <button matButton="filled" (click)="addSet()">Add</button>
+    <button matButton="outlined" (click)="showForm.set(false)">Cancel</button>
+  </div>
+} @else {
+  <button matMiniFab aria-label="Show set form" (click)="showForm.set(true)">
+    <mat-icon>add</mat-icon>
+  </button>}

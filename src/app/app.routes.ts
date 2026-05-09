@@ -7,6 +7,10 @@ export const routes: Routes = [
     component: HomePage,
     pathMatch: 'full',
   },
+  {
+    path: 'session/new',
+    loadComponent: () => import('./session/session-view/session-view'),
+  },
   { path: 'skills', loadComponent: () => import('./skills/skills-page/skills-page') },
   { path: 'skills/new', loadComponent: () => import('./skills/skill-form/skill-form') },
   { path: 'skills/:uuid', loadComponent: () => import('./skills/skill-form/skill-form') },

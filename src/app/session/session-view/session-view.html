@@ -1,0 +1,40 @@
+<div class="session-view">
+
+  @if (hasLeftExercises()) {
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Exercises</mat-label>
+      <mat-select [formControl]="exerciseControl">
+        @for (exercise of availableExercises(); track exercise.uuid) {
+          <mat-option [value]="exercise.uuid">{{ exercise.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button class="full-width" matButton="filled" [disabled]="exerciseControl.invalid" (click)="addExerciseEntry()">
+      Add
+    </button>
+  }
+  @let session = editedSession();
+
+  @for (exerciseEntry of session.exerciseEntries; track exerciseEntry.exerciseId) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ exerciseEntry.exerciseId | exerciseName }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list role="list">
+          @for (set of exerciseEntry.sets; track $index) {
+            <mat-list-item role="listitem">
+              <app-set-view [set]="set" />
+            </mat-list-item>
+          }
+        </mat-list>
+
+        <app-add-set-form
+          [exerciseId]="exerciseEntry.exerciseId"
+          (newSet)="handleNewSet($event, exerciseEntry.exerciseId)"
+        />
+
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
