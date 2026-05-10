@@ -20,7 +20,7 @@ interface SessionJson {
 
 export class SessionFactory {
   public static fromJSON(data: unknown): Session {
-    const json: SessionJson = this.parseSessionJSON(data);
+    const json: SessionJson = SessionFactory.parseSessionJSON(data);
 
     const session = new Session(json.uuid, json.createdAt);
     session.startedAt = json.startedAt;
@@ -47,67 +47,67 @@ export class SessionFactory {
   }
 
   private static parseSessionJSON(data: unknown): SessionJson {
-      if (!this.isRecord(data)) {
+      if (!SessionFactory.isRecord(data)) {
         throw new TypeError('Invalid session data: expected object');
       }
 
       return {
-        uuid: this.readString(data, 'uuid'),
-        createdAt: this.readString(data, 'createdAt'),
-        finishedAt: this.readNullableString(data, 'finishedAt'),
-        startedAt: this.readString(data, 'startedAt'),
-        notes: this.readNullableString(data, 'notes'),
-        exerciseEntries: this.readExerciseEntries(data),
+        uuid: SessionFactory.readString(data, 'uuid'),
+        createdAt: SessionFactory.readString(data, 'createdAt'),
+        finishedAt: SessionFactory.readNullableString(data, 'finishedAt'),
+        startedAt: SessionFactory.readString(data, 'startedAt'),
+        notes: SessionFactory.readNullableString(data, 'notes'),
+        exerciseEntries: SessionFactory.readExerciseEntries(data),
       };
   }
 
   private static readExerciseEntries(data: Record<string, unknown>): SessionJson['exerciseEntries'] {
     const entries = data['exerciseEntries'];
 
-    if (!this.isArray(entries)) {
+    if (!SessionFactory.isArray(entries)) {
       throw new TypeError('Invalid session data: exerciseEntries must be an array');
     }
 
     return entries.map((entry) => {
-      if (!this.isRecord(entry)) {
+      if (!SessionFactory.isRecord(entry)) {
         throw new TypeError('Invalid session data: exerciseEntries must contain only objects');
       }
 
       return {
-        exerciseId: this.readString(entry, 'exerciseId'),
-        notes: this.readNullableString(entry, 'notes'),
-        sets: this.readSets(entry)
+        exerciseId: SessionFactory.readString(entry, 'exerciseId'),
+        notes: SessionFactory.readNullableString(entry, 'notes'),
+        sets: SessionFactory.readSets(entry)
       }
     });
   }
 
   private static readSets(entry: Record<string, unknown>): SessionJson['exerciseEntries'][number]['sets'] {
     const sets = entry['sets'];
-    if (!this.isArray(sets)) {
+    if (!SessionFactory.isArray(sets)) {
       throw new TypeError('Invalid session data: sets must be an array');
     }
 
     return sets.map((set) => {
-      if (!this.isRecord(set)) {
+      if (!SessionFactory.isRecord(set)) {
         throw new TypeError('Invalid session data: sets must contain only objects');
       }
 
-      const type = this.readString(set, 'type');
+      const type = SessionFactory.readString(set, 'type');
 
       switch (type) {
         case 'bodyweight': return {
           type,
-          reps: this.readNumber(set, 'reps')
+          reps: SessionFactory.readNumber(set, 'reps')
         };
         case 'weight': return {
           type,
-          reps: this.readNumber(set, 'reps'),
-          weight: this.readNumber(set, 'weight')
+          reps: SessionFactory.readNumber(set, 'reps'),
+          weight: SessionFactory.readNumber(set, 'weight')
         };
         case 'iso': return {
           type,
-          duration: this.readNumber(set, 'duration'),
-          weight: this.readOptionalNumber(set, 'weight')
+          duration: SessionFactory.readNumber(set, 'duration'),
+          weight: SessionFactory.readOptionalNumber(set, 'weight')
         };
         default: throw new Error(`Invalid session data: unknown set type '${type}'`);
       }

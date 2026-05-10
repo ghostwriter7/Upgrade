@@ -76,18 +76,6 @@ export class Session {
     exerciseEntry.updateSet(set, index);
   }
 
-  public setStartedAt(date: string): void {
-    this.startedAt = date;
-  }
-
-  public setFinishedAt(date: string): void {
-    this.finishedAt = date;
-  }
-
-  public setNotes(notes: string | null): void {
-    this.notes = notes;
-  }
-
   private getExerciseEntryByExerciseId(exerciseId: string): ExerciseEntry {
     const exerciseEntry = this.exerciseEntries.find((entry) => entry.exerciseId === exerciseId);
 

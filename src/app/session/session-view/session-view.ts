@@ -3,8 +3,6 @@ import {
   Component,
   computed,
   inject,
-  input,
-  OnInit,
   signal,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
@@ -12,13 +10,14 @@ import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { ExerciseStore } from '../../store/exercises.store';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Session } from '../../domain/model/session.model';
+import { ExerciseEntry, Session } from '../../domain/model/session.model';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { ExerciseNamePipe } from '../../ui/pipes/exercise-name-pipe';
 import { SetView } from '../set-view/set-view';
 import { AddSetForm } from '../add-set-form/add-set-form';
 import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
+import { SessionStore } from '../../store/session.store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -43,10 +42,9 @@ import { MatList, MatListItem } from '@angular/material/list';
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
 })
-export default class SessionView implements OnInit {
-  public session = input<Session | null>(null);
-
+export default class SessionView {
   private readonly exerciseStore = inject(ExerciseStore);
+  private readonly sessionStore = inject(SessionStore);
 
   protected readonly availableExercises = computed(() => {
     const activeExerciseIds = this.activeExerciseIds();
@@ -61,16 +59,7 @@ export default class SessionView implements OnInit {
   protected readonly isSessionInvalid = computed(() => this.editedSession().exerciseEntries
     .every((entry) => entry.sets.length === 0));
 
-  public ngOnInit(): void {
-    const existingSession = this.session();
-
-    if (existingSession) {
-      this.activeExerciseIds.set(
-        new Set(existingSession.exerciseEntries.map((entry) => entry.exerciseId)),
-      );
-      this.editedSession.set(existingSession);
-    }
-  }
+  private readonly exerciseEntries = signal<ExerciseEntry[]>([]);
 
   protected addExerciseEntry(): void {
     const { value } = this.exerciseControl;
@@ -95,6 +84,8 @@ export default class SessionView implements OnInit {
 
   protected completeSession(): void {
     const session = this.editedSession();
-    session.setFinishedAt(new Date().toISOString());
+    session.finishedAt = new Date().toISOString();
+    session.startedAt = new Date().toISOString();
+    this.sessionStore.save(session);
   }
 }
