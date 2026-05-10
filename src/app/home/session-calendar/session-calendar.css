@@ -1,3 +1,9 @@
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .calendar {
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));

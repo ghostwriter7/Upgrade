@@ -1,3 +1,14 @@
+<div class="nav">
+  <button matMiniFab aria-label="Show previous month" (click)="showPreviousMonth()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <span>{{ label() }}</span>
+
+  <button matMiniFab aria-label="Show next month" (click)="showNextMonth()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>
 <div class="calendar">
   <div class="calendar__weekday">Mon</div>
   <div class="calendar__weekday">Tue</div>
