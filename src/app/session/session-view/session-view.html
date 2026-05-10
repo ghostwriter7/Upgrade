@@ -52,11 +52,12 @@
           }
         </mat-list>
 
-        <app-add-set-form
-          [exerciseId]="entry.exerciseId"
-          (newSet)="addSet($event, entry.exerciseId)"
-        />
-
+        @if (isEditable()) {
+          <app-add-set-form
+            [exerciseId]="entry.exerciseId"
+            (newSet)="addSet($event, entry.exerciseId)"
+          />
+        }
       </mat-card-content>
     </mat-card>
   }
