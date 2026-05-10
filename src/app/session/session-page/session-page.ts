@@ -2,18 +2,21 @@ import { ChangeDetectionStrategy, Component, computed, inject, input } from '@an
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { Router } from '@angular/router';
+import { SessionList } from '../session-list/session-list';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-page',
-  imports: [MatIcon, MatMiniFabButton],
+  imports: [MatIcon, MatMiniFabButton, SessionList],
   templateUrl: './session-page.html',
   styleUrl: './session-page.css',
 })
 export default class SessionPage {
   public date = input.required<string>();
 
-  protected readonly label = computed(() => Temporal.PlainDate.from(this.date()).toLocaleString('en-GB', { dateStyle: 'full' }));
+  protected readonly label = computed(() =>
+    Temporal.PlainDate.from(this.date()).toLocaleString('en-GB', { dateStyle: 'full' }),
+  );
   private readonly router = inject(Router);
 
   protected showPreviousDay(): void {

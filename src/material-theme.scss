@@ -36,3 +36,8 @@ body {
   margin: 0;
   height: 100%;
 }
+
+:root {
+  --mat-fab-extended-container-height: 30px;
+  --mat-fab-extended-container-shape:  var(--mat-sys-corner-small);
+}

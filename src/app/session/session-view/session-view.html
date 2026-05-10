@@ -1,6 +1,25 @@
 <div class="session-view">
+  <header>
+    <button matFab extended>
+      <mat-icon>access_time</mat-icon>
+      {{ startedAt() | date: 'HH:mm' }}
+    </button>
+    @if (finishedAt(); as finishedAt) {
+      <button matFab extended>
+        <mat-icon>access_time_filled</mat-icon>
+        {{ finishedAt | date: 'HH:mm' }}
+      </button>
+    }
+    @if (duration(); as duration) {
+      <span class="metadata">
+        <mat-icon>hourglass_empty</mat-icon>
+        {{ duration }}
+    </span>
+    }
 
-  @if (hasLeftExercises()) {
+  </header>
+
+  @if (isEditable() && hasLeftExercises()) {
     <mat-form-field class="full-width" appearance="outline">
       <mat-label>Exercises</mat-label>
       <mat-select [formField]="exerciseField.exerciseId">
@@ -9,7 +28,8 @@
         }
       </mat-select>
     </mat-form-field>
-    <button class="full-width" matButton="filled" [disabled]="exerciseField.exerciseId().invalid()" (click)="addExerciseEntry()">
+    <button class="full-width" matButton="filled" [disabled]="exerciseField.exerciseId().invalid()"
+            (click)="addExerciseEntry()">
       Add
     </button>
   }
@@ -41,7 +61,9 @@
     </mat-card>
   }
 
-  <button class="full-width" matButton="filled" [disabled]="isSessionInvalid()" (click)="completeSession()">
-    Complete Session
-  </button>
+  @if (isEditable()) {
+    <button class="full-width" matButton="filled" [disabled]="isSessionInvalid()" (click)="completeSession()">
+      Complete Session
+    </button>
+  }
 </div>

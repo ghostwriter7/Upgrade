@@ -31,6 +31,7 @@ export const SessionStore = signalStore(
       const id = `${year}-${month.toString().padStart(2, '0')}`;
       return Promise.resolve(store.sessionsByMonth().get(id) || []);
     },
+    getAllSessionsByDate: async (date: string): Promise<Session[]> => store.sessions().filter((session) => session.startedAt?.slice(0, 10) === date),
     save: (session: Session) => {
       patchState(store, { sessions: [...store.sessions(), session] });
       sessionRepository.save(session);

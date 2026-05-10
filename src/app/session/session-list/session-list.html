@@ -1,0 +1,7 @@
+@if (isLoading()) {
+  <app-loader />
+} @else {
+  @for (session of sessions(); track session.uuid) {
+    <app-session-view [session]="session"/>
+  }
+}
