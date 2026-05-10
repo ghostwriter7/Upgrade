@@ -1,10 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { Temporal } from '@js-temporal/polyfill';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
+import { SessionStore } from '../../store/session.store';
 
 interface CalendarCell {
   day: number | null;
+  hasSessions?: boolean;
 }
 
 @Component({
@@ -26,6 +35,7 @@ export class SessionCalendar {
   });
   private readonly firstDayOfWeek = computed(() => this.firstDayOfMonth().dayOfWeek);
   private readonly numberOfDaysInMonth = computed(() => this.firstDayOfMonth().daysInMonth);
+  private readonly sessionCountByDate = signal<Map<number, number>>(new Map());
 
   protected readonly label = computed(() =>
     this.firstDayOfMonth().toLocaleString('en-GB', { month: 'long', year: 'numeric' }),
@@ -35,6 +45,7 @@ export class SessionCalendar {
 
     const leadingEmptyCells = firstDayOfWeek - 1;
 
+    const sessionCountByDate = this.sessionCountByDate();
     const cells: CalendarCell[] = [];
 
     for (let i = 0; i < leadingEmptyCells; i++) {
@@ -42,7 +53,7 @@ export class SessionCalendar {
     }
 
     for (let i = 1; i <= this.numberOfDaysInMonth(); i++) {
-      cells.push({ day: i });
+      cells.push({ day: i, hasSessions: sessionCountByDate.has(i) });
     }
 
     while (cells.length % 7 !== 0) {
@@ -51,6 +62,21 @@ export class SessionCalendar {
 
     return cells;
   });
+
+  private readonly sessionStore = inject(SessionStore);
+
+  constructor() {
+    effect(async () => {
+      const { year, month } = this.activeYearAndMonth();
+      const sessions = await this.sessionStore.getSessionsForMonthAndYear(month, year);
+      const sessionCountByDate = sessions.reduce((lookup, session) => {
+        const sessionDay = session.day;
+        lookup.set(sessionDay, (lookup.get(sessionDay) ?? 0) + 1);
+        return lookup;
+      }, new Map<number, number>());
+      this.sessionCountByDate.set(sessionCountByDate);
+    });
+  }
 
   protected showNextMonth(): void {
     this.activeYearAndMonth.update(({ year, month }) => {

@@ -21,6 +21,7 @@
   @for (cell of calendarCells(); track $index) {
     <div
       class="calendar__cell"
+      [class.calendar__cell--has-session]="cell.hasSessions"
       [class.calendar__cell--empty]="cell.day === null"
     >
       @if (cell.day !== null) {

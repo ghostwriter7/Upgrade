@@ -5,12 +5,10 @@ export class ExerciseEntry {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
 
-  constructor(
-    public readonly exerciseId: string,
-  ) {}
+  constructor(public readonly exerciseId: string) {}
 
   public addSet(set: ExerciseSet): void {
-    this.sets.push(set)
+    this.sets.push(set);
   }
 
   public removeSetAt(index: number): void {
@@ -41,19 +39,25 @@ export class Session {
     public readonly createdAt: string,
   ) {}
 
+  public get day() {
+    return Temporal.Instant.from(new Date().toISOString())
+      .toZonedDateTimeISO(Temporal.Now.timeZoneId()).day;
+  }
+
   public static createEmpty() {
     return new Session(createUuid(), new Date().toISOString());
   }
 
   public addExerciseEntry(exerciseId: string): void {
-    if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId))
-      return;
+    if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return;
 
     this.exerciseEntries.push(new ExerciseEntry(exerciseId));
   }
 
   public removeExerciseEntry(exerciseId: string): void {
-    this.exerciseEntries = this.exerciseEntries.filter((exerciseEntry) => exerciseEntry.exerciseId !== exerciseId);
+    this.exerciseEntries = this.exerciseEntries.filter(
+      (exerciseEntry) => exerciseEntry.exerciseId !== exerciseId,
+    );
   }
 
   public setExerciseNotes(exerciseId: string, notes: string | null): void {

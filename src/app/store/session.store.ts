@@ -27,6 +27,10 @@ export const SessionStore = signalStore(
     ),
   })),
   withMethods((store, sessionRepository = inject(SessionRepository)) => ({
+    getSessionsForMonthAndYear: (month: number, year: number): Promise<Session[]> => {
+      const id = `${year}-${month}`;
+      return Promise.resolve(store.sessionsByDate().get(id) || []);
+    },
     save: (session: Session) => {
       patchState(store, { sessions: [...store.sessions(), session] });
       sessionRepository.save(session);
@@ -34,7 +38,9 @@ export const SessionStore = signalStore(
   })),
   withHooks((store, sessionRepository = inject(SessionRepository)) => ({
     onInit: () => {
-      sessionRepository.findAll().then((sessions) => patchState(store, { sessions }));
+      sessionRepository.findAll().then((sessions) => {
+        patchState(store, { sessions })
+      });
     },
   })),
 );

@@ -20,16 +20,21 @@
 }
 
 .calendar__cell {
-  min-height: 5rem;
   padding: 0.5rem;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
   background: var(--mat-sys-surface-container);
   color: var(--mat-sys-on-surface);
 }
+
 .calendar__cell--empty {
   border-color: transparent;
   background: transparent;
+}
+
+.calendar__cell--has-session {
+  background: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
 }
 
 .calendar__day {
