@@ -3,46 +3,45 @@
   @if (hasLeftExercises()) {
     <mat-form-field class="full-width" appearance="outline">
       <mat-label>Exercises</mat-label>
-      <mat-select [formControl]="exerciseControl">
+      <mat-select [formField]="exerciseField.exerciseId">
         @for (exercise of availableExercises(); track exercise.uuid) {
           <mat-option [value]="exercise.uuid">{{ exercise.name }}</mat-option>
         }
       </mat-select>
     </mat-form-field>
-    <button class="full-width" matButton="filled" [disabled]="exerciseControl.invalid" (click)="addExerciseEntry()">
+    <button class="full-width" matButton="filled" [disabled]="exerciseField.exerciseId().invalid()" (click)="addExerciseEntry()">
       Add
     </button>
   }
-  @let session = editedSession();
 
-  @for (exerciseEntry of session.exerciseEntries; track exerciseEntry.exerciseId) {
+  @for (entry of exerciseDate(); track entry.exerciseId) {
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ exerciseEntry.exerciseId | exerciseName }}</mat-card-title>
+        <mat-card-title>{{ entry.exerciseId | exerciseName }}</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <mat-list role="list">
-          @for (set of exerciseEntry.sets; track $index) {
+          @for (set of entry.sets; track $index) {
             <mat-list-item role="listitem">
               <app-set-view
                 [set]="set"
-                (deleteSet)="deleteSet(exerciseEntry.exerciseId, $index)"
-                (editSet)="editSet(exerciseEntry.exerciseId, set, $index)"
+                (deleteSet)="deleteSet(entry.exerciseId, $index)"
+                (editSet)="editSet(entry.exerciseId, set, $index)"
               />
             </mat-list-item>
           }
         </mat-list>
 
         <app-add-set-form
-          [exerciseId]="exerciseEntry.exerciseId"
-          (newSet)="handleNewSet($event, exerciseEntry.exerciseId)"
+          [exerciseId]="entry.exerciseId"
+          (newSet)="addSet($event, entry.exerciseId)"
         />
 
       </mat-card-content>
     </mat-card>
   }
 
-  <button class="full-width" matButton="filled" (click)="completeSession()">
+  <button class="full-width" matButton="filled" [disabled]="isSessionInvalid()" (click)="completeSession()">
     Complete Session
   </button>
 </div>

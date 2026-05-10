@@ -1,16 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { ExerciseStore } from '../../store/exercises.store';
-import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ExerciseEntry, Session } from '../../domain/model/session.model';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Session } from '../../domain/model/session.model';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { ExerciseNamePipe } from '../../ui/pipes/exercise-name-pipe';
 import { SetView } from '../set-view/set-view';
@@ -18,6 +12,8 @@ import { AddSetForm } from '../add-set-form/add-set-form';
 import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
 import { SessionStore } from '../../store/session.store';
+import { form, FormField, required } from '@angular/forms/signals';
+import { createUuid } from '../../common/function/create-uuid.function';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,6 +34,7 @@ import { SessionStore } from '../../store/session.store';
     MatList,
     MatListItem,
     MatCardHeader,
+    FormField,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
@@ -51,41 +48,60 @@ export default class SessionView {
     const allExercises = this.exerciseStore.exercises();
     return allExercises.filter(({ uuid }) => !activeExerciseIds.has(uuid));
   });
-  protected readonly exerciseControl = new FormControl<string | null>(null, [Validators.required]);
+  protected readonly exerciseField = form(signal({ exerciseId: '' }), (schema) => {
+    required(schema.exerciseId);
+  });
   protected readonly hasLeftExercises = computed(() => this.availableExercises().length > 0);
-  protected readonly editedSession = signal<Session>(Session.createEmpty());
+  protected readonly isSessionInvalid = computed(() =>
+    this.exerciseDate().every((entry) => entry.sets.length === 0),
+  );
+  protected readonly exerciseDate = signal<
+    {
+      exerciseId: string;
+      sets: ExerciseSet[];
+    }[]
+  >([]);
 
+  private readonly startedAt = new Date().toISOString();
   private readonly activeExerciseIds = signal<Set<string>>(new Set());
-  protected readonly isSessionInvalid = computed(() => this.editedSession().exerciseEntries
-    .every((entry) => entry.sets.length === 0));
-
-  private readonly exerciseEntries = signal<ExerciseEntry[]>([]);
 
   protected addExerciseEntry(): void {
-    const { value } = this.exerciseControl;
+    const exerciseId = this.exerciseField.exerciseId().value();
 
-    if (value) {
-      this.activeExerciseIds.update((ids) => new Set([...ids, value]));
-      this.editedSession().addExerciseEntry(value);
+    if (exerciseId) {
+      this.activeExerciseIds.update((ids) => new Set([...ids, exerciseId]));
+      this.exerciseDate.update((entries) => [...entries, { exerciseId, sets: [] }]);
     }
   }
 
-  protected handleNewSet(set: ExerciseSet, exerciseId: string): void {
-    this.editedSession().addSet(exerciseId, set);
+  protected addSet(set: ExerciseSet, exerciseId: string): void {
+    this.exerciseDate.update((entries) => {
+      const entryIndex = entries.findIndex((entry) => entry.exerciseId === exerciseId);
+      const entry = entries[entryIndex];
+      return entries.with(entryIndex, { ...entry, sets: [...entry.sets, set] });
+    });
   }
 
   protected deleteSet(exerciseId: string, index: number): void {
-    this.editedSession().removeSet(exerciseId, index);
+    this.exerciseDate.update((entries) => {
+      const entryIndex = entries.findIndex((entry) => entry.exerciseId === exerciseId);
+      const entry = entries[entryIndex];
+      return entries.with(entryIndex, { ...entry, sets: entry.sets.toSpliced(index, 1) });
+    });
   }
 
-  protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {
-
-  }
+  protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}
 
   protected completeSession(): void {
-    const session = this.editedSession();
+    const session = new Session(createUuid(), new Date().toISOString());
     session.finishedAt = new Date().toISOString();
-    session.startedAt = new Date().toISOString();
+    session.startedAt = this.startedAt;
+    const exerciseData = this.exerciseDate();
+    exerciseData.forEach((entry) => {
+      session.addExerciseEntry(entry.exerciseId);
+      entry.sets.forEach((set) => session.addSet(entry.exerciseId, set));
+    });
+
     this.sessionStore.save(session);
   }
 }
