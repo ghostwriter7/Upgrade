@@ -1,7 +1,7 @@
 import { ExerciseSet } from './exercise-set.model';
 import { createUuid } from '../../common/function/create-uuid.function';
 
-class ExerciseEntry {
+export class ExerciseEntry {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
 
