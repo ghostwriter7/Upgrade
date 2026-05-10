@@ -23,6 +23,7 @@
       class="calendar__cell"
       [class.calendar__cell--has-session]="cell.hasSessions"
       [class.calendar__cell--empty]="cell.day === null"
+      [routerLink]="['/session', cell.date]"
     >
       @if (cell.day !== null) {
         <span class="calendar__day">{{ cell.day }}</span>

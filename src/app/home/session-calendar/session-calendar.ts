@@ -10,16 +10,18 @@ import { Temporal } from '@js-temporal/polyfill';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { SessionStore } from '../../store/session.store';
+import { RouterLink } from '@angular/router';
 
 interface CalendarCell {
   day: number | null;
+  date: string;
   hasSessions?: boolean;
 }
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-calendar',
-  imports: [MatIcon, MatMiniFabButton],
+  imports: [MatIcon, MatMiniFabButton, RouterLink],
   templateUrl: './session-calendar.html',
   styleUrl: './session-calendar.css',
 })
@@ -46,18 +48,43 @@ export class SessionCalendar {
     const leadingEmptyCells = firstDayOfWeek - 1;
 
     const sessionCountByDate = this.sessionCountByDate();
+    const { year, month } = this.activeYearAndMonth();
     const cells: CalendarCell[] = [];
 
-    for (let i = 0; i < leadingEmptyCells; i++) {
-      cells.push({ day: null });
+    const {
+      year: leadingYear,
+      month: leadingMonth,
+      daysInMonth: daysInLeadingMonth,
+    } = this.firstDayOfMonth().subtract({ months: 1 });
+    for (let i = 1; i <= leadingEmptyCells; i++) {
+      cells.push({
+        day: null,
+        date: this.toDateString(
+          leadingYear,
+          leadingMonth,
+          daysInLeadingMonth - leadingEmptyCells + i,
+        ),
+      });
     }
 
     for (let i = 1; i <= this.numberOfDaysInMonth(); i++) {
-      cells.push({ day: i, hasSessions: sessionCountByDate.has(i) });
+      cells.push({
+        day: i,
+        hasSessions: sessionCountByDate.has(i),
+        date: this.toDateString(year, month, i),
+      });
     }
 
+    const {
+      year: nextYear,
+      month: nextMonth,
+    } = this.firstDayOfMonth().add({ months: 1 });
+    let nextDate = 1;
     while (cells.length % 7 !== 0) {
-      cells.push({ day: null });
+      cells.push({
+        day: null,
+        date: this.toDateString(nextYear, nextMonth, nextDate++),
+      });
     }
 
     return cells;
@@ -93,11 +120,16 @@ export class SessionCalendar {
   protected showPreviousMonth(): void {
     this.activeYearAndMonth.update(({ year, month }) => {
       const prevMonth = month - 1;
-      if (prevMonth < 1) return {
-        month: 12,
-        year: year - 1
-      };
+      if (prevMonth < 1)
+        return {
+          month: 12,
+          year: year - 1,
+        };
       return { year, month: prevMonth };
     });
+  }
+
+  private toDateString(year: number, month: number, date: number): string {
+    return `${year}-${month.toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
   }
 }

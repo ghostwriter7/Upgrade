@@ -4,6 +4,8 @@
   flex-direction: column;
 }
 
-mat-button-toggle {
-  flex: 1;
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

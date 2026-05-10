@@ -8,12 +8,12 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'session',
-    loadComponent: () => import('./session/session-page/session-page'),
-  },
-  {
     path: 'session/new',
     loadComponent: () => import('./session/session-view/session-view'),
+  },
+  {
+    path: 'session/:date',
+    loadComponent: () => import('./session/session-page/session-page'),
   },
   { path: 'skills', loadComponent: () => import('./skills/skills-page/skills-page') },
   { path: 'skills/new', loadComponent: () => import('./skills/skill-form/skill-form') },

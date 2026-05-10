@@ -1,18 +1,11 @@
-<mat-button-toggle-group
-  name="viewModel"
-  aria-label="View mode selector"
-  [hideSingleSelectionIndicator]="true"
-  [(value)]="viewMode"
->
-  <mat-button-toggle value="carousel">Carousel</mat-button-toggle>
-  <mat-button-toggle value="calendar">Calendar</mat-button-toggle>
-</mat-button-toggle-group>
+<header>
+  <button matMiniFab aria-label="Show previous day" (click)="showPreviousDay()">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
 
-@switch (viewMode()) {
-  @case ('carousel') {
-    <app-session-carousel />
-  }
-  @case ('calendar') {
-    <app-session-calendar />
-  }
-}
+  <span>{{ label() }}</span>
+
+  <button matMiniFab aria-label="Show next day" (click)="showNextDay()">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</header>
