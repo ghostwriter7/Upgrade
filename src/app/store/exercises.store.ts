@@ -3,14 +3,28 @@ import { effect, inject } from '@angular/core';
 import { PersistenceService } from '../common/service/persistence.service';
 import { Exercise, isExercise } from '../domain/model/exercise.model';
 import { ExerciseFactory } from '../domain/factory/exercise.factory';
+import { createUuid } from '../common/function/create-uuid.function';
+
+
+const now = new Date().toISOString();
+const DefaultExercises: Exercise[] = [
+  new Exercise(createUuid(), 'Isometric Front Split', null, now, null),
+  new Exercise(createUuid(), 'Front Split Slides', null, now, null),
+  new Exercise(createUuid(), 'Couch Stretch - High', 'Hips in high position. It targets quads.', now, null),
+  new Exercise(createUuid(), 'Couch Stretch - Low', 'Hips in low position. It targets hip flexors.', now, null),
+  new Exercise(createUuid(), 'Reverse Nordic Curls', null, now, null),
+  new Exercise(createUuid(), 'Kneeling Needle', null, now, null),
+  new Exercise(createUuid(), 'Split Squats', null, now, null),
+];
 
 interface State {
   exercises: Exercise[];
 }
 
 const initialState: State = {
-  exercises: [],
+  exercises: [...DefaultExercises],
 };
+
 
 export const ExerciseStore = signalStore(
   { providedIn: 'root' },
@@ -49,7 +63,8 @@ export const ExerciseStore = signalStore(
       const exercises = persistence.retrieve('exercises');
 
       if (Array.isArray(exercises) && exercises.every(isExercise)) {
-        patchState(store, { exercises: exercises.map(ExerciseFactory.fromJSON) });
+        patchState(store, { exercises: [...DefaultExercises, ...exercises.map(ExerciseFactory.fromJSON)]
+            .sort((a, b) => a.name.localeCompare(b.name)) });
       }
 
       effect(() => {
