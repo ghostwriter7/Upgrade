@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Session } from '../domain/model/session.model';
 import { SessionFactory } from '../domain/factory/session.factory';
+import { GenericRepository } from './generic.repository';
+import { StoreName } from './store-name.enum';
 
 @Injectable({ providedIn: 'root'})
-export class SessionRepository {
-  public findAll(): Promise<Session[]> {
-    const json = localStorage.getItem('sessions');
-    const data = json ? JSON.parse(json) : [];
-    const sessions = data.map(SessionFactory.fromJSON);
-    return Promise.resolve(sessions);
+export class SessionRepository extends GenericRepository<Session> {
+
+  constructor() {
+    super();
+  }
+
+  public override async findAll(): Promise<Session[]> {
+    const results = await super.findAll(StoreName.SESSIONS);
+    return results.map(SessionFactory.fromJSON);
   }
 
   public save(session: Session): Promise<void> {
-    const existing = localStorage.getItem('sessions');
-    const array = existing ? JSON.parse(existing) : [];
-
-    if (!Array.isArray(array)) throw new TypeError('Sessions must be an array');
-
-    localStorage.setItem('sessions', JSON.stringify([session, ...array]));
-    return Promise.resolve();
+    return super.put(StoreName.SESSIONS, session);
   }
 }
