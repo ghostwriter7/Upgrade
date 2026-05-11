@@ -76,7 +76,7 @@ export default class SessionView {
     this.exerciseDate().every((entry) => entry.sets.length === 0),
   );
   protected readonly exerciseDate = signal<ExerciseData>([]);
-  protected readonly isEditable = computed(() => this.session() === null);
+  protected readonly isEditable = computed(() => !this.session());
   protected readonly startedAt = computed(
     () => this.session()?.startedAt ?? new Date().toISOString(),
   );

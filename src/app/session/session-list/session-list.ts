@@ -2,16 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
-  OnInit,
   resource,
-  signal,
 } from '@angular/core';
 import { SessionStore } from '../../store/session.store';
-import { Session } from '../../domain/model/session.model';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { Loader } from '../../ui/loader/loader';
 import SessionView from '../session-view/session-view';
 

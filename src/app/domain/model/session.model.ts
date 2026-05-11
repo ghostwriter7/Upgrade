@@ -40,8 +40,9 @@ export class Session {
   ) {}
 
   public get day() {
-    return Temporal.Instant.from(new Date().toISOString())
-      .toZonedDateTimeISO(Temporal.Now.timeZoneId()).day;
+    return this.startedAt
+      ? Temporal.Instant.from(this.startedAt).toZonedDateTimeISO(Temporal.Now.timeZoneId()).day
+      : -1;
   }
 
   public static createEmpty() {
