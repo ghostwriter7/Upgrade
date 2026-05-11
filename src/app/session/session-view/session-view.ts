@@ -22,8 +22,9 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { SessionStore } from '../../store/session.store';
 import { form, FormField, required } from '@angular/forms/signals';
 import { createUuid } from '../../common/function/create-uuid.function';
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 type ExerciseData =  {
   exerciseId: string;
@@ -96,7 +97,9 @@ export default class SessionView {
     if (hours) return `${hours}h ${minutes}m`;
 
     return `${minutes}m`;
-  })
+  });
+
+  private readonly router = inject(Router);
 
   constructor() {
     effect(() => {
@@ -146,5 +149,6 @@ export default class SessionView {
     });
 
     this.sessionStore.save(session);
+    this.router.navigate(['/session', session.date]);
   }
 }

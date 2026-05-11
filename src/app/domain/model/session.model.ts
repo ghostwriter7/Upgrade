@@ -45,6 +45,10 @@ export class Session {
       : -1;
   }
 
+  public get date() {
+    return this.startedAt?.substring(0, 10);
+  }
+
   public static createEmpty() {
     return new Session(createUuid(), new Date().toISOString());
   }

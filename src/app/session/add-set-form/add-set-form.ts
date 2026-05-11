@@ -12,7 +12,7 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { min, form, FormField, hidden, required } from '@angular/forms/signals';
+import { min, form, FormField, hidden, required, validate } from '@angular/forms/signals';
 
 type SetData = {
   type: ExerciseSetType;
@@ -59,7 +59,12 @@ export class AddSetForm {
     required(schemaPath.weight, { when: ({ valueOf }) => valueOf(schemaPath.type) === 'weight' });
     min(schemaPath.reps, 1);
     min(schemaPath.duration, 1);
-    min(schemaPath.weight, 1);
+    validate(schemaPath.weight, ({ valueOf, value }) => {
+      if (valueOf(schemaPath.type) === 'weight' && value() <= 0) {
+        return { kind: 'error', message: 'Weight must be positive' }
+      }
+      return null;
+    });
     hidden(schemaPath.weight, ({ valueOf }) => valueOf(schemaPath.type) === 'bodyweight');
     hidden(schemaPath.reps, ({ valueOf }) => valueOf(schemaPath.type) === 'iso');
     hidden(schemaPath.duration, ({ valueOf }) => valueOf(schemaPath.type) !== 'iso');
