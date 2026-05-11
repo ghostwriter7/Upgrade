@@ -58,18 +58,4 @@ export const ExerciseStore = signalStore(
       },
     };
   }),
-  withHooks((store, persistence = inject(PersistenceService)) => ({
-    onInit: () => {
-      const exercises = persistence.retrieve('exercises');
-
-      if (Array.isArray(exercises) && exercises.every(isExercise)) {
-        patchState(store, { exercises: [...DefaultExercises, ...exercises.map(ExerciseFactory.fromJSON)]
-            .sort((a, b) => a.name.localeCompare(b.name)) });
-      }
-
-      effect(() => {
-        persistence.persist('exercises', store.exercises());
-      });
-    },
-  })),
 );
