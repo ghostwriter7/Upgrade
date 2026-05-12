@@ -37,6 +37,10 @@ export const SessionStore = signalStore(
       patchState(store, { sessions: [...store.sessions(), session] });
       sessionRepository.save(session);
     },
+    delete: (sessionId: string) => {
+      patchState(store, { sessions: store.sessions().filter((session) => session.uuid !== sessionId)});
+      sessionRepository.delete(sessionId);
+  }
   })),
   withHooks((store, sessionRepository = inject(SessionRepository)) => ({
     onInit: () => {

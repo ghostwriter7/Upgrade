@@ -24,21 +24,6 @@
 
   </header>
 
-  @if (isEditable() && hasLeftExercises()) {
-    <mat-form-field class="full-width" appearance="outline">
-      <mat-label>Exercises</mat-label>
-      <mat-select [formField]="exerciseField.exerciseId">
-        @for (exercise of availableExercises(); track exercise.uuid) {
-          <mat-option [value]="exercise.uuid">{{ exercise.name }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-    <button class="full-width" matButton="filled" [disabled]="exerciseField.exerciseId().invalid()"
-            (click)="addExerciseEntry()">
-      Add
-    </button>
-  }
-
   @for (entry of editedSession().exerciseEntries; track entry.exerciseId) {
     <mat-card>
       <mat-card-header>
@@ -65,6 +50,25 @@
         }
       </mat-card-content>
     </mat-card>
+  }
+
+  @if (isEditable() && hasLeftExercises()) {
+    <div class="add-exercise">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Exercises</mat-label>
+        <mat-select [formField]="exerciseField.exerciseId">
+          @for (exercise of availableExercises(); track exercise.uuid) {
+            <mat-option [value]="exercise.uuid">{{ exercise.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button
+        matButton="filled"
+        [disabled]="exerciseField.exerciseId().invalid()"
+        (click)="addExerciseEntry()">
+        Add
+      </button>
+    </div>
   }
 
   @if (isEditable()) {

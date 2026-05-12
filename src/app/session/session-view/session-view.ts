@@ -22,9 +22,8 @@ import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
 import { SessionStore } from '../../store/session.store';
 import { form, FormField, required } from '@angular/forms/signals';
-import { createUuid } from '../../common/function/create-uuid.function';
 import { MatIcon } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 type ExerciseData = {
   exerciseId: string;
@@ -62,6 +61,7 @@ export default class SessionView {
 
   private readonly exerciseStore = inject(ExerciseStore);
   private readonly sessionStore = inject(SessionStore);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly editedSession = linkedSignal(() => this.session());
   protected readonly availableExercises = computed(() => {
@@ -120,7 +120,12 @@ export default class SessionView {
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}
 
-  protected deleteSession(): void {}
+  protected deleteSession(): void {
+    this.sessionStore.delete(this.editedSession().uuid);
+    if (this.route.snapshot.url.some((element) => element.path === 'new')) {
+      this.router.navigate(['/']);
+    }
+  }
 
   protected completeSession(): void {
     const session = this.editedSession();
