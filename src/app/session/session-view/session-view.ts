@@ -106,25 +106,16 @@ export default class SessionView {
     const exerciseId = this.exerciseField.exerciseId().value();
 
     if (exerciseId) {
-      this.editedSession.update((session) => {
-        session.addExerciseEntry(exerciseId);
-        return session.shallowClone();
-      });
+      this.editedSession.update((session) => session.addExerciseEntry(exerciseId));
     }
   }
 
   protected addSet(set: ExerciseSet, exerciseId: string): void {
-    this.editedSession.update((session) => {
-      session.addSet(exerciseId, set);
-      return session.shallowClone();
-    });
+    this.editedSession.update((session) => session.addSet(exerciseId, set));
   }
 
   protected deleteSet(exerciseId: string, index: number): void {
-    this.editedSession.update((session) => {
-      session.removeSet(exerciseId, index);
-      return session.shallowClone();
-    });
+    this.editedSession.update((session) => session.removeSet(exerciseId, index));
   }
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}

@@ -69,10 +69,11 @@ export class Session {
     return session;
   }
 
-  public addExerciseEntry(exerciseId: string): void {
-    if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return;
+  public addExerciseEntry(exerciseId: string): Session {
+    if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return this;
 
     this.exerciseEntries = [...this.exerciseEntries, new ExerciseEntry(exerciseId)];
+    return this.shallowClone();
   }
 
   public removeExerciseEntry(exerciseId: string): void {
@@ -86,14 +87,16 @@ export class Session {
     exerciseEntry.notes = notes;
   }
 
-  public addSet(exerciseId: string, set: ExerciseSet): void {
+  public addSet(exerciseId: string, set: ExerciseSet): Session {
     const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
     exerciseEntry.addSet(set);
+    return this.shallowClone();
   }
 
-  public removeSet(exerciseId: string, index: number): void {
+  public removeSet(exerciseId: string, index: number): Session {
     const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
     exerciseEntry.removeSetAt(index);
+    return this.shallowClone();
   }
 
   public updateSet(exerciseId: string, index: number, set: ExerciseSet): void {
