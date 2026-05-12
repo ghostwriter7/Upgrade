@@ -37,7 +37,7 @@ export class SessionCalendar {
   });
   private readonly firstDayOfWeek = computed(() => this.firstDayOfMonth().dayOfWeek);
   private readonly numberOfDaysInMonth = computed(() => this.firstDayOfMonth().daysInMonth);
-  private readonly sessionCountByDate = signal<Map<number, number>>(new Map());
+  private readonly sessionCountByDate = signal<Record<number, number>>({});
 
   protected readonly label = computed(() =>
     this.firstDayOfMonth().toLocaleString('en-GB', { month: 'long', year: 'numeric' }),
@@ -70,7 +70,7 @@ export class SessionCalendar {
     for (let i = 1; i <= this.numberOfDaysInMonth(); i++) {
       cells.push({
         day: i,
-        hasSessions: sessionCountByDate.has(i),
+        hasSessions: !!sessionCountByDate[i],
         date: this.toDateString(year, month, i),
       });
     }

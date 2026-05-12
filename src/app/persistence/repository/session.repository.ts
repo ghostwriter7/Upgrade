@@ -14,7 +14,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     super();
   }
 
-  public async getCountsByMonthAndYear(month: number, year: number): Promise<Map<number, number>> {
+  public async getCountsByMonthAndYear(month: number, year: number): Promise<Record<number, number>> {
     const request = await super.openKeyCursor(StoreName.SESSIONS, IndexName.StartedAt, () => {
       const startDate = new Temporal.PlainDate(year, month, 1);
       const endDate = startDate.add({ months: 1 });
@@ -23,7 +23,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     });
 
     return new Promise((resolve, reject) => {
-      const counts = new Map<number, number>();
+      const counts: Record<number, number> = {};
 
       request.onsuccess = () => {
         const cursor = request.result;
@@ -39,7 +39,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
 
         const { day } = DateHelper.toLocal(DateHelper.from(startedAt));
 
-        counts.set(day, (counts.get(day) ?? 0) + 1);
+        counts[day] = (counts[day] ?? 0) + 1;
 
         cursor.continue();
       };

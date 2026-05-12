@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { SessionList } from '../session-list/session-list';
 import { DateHelper } from '../../common/helper/date.helper';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
+import { SessionStore } from '../../store/session.store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,6 +23,14 @@ export default class SessionPage {
     this.date().toLocaleString('en-GB', { dateStyle: 'full' }),
   );
   private readonly router = inject(Router);
+  private readonly sessionStore = inject(SessionStore);
+
+  constructor() {
+    effect(() => {
+      const date = this.date();
+      this.sessionStore.setActiveDate(date.toPlainDate().toString());
+    });
+  }
 
   protected showPreviousDay(): void {
     const previousDate = this.date().subtract({ days: 1 }).toPlainDate().toString();

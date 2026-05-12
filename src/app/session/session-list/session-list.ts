@@ -1,10 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   input,
-  resource,
 } from '@angular/core';
 import { SessionStore } from '../../store/session.store';
 import { Loader } from '../../ui/loader/loader';
@@ -23,16 +21,6 @@ export class SessionList {
 
   private readonly sessionStore = inject(SessionStore);
 
-  private readonly sessionResource = resource({
-    params: () => ({ date: this.date() }),
-    loader: ({ params }) => this.sessionStore.getAllSessionsByDate(params.date),
-  });
-
-  protected readonly isLoading = this.sessionResource.isLoading;
-  protected readonly sessions = computed(() => {
-    if (this.sessionResource.hasValue()) {
-      return this.sessionResource.value();
-    }
-    return [];
-  });
+  protected readonly sessions = this.sessionStore.activeSessions;
+  protected readonly loading = this.sessionStore.loading;
 }

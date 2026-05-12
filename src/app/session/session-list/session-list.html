@@ -1,4 +1,4 @@
-@if (isLoading()) {
+@if (loading()) {
   <app-loader />
 } @else {
   @for (session of sessions(); track session.uuid) {
