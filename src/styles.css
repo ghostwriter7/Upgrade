@@ -1,3 +1,11 @@
+:root {
+  --page-height: calc(100svh - 56px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   color-scheme: dark;
 }

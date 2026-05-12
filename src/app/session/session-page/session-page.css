@@ -4,8 +4,15 @@
   flex-direction: column;
 }
 
-header {
+footer {
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px;
 }

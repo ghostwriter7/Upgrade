@@ -1,5 +1,7 @@
 .content {
-  width: min(95vw, 1200px);
+  display: flex;
+  width: min(100svw, 1200px);
+  min-height: var(--page-height);
   padding: 12px;
   overflow-x: hidden;
   background: var(--mat-sys-surface);

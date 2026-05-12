@@ -1,0 +1,8 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  gap: 2rem;
+
+  height: calc(var(--page-height) - 80px);
+}

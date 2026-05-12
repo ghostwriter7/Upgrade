@@ -1,13 +1,13 @@
-<header>
-  <button matMiniFab aria-label="Show previous day" (click)="showPreviousDay()">
+<app-session-list [date]="date()" />
+
+<footer>
+  <button class="info" matMiniFab aria-label="Show previous day" (click)="showPreviousDay()">
     <mat-icon>chevron_left</mat-icon>
   </button>
 
   <span>{{ label() }}</span>
 
-  <button matMiniFab aria-label="Show next day" (click)="showNextDay()">
+  <button class="info" matMiniFab aria-label="Show next day" (click)="showNextDay()">
     <mat-icon>chevron_right</mat-icon>
   </button>
-</header>
-
-<app-session-list [date]="date()" />
+</footer>
