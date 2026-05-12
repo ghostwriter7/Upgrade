@@ -10,7 +10,7 @@ export class ExerciseEntry {
   constructor(public readonly exerciseId: string) {}
 
   public addSet(set: ExerciseSet): void {
-    this.sets.push(set);
+    this.sets = [...this.sets, set];
   }
 
   public removeSetAt(index: number): void {
@@ -33,7 +33,7 @@ export class ExerciseEntry {
 export class Session {
   public exerciseEntries: ExerciseEntry[] = [];
   public notes: string | null = null;
-  public startedAt: TemporalType.Instant | null = null;
+  public startedAt: TemporalType.Instant = DateHelper.now();
   public finishedAt: TemporalType.Instant | null = null;
 
   constructor(
@@ -53,14 +53,26 @@ export class Session {
     return this.startedAt ? DateHelper.toLocal(this.startedAt).toString().substring(0, 7) : null;
   }
 
+  public get invalid(): boolean {
+    return this.exerciseEntries.every((entry) => entry.sets.length === 0);
+  }
+
   public static createEmpty() {
     return new Session(createUuid(), DateHelper.now());
+  }
+
+  public shallowClone(): Session {
+    const session = new Session(this.uuid, this.createdAt);
+    session.startedAt = this.startedAt;
+    session.finishedAt = this.finishedAt;
+    session.exerciseEntries = this.exerciseEntries;
+    return session;
   }
 
   public addExerciseEntry(exerciseId: string): void {
     if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return;
 
-    this.exerciseEntries.push(new ExerciseEntry(exerciseId));
+    this.exerciseEntries = [...this.exerciseEntries, new ExerciseEntry(exerciseId)];
   }
 
   public removeExerciseEntry(exerciseId: string): void {

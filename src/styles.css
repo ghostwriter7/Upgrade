@@ -5,3 +5,7 @@ body {
 .full-width {
   width: 100%;
 }
+
+.ml-auto {
+  margin-left: auto;
+}

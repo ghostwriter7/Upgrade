@@ -2,9 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   inject,
   input,
+  linkedSignal,
   signal,
 } from '@angular/core';
 import { MatButton, MatFabButton } from '@angular/material/button';
@@ -58,11 +58,12 @@ type ExerciseData = {
   styleUrl: './session-view.css',
 })
 export default class SessionView {
-  public session = input<Session | null>(null);
+  public session = input.required<Session>();
 
   private readonly exerciseStore = inject(ExerciseStore);
   private readonly sessionStore = inject(SessionStore);
 
+  protected readonly editedSession = linkedSignal(() => this.session());
   protected readonly availableExercises = computed(() => {
     const activeExerciseIds = this.activeExerciseIds();
     const allExercises = this.exerciseStore.exercises();
@@ -72,36 +73,27 @@ export default class SessionView {
     required(schema.exerciseId);
   });
   protected readonly hasLeftExercises = computed(() => this.availableExercises().length > 0);
-  protected readonly isSessionInvalid = computed(() =>
-    this.exerciseDate().every((entry) => entry.sets.length === 0),
+  protected readonly isSessionInvalid = computed(() => this.editedSession().invalid);
+  protected readonly isEditable = computed(() => !this.session().finishedAt);
+  protected readonly startedAt = computed(() =>
+    DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
   );
-  protected readonly exerciseDate = signal<ExerciseData>([]);
-  protected readonly isEditable = computed(() => !this.session());
-  protected readonly startedAt = computed(() => {
-    const startedAt = this.session()?.startedAt;
-
-    if (startedAt) {
-      return DateHelper.toLocal(startedAt);
-    }
-
-    return DateHelper.toLocal(DateHelper.now());
-  });
-  protected readonly startedAtValue = computed(() => this.startedAt().toLocaleString('en-GB', { timeStyle: 'short'}));
-  protected readonly finishedAtValue = computed(() => this.finishedAt()?.toLocaleString('en-GB', { timeStyle: 'short'}));
   private readonly activeExerciseIds = computed(
-    () => new Set(this.exerciseDate().map(({ exerciseId }) => exerciseId)),
+    () => new Set(this.editedSession().exerciseEntries.map(({ exerciseId }) => exerciseId)),
   );
   protected readonly finishedAt = computed(() => {
-    const finishedAt = this.session()?.finishedAt;
-    return finishedAt ? DateHelper.toLocal(finishedAt) : null;
+    const finishedAt = this.editedSession()?.finishedAt;
+    return finishedAt
+      ? DateHelper.toLocal(finishedAt).toLocaleString('en-GB', { timeStyle: 'short' })
+      : null;
   });
   protected readonly duration = computed(() => {
     const startedAt = this.startedAt();
-    const finishedAt = this.finishedAt();
+    const finishedAt = this.editedSession().finishedAt;
 
     if (!finishedAt) return null;
 
-    const duration = finishedAt.since(startedAt);
+    const duration = DateHelper.toLocal(finishedAt).since(startedAt);
     const { hours, minutes } = duration;
 
     if (hours) return `${hours}h ${minutes}m`;
@@ -111,52 +103,38 @@ export default class SessionView {
 
   private readonly router = inject(Router);
 
-  constructor() {
-    effect(() => {
-      const session = this.session();
-      if (session) {
-        this.exerciseDate.set(
-          session.exerciseEntries.map(({ exerciseId, sets }) => ({ exerciseId, sets })),
-        );
-      }
-    });
-  }
-
   protected addExerciseEntry(): void {
     const exerciseId = this.exerciseField.exerciseId().value();
 
     if (exerciseId) {
-      this.exerciseDate.update((entries) => [...entries, { exerciseId, sets: [] }]);
+      this.editedSession.update((session) => {
+        session.addExerciseEntry(exerciseId);
+        return session.shallowClone();
+      });
     }
   }
 
   protected addSet(set: ExerciseSet, exerciseId: string): void {
-    this.exerciseDate.update((entries) => {
-      const entryIndex = entries.findIndex((entry) => entry.exerciseId === exerciseId);
-      const entry = entries[entryIndex];
-      return entries.with(entryIndex, { ...entry, sets: [...entry.sets, set] });
+    this.editedSession.update((session) => {
+      session.addSet(exerciseId, set);
+      return session.shallowClone();
     });
   }
 
   protected deleteSet(exerciseId: string, index: number): void {
-    this.exerciseDate.update((entries) => {
-      const entryIndex = entries.findIndex((entry) => entry.exerciseId === exerciseId);
-      const entry = entries[entryIndex];
-      return entries.with(entryIndex, { ...entry, sets: entry.sets.toSpliced(index, 1) });
+    this.editedSession.update((session) => {
+      session.removeSet(exerciseId, index);
+      return session.shallowClone();
     });
   }
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}
 
+  protected deleteSession(): void {}
+
   protected completeSession(): void {
-    const session = new Session(createUuid(), DateHelper.now());
+    const session = this.editedSession();
     session.finishedAt = DateHelper.now();
-    session.startedAt = this.startedAt().toInstant();
-    const exerciseData = this.exerciseDate();
-    exerciseData.forEach((entry) => {
-      session.addExerciseEntry(entry.exerciseId);
-      entry.sets.forEach((set) => session.addSet(entry.exerciseId, set));
-    });
 
     this.sessionStore.save(session);
     this.router.navigate(['/session', session.date]);

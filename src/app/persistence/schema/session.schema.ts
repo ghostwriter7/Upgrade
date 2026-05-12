@@ -32,7 +32,7 @@ export const ExerciseEntrySchema = z.object({
 export const SessionSchema = z.object({
   uuid: z.uuid(),
   createdAt: z.iso.datetime(),
-  startedAt: z.iso.datetime().nullable(),
+  startedAt: z.iso.datetime(),
   finishedAt: z.iso.datetime().nullable(),
   notes: z.string().nullable(),
   exerciseEntries: z.array(ExerciseEntrySchema)

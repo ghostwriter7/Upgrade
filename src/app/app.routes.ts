@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './home/home-page/home-page';
+import { Session } from './domain/model/session.model';
 
 export const routes: Routes = [
   {
@@ -9,6 +10,9 @@ export const routes: Routes = [
   },
   {
     path: 'session/new',
+    data: {
+      session: Session.createEmpty(),
+    },
     loadComponent: () => import('./session/session-view/session-view'),
   },
   {

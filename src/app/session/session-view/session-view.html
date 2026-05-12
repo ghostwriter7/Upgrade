@@ -2,20 +2,25 @@
   <header>
     <button matFab extended>
       <mat-icon>access_time</mat-icon>
-      {{ startedAtValue() }}
+      {{ startedAt() }}
     </button>
-    @if (finishedAtValue(); as finishedAt) {
+    @if (finishedAt(); as finishedAt) {
       <button matFab extended>
         <mat-icon>access_time_filled</mat-icon>
-        {{ finishedAt  }}
+        {{ finishedAt }}
       </button>
     }
     @if (duration(); as duration) {
       <span class="metadata">
         <mat-icon>hourglass_empty</mat-icon>
         {{ duration }}
-    </span>
+      </span>
     }
+    <button matFab extended class="danger ml-auto" (click)="deleteSession()">
+      <mat-icon>delete_forever</mat-icon>
+      Delete
+    </button>
+
 
   </header>
 
@@ -34,7 +39,7 @@
     </button>
   }
 
-  @for (entry of exerciseDate(); track entry.exerciseId) {
+  @for (entry of editedSession().exerciseEntries; track entry.exerciseId) {
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{ entry.exerciseId | exerciseName }}</mat-card-title>
