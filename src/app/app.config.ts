@@ -2,8 +2,8 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
-import { DATABASE_TOKEN } from './persistence/database.token';
-import { databaseFactory } from './persistence/database-initializer.service';
+import { DATABASE_TOKEN } from './persistence/repository/database.token';
+import { databaseFactory } from './persistence/repository/database-initializer.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [

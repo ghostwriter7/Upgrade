@@ -1,7 +1,7 @@
 import { Session } from '../domain/model/session.model';
 import { patchState, signalStore, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { computed, inject } from '@angular/core';
-import { SessionRepository } from '../persistence/session.repository';
+import { SessionRepository } from '../persistence/repository/session.repository';
 
 interface State {
   sessions: Session[];

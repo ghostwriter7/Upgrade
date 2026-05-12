@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Session } from '../domain/model/session.model';
-import { SessionFactory } from '../domain/factory/session.factory';
+import { Session } from '../../domain/model/session.model';
 import { GenericRepository } from './generic.repository';
 import { StoreName } from './store-name.enum';
+import { SessionDto, SessionSchema } from '../schema/session.schema';
+import { SessionMapper } from '../mapper/session.mapper';
 
 @Injectable({ providedIn: 'root'})
-export class SessionRepository extends GenericRepository<Session> {
+export class SessionRepository extends GenericRepository<SessionDto> {
 
   constructor() {
     super();
@@ -13,11 +14,13 @@ export class SessionRepository extends GenericRepository<Session> {
 
   public override async findAll(): Promise<Session[]> {
     const results = await super.findAll(StoreName.SESSIONS);
-    return results.map(SessionFactory.fromJSON);
+    const dtos: SessionDto[] = results.map((data) => SessionSchema.parse(data));
+    return dtos.map(SessionMapper.toDomain);
   }
 
   public save(session: Session): Promise<void> {
-    return super.put(StoreName.SESSIONS, session);
+    const dto = SessionMapper.toDto(session);
+    return super.put(StoreName.SESSIONS, dto);
   }
 
   public override delete(sessionId: string): Promise<boolean> {

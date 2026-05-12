@@ -26,7 +26,7 @@ export class WeightedSet extends ExerciseSet {
 export class IsoSet extends ExerciseSet {
   constructor(
     public readonly duration: number,
-    public readonly weight?: number | null,
+    public readonly weight?: number,
   ) {
     super('iso');
   }
