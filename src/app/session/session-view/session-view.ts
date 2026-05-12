@@ -88,12 +88,11 @@ export default class SessionView {
       : null;
   });
   protected readonly duration = computed(() => {
-    const startedAt = this.startedAt();
-    const finishedAt = this.editedSession().finishedAt;
+    const { startedAt, finishedAt } = this.editedSession();
 
     if (!finishedAt) return null;
 
-    const duration = DateHelper.toLocal(finishedAt).since(startedAt);
+    const duration = DateHelper.toLocal(finishedAt).since(DateHelper.toLocal(startedAt));
     const { hours, minutes } = duration;
 
     if (hours) return `${hours}h ${minutes}m`;
