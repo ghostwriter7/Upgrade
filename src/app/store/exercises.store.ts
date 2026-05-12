@@ -1,15 +1,16 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { Exercise } from '../domain/model/exercise.model';
+import { DateHelper } from '../common/helper/date.helper';
 
-const now = new Date().toISOString();
+const now = DateHelper.now();
 const DefaultExercises: Exercise[] = [
-  new Exercise('aad365b9-4660-429a-84f6-a590f9d75a10', 'Isometric Front Split', null, now, null),
-  new Exercise('32aea503-5a4a-4249-a56e-c92f3793bc84', 'Front Split Slides', null, now, null),
-  new Exercise('a0124f1e-148a-49e0-8cfd-e0844f7635e1', 'Couch Stretch - High', 'Hips in high position. It targets quads.', now, null),
-  new Exercise('e65ac292-43d6-49b4-a602-56ee2a03ed74', 'Couch Stretch - Low', 'Hips in low position. It targets hip flexors.', now, null),
-  new Exercise('4b2415a0-486a-4a27-9056-5c07006e1454', 'Reverse Nordic Curls', null, now, null),
-  new Exercise('fbd043fd-6dd0-4882-a88f-9fb8126c9789', 'Kneeling Needle', null, now, null),
-  new Exercise('3a7a3406-7daa-402f-9943-2eb69706ea0b', 'Split Squats', null, now, null),
+  new Exercise('aad365b9-4660-429a-84f6-a590f9d75a10', 'Isometric Front Split', null),
+  new Exercise('32aea503-5a4a-4249-a56e-c92f3793bc84', 'Front Split Slides', null),
+  new Exercise('a0124f1e-148a-49e0-8cfd-e0844f7635e1', 'Couch Stretch - High', 'Hips in high position. It targets quads.'),
+  new Exercise('e65ac292-43d6-49b4-a602-56ee2a03ed74', 'Couch Stretch - Low', 'Hips in low position. It targets hip flexors.'),
+  new Exercise('4b2415a0-486a-4a27-9056-5c07006e1454', 'Reverse Nordic Curls', null),
+  new Exercise('fbd043fd-6dd0-4882-a88f-9fb8126c9789', 'Kneeling Needle', null),
+  new Exercise('3a7a3406-7daa-402f-9943-2eb69706ea0b', 'Split Squats', null),
 ];
 
 interface State {

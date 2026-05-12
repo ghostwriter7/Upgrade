@@ -11,8 +11,7 @@ export abstract class GenericRepository<T> {
   }
 
   protected async findAll(storeName: StoreName): Promise<unknown[]> {
-    const db = await this.getDb();
-    const transaction = db.transaction(storeName, 'readonly');
+    const transaction = await this.createReadTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.getAll();
 
@@ -23,8 +22,7 @@ export abstract class GenericRepository<T> {
   }
 
   protected async put(storeName: StoreName, entity: T): Promise<void> {
-    const db = await this.getDb();
-    const transaction = db.transaction(storeName, 'readwrite');
+    const transaction = await this.createWriteTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.put(entity);
 
@@ -32,6 +30,27 @@ export abstract class GenericRepository<T> {
       request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error!);
     });
+  }
+
+  protected async delete(storeName: StoreName, entityId: string): Promise<boolean> {
+    const transaction = await this.createWriteTransaction(storeName);
+    const store = transaction.objectStore(storeName);
+    const request = store.delete(entityId);
+
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(true);
+      request.onerror = () => reject(request.error!);
+    });
+  }
+
+  protected async createReadTransaction(storeName: StoreName): Promise<IDBTransaction> {
+    const db = await this.getDb();
+    return db.transaction(storeName, 'readonly');
+  }
+
+  protected async createWriteTransaction(storeName: StoreName): Promise<IDBTransaction> {
+    const db = await this.getDb();
+    return db.transaction(storeName, 'readwrite');
   }
 
 }

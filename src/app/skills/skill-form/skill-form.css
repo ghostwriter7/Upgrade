@@ -1,8 +1,0 @@
-.actions {
-  display: flex;
-  gap: 0.5rem;
-
-  button {
-    flex: 1;
-  }
-}

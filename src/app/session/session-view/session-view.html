@@ -2,12 +2,12 @@
   <header>
     <button matFab extended>
       <mat-icon>access_time</mat-icon>
-      {{ startedAt() | date: 'HH:mm' }}
+      {{ startedAtValue() }}
     </button>
-    @if (finishedAt(); as finishedAt) {
+    @if (finishedAtValue(); as finishedAt) {
       <button matFab extended>
         <mat-icon>access_time_filled</mat-icon>
-        {{ finishedAt | date: 'HH:mm' }}
+        {{ finishedAt  }}
       </button>
     }
     @if (duration(); as duration) {

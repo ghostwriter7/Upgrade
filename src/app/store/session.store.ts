@@ -17,7 +17,7 @@ export const SessionStore = signalStore(
   withComputed((store) => ({
     sessionsByMonth: computed(() =>
       store.sessions().reduce((lookup, session) => {
-        const dateId = session.startedAt?.slice(0, 7)!;
+        const dateId = session.yearMonth!;
 
         const existingSessions = lookup.get(dateId) ?? [];
         lookup.set(dateId, [...existingSessions, session]);
@@ -31,7 +31,8 @@ export const SessionStore = signalStore(
       const id = `${year}-${month.toString().padStart(2, '0')}`;
       return Promise.resolve(store.sessionsByMonth().get(id) || []);
     },
-    getAllSessionsByDate: async (date: string): Promise<Session[]> => store.sessions().filter((session) => session.startedAt?.slice(0, 10) === date),
+    getAllSessionsByDate: async (date: string): Promise<Session[]> => store.sessions()
+      .filter((session) => session.date === date),
     save: (session: Session) => {
       patchState(store, { sessions: [...store.sessions(), session] });
       sessionRepository.save(session);

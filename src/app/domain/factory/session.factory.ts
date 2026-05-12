@@ -1,5 +1,6 @@
 import { ExerciseEntry, Session } from '../model/session.model';
 import { BodyweightSet, IsoSet, WeightedSet } from '../model/exercise-set.model';
+import { DateHelper } from '../../common/helper/date.helper';
 
 interface SessionJson {
   uuid: string;
@@ -22,9 +23,9 @@ export class SessionFactory {
   public static fromJSON(data: unknown): Session {
     const json: SessionJson = SessionFactory.parseSessionJSON(data);
 
-    const session = new Session(json.uuid, json.createdAt);
-    session.startedAt = json.startedAt;
-    session.finishedAt = json.finishedAt;
+    const session = new Session(json.uuid, DateHelper.from(json.createdAt));
+    session.startedAt = DateHelper.from(json.startedAt);
+    session.finishedAt = json.finishedAt ? DateHelper.from(json.finishedAt) : null;
     session.notes = json.notes;
     session.exerciseEntries = json.exerciseEntries.map(SessionFactory.toExerciseEntry);
     return session;

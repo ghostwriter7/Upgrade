@@ -19,4 +19,8 @@ export class SessionRepository extends GenericRepository<Session> {
   public save(session: Session): Promise<void> {
     return super.put(StoreName.SESSIONS, session);
   }
+
+  public override delete(sessionId: string): Promise<boolean> {
+    return super.delete(StoreName.SESSIONS, sessionId);
+  }
 }
