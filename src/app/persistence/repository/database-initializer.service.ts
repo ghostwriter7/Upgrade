@@ -1,6 +1,7 @@
 import { DatabaseVersion } from './database-version.const';
 import { Observable, ReplaySubject } from 'rxjs';
 import { StoreName } from './store-name.enum';
+import { IndexName } from './index-name.enum';
 
 export function databaseFactory(): Observable<IDBDatabase> {
   const db = indexedDB.open('upgrade', DatabaseVersion);
@@ -14,7 +15,7 @@ export function databaseFactory(): Observable<IDBDatabase> {
     const existingObjectStores = db.objectStoreNames;
     if (!existingObjectStores.contains('sessions')) {
       const store = db.createObjectStore(StoreName.SESSIONS, { keyPath: 'uuid' });
-      store.createIndex('startedAtIndex', 'startedAt', { unique: false });
+      store.createIndex(IndexName.StartedAt, 'startedAt', { unique: false });
     }
   };
 

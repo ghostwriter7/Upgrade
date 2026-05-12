@@ -61,7 +61,10 @@ export class Session {
     return new Session(createUuid(), DateHelper.now());
   }
 
-  public shallowClone(): Session {
+  /**
+   * Performs a shallow clone of the session, creating a new instance with the same properties.
+   */
+  public clone(): Session {
     const session = new Session(this.uuid, this.createdAt);
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
@@ -73,7 +76,7 @@ export class Session {
     if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return this;
 
     this.exerciseEntries = [...this.exerciseEntries, new ExerciseEntry(exerciseId)];
-    return this.shallowClone();
+    return this.clone();
   }
 
   public removeExerciseEntry(exerciseId: string): void {
@@ -90,13 +93,13 @@ export class Session {
   public addSet(exerciseId: string, set: ExerciseSet): Session {
     const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
     exerciseEntry.addSet(set);
-    return this.shallowClone();
+    return this.clone();
   }
 
   public removeSet(exerciseId: string, index: number): Session {
     const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
     exerciseEntry.removeSetAt(index);
-    return this.shallowClone();
+    return this.clone();
   }
 
   public updateSet(exerciseId: string, index: number, set: ExerciseSet): void {

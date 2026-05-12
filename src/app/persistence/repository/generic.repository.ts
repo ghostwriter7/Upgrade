@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { DATABASE_TOKEN } from './database.token';
 import { firstValueFrom } from 'rxjs';
 import { StoreName } from './store-name.enum';
+import { IndexName } from './index-name.enum';
 
 export abstract class GenericRepository<T> {
   private readonly db = inject(DATABASE_TOKEN);
@@ -10,15 +11,31 @@ export abstract class GenericRepository<T> {
     return firstValueFrom(this.db);
   }
 
+  protected async openKeyCursor(storeName: StoreName,
+                                index: IndexName,
+                                createRange: () => IDBKeyRange): Promise<IDBRequest<IDBCursor | null>> {
+    const transaction = await this.createReadTransaction(storeName);
+    const store = transaction.objectStore(storeName);
+    return store.index(index).openKeyCursor(createRange());
+  }
+
+  protected async findAllBy(
+    storeName: StoreName,
+    query: (store: IDBObjectStore) => IDBRequest,
+  ): Promise<T[]> {
+    const transaction = await this.createReadTransaction(storeName);
+    const store = transaction.objectStore(storeName);
+    const request = query(store);
+
+    return this.responseFromRequest<T[]>(request);
+  }
+
   protected async findAll(storeName: StoreName): Promise<unknown[]> {
     const transaction = await this.createReadTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.getAll();
 
-    return new Promise((resolve, reject) => {
-      request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error!);
-    });
+    return this.responseFromRequest<T[]>(request);
   }
 
   protected async put(storeName: StoreName, entity: T): Promise<void> {
@@ -53,4 +70,10 @@ export abstract class GenericRepository<T> {
     return db.transaction(storeName, 'readwrite');
   }
 
+  private responseFromRequest<T>(request: IDBRequest): Promise<T> {
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error!);
+    });
+  }
 }

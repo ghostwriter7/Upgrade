@@ -95,12 +95,7 @@ export class SessionCalendar {
   constructor() {
     effect(async () => {
       const { year, month } = this.activeYearAndMonth();
-      const sessions = await this.sessionStore.getSessionsForMonthAndYear(month, year);
-      const sessionCountByDate = sessions.reduce((lookup, session) => {
-        const sessionDay = session.day;
-        lookup.set(sessionDay, (lookup.get(sessionDay) ?? 0) + 1);
-        return lookup;
-      }, new Map<number, number>());
+      const sessionCountByDate = await this.sessionStore.getCountsByMonthAndYear(month, year);
       this.sessionCountByDate.set(sessionCountByDate);
     });
   }
