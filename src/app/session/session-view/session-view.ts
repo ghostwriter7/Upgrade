@@ -7,7 +7,7 @@ import {
   linkedSignal,
   signal,
 } from '@angular/core';
-import { MatButton, MatFabButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { DateHelper } from '../../common/helper/date.helper';
@@ -24,11 +24,6 @@ import { SessionStore } from '../../store/session.store';
 import { form, FormField, required } from '@angular/forms/signals';
 import { MatIcon } from '@angular/material/icon';
 import { ActivatedRoute, Router } from '@angular/router';
-
-type ExerciseData = {
-  exerciseId: string;
-  sets: ExerciseSet[];
-}[];
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,11 +47,13 @@ type ExerciseData = {
     FormField,
     MatIcon,
     MatFabButton,
+    MatMiniFabButton,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
 })
 export default class SessionView {
+  public isNew = input(false);
   public session = input.required<Session>();
 
   private readonly exerciseStore = inject(ExerciseStore);
@@ -107,6 +104,7 @@ export default class SessionView {
 
     if (exerciseId) {
       this.editedSession.update((session) => session.addExerciseEntry(exerciseId));
+      this.exerciseField.exerciseId().reset('');
     }
   }
 
@@ -122,7 +120,7 @@ export default class SessionView {
 
   protected deleteSession(): void {
     this.sessionStore.delete(this.editedSession().uuid);
-    if (this.route.snapshot.url.some((element) => element.path === 'new')) {
+    if (this.isNew()) {
       this.router.navigate(['/']);
     }
   }

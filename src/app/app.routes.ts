@@ -12,6 +12,7 @@ export const routes: Routes = [
     path: 'session/new',
     data: {
       session: Session.createEmpty(),
+      isNew: true
     },
     loadComponent: () => import('./session/session-view/session-view'),
   },
