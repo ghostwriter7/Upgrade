@@ -11,7 +11,11 @@ export class DateHelper {
     return Temporal.Instant.from(date);
   }
 
-  public static toLocal(instant: TemporalType.Instant): TemporalType.ZonedDateTime {
-    return instant.toZonedDateTimeISO(DateHelper.WARSAW_TIMEZONE);
+  public static toLocal(input: TemporalType.Instant | TemporalType.PlainDate): TemporalType.ZonedDateTime {
+    if (input instanceof Temporal.PlainDate) {
+      return input.toZonedDateTime(DateHelper.WARSAW_TIMEZONE);
+    }
+
+    return input.toZonedDateTimeISO(DateHelper.WARSAW_TIMEZONE);
   }
 }

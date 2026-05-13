@@ -32,13 +32,19 @@ export const SessionStore = signalStore(
     activeSessions: computed(() => store.sessionsByDate()[store.activeDate()]),
   })),
   withMethods((store, sessionRepository = inject(SessionRepository)) => {
-    const createCountId = (date: TemporalType.Instant | TemporalType.ZonedDateTime): string => {
-      if (date instanceof Temporal.Instant) {
-        const zonedDate = DateHelper.toLocal(date);
-        return `${zonedDate.year}-${zonedDate.month}`;
-      }
-      return `${date.year}-${date.month}`;
+    const createCountId = (date: TemporalType.Instant | TemporalType.PlainDate): string => {
+      const zonedDate = DateHelper.toLocal(date);
+      return `${zonedDate.year}-${zonedDate.month}`;
     };
+
+    const computeCounts = (session: Session, change: number ): Record<string, Record<number, number>> => {
+      const countId = createCountId(session.startedAt);
+      const counts = { ...store.countsByMonthAndYear() };
+      const targetCounts = counts[countId] ?? {};
+      const dateIndex = session.day;
+      targetCounts[dateIndex] = Math.max(0, (targetCounts[dateIndex] ?? 0) + change);
+      return counts;
+    }
 
     return {
       setActiveDate: (activeDate: string) => patchState(store, { activeDate }),
@@ -47,8 +53,7 @@ export const SessionStore = signalStore(
         month: number,
         year: number,
       ): Promise<Record<number, number>> => {
-        const date = new Temporal.PlainDate(year, month, 1).toZonedDateTime(DateHelper.WARSAW_TIMEZONE);
-        const storeId = createCountId(date);
+        const storeId = createCountId(new Temporal.PlainDate(year, month, 1));
         const cachedEntry = store.countsByMonthAndYear()[storeId];
         if (cachedEntry) return cachedEntry;
 
@@ -64,12 +69,6 @@ export const SessionStore = signalStore(
       },
 
       save: (session: Session) => {
-        const countId = createCountId(session.startedAt);
-        const countsByMonthAndYear = store.countsByMonthAndYear();
-        const dayIndex = session.day;
-        const targetCounts = countsByMonthAndYear[countId] || {};
-        targetCounts[dayIndex] = (targetCounts[dayIndex] || 0) + 1;
-
         const dateId = session.date!;
         const sessionsByDate = { ...store.sessionsByDate() };
         const thisDateSessions = sessionsByDate[dateId] || [];
@@ -78,21 +77,12 @@ export const SessionStore = signalStore(
         patchState(store, (state) => ({
           ...state,
           sessionsByDate,
-          countsByMonthAndYear: {
-            ...state.countsByMonthAndYear,
-            [countId]: targetCounts,
-          },
+          countsByMonthAndYear: computeCounts(session, +1),
         }));
         sessionRepository.save(session);
       },
 
       delete: (session: Session) => {
-        const countId = createCountId(session.startedAt);
-        const countsByMonthAndYear = { ...store.countsByMonthAndYear()};
-        const dayIndex = session.day;
-        const targetCounts = countsByMonthAndYear[countId];
-        targetCounts[dayIndex] = (targetCounts[dayIndex] || 1) - 1;
-
         const dateId = session.date!;
         const sessionsByDate = { ...store.sessionsByDate() };
         sessionsByDate[dateId] = sessionsByDate[dateId]?.filter(
@@ -102,7 +92,7 @@ export const SessionStore = signalStore(
         patchState(store, (state) => ({
           ...state,
           sessionsByDate,
-          countsByMonthAndYear,
+          countsByMonthAndYear: computeCounts(session, - 1),
         }));
         sessionRepository.delete(session.uuid);
       },
@@ -114,13 +104,12 @@ export const SessionStore = signalStore(
         const date = store.activeDate();
 
         if (date) {
-          const cachedSessions = { ...store.sessionsByDate()};
+          const cachedSessions = { ...store.sessionsByDate() };
 
           if (!cachedSessions[date]) {
-
             const zonedDate = Temporal.PlainDate.from(date).toZonedDateTime({
               plainTime: '00:00',
-              timeZone: DateHelper.WARSAW_TIMEZONE
+              timeZone: DateHelper.WARSAW_TIMEZONE,
             });
 
             cachedSessions[date] = await sessionRepository.findAllByDate(zonedDate);
