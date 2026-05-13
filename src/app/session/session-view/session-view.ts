@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   inject,
   input,
   linkedSignal,
@@ -24,6 +25,9 @@ import { SessionStore } from '../../store/session.store';
 import { form, FormField, required } from '@angular/forms/signals';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteSessionAlert } from '../delete-session-alert/delete-session-alert';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,6 +101,8 @@ export default class SessionView {
   });
 
   private readonly router = inject(Router);
+  private readonly dialog = inject(MatDialog);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected addExerciseEntry(): void {
     const exerciseId = this.exerciseField.exerciseId().value();
@@ -118,11 +124,19 @@ export default class SessionView {
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}
 
   protected deleteSession(): void {
-    if (this.isNew()) {
-      this.router.navigate(['/']);
-    } else {
-      this.sessionStore.delete(this.editedSession());
-    }
+    const ref = this.dialog.open(DeleteSessionAlert);
+
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+      if (result) {
+        if (this.isNew()) {
+          this.router.navigate(['/']);
+        } else {
+          this.sessionStore.delete(this.editedSession());
+        }
+      }
+    });
   }
 
   protected completeSession(): void {
