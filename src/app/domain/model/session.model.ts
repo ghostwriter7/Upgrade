@@ -49,10 +49,6 @@ export class Session {
     return this.startedAt ? DateHelper.toLocal(this.startedAt).toPlainDate().toString() : null;
   }
 
-  public get yearMonth() {
-    return this.startedAt ? DateHelper.toLocal(this.startedAt).toString().substring(0, 7) : null;
-  }
-
   public get invalid(): boolean {
     return this.exerciseEntries.every((entry) => entry.sets.length === 0);
   }

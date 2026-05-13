@@ -12,19 +12,22 @@ export class DateHelper {
   }
 
   public static toLocal(
-    input: TemporalType.Instant | TemporalType.PlainDate,
+    input: TemporalType.Instant | TemporalType.PlainDate | string,
   ): TemporalType.ZonedDateTime {
+    if (typeof input === 'string') {
+      if (input.length === 10)
+        return Temporal.PlainDate.from(input).toZonedDateTime({
+          plainTime: '00:00',
+          timeZone: DateHelper.WARSAW_TIMEZONE,
+        });
+
+      throw new Error('No other string input but matching pattern of YYYY-MM-DD is supported for now');
+    }
+
     if (input instanceof Temporal.PlainDate) {
       return input.toZonedDateTime(DateHelper.WARSAW_TIMEZONE);
     }
 
     return input.toZonedDateTimeISO(DateHelper.WARSAW_TIMEZONE);
-  }
-
-  public static toZone(date: string): TemporalType.ZonedDateTime {
-    return Temporal.PlainDate.from(date).toZonedDateTime({
-      plainTime: '00:00',
-      timeZone: DateHelper.WARSAW_TIMEZONE,
-    });
   }
 }

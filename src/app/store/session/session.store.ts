@@ -46,6 +46,7 @@ export const SessionStore = signalStore(
       const targetCounts = counts[countId] ?? {};
       const dateIndex = session.day;
       targetCounts[dateIndex] = Math.max(0, (targetCounts[dateIndex] ?? 0) + change);
+      counts[countId] = targetCounts;
       return counts;
     }
 
@@ -110,7 +111,7 @@ export const SessionStore = signalStore(
           const cachedSessions = untracked(store.sessionsByDate);
 
           if (!cachedSessions[date]) {
-            const zonedDate = DateHelper.toZone(date);
+            const zonedDate = DateHelper.toLocal(date);
 
             const sessionsByDate = { ...cachedSessions };
             sessionsByDate[date] = await sessionRepository.findAllByDate(zonedDate);

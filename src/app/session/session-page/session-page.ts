@@ -16,7 +16,7 @@ import { SessionStore } from '../../store/session/session.store';
 })
 export default class SessionPage {
   public date = input.required<TemporalType.ZonedDateTime, string>({
-    transform: DateHelper.toZone,
+    transform: DateHelper.toLocal,
   });
 
   protected readonly label = computed(() =>

@@ -10,7 +10,7 @@ type SessionRepositoryMock = Mocked<
 >;
 
 describe('SessionStore', () => {
-  let sessionStore: InstanceType<typeof SessionStore>;
+  let store: InstanceType<typeof SessionStore>;
 
   const sessionRepositoryMockFactory = () => ({
     getCountsByMonthAndYear: vi.fn(),
@@ -28,7 +28,7 @@ describe('SessionStore', () => {
     TestBed.configureTestingModule({
       providers: [{ provide: SessionRepository, useValue: sessionRepositoryMock }],
     });
-    sessionStore = TestBed.inject(SessionStore);
+    store = TestBed.inject(SessionStore);
   });
 
   const flushEffectsAndPromises = async () => {
@@ -49,17 +49,17 @@ describe('SessionStore', () => {
       await flushEffectsAndPromises();
 
       expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(now);
-      expect(sessionStore.activeSessions()).toEqual([]);
+      expect(store.activeSessions()).toEqual([]);
     });
 
     it('should fetch sessions for the target date from the repository when not available in the cache', async () => {
       sessionRepositoryMock.findAllByDate.mockResolvedValueOnce([]);
-      sessionStore.setActiveDate(yesterdayStr);
+      store.setActiveDate(yesterdayStr);
 
       await flushEffectsAndPromises();
 
       expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(yesterday);
-      expect(sessionStore.activeSessions()).toEqual([]);
+      expect(store.activeSessions()).toEqual([]);
     });
 
     it('should early return sessions from the cache when available', async () => {
@@ -73,9 +73,9 @@ describe('SessionStore', () => {
       await flushEffectsAndPromises(); // Fetch today's data
 
       expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(now);
-      expect(sessionStore.activeSessions()).toEqual(todaySessions);
+      expect(store.activeSessions()).toEqual(todaySessions);
 
-      sessionStore.setActiveDate(yesterdayStr);
+      store.setActiveDate(yesterdayStr);
 
       await flushEffectsAndPromises(); // Fetch yesterday's data
 
@@ -83,12 +83,12 @@ describe('SessionStore', () => {
 
       sessionRepositoryMock.findAllByDate.mockClear();
 
-      sessionStore.setActiveDate(nowStr);
+      store.setActiveDate(nowStr);
 
       TestBed.tick(); // Trigger effect
 
       expect(sessionRepositoryMock.findAllByDate).not.toHaveBeenCalled();
-      expect(sessionStore.activeSessions()).toEqual(todaySessions);
+      expect(store.activeSessions()).toEqual(todaySessions);
     });
   });
 
@@ -102,7 +102,7 @@ describe('SessionStore', () => {
     it('should fetch counts from the repository when there is no cached entry', async () => {
       sessionRepositoryMock.getCountsByMonthAndYear.mockResolvedValueOnce(savedCounts);
 
-      const counts = await sessionStore.getCountsByMonthAndYear(7, 2026);
+      const counts = await store.getCountsByMonthAndYear(7, 2026);
 
       expect(counts).toEqual(savedCounts);
       expect(sessionRepositoryMock.getCountsByMonthAndYear).toHaveBeenCalledExactlyOnceWith(
@@ -111,14 +111,131 @@ describe('SessionStore', () => {
       );
     });
 
-    it('should return counts from the cache when it is available',async () => {
+    it('should return counts from the cache when it is available', async () => {
       sessionRepositoryMock.getCountsByMonthAndYear.mockResolvedValueOnce(savedCounts);
-      await sessionStore.getCountsByMonthAndYear(7, 2026);
+      await store.getCountsByMonthAndYear(7, 2026);
 
-      const counts = await sessionStore.getCountsByMonthAndYear(7, 2026);
+      const counts = await store.getCountsByMonthAndYear(7, 2026);
 
       expect(counts).toEqual(savedCounts);
       expect(sessionRepositoryMock.getCountsByMonthAndYear).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  const sessionOne = Session.createEmpty();
+  sessionOne.startedAt = Temporal.Instant.from('2023-08-01T00:00:00Z');
+  const { year, month } = DateHelper.toLocal(sessionOne.startedAt);
+  const yearMonthId = `${year}-${month}`;
+
+  const sessionTwo = Session.createEmpty();
+  sessionTwo.startedAt = sessionOne.startedAt;
+
+  const sessionThree = sessionTwo.clone();
+  sessionThree.startedAt = DateHelper.toLocal(sessionOne.startedAt)
+    .add(Temporal.Duration.from('+P2D'))
+    .toInstant();
+
+  describe('Save a session', () => {
+    it('should save a new session and increment a counter', () => {
+      store.save(sessionOne);
+
+      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionOne);
+      expect(store.sessionsByDate()).toEqual({
+        [sessionOne.date!]: [sessionOne],
+      });
+      expect(store.countsByMonthAndYear()).toEqual({
+        [yearMonthId]: {
+          [sessionOne.day]: 1,
+        },
+      });
+    });
+
+    it('should properly save a new session when an existing session for the same day exists', () => {
+      store.save(sessionOne);
+      sessionRepositoryMock.save.mockClear();
+
+      store.save(sessionTwo);
+
+      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionTwo);
+      expect(store.sessionsByDate()).toEqual({ [sessionTwo.date!]: [sessionOne, sessionTwo] });
+      expect(store.countsByMonthAndYear()).toEqual({
+        [yearMonthId]: {
+          [sessionTwo.day]: 2,
+        },
+      });
+    });
+
+    it('should properly save a new session when another session exists in the cache for another day', () => {
+      store.save(sessionOne);
+      sessionRepositoryMock.save.mockClear();
+
+      store.save(sessionThree);
+
+      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionThree);
+      expect(store.sessionsByDate()).toEqual({
+        [sessionOne.date!]: [sessionOne],
+        [sessionThree.date!]: [sessionThree],
+      });
+      expect(store.countsByMonthAndYear()).toEqual({
+        [yearMonthId]: {
+          [sessionOne.day]: 1,
+          [sessionThree.day]: 1,
+        },
+      });
+    });
+  });
+
+  describe('Delete a session', () => {
+    it('should delete a session and decrement a counter when no other sessions exist for the same day', () => {
+      store.save(sessionOne);
+
+      store.delete(sessionOne);
+
+      expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
+      expect(store.sessionsByDate()).toEqual({
+        [sessionOne.date!]: [],
+      });
+      expect(store.countsByMonthAndYear()).toEqual({
+        [yearMonthId]: {
+          [sessionOne.day]: 0,
+        },
+      });
+    });
+
+    it('should delete a session when another session exists for the same day', () => {
+      store.save(sessionOne);
+      store.save(sessionTwo)
+
+      store.delete(sessionOne);
+
+      expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
+      expect(store.sessionsByDate()).toEqual({
+        [sessionTwo.date!]: [sessionTwo],
+      });
+      expect(store.countsByMonthAndYear()).toEqual({
+        [yearMonthId]: {
+          [sessionTwo.day]: 1,
+        },
+      });
+    });
+
+    it('should delete a session when another session exists in the cache (different day)', () => {
+      store.save(sessionOne);
+      store.save(sessionThree);
+
+      store.delete(sessionOne);
+
+      expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
+      expect(store.sessionsByDate()).toEqual({
+        [sessionOne.date!]: [],
+        [sessionThree.date!]: [sessionThree],
+      });
+      expect(store.countsByMonthAndYear()).toEqual({
+        [yearMonthId]: {
+          [sessionOne.day]: 0,
+          [sessionThree.day]: 1,
+        },
+      });
     });
   });
 });
