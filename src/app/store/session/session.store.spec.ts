@@ -4,13 +4,48 @@ import { TestBed } from '@angular/core/testing';
 import { SessionRepository } from '../../persistence/repository/session.repository';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Session } from '../../domain/model/session.model';
+import { createUuid } from '../../common/function/create-uuid.function';
 
 type SessionRepositoryMock = Mocked<
   Pick<SessionRepository, 'findAllByDate' | 'getCountsByMonthAndYear' | 'save' | 'delete'>
 >;
 
+const createSessionAt = (iso: string): Session => {
+  const session = Session.createEmpty();
+  session.startedAt = Temporal.Instant.from(iso);
+  return session;
+};
+
+const createSessionFixture = () => {
+  const sessionOne = createSessionAt('2023-08-01T00:00:00Z');
+
+  const sessionTwo = Session.createEmpty();
+  sessionTwo.startedAt = sessionOne.startedAt;
+
+  const sessionThree = Session.createEmpty();
+  sessionThree.startedAt = DateHelper.toLocal(sessionOne.startedAt)
+    .add(Temporal.Duration.from('+P2D'))
+    .toInstant();
+
+  const { year, month } = DateHelper.toLocal(sessionOne.startedAt);
+  const yearMonthId = `${year}-${month}`;
+
+  return {
+    sessionOne,
+    sessionTwo,
+    sessionThree,
+    yearMonthId,
+  };
+};
+
 describe('SessionStore', () => {
   let store: InstanceType<typeof SessionStore>;
+
+  const expectSessionsByDate = (expected: Record<string, Session[]>) =>
+    expect(store.sessionsByDate()).toEqual(expected);
+
+  const expectCountsByMonthAndYear = (expected: Record<string, Record<number, number>>) =>
+    expect(store.countsByMonthAndYear()).toEqual(expected);
 
   const sessionRepositoryMockFactory = () => ({
     getCountsByMonthAndYear: vi.fn(),
@@ -122,61 +157,41 @@ describe('SessionStore', () => {
     });
   });
 
-  const sessionOne = Session.createEmpty();
-  sessionOne.startedAt = Temporal.Instant.from('2023-08-01T00:00:00Z');
-  const { year, month } = DateHelper.toLocal(sessionOne.startedAt);
-  const yearMonthId = `${year}-${month}`;
-
-  const sessionTwo = Session.createEmpty();
-  sessionTwo.startedAt = sessionOne.startedAt;
-
-  const sessionThree = sessionTwo.clone();
-  sessionThree.startedAt = DateHelper.toLocal(sessionOne.startedAt)
-    .add(Temporal.Duration.from('+P2D'))
-    .toInstant();
-
   describe('Save a session', () => {
     it('should save a new session and increment a counter', () => {
+      const { sessionOne, yearMonthId } = createSessionFixture();
       store.save(sessionOne);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionOne);
-      expect(store.sessionsByDate()).toEqual({
-        [sessionOne.date!]: [sessionOne],
-      });
-      expect(store.countsByMonthAndYear()).toEqual({
-        [yearMonthId]: {
-          [sessionOne.day]: 1,
-        },
-      });
+      expectSessionsByDate({ [sessionOne.date!]: [sessionOne] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.day]: 1 } });
     });
 
     it('should properly save a new session when an existing session for the same day exists', () => {
+      const { sessionOne, sessionTwo, yearMonthId } = createSessionFixture();
       store.save(sessionOne);
       sessionRepositoryMock.save.mockClear();
 
       store.save(sessionTwo);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionTwo);
-      expect(store.sessionsByDate()).toEqual({ [sessionTwo.date!]: [sessionOne, sessionTwo] });
-      expect(store.countsByMonthAndYear()).toEqual({
-        [yearMonthId]: {
-          [sessionTwo.day]: 2,
-        },
-      });
+      expectSessionsByDate({ [sessionTwo.date!]: [sessionOne, sessionTwo] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.day]: 2 } });
     });
 
     it('should properly save a new session when another session exists in the cache for another day', () => {
+      const { sessionOne, sessionThree, yearMonthId } = createSessionFixture();
       store.save(sessionOne);
       sessionRepositoryMock.save.mockClear();
 
       store.save(sessionThree);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionThree);
-      expect(store.sessionsByDate()).toEqual({
+      expectSessionsByDate({
         [sessionOne.date!]: [sessionOne],
         [sessionThree.date!]: [sessionThree],
       });
-      expect(store.countsByMonthAndYear()).toEqual({
+      expectCountsByMonthAndYear({
         [yearMonthId]: {
           [sessionOne.day]: 1,
           [sessionThree.day]: 1,
@@ -187,55 +202,38 @@ describe('SessionStore', () => {
 
   describe('Delete a session', () => {
     it('should delete a session and decrement a counter when no other sessions exist for the same day', () => {
+      const { sessionOne, yearMonthId } = createSessionFixture();
       store.save(sessionOne);
 
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expect(store.sessionsByDate()).toEqual({
-        [sessionOne.date!]: [],
-      });
-      expect(store.countsByMonthAndYear()).toEqual({
-        [yearMonthId]: {
-          [sessionOne.day]: 0,
-        },
-      });
+      expectSessionsByDate({ [sessionOne.date!]: [] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.day]: 0 } });
     });
 
     it('should delete a session when another session exists for the same day', () => {
+      const { sessionOne, sessionTwo, yearMonthId } = createSessionFixture();
       store.save(sessionOne);
-      store.save(sessionTwo)
+      store.save(sessionTwo);
 
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expect(store.sessionsByDate()).toEqual({
-        [sessionTwo.date!]: [sessionTwo],
-      });
-      expect(store.countsByMonthAndYear()).toEqual({
-        [yearMonthId]: {
-          [sessionTwo.day]: 1,
-        },
-      });
+      expectSessionsByDate({ [sessionTwo.date!]: [sessionTwo] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.day]: 1 } });
     });
 
     it('should delete a session when another session exists in the cache (different day)', () => {
+      const { sessionOne, sessionThree, yearMonthId } = createSessionFixture();
       store.save(sessionOne);
       store.save(sessionThree);
 
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expect(store.sessionsByDate()).toEqual({
-        [sessionOne.date!]: [],
-        [sessionThree.date!]: [sessionThree],
-      });
-      expect(store.countsByMonthAndYear()).toEqual({
-        [yearMonthId]: {
-          [sessionOne.day]: 0,
-          [sessionThree.day]: 1,
-        },
-      });
+      expectSessionsByDate({ [sessionOne.date!]: [], [sessionThree.date!]: [sessionThree] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.day]: 0, [sessionThree.day]: 1 } });
     });
   });
 });
