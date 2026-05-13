@@ -29,7 +29,10 @@ export const SessionStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     loading: computed(() => store.sessionsByDate()[store.activeDate()] === undefined),
-    activeSessions: computed(() => store.activeDate() ? store.sessionsByDate()[store.activeDate()] : null),
+    activeSessions: computed(() => {
+      const activeDate = store.activeDate();
+      return activeDate ? store.sessionsByDate()[activeDate] : null;
+    }),
   })),
   withMethods((store, sessionRepository = inject(SessionRepository)) => {
     const createCountId = (date: TemporalType.Instant | TemporalType.PlainDate): string => {
@@ -104,19 +107,17 @@ export const SessionStore = signalStore(
         const date = store.activeDate();
 
         if (date) {
-          const cachedSessions = { ...untracked(store.sessionsByDate) };
+          const cachedSessions = untracked(store.sessionsByDate);
 
           if (!cachedSessions[date]) {
-            const zonedDate = Temporal.PlainDate.from(date).toZonedDateTime({
-              plainTime: '00:00',
-              timeZone: DateHelper.WARSAW_TIMEZONE,
-            });
+            const zonedDate = DateHelper.toZone(date);
 
-            cachedSessions[date] = await sessionRepository.findAllByDate(zonedDate);
+            const sessionsByDate = { ...cachedSessions };
+            sessionsByDate[date] = await sessionRepository.findAllByDate(zonedDate);
 
             patchState(store, (state) => ({
               ...state,
-              sessionsByDate: cachedSessions,
+              sessionsByDate,
             }));
           }
         }

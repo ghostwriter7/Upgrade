@@ -11,11 +11,20 @@ export class DateHelper {
     return Temporal.Instant.from(date);
   }
 
-  public static toLocal(input: TemporalType.Instant | TemporalType.PlainDate): TemporalType.ZonedDateTime {
+  public static toLocal(
+    input: TemporalType.Instant | TemporalType.PlainDate,
+  ): TemporalType.ZonedDateTime {
     if (input instanceof Temporal.PlainDate) {
       return input.toZonedDateTime(DateHelper.WARSAW_TIMEZONE);
     }
 
     return input.toZonedDateTimeISO(DateHelper.WARSAW_TIMEZONE);
+  }
+
+  public static toZone(date: string): TemporalType.ZonedDateTime {
+    return Temporal.PlainDate.from(date).toZonedDateTime({
+      plainTime: '00:00',
+      timeZone: DateHelper.WARSAW_TIMEZONE,
+    });
   }
 }

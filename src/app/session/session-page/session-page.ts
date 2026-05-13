@@ -15,9 +15,9 @@ import { SessionStore } from '../../store/session/session.store';
   styleUrl: './session-page.css',
 })
 export default class SessionPage {
-  public date = input.required<TemporalType.ZonedDateTime, string>(
-    { transform: (value) => Temporal.PlainDate.from(value).toZonedDateTime(DateHelper.WARSAW_TIMEZONE)}
-  );
+  public date = input.required<TemporalType.ZonedDateTime, string>({
+    transform: DateHelper.toZone,
+  });
 
   protected readonly label = computed(() =>
     this.date().toLocaleString('en-GB', { dateStyle: 'full' }),
