@@ -1,3 +1,12 @@
+.set-type-selector {
+  display: flex;
+  margin-bottom: 1rem;
+
+  .set-type-value {
+    flex: 1;
+  }
+}
+
 .actions {
   display: flex;
   gap: 0.5rem;

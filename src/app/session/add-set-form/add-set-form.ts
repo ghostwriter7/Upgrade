@@ -13,6 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { min, form, FormField, hidden, required, validate } from '@angular/forms/signals';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 type SetData = {
   type: ExerciseSetType;
@@ -35,6 +36,8 @@ type SetData = {
     MatMiniFabButton,
     MatIcon,
     FormField,
+    MatButtonToggleGroup,
+    MatButtonToggle,
   ],
   templateUrl: './add-set-form.html',
   styleUrl: './add-set-form.css',
@@ -61,7 +64,7 @@ export class AddSetForm {
     min(schemaPath.duration, 1);
     validate(schemaPath.weight, ({ valueOf, value }) => {
       if (valueOf(schemaPath.type) === 'weight' && value() <= 0) {
-        return { kind: 'error', message: 'Weight must be positive' }
+        return { kind: 'error', message: 'Weight must be positive' };
       }
       return null;
     });

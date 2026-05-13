@@ -1,12 +1,14 @@
 @if (showForm()) {
-  <mat-form-field class="full-width" appearance="outline">
-    <mat-label>Set Type</mat-label>
-    <mat-select [formField]="setForm.type">
-      @for (option of setTypeOptions; track option.value) {
-        <mat-option [value]="option.value">{{ option.label }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
+  <mat-button-toggle-group
+    class="set-type-selector"
+    aria-label="Set type selector"
+    [formField]="setForm.type"
+    [hideSingleSelectionIndicator]="true"
+  >
+    @for (option of setTypeOptions; track option.value) {
+    <mat-button-toggle class="set-type-value" [value]="option.value">{{ option.label }}</mat-button-toggle>
+    }
+  </mat-button-toggle-group>
 
   @if (!setForm.duration().hidden()) {
     <mat-form-field class="full-width" appearance="outline">
