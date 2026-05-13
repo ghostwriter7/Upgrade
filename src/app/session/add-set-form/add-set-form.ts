@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { ExerciseStore } from '../../store/exercises.store';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
 import {
   BodyweightSet,
   ExerciseSet,
@@ -28,8 +27,6 @@ type SetData = {
   imports: [
     MatFormField,
     MatLabel,
-    MatSelect,
-    MatOption,
     ReactiveFormsModule,
     MatInput,
     MatButton,
