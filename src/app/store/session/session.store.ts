@@ -1,4 +1,4 @@
-import { Session } from '../domain/model/session.model';
+import { Session } from '../../domain/model/session.model';
 import {
   patchState,
   signalStore,
@@ -7,10 +7,10 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { computed, effect, inject } from '@angular/core';
-import { SessionRepository } from '../persistence/repository/session.repository';
+import { computed, effect, inject, untracked } from '@angular/core';
+import { SessionRepository } from '../../persistence/repository/session.repository';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { DateHelper } from '../common/helper/date.helper';
+import { DateHelper } from '../../common/helper/date.helper';
 
 interface State {
   activeDate: string;
@@ -29,7 +29,7 @@ export const SessionStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     loading: computed(() => store.sessionsByDate()[store.activeDate()] === undefined),
-    activeSessions: computed(() => store.sessionsByDate()[store.activeDate()]),
+    activeSessions: computed(() => store.activeDate() ? store.sessionsByDate()[store.activeDate()] : null),
   })),
   withMethods((store, sessionRepository = inject(SessionRepository)) => {
     const createCountId = (date: TemporalType.Instant | TemporalType.PlainDate): string => {
@@ -104,7 +104,7 @@ export const SessionStore = signalStore(
         const date = store.activeDate();
 
         if (date) {
-          const cachedSessions = { ...store.sessionsByDate() };
+          const cachedSessions = { ...untracked(store.sessionsByDate) };
 
           if (!cachedSessions[date]) {
             const zonedDate = Temporal.PlainDate.from(date).toZonedDateTime({

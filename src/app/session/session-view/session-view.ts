@@ -21,7 +21,7 @@ import { SetView } from '../set-view/set-view';
 import { AddSetForm } from '../add-set-form/add-set-form';
 import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
-import { SessionStore } from '../../store/session.store';
+import { SessionStore } from '../../store/session/session.store';
 import { form, FormField, required } from '@angular/forms/signals';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';

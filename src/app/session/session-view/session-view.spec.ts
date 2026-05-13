@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SessionView } from './session-view';
+import SessionView from './session-view';
 
 describe('SessionView', () => {
   let component: SessionView;

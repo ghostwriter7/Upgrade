@@ -9,7 +9,7 @@ import {
 import { Temporal } from '@js-temporal/polyfill';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
-import { SessionStore } from '../../store/session.store';
+import { SessionStore } from '../../store/session/session.store';
 import { RouterLink } from '@angular/router';
 
 interface CalendarCell {

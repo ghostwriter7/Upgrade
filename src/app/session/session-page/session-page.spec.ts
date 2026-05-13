@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SessionPage } from './session-page';
+import SessionPage from './session-page';
 
 describe('SessionPage', () => {
   let component: SessionPage;

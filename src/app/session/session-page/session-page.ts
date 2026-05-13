@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { SessionList } from '../session-list/session-list';
 import { DateHelper } from '../../common/helper/date.helper';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { SessionStore } from '../../store/session.store';
+import { SessionStore } from '../../store/session/session.store';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

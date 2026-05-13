@@ -4,7 +4,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { SessionStore } from '../../store/session.store';
+import { SessionStore } from '../../store/session/session.store';
 import { Loader } from '../../ui/loader/loader';
 import SessionView from '../session-view/session-view';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
