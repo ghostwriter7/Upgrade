@@ -26,8 +26,7 @@ describe('SessionStore', () => {
 
     sessionRepositoryMock = sessionRepositoryMockFactory();
     TestBed.configureTestingModule({
-      providers: [
-        { provide: SessionRepository, useValue: sessionRepositoryMock }],
+      providers: [{ provide: SessionRepository, useValue: sessionRepositoryMock }],
     });
     sessionStore = TestBed.inject(SessionStore);
   });
@@ -37,10 +36,10 @@ describe('SessionStore', () => {
     await Promise.resolve();
   };
 
-  describe('Initialization', () => {
-    const now = DateHelper.toLocal(DateHelper.now()).withPlainTime('00:00');
-    const nowStr = now.toPlainDate().toString();
+  const now = DateHelper.toLocal(DateHelper.now()).withPlainTime('00:00');
+  const nowStr = now.toPlainDate().toString();
 
+  describe('Initialization', () => {
     const yesterday = now.subtract({ days: 1 });
     const yesterdayStr = yesterday.toPlainDate().toString();
 
@@ -90,6 +89,36 @@ describe('SessionStore', () => {
 
       expect(sessionRepositoryMock.findAllByDate).not.toHaveBeenCalled();
       expect(sessionStore.activeSessions()).toEqual(todaySessions);
+    });
+  });
+
+  describe('Counts by a month and a year', () => {
+    beforeEach(async () => {
+      sessionRepositoryMock.findAllByDate.mockResolvedValueOnce([]);
+      await flushEffectsAndPromises();
+    });
+
+    const savedCounts = { 1: 1, 3: 1 };
+    it('should fetch counts from the repository when there is no cached entry', async () => {
+      sessionRepositoryMock.getCountsByMonthAndYear.mockResolvedValueOnce(savedCounts);
+
+      const counts = await sessionStore.getCountsByMonthAndYear(7, 2026);
+
+      expect(counts).toEqual(savedCounts);
+      expect(sessionRepositoryMock.getCountsByMonthAndYear).toHaveBeenCalledExactlyOnceWith(
+        7,
+        2026,
+      );
+    });
+
+    it('should return counts from the cache when it is available',async () => {
+      sessionRepositoryMock.getCountsByMonthAndYear.mockResolvedValueOnce(savedCounts);
+      await sessionStore.getCountsByMonthAndYear(7, 2026);
+
+      const counts = await sessionStore.getCountsByMonthAndYear(7, 2026);
+
+      expect(counts).toEqual(savedCounts);
+      expect(sessionRepositoryMock.getCountsByMonthAndYear).toHaveBeenCalledTimes(1);
     });
   });
 });
