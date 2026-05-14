@@ -1,6 +1,6 @@
 import { describe, expect, it, vi} from 'vitest'
 import { DateHelper } from '../../common/helper/date.helper';
-import { ExerciseEntry, Session } from './session.model';
+import { Session } from './session.model';
 import { BodyweightSet } from './exercise-set.model';
 
 describe('Session', () => {
@@ -30,7 +30,7 @@ describe('Session', () => {
       'should return true when there are no sets',
       (exerciseIds) => {
         const session = Session.createEmpty();
-        exerciseIds.forEach((exerciseId) => session.addExerciseEntry(exerciseId));
+        exerciseIds.forEach((exerciseId) => session.addExercise(exerciseId));
 
         expect(session.isEmpty).toEqual(true);
       },
@@ -38,9 +38,9 @@ describe('Session', () => {
 
     it('should return false when there is at least one set associated with at least one exercise', () => {
       const session = Session.createEmpty();
-      session.addExerciseEntry('A');
-      session.addExerciseEntry('B');
-      session.addExerciseEntry('C');
+      session.addExercise('A');
+      session.addExercise('B');
+      session.addExercise('C');
       session.addSet('C', new BodyweightSet(5));
 
       expect(session.isEmpty).toEqual(false);

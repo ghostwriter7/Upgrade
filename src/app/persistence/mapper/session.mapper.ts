@@ -10,7 +10,7 @@ export class SessionMapper {
     session.startedAt = DateHelper.from(sessionDto.startedAt);
     session.finishedAt = sessionDto.finishedAt ? DateHelper.from(sessionDto.finishedAt) : null;
     session.notes = sessionDto.notes;
-    session.exerciseEntries = sessionDto.exerciseEntries.map(ExerciseEntryMapper.toDomain);
+    session.exercises = sessionDto.exerciseEntries.map(ExerciseEntryMapper.toDomain);
 
     return session;
   }
@@ -22,7 +22,7 @@ export class SessionMapper {
       startedAt: session.startedAt.toString({ smallestUnit: 'second'}),
       finishedAt: session.finishedAt ? session.finishedAt.toString({ smallestUnit: 'second'}) : null,
       notes: session.notes,
-      exerciseEntries: session.exerciseEntries.map(ExerciseEntryMapper.toDto),
+      exerciseEntries: session.exercises.map(ExerciseEntryMapper.toDto),
     }
   }
 }

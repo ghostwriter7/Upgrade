@@ -3,7 +3,7 @@ import { createUuid } from '../../common/function/create-uuid.function';
 import { DateHelper } from '../../common/helper/date.helper';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 
-export class ExerciseEntry {
+export class ExerciseLog {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
 
@@ -31,7 +31,7 @@ export class ExerciseEntry {
 }
 
 export class Session {
-  public exerciseEntries: ExerciseEntry[] = [];
+  public exercises: ExerciseLog[] = [];
   public notes: string | null = null;
   public startedAt: TemporalType.Instant = DateHelper.now();
   public finishedAt: TemporalType.Instant | null = null;
@@ -50,10 +50,10 @@ export class Session {
   }
 
   public get isEmpty(): boolean {
-    return this.exerciseEntries.every((entry) => entry.sets.length === 0);
+    return this.exercises.every((entry) => entry.sets.length === 0);
   }
 
-  public static createEmpty() {
+  public static createEmpty(): Session {
     return new Session(createUuid(), DateHelper.now());
   }
 
@@ -64,47 +64,46 @@ export class Session {
     const session = new Session(this.uuid, this.createdAt);
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
-    session.exerciseEntries = this.exerciseEntries;
+    session.exercises = this.exercises;
     return session;
   }
 
-  public addExerciseEntry(exerciseId: string): Session {
-    if (this.exerciseEntries.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return this;
-
-    this.exerciseEntries = [...this.exerciseEntries, new ExerciseEntry(exerciseId)];
+  public addExercise(exerciseId: string): Session {
+    if (this.exercises.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return this;
+    this.exercises = [...this.exercises, new ExerciseLog(exerciseId)];
     return this.clone();
   }
 
-  public removeExerciseEntry(exerciseId: string): void {
-    this.exerciseEntries = this.exerciseEntries.filter(
+  public removeExercise(exerciseId: string): Session {
+    this.exercises = this.exercises.filter(
       (exerciseEntry) => exerciseEntry.exerciseId !== exerciseId,
     );
+    return this.clone();
   }
 
-  public setExerciseNotes(exerciseId: string, notes: string | null): void {
-    const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
-    exerciseEntry.notes = notes;
+  public setExerciseNotes(exerciseId: string, notes: string | null): Session {
+    this.getExerciseById(exerciseId).notes = notes;
+    this.exercises = [...this.exercises];
+    return this.clone();
   }
 
   public addSet(exerciseId: string, set: ExerciseSet): Session {
-    const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
-    exerciseEntry.addSet(set);
+    this.getExerciseById(exerciseId).addSet(set);
     return this.clone();
   }
 
   public removeSet(exerciseId: string, index: number): Session {
-    const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
-    exerciseEntry.removeSetAt(index);
+    this.getExerciseById(exerciseId).removeSetAt(index);
     return this.clone();
   }
 
-  public updateSet(exerciseId: string, index: number, set: ExerciseSet): void {
-    const exerciseEntry = this.getExerciseEntryByExerciseId(exerciseId);
-    exerciseEntry.updateSet(set, index);
+  public updateSet(exerciseId: string, index: number, set: ExerciseSet): Session {
+    this.getExerciseById(exerciseId).updateSet(set, index);
+    return this.clone();
   }
 
-  private getExerciseEntryByExerciseId(exerciseId: string): ExerciseEntry {
-    const exerciseEntry = this.exerciseEntries.find((entry) => entry.exerciseId === exerciseId);
+  private getExerciseById(exerciseId: string): ExerciseLog {
+    const exerciseEntry = this.exercises.find((entry) => entry.exerciseId === exerciseId);
 
     if (!exerciseEntry) throw new Error(`Exercise Entry for exercise ID: ${exerciseId} not found`);
 

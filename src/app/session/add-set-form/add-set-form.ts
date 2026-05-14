@@ -100,4 +100,40 @@ export class AddSetForm {
       }
     }
   }
+
+  protected decrementReps(): void {
+    this.setModel.update((model) => ({ ...model, reps: Math.max(model.reps - 1, 1) }));
+  }
+
+  protected incrementReps(): void {
+    this.setModel.update((model) => ({ ...model, reps: model.reps + 1 }));
+  }
+
+  protected decrementWeight(): void {
+    this.setModel.update((model) => ({ ...model, weight: Math.max(model.weight - 1, 0) }));
+  }
+
+  protected incrementWeight(): void {
+    this.setModel.update((model) => ({ ...model, weight: model.weight + 1 }));
+  }
+
+  protected decrementDuration(): void  {
+    this.setModel.update((model) => ({ ...model, duration: Math.max(model.duration - 1, 1) }));
+  }
+
+  protected incrementDuration(): void {
+    this.setModel.update((model) => ({ ...model, duration: model.duration + 1 }));
+  }
+
+  protected setWeight(weight: number): void {
+    this.setModel.update((model) => ({ ...model, weight }));
+  }
+
+  protected setReps(reps: number): void {
+    this.setModel.update((model) => ({ ...model, reps }));
+  }
+
+  protected setDuration(duration: number): void {
+    this.setModel.update((model) => ({ ...model, duration }));
+  }
 }

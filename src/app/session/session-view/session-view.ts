@@ -79,7 +79,7 @@ export default class SessionView {
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
   );
   private readonly activeExerciseIds = computed(
-    () => new Set(this.editedSession().exerciseEntries.map(({ exerciseId }) => exerciseId)),
+    () => new Set(this.editedSession().exercises.map(({ exerciseId }) => exerciseId)),
   );
   protected readonly finishedAt = computed(() => {
     const finishedAt = this.editedSession()?.finishedAt;
@@ -108,7 +108,7 @@ export default class SessionView {
     const exerciseId = this.exerciseField.exerciseId().value();
 
     if (exerciseId) {
-      this.editedSession.update((session) => session.addExerciseEntry(exerciseId));
+      this.editedSession.update((session) => session.addExercise(exerciseId));
       this.exerciseField.exerciseId().reset('');
     }
   }

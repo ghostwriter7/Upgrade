@@ -15,3 +15,25 @@
     flex: 1;
   }
 }
+
+.fields {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.field-container, .control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.field-container {
+  flex-direction: column;
+}
+
+.quick-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

@@ -10,26 +10,78 @@
     }
   </mat-button-toggle-group>
 
-  @if (!setForm.duration().hidden()) {
-    <mat-form-field class="full-width" appearance="outline">
-      <mat-label>Duration</mat-label>
-      <input [formField]="setForm.duration" type="number" matInput placeholder="Duration in seconds">
-    </mat-form-field>
+  <div class="fields">
+    @if (!setForm.duration().hidden()) {
+    <div class="field-container">
+      <div class="control">
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementDuration()">
+          <mat-icon>exposure_neg_1</mat-icon>
+        </button>
+
+        <span>{{ setForm.duration().value() }}</span>
+
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementDuration()">
+          <mat-icon>exposure_plus_1</mat-icon>
+        </button>
+      </div>
+      <div class="quick-options">
+        <button matButton="filled" (click)="setDuration(5)">5</button>
+        <button matButton="filled" (click)="setDuration(10)">10</button>
+        <button matButton="filled" (click)="setDuration(15)">15</button>
+        <button matButton="filled" (click)="setDuration(20)">20</button>
+        <button matButton="filled" (click)="setDuration(25)">25</button>
+        <button matButton="filled" (click)="setDuration(30)">30</button>
+      </div>
+    </div>
   }
 
-  @if (!setForm.reps().hidden()) {
-    <mat-form-field class="full-width" appearance="outline">
-      <mat-label>Reps</mat-label>
-      <input [formField]="setForm.reps" matInput type="number" placeholder="Number of reps">
-    </mat-form-field>
-  }
+    @if (!setForm.reps().hidden()) {
+      <div class="field-container">
+        <div class="control">
+          <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementReps()">
+            <mat-icon>exposure_neg_1</mat-icon>
+          </button>
 
-  @if (!setForm.weight().hidden()) {
-    <mat-form-field class="full-width" appearance="outline">
-      <mat-label>Weight</mat-label>
-      <input [formField]="setForm.weight" matInput type="number" placeholder="Weight (kg)">
-    </mat-form-field>
-  }
+          <span>{{ setForm.reps().value() }}</span>
+
+          <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementReps()">
+            <mat-icon>exposure_plus_1</mat-icon>
+          </button>
+        </div>
+        <div class="quick-options">
+          <button matButton="filled" (click)="setReps(1)">1</button>
+          <button matButton="filled" (click)="setReps(2)">2</button>
+          <button matButton="filled" (click)="setReps(3)">3</button>
+          <button matButton="filled" (click)="setReps(5)">5</button>
+          <button matButton="filled" (click)="setReps(8)">8</button>
+          <button matButton="filled" (click)="setReps(10)">10</button>
+        </div>
+      </div>
+    }
+
+    @if (!setForm.weight().hidden()) {
+      <div class="field-container">
+        <div class="control">
+          <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementWeight()">
+            <mat-icon>exposure_neg_1</mat-icon>
+          </button>
+
+          <span>{{ setForm.weight().value() }} kg</span>
+
+          <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementWeight()">
+            <mat-icon>exposure_plus_1</mat-icon>
+          </button>
+        </div>
+        <div class="quick-options">
+          <button matButton="filled" (click)="setWeight(1)">1</button>
+          <button matButton="filled" (click)="setWeight(2)">2</button>
+          <button matButton="filled" (click)="setWeight(3)">3</button>
+          <button matButton="filled" (click)="setWeight(5)">5</button>
+          <button matButton="filled" (click)="setWeight(8)">8</button>
+          <button matButton="filled" (click)="setWeight(10)">10</button>
+        </div>
+      </div>
+    }</div>
 
   <div class="actions">
     <button matButton="filled" [disabled]="setForm().invalid()" (click)="addSet()">Add</button>

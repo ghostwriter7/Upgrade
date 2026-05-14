@@ -23,7 +23,7 @@
 
   </header>
 
-  @for (entry of editedSession().exerciseEntries; track entry.exerciseId) {
+  @for (entry of editedSession().exercises; track entry.exerciseId) {
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{ entry.exerciseId | exerciseName }}</mat-card-title>
