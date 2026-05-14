@@ -41,15 +41,15 @@ export class Session {
     public readonly createdAt: TemporalType.Instant,
   ) {}
 
-  public get day() {
-    return this.startedAt ? DateHelper.toLocal(this.startedAt).day : -1;
+  public get dayOfMonth(): number {
+    return DateHelper.toLocal(this.startedAt).day;
   }
 
-  public get date() {
-    return this.startedAt ? DateHelper.toLocal(this.startedAt).toPlainDate().toString() : null;
+  public get isoDate(): string {
+    return DateHelper.toLocal(this.startedAt).toPlainDate().toString();
   }
 
-  public get invalid(): boolean {
+  public get isEmpty(): boolean {
     return this.exerciseEntries.every((entry) => entry.sets.length === 0);
   }
 

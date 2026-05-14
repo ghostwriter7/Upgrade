@@ -73,7 +73,7 @@ export default class SessionView {
     required(schema.exerciseId);
   });
   protected readonly hasLeftExercises = computed(() => this.availableExercises().length > 0);
-  protected readonly isSessionInvalid = computed(() => this.editedSession().invalid);
+  protected readonly isSessionInvalid = computed(() => this.editedSession().isEmpty);
   protected readonly isEditable = computed(() => !this.session().finishedAt);
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
@@ -144,6 +144,6 @@ export default class SessionView {
     session.finishedAt = DateHelper.now();
 
     this.sessionStore.save(session);
-    this.router.navigate(['/session', session.date]);
+    this.router.navigate(['/session', session.isoDate]);
   }
 }

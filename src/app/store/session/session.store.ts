@@ -44,7 +44,7 @@ export const SessionStore = signalStore(
       const countId = createCountId(session.startedAt);
       const counts = { ...store.countsByMonthAndYear() };
       const targetCounts = counts[countId] ?? {};
-      const dateIndex = session.day;
+      const dateIndex = session.dayOfMonth;
       targetCounts[dateIndex] = Math.max(0, (targetCounts[dateIndex] ?? 0) + change);
       counts[countId] = targetCounts;
       return counts;
@@ -73,7 +73,7 @@ export const SessionStore = signalStore(
       },
 
       save: (session: Session) => {
-        const dateId = session.date!;
+        const dateId = session.isoDate!;
         const sessionsByDate = { ...store.sessionsByDate() };
         const thisDateSessions = sessionsByDate[dateId] || [];
         sessionsByDate[dateId] = [...thisDateSessions, session];
@@ -87,7 +87,7 @@ export const SessionStore = signalStore(
       },
 
       delete: (session: Session) => {
-        const dateId = session.date!;
+        const dateId = session.isoDate!;
         const sessionsByDate = { ...store.sessionsByDate() };
         sessionsByDate[dateId] = sessionsByDate[dateId]?.filter(
           ({ uuid }) => uuid !== session.uuid,

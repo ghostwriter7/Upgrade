@@ -163,8 +163,8 @@ describe('SessionStore', () => {
       store.save(sessionOne);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionOne);
-      expectSessionsByDate({ [sessionOne.date!]: [sessionOne] });
-      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.day]: 1 } });
+      expectSessionsByDate({ [sessionOne.isoDate!]: [sessionOne] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 1 } });
     });
 
     it('should properly save a new session when an existing session for the same day exists', () => {
@@ -175,8 +175,8 @@ describe('SessionStore', () => {
       store.save(sessionTwo);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionTwo);
-      expectSessionsByDate({ [sessionTwo.date!]: [sessionOne, sessionTwo] });
-      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.day]: 2 } });
+      expectSessionsByDate({ [sessionTwo.isoDate!]: [sessionOne, sessionTwo] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.dayOfMonth]: 2 } });
     });
 
     it('should properly save a new session when another session exists in the cache for another day', () => {
@@ -188,13 +188,13 @@ describe('SessionStore', () => {
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionThree);
       expectSessionsByDate({
-        [sessionOne.date!]: [sessionOne],
-        [sessionThree.date!]: [sessionThree],
+        [sessionOne.isoDate!]: [sessionOne],
+        [sessionThree.isoDate!]: [sessionThree],
       });
       expectCountsByMonthAndYear({
         [yearMonthId]: {
-          [sessionOne.day]: 1,
-          [sessionThree.day]: 1,
+          [sessionOne.dayOfMonth]: 1,
+          [sessionThree.dayOfMonth]: 1,
         },
       });
     });
@@ -208,8 +208,8 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expectSessionsByDate({ [sessionOne.date!]: [] });
-      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.day]: 0 } });
+      expectSessionsByDate({ [sessionOne.isoDate!]: [] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0 } });
     });
 
     it('should delete a session when another session exists for the same day', () => {
@@ -220,8 +220,8 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expectSessionsByDate({ [sessionTwo.date!]: [sessionTwo] });
-      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.day]: 1 } });
+      expectSessionsByDate({ [sessionTwo.isoDate!]: [sessionTwo] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.dayOfMonth]: 1 } });
     });
 
     it('should delete a session when another session exists in the cache (different day)', () => {
@@ -232,8 +232,8 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expectSessionsByDate({ [sessionOne.date!]: [], [sessionThree.date!]: [sessionThree] });
-      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.day]: 0, [sessionThree.day]: 1 } });
+      expectSessionsByDate({ [sessionOne.isoDate!]: [], [sessionThree.isoDate!]: [sessionThree] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0, [sessionThree.dayOfMonth]: 1 } });
     });
   });
 });
