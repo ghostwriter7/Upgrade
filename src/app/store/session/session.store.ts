@@ -83,15 +83,16 @@ export const SessionStore = signalStore(
         const existingIndex = thisDateSessions.findIndex(({ uuid }) => uuid === session.uuid);
         if (existingIndex === -1) {
           sessionsByDate[dateId] = [...thisDateSessions, session];
+          patchState(store, (state) => ({
+            ...state,
+            sessionsByDate,
+            countsByMonthAndYear: computeCounts(session, +1),
+          }));
         } else {
           sessionsByDate[dateId] = thisDateSessions.with(existingIndex, session);
+          patchState(store, { sessionsByDate });
         }
 
-        patchState(store, (state) => ({
-          ...state,
-          sessionsByDate,
-          countsByMonthAndYear: computeCounts(session, +1),
-        }));
         sessionRepository.save(session);
       },
 
