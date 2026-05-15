@@ -27,7 +27,8 @@ import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteSessionAlert } from '../delete-session-alert/delete-session-alert';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { debounceTime, filter, skip, tap } from 'rxjs';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,6 +105,18 @@ export default class SessionView {
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
 
+  constructor() {
+    toObservable(this.editedSession)
+      .pipe(
+        skip(1),
+        filter((session) => !session.isEmpty),
+        debounceTime(1000),
+        tap((session) => this.sessionStore.save(session)),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe();
+  }
+
   protected addExerciseEntry(): void {
     const exerciseId = this.exerciseField.exerciseId().value();
 
@@ -126,23 +139,27 @@ export default class SessionView {
   protected deleteSession(): void {
     const ref = this.dialog.open(DeleteSessionAlert);
 
-    ref.afterClosed()
+    ref
+      .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-      if (result) {
-        if (this.isNew()) {
-          this.router.navigate(['/']);
-        } else {
-          this.sessionStore.delete(this.editedSession());
+        if (result) {
+          if (this.isNew()) {
+            this.router.navigate(['/']);
+          } else {
+            this.sessionStore.delete(this.editedSession());
+          }
         }
-      }
-    });
+      });
   }
 
   protected completeSession(): void {
-    const session = this.editedSession();
-    session.finishedAt = DateHelper.now();
+    this.editedSession.update((session) => {
+      session.finishedAt = DateHelper.now();
+      return session.clone();
+    });
 
+    const session = this.editedSession();
     this.sessionStore.save(session);
     this.router.navigate(['/session', session.isoDate]);
   }

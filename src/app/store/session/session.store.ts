@@ -40,7 +40,10 @@ export const SessionStore = signalStore(
       return `${zonedDate.year}-${zonedDate.month}`;
     };
 
-    const computeCounts = (session: Session, change: number ): Record<string, Record<number, number>> => {
+    const computeCounts = (
+      session: Session,
+      change: number,
+    ): Record<string, Record<number, number>> => {
       const countId = createCountId(session.startedAt);
       const counts = { ...store.countsByMonthAndYear() };
       const targetCounts = counts[countId] ?? {};
@@ -48,7 +51,7 @@ export const SessionStore = signalStore(
       targetCounts[dateIndex] = Math.max(0, (targetCounts[dateIndex] ?? 0) + change);
       counts[countId] = targetCounts;
       return counts;
-    }
+    };
 
     return {
       setActiveDate: (activeDate: string) => patchState(store, { activeDate }),
@@ -73,10 +76,16 @@ export const SessionStore = signalStore(
       },
 
       save: (session: Session) => {
-        const dateId = session.isoDate!;
+        const dateId = session.isoDate;
         const sessionsByDate = { ...store.sessionsByDate() };
         const thisDateSessions = sessionsByDate[dateId] || [];
-        sessionsByDate[dateId] = [...thisDateSessions, session];
+
+        const existingIndex = thisDateSessions.findIndex(({ uuid }) => uuid === session.uuid);
+        if (existingIndex === -1) {
+          sessionsByDate[dateId] = [...thisDateSessions, session];
+        } else {
+          sessionsByDate[dateId] = thisDateSessions.with(existingIndex, session);
+        }
 
         patchState(store, (state) => ({
           ...state,
@@ -96,7 +105,7 @@ export const SessionStore = signalStore(
         patchState(store, (state) => ({
           ...state,
           sessionsByDate,
-          countsByMonthAndYear: computeCounts(session, - 1),
+          countsByMonthAndYear: computeCounts(session, -1),
         }));
         sessionRepository.delete(session.uuid);
       },

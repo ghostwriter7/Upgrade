@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { ExerciseStore } from '../../store/exercises.store';
-import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import {
   BodyweightSet,
   ExerciseSet,
@@ -25,10 +24,7 @@ type SetData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-add-set-form',
   imports: [
-    MatFormField,
-    MatLabel,
     ReactiveFormsModule,
-    MatInput,
     MatButton,
     MatMiniFabButton,
     MatIcon,
