@@ -163,7 +163,7 @@ describe('SessionStore', () => {
       store.save(sessionOne);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionOne);
-      expectSessionsByDate({ [sessionOne.isoDate!]: [sessionOne] });
+      expectSessionsByDate({ [sessionOne.isoDate]: [sessionOne] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 1 } });
     });
 
@@ -175,7 +175,7 @@ describe('SessionStore', () => {
       store.save(sessionTwo);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionTwo);
-      expectSessionsByDate({ [sessionTwo.isoDate!]: [sessionOne, sessionTwo] });
+      expectSessionsByDate({ [sessionTwo.isoDate]: [sessionOne, sessionTwo] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.dayOfMonth]: 2 } });
     });
 
@@ -188,8 +188,8 @@ describe('SessionStore', () => {
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionThree);
       expectSessionsByDate({
-        [sessionOne.isoDate!]: [sessionOne],
-        [sessionThree.isoDate!]: [sessionThree],
+        [sessionOne.isoDate]: [sessionOne],
+        [sessionThree.isoDate]: [sessionThree],
       });
       expectCountsByMonthAndYear({
         [yearMonthId]: {
@@ -197,6 +197,19 @@ describe('SessionStore', () => {
           [sessionThree.dayOfMonth]: 1,
         },
       });
+    });
+
+    it('should update a session instead of inserting a duplicate', () => {
+      const { sessionOne, yearMonthId } = createSessionFixture();
+      store.save(sessionOne);
+      sessionRepositoryMock.save.mockClear();
+      const updatedSession = sessionOne.addExercise('anyExerciseId');
+
+      store.save(updatedSession)
+
+      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(updatedSession);
+      expectSessionsByDate({ [updatedSession.isoDate]: [updatedSession] });
+      expectCountsByMonthAndYear({ [yearMonthId]: { [updatedSession.dayOfMonth]: 1 } });
     });
   });
 
@@ -208,7 +221,7 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expectSessionsByDate({ [sessionOne.isoDate!]: [] });
+      expectSessionsByDate({ [sessionOne.isoDate]: [] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0 } });
     });
 
@@ -220,7 +233,7 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expectSessionsByDate({ [sessionTwo.isoDate!]: [sessionTwo] });
+      expectSessionsByDate({ [sessionTwo.isoDate]: [sessionTwo] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.dayOfMonth]: 1 } });
     });
 
@@ -232,7 +245,7 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
-      expectSessionsByDate({ [sessionOne.isoDate!]: [], [sessionThree.isoDate!]: [sessionThree] });
+      expectSessionsByDate({ [sessionOne.isoDate]: [], [sessionThree.isoDate]: [sessionThree] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0, [sessionThree.dayOfMonth]: 1 } });
     });
   });
