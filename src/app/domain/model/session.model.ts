@@ -9,13 +9,26 @@ export class ExerciseLog {
 
   constructor(public readonly exerciseId: string) {}
 
-  public addSet(set: ExerciseSet): void {
-    this.sets = [...this.sets, set];
+  public get isEmpty(): boolean {
+    return this.sets.length === 0;
   }
 
-  public removeSetAt(index: number): void {
+  public clone(): ExerciseLog {
+    const log = new ExerciseLog(this.exerciseId);
+    log.sets = this.sets;
+    log.notes = this.notes;
+    return log;
+  }
+
+  public withSet(set: ExerciseSet): ExerciseLog {
+    this.sets = [...this.sets, set];
+    return this.clone();
+  }
+
+  public removeSetAt(index: number): ExerciseLog {
     this.checkIndex(index);
     this.sets = this.sets.toSpliced(index, 1);
+    return this.clone();
   }
 
   public updateSet(set: ExerciseSet, index: number): void {
@@ -64,7 +77,7 @@ export class Session {
     const session = new Session(this.uuid, this.createdAt);
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
-    session.exercises = this.exercises;
+    session.exercises = [...this.exercises];
     return session;
   }
 
@@ -88,18 +101,26 @@ export class Session {
   }
 
   public addSet(exerciseId: string, set: ExerciseSet): Session {
-    this.getExerciseById(exerciseId).addSet(set);
+    const index = this.getExerciseIndex(exerciseId);
+    this.exercises = this.exercises.with(index, this.exercises[index].withSet(set));
     return this.clone();
   }
 
   public removeSet(exerciseId: string, index: number): Session {
-    this.getExerciseById(exerciseId).removeSetAt(index);
+    const exerciseIndex = this.getExerciseIndex(exerciseId);
+    this.exercises = this.exercises.with(exerciseIndex, this.exercises[exerciseIndex].removeSetAt(index));
     return this.clone();
   }
 
   public updateSet(exerciseId: string, index: number, set: ExerciseSet): Session {
     this.getExerciseById(exerciseId).updateSet(set, index);
     return this.clone();
+  }
+
+  private getExerciseIndex(exerciseId: string): number {
+    const index = this.exercises.findIndex((entry) => entry.exerciseId === exerciseId);
+    if (index === -1) throw new Error(`Exercise with ID: ${exerciseId} not found`);
+    return index;
   }
 
   private getExerciseById(exerciseId: string): ExerciseLog {

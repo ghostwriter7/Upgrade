@@ -8,7 +8,7 @@ import {
   linkedSignal,
   signal,
 } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { DateHelper } from '../../common/helper/date.helper';
@@ -29,6 +29,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, skip, tap } from 'rxjs';
 import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,6 +52,8 @@ import { Temporal as TemporalType } from '@js-temporal/polyfill';
     MatCardHeader,
     FormField,
     SessionHeader,
+    MatIcon,
+    MatMiniFabButton,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
@@ -108,7 +111,7 @@ export default class SessionView {
   }
 
   protected deleteSet(exerciseId: string, index: number): void {
-    this.editedSession.update((session) => session.removeSet(exerciseId, index));
+    this.editedSession.update((session) =>session.removeSet(exerciseId, index));
   }
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}

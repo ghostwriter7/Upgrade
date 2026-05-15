@@ -15,13 +15,13 @@
     <div class="field-container">
       <div class="control">
         <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementDuration()">
-          <mat-icon>exposure_neg_1</mat-icon>
+          <mat-icon>remove</mat-icon>
         </button>
 
         <span>{{ setForm.duration().value() }}</span>
 
         <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementDuration()">
-          <mat-icon>exposure_plus_1</mat-icon>
+          <mat-icon>add</mat-icon>
         </button>
       </div>
       <div class="quick-options">
@@ -39,13 +39,13 @@
       <div class="field-container">
         <div class="control">
           <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementReps()">
-            <mat-icon>exposure_neg_1</mat-icon>
+            <mat-icon>remove</mat-icon>
           </button>
 
           <span>{{ setForm.reps().value() }}</span>
 
           <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementReps()">
-            <mat-icon>exposure_plus_1</mat-icon>
+            <mat-icon>add</mat-icon>
           </button>
         </div>
         <div class="quick-options">
@@ -63,13 +63,13 @@
       <div class="field-container">
         <div class="control">
           <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementWeight()">
-            <mat-icon>exposure_neg_1</mat-icon>
+            <mat-icon>remove</mat-icon>
           </button>
 
           <span>{{ setForm.weight().value() }} kg</span>
 
           <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementWeight()">
-            <mat-icon>exposure_plus_1</mat-icon>
+            <mat-icon>add</mat-icon>
           </button>
         </div>
         <div class="quick-options">
@@ -84,11 +84,20 @@
     }</div>
 
   <div class="actions">
-    <button matButton="filled" [disabled]="setForm().invalid()" (click)="addSet()">Add</button>
-    <button matButton="outlined" (click)="showForm.set(false)">Cancel</button>
+    <button matMiniFab aria-label="Add set" [disabled]="setForm().invalid()" (click)="addSet()">
+      <mat-icon>check</mat-icon>
+    </button>
+    <button matMiniFab class="info" aria-label="Cancel set creation"  (click)="showForm.set(false)">
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
 } @else {
-  <button matMiniFab aria-label="Show set form" (click)="showForm.set(true)">
-    <mat-icon>add</mat-icon>
-  </button>
+  <div class="actions">
+    <button matMiniFab aria-label="Show set form" (click)="showForm.set(true)">
+      <mat-icon>add</mat-icon>
+    </button>
+    <button matMiniFab aria-label="Copy last set" [disabled]="isCloneDisabled()" (click)="copyLastSet()">
+      <mat-icon>content_copy</mat-icon>
+    </button>
+  </div>
 }

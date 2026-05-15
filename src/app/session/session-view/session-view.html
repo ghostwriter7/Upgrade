@@ -26,7 +26,7 @@
 
         @if (isEditable()) {
           <app-add-set-form
-            [exerciseId]="entry.exerciseId"
+            [exerciseLog]="entry"
             (newSet)="addSet($event, entry.exerciseId)"
           />
         }

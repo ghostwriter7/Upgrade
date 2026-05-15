@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { ExerciseStore } from '../../store/exercises.store';
 import {
   BodyweightSet,
@@ -12,6 +12,7 @@ import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { min, form, FormField, hidden, required, validate } from '@angular/forms/signals';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
+import { ExerciseLog } from '../../domain/model/session.model';
 
 type SetData = {
   type: ExerciseSetType;
@@ -36,13 +37,13 @@ type SetData = {
   styleUrl: './add-set-form.css',
 })
 export class AddSetForm {
-  public exerciseId = input.required<string>();
+  public exerciseLog = input.required<ExerciseLog>()
   public newSet = output<ExerciseSet>();
 
   private readonly exerciseStore = inject(ExerciseStore);
 
+  protected readonly isCloneDisabled = computed(() => this.exerciseLog().isEmpty);
   protected readonly showForm = signal(false);
-
   protected readonly setModel = signal<SetData>({
     type: 'bodyweight',
     reps: 1,
@@ -93,8 +94,10 @@ export class AddSetForm {
           break;
         case 'iso':
           this.newSet.emit(new IsoSet(duration, weight));
+          break;
       }
     }
+    this.showForm.set(false);
   }
 
   protected decrementReps(): void {
@@ -131,5 +134,12 @@ export class AddSetForm {
 
   protected setDuration(duration: number): void {
     this.setModel.update((model) => ({ ...model, duration }));
+  }
+
+  protected copyLastSet(): void {
+    const lastSet = this.exerciseLog().sets.at(-1);
+    if (lastSet) {
+      this.newSet.emit(lastSet);
+    }
   }
 }
