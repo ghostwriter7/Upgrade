@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Notes</h2>
+<mat-dialog-content>
+  <mat-form-field class="full-width full-height">
+    <mat-label>Notes</mat-label>
+    <textarea placeholder="Type your notes..." matInput [value]="data.note" #input></textarea>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="success" [mat-dialog-close]="input.value" matButton>Save</button>
+  <button class="info" matButton mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

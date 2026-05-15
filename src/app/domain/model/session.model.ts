@@ -37,6 +37,11 @@ export class ExerciseLog {
     return this.clone();
   }
 
+  public withNotes(notes: string | null): ExerciseLog {
+    this.notes = notes;
+    return this.clone();
+  }
+
   private checkIndex(index: number): void {
     if (index < 0 || index >= this.sets.length) {
       throw new Error('Invalid index');
@@ -96,8 +101,8 @@ export class Session {
   }
 
   public setExerciseNotes(exerciseId: string, notes: string | null): Session {
-    this.getExerciseById(exerciseId).notes = notes;
-    this.exercises = [...this.exercises];
+    const index = this.getExerciseIndex(exerciseId);
+    this.exercises = this.exercises.with(index, this.exercises[index].withNotes(notes));
     return this.clone();
   }
 

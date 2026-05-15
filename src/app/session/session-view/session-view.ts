@@ -28,6 +28,7 @@ import { ExerciseSelector } from '../exercise-selector/exercise-selector';
 import { EditSet } from '../edit-set/edit-set';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { EditNote } from '../edit-note/edit-note';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -147,5 +148,15 @@ export default class SessionView {
 
   protected deleteExercise(entry: ExerciseLog): void {
     this.editedSession.update((session) => session.removeExercise(entry.exerciseId));
+  }
+
+  protected editExerciseNote(entry: ExerciseLog): void {
+    const ref = this.dialog.open(EditNote, { data: { note: entry.notes }, width: '90svw', height: '90svh' });
+    ref
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((note: string | null) => {
+        this.editedSession.update((session) => session.setExerciseNotes(entry.exerciseId, note));
+      });
   }
 }
