@@ -7,10 +7,10 @@ import {
   input,
   linkedSignal,
 } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Session } from '../../domain/model/session.model';
+import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { ExerciseNamePipe } from '../../ui/pipes/exercise-name-pipe';
 import { SetView } from '../set-view/set-view';
@@ -26,6 +26,8 @@ import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
 import { EditSet } from '../edit-set/edit-set';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,10 +41,15 @@ import { EditSet } from '../edit-set/edit-set';
     ExerciseNamePipe,
     SetView,
     AddSetForm,
+    MatMenu,
+    MatMenuTrigger,
     MatList,
     MatListItem,
     MatCardHeader,
     SessionHeader,
+    MatIcon,
+    MatMiniFabButton,
+    MatMenuItem,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
@@ -74,10 +81,13 @@ export default class SessionView {
   }
 
   protected showExerciseDialog(): void {
-    const ref: MatDialogRef<ExerciseSelector, Set<string> | undefined> = this.dialog.open(ExerciseSelector,
-      { data: { session: this.editedSession() }, width: '90svw', height: '80svh' });
+    const ref: MatDialogRef<ExerciseSelector, Set<string> | undefined> = this.dialog.open(
+      ExerciseSelector,
+      { data: { session: this.editedSession() }, width: '90svw', height: '80svh' },
+    );
 
-    ref.afterClosed()
+    ref
+      .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((exerciseIds) => {
         if (exerciseIds && exerciseIds.size !== 0) {
@@ -93,12 +103,15 @@ export default class SessionView {
   }
 
   protected deleteSet(exerciseId: string, index: number): void {
-    this.editedSession.update((session) =>session.removeSet(exerciseId, index));
+    this.editedSession.update((session) => session.removeSet(exerciseId, index));
   }
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {
-    const ref: MatDialogRef<EditSet, ExerciseSet | undefined> = this.dialog.open(EditSet, { data: { set } });
-    ref.afterClosed()
+    const ref: MatDialogRef<EditSet, ExerciseSet | undefined> = this.dialog.open(EditSet, {
+      data: { set },
+    });
+    ref
+      .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         if (result) {
@@ -130,5 +143,9 @@ export default class SessionView {
       session.finishedAt = finishedAt;
       return session.clone();
     });
+  }
+
+  protected deleteExercise(entry: ExerciseLog): void {
+    this.editedSession.update((session) => session.removeExercise(entry.exerciseId));
   }
 }
