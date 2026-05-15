@@ -8,16 +8,3 @@
   gap: 0.5rem;
 }
 
-.add-exercise {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
-
-  mat-form-field {
-    flex: 2;
-  }
-
-  button {
-    flex: 1
-  }
-}

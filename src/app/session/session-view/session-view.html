@@ -34,26 +34,13 @@
     </mat-card>
   }
 
-  @if (isEditable() && hasLeftExercises()) {
-    <div class="add-exercise">
-      <mat-form-field appearance="outline" subscriptSizing="dynamic">
-        <mat-label>Exercises</mat-label>
-        <mat-select [formField]="exerciseField.exerciseId">
-          @for (exercise of availableExercises(); track exercise.uuid) {
-            <mat-option [value]="exercise.uuid">{{ exercise.name }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-      <button
-        matButton="filled"
-        [disabled]="exerciseField.exerciseId().invalid()"
-        (click)="addExerciseEntry()">
-        Add
-      </button>
-    </div>
-  }
-
   @if (isEditable()) {
+    <button
+      matButton="filled"
+      (click)="showExerciseDialog()">
+      Add
+    </button>
+
     <button class="full-width" matButton="filled" [disabled]="isSessionInvalid()" (click)="completeSession()">
       Complete Session
     </button>

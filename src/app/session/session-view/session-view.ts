@@ -6,13 +6,9 @@ import {
   inject,
   input,
   linkedSignal,
-  signal,
 } from '@angular/core';
-import { MatButton, MatMiniFabButton } from '@angular/material/button';
-import { MatFormField, MatLabel } from '@angular/material/input';
-import { MatOption, MatSelect } from '@angular/material/select';
+import { MatButton } from '@angular/material/button';
 import { DateHelper } from '../../common/helper/date.helper';
-import { ExerciseStore } from '../../store/exercises.store';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Session } from '../../domain/model/session.model';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
@@ -22,24 +18,19 @@ import { AddSetForm } from '../add-set-form/add-set-form';
 import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
 import { SessionStore } from '../../store/session/session.store';
-import { form, FormField, required } from '@angular/forms/signals';
 import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, skip, tap } from 'rxjs';
 import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { MatIcon } from '@angular/material/icon';
+import { ExerciseSelector } from '../exercise-selector/exercise-selector';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-view',
   imports: [
     MatButton,
-    MatFormField,
-    MatLabel,
-    MatSelect,
-    MatOption,
     ReactiveFormsModule,
     MatCard,
     MatCardTitle,
@@ -50,10 +41,7 @@ import { MatIcon } from '@angular/material/icon';
     MatList,
     MatListItem,
     MatCardHeader,
-    FormField,
     SessionHeader,
-    MatIcon,
-    MatMiniFabButton,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
@@ -62,24 +50,11 @@ export default class SessionView {
   public isNew = input(false);
   public session = input.required<Session>();
 
-  private readonly exerciseStore = inject(ExerciseStore);
   private readonly sessionStore = inject(SessionStore);
 
   protected readonly editedSession = linkedSignal(() => this.session());
-  protected readonly availableExercises = computed(() => {
-    const activeExerciseIds = this.activeExerciseIds();
-    const allExercises = this.exerciseStore.exercises();
-    return allExercises.filter(({ uuid }) => !activeExerciseIds.has(uuid));
-  });
-  protected readonly exerciseField = form(signal({ exerciseId: '' }), (schema) => {
-    required(schema.exerciseId);
-  });
-  protected readonly hasLeftExercises = computed(() => this.availableExercises().length > 0);
   protected readonly isSessionInvalid = computed(() => this.editedSession().isEmpty);
   protected readonly isEditable = computed(() => !this.session().finishedAt);
-  private readonly activeExerciseIds = computed(
-    () => new Set(this.editedSession().exercises.map(({ exerciseId }) => exerciseId)),
-  );
 
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
@@ -97,13 +72,19 @@ export default class SessionView {
       .subscribe();
   }
 
-  protected addExerciseEntry(): void {
-    const exerciseId = this.exerciseField.exerciseId().value();
+  protected showExerciseDialog(): void {
+    const ref: MatDialogRef<ExerciseSelector, Set<string> | undefined> = this.dialog.open(ExerciseSelector,
+      { data: { session: this.editedSession() }, width: '90svw', height: '80svh' });
 
-    if (exerciseId) {
-      this.editedSession.update((session) => session.addExercise(exerciseId));
-      this.exerciseField.exerciseId().reset('');
-    }
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((exerciseIds) => {
+        if (exerciseIds && exerciseIds.size !== 0) {
+          exerciseIds.forEach((exerciseId) => {
+            this.editedSession.update((session) => session.addExercise(exerciseId));
+          });
+        }
+      });
   }
 
   protected addSet(set: ExerciseSet, exerciseId: string): void {
