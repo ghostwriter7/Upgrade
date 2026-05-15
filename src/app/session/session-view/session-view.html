@@ -14,7 +14,7 @@
           <mat-icon>menu</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-          <button mat-menu-item [disabled]="$count === 1" (click)="deleteExercise(entry)">Delete</button>
+          <button class="danger" mat-menu-item [disabled]="$count === 1" (click)="deleteExercise(entry)">Delete</button>
           <button mat-menu-item (click)="editExerciseNote(entry)">Notes</button>
         </mat-menu>
       </mat-card-header>
