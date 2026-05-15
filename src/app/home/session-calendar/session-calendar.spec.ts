@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SessionCalendar } from './session-calendar';
+import { SessionStore } from '../../store/session/session.store';
 
 describe('SessionCalendar', () => {
   let component: SessionCalendar;
@@ -8,6 +9,14 @@ describe('SessionCalendar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      providers: [
+        {
+          provide: SessionStore,
+          useValue: {
+            getCountsByMonthAndYear: vi.fn().mockResolvedValue({}),
+          },
+        },
+      ],
       imports: [SessionCalendar],
     }).compileComponents();
 
