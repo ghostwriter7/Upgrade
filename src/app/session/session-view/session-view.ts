@@ -25,6 +25,7 @@ import { debounceTime, filter, skip, tap } from 'rxjs';
 import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
+import { EditSet } from '../edit-set/edit-set';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,7 +96,16 @@ export default class SessionView {
     this.editedSession.update((session) =>session.removeSet(exerciseId, index));
   }
 
-  protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}
+  protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {
+    const ref: MatDialogRef<EditSet, ExerciseSet | undefined> = this.dialog.open(EditSet, { data: { set } });
+    ref.afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.editedSession.update((session) => session.updateSet(exerciseId, index, result));
+        }
+      });
+  }
 
   protected completeSession(): void {
     this.editedSession.update((session) => {

@@ -31,9 +31,10 @@ export class ExerciseLog {
     return this.clone();
   }
 
-  public updateSet(set: ExerciseSet, index: number): void {
+  public withUpdatedSet(set: ExerciseSet, index: number): ExerciseLog {
     this.checkIndex(index);
     this.sets = this.sets.with(index, set);
+    return this.clone();
   }
 
   private checkIndex(index: number): void {
@@ -113,7 +114,11 @@ export class Session {
   }
 
   public updateSet(exerciseId: string, index: number, set: ExerciseSet): Session {
-    this.getExerciseById(exerciseId).updateSet(set, index);
+    const exerciseIndex = this.getExerciseIndex(exerciseId);
+    this.exercises = this.exercises.with(
+      exerciseIndex,
+      this.exercises[exerciseIndex].withUpdatedSet(set, index),
+    );
     return this.clone();
   }
 

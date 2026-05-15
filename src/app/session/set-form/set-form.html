@@ -1,0 +1,84 @@
+<mat-button-toggle-group
+  class="set-type-selector"
+  aria-label="Set type selector"
+  [formField]="setForm.type"
+  [hideSingleSelectionIndicator]="true"
+>
+  @for (option of setTypeOptions; track option.value) {
+    <mat-button-toggle class="set-type-value" [value]="option.value">{{ option.label }}</mat-button-toggle>
+  }
+</mat-button-toggle-group>
+
+<div class="fields">
+  @if (!setForm.duration().hidden()) {
+    <div class="field-container">
+      <div class="control">
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementDuration()">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <span>{{ setForm.duration().value() }}</span>
+
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementDuration()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="quick-options">
+        <button matButton="filled" (click)="setDuration(5)">5</button>
+        <button matButton="filled" (click)="setDuration(10)">10</button>
+        <button matButton="filled" (click)="setDuration(15)">15</button>
+        <button matButton="filled" (click)="setDuration(20)">20</button>
+        <button matButton="filled" (click)="setDuration(25)">25</button>
+        <button matButton="filled" (click)="setDuration(30)">30</button>
+      </div>
+    </div>
+  }
+
+  @if (!setForm.reps().hidden()) {
+    <div class="field-container">
+      <div class="control">
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementReps()">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <span>{{ setForm.reps().value() }}</span>
+
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementReps()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="quick-options">
+        <button matButton="filled" (click)="setReps(1)">1</button>
+        <button matButton="filled" (click)="setReps(2)">2</button>
+        <button matButton="filled" (click)="setReps(3)">3</button>
+        <button matButton="filled" (click)="setReps(5)">5</button>
+        <button matButton="filled" (click)="setReps(8)">8</button>
+        <button matButton="filled" (click)="setReps(10)">10</button>
+      </div>
+    </div>
+  }
+
+  @if (!setForm.weight().hidden()) {
+    <div class="field-container">
+      <div class="control">
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="decrementWeight()">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <span>{{ setForm.weight().value() }} kg</span>
+
+        <button matMiniFab aria-label="Example icon button with a menu icon" (click)="incrementWeight()">
+          <mat-icon>add</mat-icon>
+        </button>
+      </div>
+      <div class="quick-options">
+        <button matButton="filled" (click)="setWeight(1)">1</button>
+        <button matButton="filled" (click)="setWeight(2)">2</button>
+        <button matButton="filled" (click)="setWeight(3)">3</button>
+        <button matButton="filled" (click)="setWeight(5)">5</button>
+        <button matButton="filled" (click)="setWeight(8)">8</button>
+        <button matButton="filled" (click)="setWeight(10)">10</button>
+      </div>
+    </div>
+  }
+</div>
