@@ -156,7 +156,9 @@ export default class SessionView {
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((note: string | null) => {
-        this.editedSession.update((session) => session.setExerciseNotes(entry.exerciseId, note));
+        if (typeof note === 'string') {
+          this.editedSession.update((session) => session.setExerciseNotes(entry.exerciseId, note));
+        }
       });
   }
 }

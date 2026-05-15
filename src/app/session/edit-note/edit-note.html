@@ -7,5 +7,5 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button class="success" [mat-dialog-close]="input.value" matButton>Save</button>
-  <button class="info" matButton mat-dialog-close>Cancel</button>
+  <button class="info" matButton [mat-dialog-close]="null">Cancel</button>
 </mat-dialog-actions>

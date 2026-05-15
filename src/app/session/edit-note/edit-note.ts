@@ -7,8 +7,8 @@ import {
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { SetForm } from '../set-form/set-form';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-edit-note',
@@ -18,10 +18,10 @@ import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
-    SetForm,
     MatFormField,
     MatLabel,
     MatInput,
+    FormsModule,
   ],
   templateUrl: './edit-note.html',
   styleUrl: './edit-note.css',
