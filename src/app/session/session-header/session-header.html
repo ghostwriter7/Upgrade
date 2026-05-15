@@ -1,0 +1,21 @@
+<header>
+  <button matFab extended (click)="editStartedAt()">
+    <mat-icon>access_time</mat-icon>
+    {{ startedAt() }}
+  </button>
+  @if (finishedAt(); as finishedAt) {
+    <button matFab extended (click)="editFinishedAt()">
+      <mat-icon>access_time_filled</mat-icon>
+      {{ finishedAt }}
+    </button>
+  }
+  @if (duration(); as duration) {
+    <span class="metadata">
+        <mat-icon>hourglass_empty</mat-icon>
+      {{ duration }}
+      </span>
+  }
+  <button matMiniFab class="danger ml-auto" (click)="deleteSession()">
+    <mat-icon>delete_forever</mat-icon>
+  </button>
+</header>

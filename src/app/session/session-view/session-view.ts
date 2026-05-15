@@ -8,7 +8,7 @@ import {
   linkedSignal,
   signal,
 } from '@angular/core';
-import { MatButton, MatFabButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { DateHelper } from '../../common/helper/date.helper';
@@ -23,12 +23,12 @@ import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
 import { SessionStore } from '../../store/session/session.store';
 import { form, FormField, required } from '@angular/forms/signals';
-import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { DeleteSessionAlert } from '../delete-session-alert/delete-session-alert';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, skip, tap } from 'rxjs';
+import { SessionHeader } from '../session-header/session-header';
+import { Temporal as TemporalType } from '@js-temporal/polyfill';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -50,9 +50,7 @@ import { debounceTime, filter, skip, tap } from 'rxjs';
     MatListItem,
     MatCardHeader,
     FormField,
-    MatIcon,
-    MatFabButton,
-    MatMiniFabButton,
+    SessionHeader,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
@@ -76,30 +74,9 @@ export default class SessionView {
   protected readonly hasLeftExercises = computed(() => this.availableExercises().length > 0);
   protected readonly isSessionInvalid = computed(() => this.editedSession().isEmpty);
   protected readonly isEditable = computed(() => !this.session().finishedAt);
-  protected readonly startedAt = computed(() =>
-    DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
-  );
   private readonly activeExerciseIds = computed(
     () => new Set(this.editedSession().exercises.map(({ exerciseId }) => exerciseId)),
   );
-  protected readonly finishedAt = computed(() => {
-    const finishedAt = this.editedSession()?.finishedAt;
-    return finishedAt
-      ? DateHelper.toLocal(finishedAt).toLocaleString('en-GB', { timeStyle: 'short' })
-      : null;
-  });
-  protected readonly duration = computed(() => {
-    const { startedAt, finishedAt } = this.editedSession();
-
-    if (!finishedAt) return null;
-
-    const duration = DateHelper.toLocal(finishedAt).since(DateHelper.toLocal(startedAt));
-    const { hours, minutes } = duration;
-
-    if (hours) return `${hours}h ${minutes}m`;
-
-    return `${minutes}m`;
-  });
 
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
@@ -136,23 +113,6 @@ export default class SessionView {
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {}
 
-  protected deleteSession(): void {
-    const ref = this.dialog.open(DeleteSessionAlert);
-
-    ref
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result) {
-          if (this.isNew()) {
-            this.router.navigate(['/']);
-          } else {
-            this.sessionStore.delete(this.editedSession());
-          }
-        }
-      });
-  }
-
   protected completeSession(): void {
     this.editedSession.update((session) => {
       session.finishedAt = DateHelper.now();
@@ -162,5 +122,19 @@ export default class SessionView {
     const session = this.editedSession();
     this.sessionStore.save(session);
     this.router.navigate(['/session', session.isoDate]);
+  }
+
+  protected onStartedAtChange(startedAt: TemporalType.Instant): void {
+    this.editedSession.update((session) => {
+      session.startedAt = startedAt;
+      return session.clone();
+    });
+  }
+
+  protected onFinishedAtChange(finishedAt: TemporalType.Instant): void {
+    this.editedSession.update((session) => {
+      session.finishedAt = finishedAt;
+      return session.clone();
+    });
   }
 }

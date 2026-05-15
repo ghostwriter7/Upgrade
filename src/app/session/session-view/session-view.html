@@ -1,27 +1,10 @@
 <div class="session-view">
-  <header>
-    <button matFab extended>
-      <mat-icon>access_time</mat-icon>
-      {{ startedAt() }}
-    </button>
-    @if (finishedAt(); as finishedAt) {
-      <button matFab extended>
-        <mat-icon>access_time_filled</mat-icon>
-        {{ finishedAt }}
-      </button>
-    }
-    @if (duration(); as duration) {
-      <span class="metadata">
-        <mat-icon>hourglass_empty</mat-icon>
-        {{ duration }}
-      </span>
-    }
-    <button matMiniFab class="danger ml-auto" (click)="deleteSession()">
-      <mat-icon>delete_forever</mat-icon>
-    </button>
-
-
-  </header>
+  <app-session-header
+    [isNew]="isNew()"
+    [session]="editedSession()"
+    (finishedAtChange)="onFinishedAtChange($event)"
+    (startedAtChange)="onStartedAtChange($event)"
+  />
 
   @for (entry of editedSession().exercises; track entry.exerciseId) {
     <mat-card>

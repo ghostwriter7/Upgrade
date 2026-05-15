@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>{{  data.label }}</h2>
+<mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Time</mat-label>
+    <input matInput type="time" [formField]="form.time" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="danger" matButton [mat-dialog-close]="result()">Update</button>
+  <button class="info" matButton mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
