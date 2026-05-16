@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DateHelper } from '../../common/helper/date.helper';
-import { DeleteSessionAlert } from '../delete-session-alert/delete-session-alert';
+import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { SessionStore } from '../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
@@ -51,7 +51,7 @@ export class SessionHeader {
   private readonly router = inject(Router);
 
   protected deleteSession(): void {
-    const ref = this.dialog.open(DeleteSessionAlert);
+    const ref = this.dialog.open(ConfirmDeleteAlert);
 
     ref
       .afterClosed()

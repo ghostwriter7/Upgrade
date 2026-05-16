@@ -3,9 +3,9 @@ import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } fr
 import { MatButton } from '@angular/material/button';
 
 @Component({
-  selector: 'app-delete-session-alert',
+  selector: 'app-confirm-delete-alert',
   imports: [MatDialogContent, MatDialogActions, MatDialogTitle, MatButton, MatDialogClose],
-  templateUrl: './delete-session-alert.html',
-  styleUrl: './delete-session-alert.css',
+  templateUrl: './confirm-delete-alert.component.html',
+  styleUrl: './confirm-delete-alert.component.css',
 })
-export class DeleteSessionAlert {}
+export class ConfirmDeleteAlert {}

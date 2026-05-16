@@ -30,6 +30,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { EditNote } from '../edit-note/edit-note';
 import { Timer } from '../timer/timer';
+import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -150,7 +151,17 @@ export default class SessionView {
   }
 
   protected deleteExercise(entry: ExerciseLog): void {
-    this.editedSession.update((session) => session.removeExercise(entry.exerciseId));
+    const ref = this.dialog.open(ConfirmDeleteAlert);
+
+    ref
+      .afterClosed()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        if (result) {
+          this.editedSession.update((session) => session.removeExercise(entry.exerciseId));
+        }
+      });
+
   }
 
   protected editExerciseNote(entry: ExerciseLog): void {

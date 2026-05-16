@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeleteSessionAlert } from './delete-session-alert';
+import { ConfirmDeleteAlert } from './confirm-delete-alert.component';
 
 describe('DeleteSessionAlert', () => {
-  let component: DeleteSessionAlert;
-  let fixture: ComponentFixture<DeleteSessionAlert>;
+  let component: ConfirmDeleteAlert;
+  let fixture: ComponentFixture<ConfirmDeleteAlert>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DeleteSessionAlert],
+      imports: [ConfirmDeleteAlert],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DeleteSessionAlert);
+    fixture = TestBed.createComponent(ConfirmDeleteAlert);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });
