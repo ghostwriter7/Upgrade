@@ -112,7 +112,19 @@ export class Session {
     return this.clone();
   }
 
-  public removeSet(exerciseId: string, index: number): Session {
+  public copyLastSet(exerciseId: string): Session {
+    const index = this.getExerciseIndex(exerciseId);
+    const exercise = this.exercises[index];
+    const lastSet = exercise.sets.at(-1);
+
+    if (!lastSet) throw new Error('Exercise has no sets to copy');
+
+    this.exercises = this.exercises.with(index, exercise.withSet(lastSet));
+    return this.clone();
+  }
+
+
+    public removeSet(exerciseId: string, index: number): Session {
     const exerciseIndex = this.getExerciseIndex(exerciseId);
     this.exercises = this.exercises.with(exerciseIndex, this.exercises[exerciseIndex].removeSetAt(index));
     return this.clone();

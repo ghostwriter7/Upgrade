@@ -6,8 +6,9 @@ import {
   inject,
   input,
   linkedSignal,
+  signal,
 } from '@angular/core';
-import { MatButton, MatFabButton, MatMiniFabButton } from '@angular/material/button';
+import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
@@ -36,7 +37,6 @@ import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-view',
   imports: [
-    MatButton,
     ReactiveFormsModule,
     MatCard,
     MatCardTitle,
@@ -72,6 +72,7 @@ export default class SessionView {
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly showSetFormFor = signal<string | null>(null);
 
   constructor() {
     toObservable(this.editedSession)
@@ -105,6 +106,7 @@ export default class SessionView {
 
   protected addSet(set: ExerciseSet, exerciseId: string): void {
     this.editedSession.update((session) => session.addSet(exerciseId, set));
+    this.showSetFormFor.set(null);
   }
 
   protected deleteSet(exerciseId: string, index: number): void {
@@ -179,4 +181,13 @@ export default class SessionView {
         }
       });
   }
+
+  protected showSetForm(exerciseId: string): void {
+    this.showSetFormFor.set(exerciseId);
+  }
+
+  protected copyLastSet(exerciseId: string): void {
+    this.editedSession.update((session) => session.copyLastSet(exerciseId));
+  }
 }
+

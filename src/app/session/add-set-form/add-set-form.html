@@ -1,20 +1,9 @@
-@if (showForm()) {
-  <app-set-form (valueChange)="setModel.set($event)" [value]="setModel()" #setForm/>
-  <div class="actions">
-    <button matMiniFab aria-label="Add set" [disabled]="setForm.isInvalid()" (click)="addSet()">
-      <mat-icon>check</mat-icon>
-    </button>
-    <button matMiniFab class="info" aria-label="Cancel set creation"  (click)="showForm.set(false)">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-} @else {
-  <div class="actions">
-    <button matMiniFab aria-label="Show set form" (click)="showForm.set(true)">
-      <mat-icon>add</mat-icon>
-    </button>
-    <button matMiniFab aria-label="Copy last set" [disabled]="isCloneDisabled()" (click)="copyLastSet()">
-      <mat-icon>content_copy</mat-icon>
-    </button>
-  </div>
-}
+<app-set-form (valueChange)="setModel.set($event)" [value]="setModel()" #setForm />
+<div class="actions">
+  <button matMiniFab aria-label="Add set" [disabled]="setForm.isInvalid()" (click)="addSet()">
+    <mat-icon>check</mat-icon>
+  </button>
+  <button matMiniFab class="info" aria-label="Cancel set creation" (click)="cancelAddSet.emit()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
