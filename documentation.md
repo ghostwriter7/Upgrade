@@ -25,7 +25,8 @@ Upgrade is a single‑page Angular app for logging flexibility/mobility training
 - Exercises
   - Predefined exercise catalog (static list).
   - Multi‑select exercise picker for a session.
-  - Exercise‑level notes (viewable once a session is completed).
+  - Exercise‑level notes.
+  - Delete an exercise (with confirmation).
 - Sets
   - Add sets with type‑specific fields:
     - Bodyweight: reps.

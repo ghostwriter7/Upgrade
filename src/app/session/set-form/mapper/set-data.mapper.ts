@@ -7,24 +7,31 @@ import {
 } from '../../../domain/model/exercise-set.model';
 
 export class SetDataMapper {
-  public static toDomain({ type, weight, reps, duration }: SetData): ExerciseSet {
+  public static toDomain({ type, weight, reps, duration, exposureZone, depth, breathQuality }: SetData): ExerciseSet {
     if (type) {
       switch (type) {
         case 'bodyweight':
-          return new BodyweightSet(reps);
+          return new BodyweightSet(reps, depth, exposureZone, breathQuality);
         case 'weight':
-          return new WeightedSet(reps, weight);
+          return new WeightedSet(reps, weight, depth, exposureZone, breathQuality);
         case 'iso':
-          return new IsoSet(duration, weight);
+          return new IsoSet(duration, depth, exposureZone, breathQuality, weight);
       }
     }
     throw new Error(`Invalid set type: ${type}`);
   }
 
   public static toDto(exerciseSet: ExerciseSet): SetData {
+    const common = {
+      breathQuality: exerciseSet.breathQuality,
+      depth: exerciseSet.depth,
+      exposureZone: exerciseSet.exposureZone,
+    };
+
     switch (exerciseSet.type) {
       case 'bodyweight':
         return {
+          ...common,
           type: 'bodyweight',
           reps: (exerciseSet as BodyweightSet).reps,
           weight: 0,
@@ -32,6 +39,7 @@ export class SetDataMapper {
         };
       case 'weight':
         return {
+          ...common,
           type: 'weight',
           reps: (exerciseSet as WeightedSet).reps,
           weight: (exerciseSet as WeightedSet).weight,
@@ -39,6 +47,7 @@ export class SetDataMapper {
         };
       case 'iso':
         return {
+          ...common,
           type: 'iso',
           reps: 0,
           weight: (exerciseSet as IsoSet).weight ?? 0,

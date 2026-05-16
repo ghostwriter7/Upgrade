@@ -30,6 +30,9 @@ export class AddSetForm {
     reps: 1,
     weight: 0,
     duration: 0,
+    breathQuality: null,
+    exposureZone: null,
+    depth: null
   });
 
   protected addSet(): void {
