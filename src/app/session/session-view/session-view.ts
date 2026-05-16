@@ -7,7 +7,7 @@ import {
   input,
   linkedSignal,
 } from '@angular/core';
-import { MatButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
@@ -53,6 +53,7 @@ import { Timer } from '../timer/timer';
     MatMiniFabButton,
     MatMenuItem,
     Timer,
+    MatFabButton,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',

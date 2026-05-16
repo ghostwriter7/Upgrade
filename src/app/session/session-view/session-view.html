@@ -45,15 +45,17 @@
   }
 
   @if (isEditable()) {
-    <button
-      matButton="filled"
-      (click)="showExerciseDialog()">
-      Add
-    </button>
+    <div class="actions">
+      <button matFab extended [disabled]="isSessionInvalid()" (click)="completeSession()">
+        <mat-icon>save</mat-icon>
+        Complete
+      </button>
 
-    <button class="full-width" matButton="filled" [disabled]="isSessionInvalid()" (click)="completeSession()">
-      Complete Session
-    </button>
+      <button matFab extended (click)="showExerciseDialog()">
+        <mat-icon>add</mat-icon>
+        Skill
+      </button>
+    </div>
   }
 </div>
 

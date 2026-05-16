@@ -13,3 +13,8 @@
 .exercise-header {
   align-items: center;
 }
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+}
