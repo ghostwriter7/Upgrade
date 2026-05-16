@@ -87,9 +87,9 @@
   <mat-card>
     <mat-card-content>
       Exposure Zones
-      <mat-chip-listbox [formField]="setForm.exposureZone" [hideSingleSelectionIndicator]="true">
+      <mat-chip-listbox (change)="update({ exposureZone : $event.value })" [hideSingleSelectionIndicator]="true">
         @for (option of exposureZoneOptions; track option.value) {
-          <mat-chip-option [value]="option.value">{{ option.label }}</mat-chip-option>
+          <mat-chip-option [ngClass]="option.modifierClass" [value]="option.value">{{ option.label }}</mat-chip-option>
         }
       </mat-chip-listbox>
     </mat-card-content>
@@ -100,7 +100,7 @@
   <mat-card>
     <mat-card-content>
       <p>Depth</p>
-      <mat-chip-listbox [formField]="setForm.depth" [hideSingleSelectionIndicator]="true">
+      <mat-chip-listbox (change)="update({ depth : $event.value })" [hideSingleSelectionIndicator]="true">
         @for (option of depthOptions; track option.value) {
           <mat-chip-option [value]="option.value">{{ option.label }}</mat-chip-option>
         }
@@ -113,7 +113,7 @@
   <mat-card>
     <mat-card-content>
       <p>Breath Quality</p>
-      <mat-chip-listbox [formField]="setForm.breathQuality" [hideSingleSelectionIndicator]="true">
+      <mat-chip-listbox (change)="update({ breathQuality : $event.value })" [hideSingleSelectionIndicator]="true">
         @for (option of breathQualityOptions; track option.value) {
           <mat-chip-option [value]="option.value">{{ option.label }}</mat-chip-option>
         }

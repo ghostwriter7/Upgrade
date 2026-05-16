@@ -5,13 +5,15 @@ import { BreathQuality } from '../enum/breath-quality.enum';
 export const ExerciseSetTypes = ['bodyweight', 'weight', 'iso'] as const;
 export type ExerciseSetType = (typeof ExerciseSetTypes)[number];
 
-export class ExerciseSet {
-  constructor(
+export abstract class ExerciseSet {
+  protected constructor(
     public readonly type: ExerciseSetType,
     public readonly depth: Depth | null,
     public readonly exposureZone: ExposureZone | null,
     public readonly breathQuality: BreathQuality | null,
   ) {}
+
+  public abstract get quantity(): number;
 }
 
 export class BodyweightSet extends ExerciseSet {
@@ -22,6 +24,10 @@ export class BodyweightSet extends ExerciseSet {
     breathQuality: BreathQuality | null,
   ) {
     super('bodyweight', depth, exposureZone, breathQuality);
+  }
+
+  public get quantity(): number {
+    return this.reps;
   }
 }
 
@@ -35,6 +41,10 @@ export class WeightedSet extends ExerciseSet {
   ) {
     super('weight', depth, exposureZone, breathQuality);
   }
+
+  public get quantity(): number {
+    return this.reps;
+  }
 }
 
 export class IsoSet extends ExerciseSet {
@@ -46,5 +56,9 @@ export class IsoSet extends ExerciseSet {
     public readonly weight?: number,
   ) {
     super('iso', depth, exposureZone, breathQuality);
+  }
+
+  public get quantity(): number {
+    return this.duration;
   }
 }

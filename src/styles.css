@@ -6,6 +6,11 @@
   --space-4: 1rem;
   --space-5: 1.5rem;
   --space-6: 2rem;
+
+  --green: #08650c;
+  --blue: #105c9a;
+  --yellow: #b4942f;
+  --red: var(--mat-sys-error-container);
 }
 
 * {
@@ -35,3 +40,19 @@ body {
 .gap-1 {
   gap: var(--space-1);
 }
+
+.red {
+  background-color: var(--red) !important;
+}
+
+.blue {
+  background-color: var(--blue) !important;
+}
+
+.yellow {
+  background-color: var(--yellow) !important;
+}
+
+.green {
+  background-color: var(--green) !important;
+  }

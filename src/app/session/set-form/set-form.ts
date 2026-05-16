@@ -19,8 +19,8 @@ import { BreathQualityOptions } from '../../domain/consts/breath-quality-options
 import { Depth } from '../../domain/enum/depth.enum';
 import { BreathQuality } from '../../domain/enum/breath-quality.enum';
 import { ExposureZone } from '../../domain/enum/exposure-zone.enum';
-import { MatFormField, MatLabel } from '@angular/material/input';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { NgClass } from '@angular/common';
 
 export interface SetData {
   type: ExerciseSetType;
@@ -43,12 +43,9 @@ export interface SetData {
     FormField,
     MatChipListbox,
     MatChipOption,
-    MatFormField,
-    MatLabel,
     MatCard,
-    MatCardTitle,
     MatCardContent,
-    MatCardHeader,
+    NgClass,
   ],
   templateUrl: './set-form.html',
   styleUrl: './set-form.css',

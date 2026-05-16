@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import {
-  BodyweightSet,
   ExerciseSet,
   IsoSet,
   WeightedSet,
@@ -26,17 +25,17 @@ export class SetView {
     const set = this.set();
     switch (set.type) {
       case 'bodyweight':
-        return `${(set as BodyweightSet).reps} reps`;
+        return `${set.quantity} reps`;
       case 'weight': {
         const weightSet = set as WeightedSet;
-        return `${weightSet.reps} reps + ${weightSet.weight} kg`;
+        return `${weightSet.quantity} reps + ${weightSet.weight} kg`;
       }
       case 'iso': {
         const isoSet = set as IsoSet;
         if (isoSet.weight) {
-          return `${isoSet.duration} seconds + ${isoSet.weight} kg`;
+          return `${isoSet.quantity} seconds + ${isoSet.weight} kg`;
         }
-        return `${isoSet.duration} seconds`;
+        return `${isoSet.quantity} seconds`;
       }
     }
   });
