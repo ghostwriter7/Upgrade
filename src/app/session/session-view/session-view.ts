@@ -6,6 +6,7 @@ import {
   inject,
   input,
   linkedSignal,
+  OnInit,
   signal,
 } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
@@ -20,7 +21,6 @@ import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { MatList, MatListItem } from '@angular/material/list';
 import { SessionStore } from '../../store/session/session.store';
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime, filter, skip, tap } from 'rxjs';
 import { SessionHeader } from '../session-header/session-header';
@@ -32,6 +32,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { EditNote } from '../edit-note/edit-note';
 import { Timer } from '../timer/timer';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
+import { DialogService } from '../../common/service/dialog.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,10 +57,11 @@ import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert
     Timer,
     MatFabButton,
   ],
+  providers: [DialogService],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
 })
-export default class SessionView {
+export default class SessionView implements OnInit {
   public isNew = input(false);
   public session = input.required<Session>();
 
@@ -67,12 +69,12 @@ export default class SessionView {
 
   protected readonly editedSession = linkedSignal(() => this.session());
   protected readonly isSessionInvalid = computed(() => this.editedSession().isEmpty);
-  protected readonly isEditable = linkedSignal(() =>  !this.session().finishedAt);
+  protected readonly isEditable = signal(false);
   protected readonly showSetFormFor = signal<string | null>(null);
   protected readonly isUnfinished = computed(() => !this.session().finishedAt);
 
   private readonly router = inject(Router);
-  private readonly dialog = inject(MatDialog);
+  private readonly dialog = inject(DialogService);
   private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -87,22 +89,22 @@ export default class SessionView {
       .subscribe();
   }
 
-  protected showExerciseDialog(): void {
-    const ref: MatDialogRef<ExerciseSelector, Set<string> | undefined> = this.dialog.open(
-      ExerciseSelector,
-      { data: { session: this.editedSession() }, width: '90svw', height: '80svh' },
-    );
+  public ngOnInit(): void {
+    this.isEditable.set(!this.session().finishedAt);
+  }
 
-    ref
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((exerciseIds) => {
-        if (exerciseIds && exerciseIds.size !== 0) {
+  protected showExerciseDialog(): void {
+    this.dialog.open(
+      ExerciseSelector,
+      (exerciseIds: Set<string>) => {
+        if (exerciseIds.size !== 0) {
           exerciseIds.forEach((exerciseId) => {
             this.editedSession.update((session) => session.addExercise(exerciseId));
           });
         }
-      });
+      },
+      { data: { session: this.editedSession() }, width: '90svw', height: '80svh' },
+    );
   }
 
   protected addSet(set: ExerciseSet, exerciseId: string): void {
@@ -115,17 +117,12 @@ export default class SessionView {
   }
 
   protected editSet(exerciseId: string, set: ExerciseSet, index: number): void {
-    const ref: MatDialogRef<EditSet, ExerciseSet | undefined> = this.dialog.open(EditSet, {
-      data: { set },
-    });
-    ref
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result) {
-          this.editedSession.update((session) => session.updateSet(exerciseId, index, result));
-        }
-      });
+    this.dialog.open(
+      EditSet,
+      (result: ExerciseSet) =>
+        this.editedSession.update((session) => session.updateSet(exerciseId, index, result)),
+      { data: { set } },
+    );
   }
 
   protected completeSession(): void {
@@ -154,33 +151,23 @@ export default class SessionView {
   }
 
   protected deleteExercise(entry: ExerciseLog): void {
-    const ref = this.dialog.open(ConfirmDeleteAlert);
-
-    ref
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        if (result) {
-          this.editedSession.update((session) => session.removeExercise(entry.exerciseId));
-        }
-      });
-
+    this.dialog.open(ConfirmDeleteAlert, () =>
+      this.editedSession.update((session) => session.removeExercise(entry.exerciseId)),
+    );
   }
 
   protected editExerciseNote(entry: ExerciseLog): void {
-    const ref = this.dialog.open(EditNote, {
-      data: { note: entry.notes },
-      width: '90svw',
-      height: '90svh',
-    });
-    ref
-      .afterClosed()
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((note: string | null) => {
-        if (typeof note === 'string') {
-          this.editedSession.update((session) => session.setExerciseNotes(entry.exerciseId, note));
-        }
-      });
+    this.dialog.open(
+      EditNote,
+      (note: string) =>
+        this.editedSession.update((session) => session.setExerciseNotes(entry.exerciseId, note)),
+      {
+        data: { note: entry.notes },
+        width: '90svw',
+        height: '90svh',
+      },
+      (note: string | undefined) => typeof note === 'string',
+    );
   }
 
   protected showSetForm(exerciseId: string): void {
@@ -194,5 +181,8 @@ export default class SessionView {
   protected onEditStart(): void {
     this.isEditable.set(true);
   }
-}
 
+  protected cancelEdit(): void {
+    this.isEditable.set(false);
+  }
+}

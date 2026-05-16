@@ -11,15 +11,13 @@ export class DialogService {
   public open<R, D, T>(
     component: Type<T>,
     afterClosedHandler: (result: R) => void,
-    config?: MatDialogConfig<D>,
+    config: MatDialogConfig<D> = {},
+    valuePredicate: (result: R) => boolean = Boolean,
   ): void {
     const dialogRef = this.dialog.open(component, config);
     dialogRef
       .afterClosed()
-      .pipe(
-        filter(Boolean),
-        takeUntilDestroyed(this.destroyRef),
-      )
+      .pipe(filter(valuePredicate), takeUntilDestroyed(this.destroyRef))
       .subscribe(afterClosedHandler);
   }
 }

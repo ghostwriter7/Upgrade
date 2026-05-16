@@ -27,3 +27,11 @@ body {
 .ml-auto {
   margin-left: auto;
 }
+
+.flex-container {
+  display: flex;
+}
+
+.gap-1 {
+  gap: var(--space-1);
+}
