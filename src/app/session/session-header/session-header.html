@@ -22,7 +22,7 @@
     </button>
     <mat-menu #menu="matMenu">
       @if (isFinal()) {
-        <button mat-menu-item class="info" (click)="editStart.emit()">
+        <button mat-menu-item (click)="editStart.emit()">
           <mat-icon>edit</mat-icon> Edit
         </button>
       }
