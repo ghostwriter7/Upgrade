@@ -16,8 +16,20 @@
         {{ duration }}
       </span>
     }
-    <button matMiniFab class="danger ml-auto" (click)="deleteSession()">
-      <mat-icon>delete_forever</mat-icon>
+
+    <button class="ml-auto info" matMiniFab aria-label="Show session context menu" [matMenuTriggerFor]="menu">
+      <mat-icon>menu</mat-icon>
     </button>
+    <mat-menu #menu="matMenu">
+      @if (isFinal()) {
+        <button mat-menu-item class="info" (click)="editStart.emit()">
+          <mat-icon>edit</mat-icon> Edit
+        </button>
+      }
+      <button mat-menu-item class="danger" (click)="deleteSession()">
+        <mat-icon>delete_forever</mat-icon> Delete
+      </button>
+    </mat-menu>
+
   </div>
 </header>

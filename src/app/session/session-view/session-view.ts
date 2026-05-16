@@ -67,12 +67,13 @@ export default class SessionView {
 
   protected readonly editedSession = linkedSignal(() => this.session());
   protected readonly isSessionInvalid = computed(() => this.editedSession().isEmpty);
-  protected readonly isEditable = computed(() => !this.session().finishedAt);
+  protected readonly isEditable = linkedSignal(() =>  !this.session().finishedAt);
+  protected readonly showSetFormFor = signal<string | null>(null);
+  protected readonly isUnfinished = computed(() => !this.session().finishedAt);
 
   private readonly router = inject(Router);
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
-  protected readonly showSetFormFor = signal<string | null>(null);
 
   constructor() {
     toObservable(this.editedSession)
@@ -188,6 +189,10 @@ export default class SessionView {
 
   protected copyLastSet(exerciseId: string): void {
     this.editedSession.update((session) => session.copyLastSet(exerciseId));
+  }
+
+  protected onEditStart(): void {
+    this.isEditable.set(true);
   }
 }
 

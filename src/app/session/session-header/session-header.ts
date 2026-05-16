@@ -10,10 +10,11 @@ import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert
 import { SessionStore } from '../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'app-session-header',
-  imports: [MatFabButton, MatIcon, MatMiniFabButton],
+  imports: [MatFabButton, MatIcon, MatMiniFabButton, MatMenu, MatMenuItem, MatMenuTrigger],
   templateUrl: './session-header.html',
   styleUrl: './session-header.css',
 })
@@ -22,6 +23,8 @@ export class SessionHeader {
   public session = input.required<Session>();
   public startedAtChange = output<TemporalType.Instant>();
   public finishedAtChange = output<TemporalType.Instant>();
+  public editStart = output();
+  protected readonly isFinal = computed(() => this.session().finishedAt !== null);
 
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),

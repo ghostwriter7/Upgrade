@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  height: calc(var(--page-height) - 100px);
+  max-height: calc(var(--page-height) - 100px);
   overflow-y: auto;
 }
 

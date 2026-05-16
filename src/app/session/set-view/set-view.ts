@@ -17,6 +17,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
   styleUrl: './set-view.css',
 })
 export class SetView {
+  public isEditable = input.required<boolean>();
   public set = input.required<ExerciseSet>();
   public editSet = output<void>();
   public deleteSet = output<void>();

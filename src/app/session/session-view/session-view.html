@@ -4,24 +4,27 @@
     [session]="editedSession()"
     (finishedAtChange)="onFinishedAtChange($event)"
     (startedAtChange)="onStartedAtChange($event)"
+    (editStart)="onEditStart()"
   />
 
   @for (entry of editedSession().exercises; track entry.exerciseId) {
     <mat-card>
       <mat-card-header class="exercise-header">
         <mat-card-title>{{ entry.exerciseId | exerciseName }}</mat-card-title>
-        <button class="ml-auto info" matMiniFab aria-label="Show exercise context menu" [matMenuTriggerFor]="menu">
-          <mat-icon>menu</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="showSetForm(entry.exerciseId)">Add Set</button>
-          <button mat-menu-item [disabled]="entry.isEmpty" (click)="copyLastSet(entry.exerciseId)">Copy Last Set</button>
-          <button mat-menu-item (click)="editExerciseNote(entry)">Notes</button>
-          <button class="danger" mat-menu-item [disabled]="$count === 1" (click)="deleteExercise(entry)">Delete</button>
-        </mat-menu>
+        @if (isEditable()) {
+          <button class="ml-auto info" matMiniFab aria-label="Show exercise context menu" [matMenuTriggerFor]="menu">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="showSetForm(entry.exerciseId)">Add Set</button>
+            <button mat-menu-item [disabled]="entry.isEmpty" (click)="copyLastSet(entry.exerciseId)">Copy Last Set</button>
+            <button mat-menu-item (click)="editExerciseNote(entry)">Notes</button>
+            <button class="danger" mat-menu-item [disabled]="$count === 1" (click)="deleteExercise(entry)">Delete</button>
+          </mat-menu>
+        }
       </mat-card-header>
       <mat-card-content>
-        @if (!isEditable() && entry.notes) {
+        @if (entry.notes) {
           <p>{{ entry.notes }}</p>
         }
         <mat-list role="list">
@@ -29,6 +32,7 @@
             <mat-list-item role="listitem">
               <app-set-view
                 [set]="set"
+                [isEditable]="isEditable()"
                 (deleteSet)="deleteSet(entry.exerciseId, $index)"
                 (editSet)="editSet(entry.exerciseId, set, $index)"
               />
@@ -49,10 +53,17 @@
 
   @if (isEditable()) {
     <div class="actions">
-      <button matFab extended [disabled]="isSessionInvalid()" (click)="completeSession()">
-        <mat-icon>save</mat-icon>
-        Complete
-      </button>
+      @if (isUnfinished()) {
+        <button matFab extended [disabled]="isSessionInvalid()" (click)="completeSession()">
+          <mat-icon>save</mat-icon>
+          Complete
+        </button>
+      } @else {
+        <button matFab extended (click)="isEditable.set(false)">
+          <mat-icon>cancel</mat-icon>
+          Cancel
+        </button>
+      }
 
       <button matFab extended (click)="showExerciseDialog()">
         <mat-icon>add</mat-icon>
