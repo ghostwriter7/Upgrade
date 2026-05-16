@@ -29,6 +29,7 @@ import { EditSet } from '../edit-set/edit-set';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { EditNote } from '../edit-note/edit-note';
+import { Timer } from '../timer/timer';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,6 +52,7 @@ import { EditNote } from '../edit-note/edit-note';
     MatIcon,
     MatMiniFabButton,
     MatMenuItem,
+    Timer,
   ],
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
@@ -151,7 +153,11 @@ export default class SessionView {
   }
 
   protected editExerciseNote(entry: ExerciseLog): void {
-    const ref = this.dialog.open(EditNote, { data: { note: entry.notes }, width: '90svw', height: '90svh' });
+    const ref = this.dialog.open(EditNote, {
+      data: { note: entry.notes },
+      width: '90svw',
+      height: '90svh',
+    });
     ref
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -10,11 +10,10 @@ import { DeleteSessionAlert } from '../delete-session-alert/delete-session-alert
 import { SessionStore } from '../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { Timer } from '../timer/timer';
 
 @Component({
   selector: 'app-session-header',
-  imports: [MatFabButton, MatIcon, MatMiniFabButton, Timer],
+  imports: [MatFabButton, MatIcon, MatMiniFabButton],
   templateUrl: './session-header.html',
   styleUrl: './session-header.css',
 })

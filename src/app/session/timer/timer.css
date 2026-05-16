@@ -1,0 +1,31 @@
+:host {
+  position: fixed;
+  bottom: var(--space-2);
+  left: var(--space-2);
+  right: var(--space-2);
+}
+
+.card {
+  width: 100%;
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  gap: .5rem;
+}
+
+.display-value {
+  background-color: var(--mat-sys-primary-container);
+  border-radius: var(--mat-sys-corner-small);
+  color: var(--mat-sys-on-primary-container);
+  font: var(--mat-sys-display-small);
+  box-shadow: var(--mat-sys-shadow);
+  padding-inline: var(--space-4);
+}
