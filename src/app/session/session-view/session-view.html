@@ -40,11 +40,11 @@
           }
         </mat-list>
 
-        @if (showSetFormFor() === entry.exerciseId) {
+        @if (setFormActiveForExerciseId() === entry.exerciseId) {
           <app-add-set-form
             [exerciseLog]="entry"
             (newSet)="addSet($event, entry.exerciseId)"
-            (cancelAddSet)="showSetFormFor.set(null)"
+            (cancelAddSet)="onCancelAddSet()"
           />
         }
       </mat-card-content>

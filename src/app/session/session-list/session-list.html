@@ -1,7 +1,13 @@
 @if (loading()) {
   <app-loader />
 } @else {
-  @for (session of sessions(); track session.uuid) {
-    <app-session-view [session]="session"/>
+  @for (injector of injectors(); track injector) {
+    <ng-container
+      *ngComponentOutlet="
+      sessionViewComponent;
+      inputs: { isNew: false },
+      injector: injector
+    "
+    />
   }
 }
