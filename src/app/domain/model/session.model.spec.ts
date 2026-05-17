@@ -41,7 +41,7 @@ describe('Session', () => {
       session.addExercise('A');
       session.addExercise('B');
       session.addExercise('C');
-      session.addSet('C', new BodyweightSet(5));
+      session.addSet('C', new BodyweightSet(5, null, null, null));
 
       expect(session.isEmpty).toEqual(false);
     });
