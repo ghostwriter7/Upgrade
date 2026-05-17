@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { Timer } from '../timer/timer';
@@ -29,20 +28,6 @@ export default class SessionView {
   private readonly sessionEditor = inject(SessionEditorService);
 
   protected readonly editedSession = this.sessionEditor.$session;
-  protected readonly isSessionInvalid = this.sessionEditor.$isSessionInvalid;
-  protected readonly isEditable = this.sessionEditor.$isEditable;
-  protected readonly isUnfinished = this.sessionEditor.$isUnfinished;
-
-  private readonly router = inject(Router);
-
-  protected showExerciseDialog(): void {
-    this.sessionEditor.showExerciseDialog();
-  }
-
-  protected completeSession(): void {
-    this.sessionEditor.completeSession();
-    this.router.navigate(['/session', this.editedSession().isoDate]);
-  }
 
   protected onStartedAtChange(startedAt: TemporalType.Instant): void {
     this.sessionEditor.patchStartedAt(startedAt);
@@ -54,9 +39,5 @@ export default class SessionView {
 
   protected onEditStart(): void {
     this.sessionEditor.makeEditable();
-  }
-
-  protected cancelEdit(): void {
-    this.sessionEditor.cancelEdit();
   }
 }
