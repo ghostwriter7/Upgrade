@@ -13,7 +13,14 @@ import { DialogService } from '../../common/service/dialog.service';
 
 @Component({
   selector: 'app-session-header',
-  imports: [MatFabButton, MatIcon, MatMiniFabButton, MatMenu, MatMenuItem, MatMenuTrigger],
+  imports: [
+    MatFabButton,
+    MatIcon,
+    MatMiniFabButton,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger,
+  ],
   templateUrl: './session-header.html',
   providers: [DialogService],
   styleUrl: './session-header.css',
@@ -25,6 +32,19 @@ export class SessionHeader {
   public finishedAtChange = output<TemporalType.Instant>();
   public editStart = output();
 
+  protected readonly testIds = computed(() => {
+    const { uuid } = this.session();
+
+    return {
+      startedAt: `session-header-started-at-${uuid}`,
+      startedAtValue: `session-header-started-at-value-${uuid}`,
+      finishedAt: `session-header-finished-at-${uuid}`,
+      finishedAtValue: `session-header-finished-at-value-${uuid}`,
+      duration: `session-header-duration-${uuid}`,
+      menu: `session-header-menu-${uuid}`,
+    };
+  });
+  protected readonly dynamicTestId = computed(() => this.session().uuid);
   protected readonly isFinal = computed(() => this.session().finishedAt !== null);
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),

@@ -1,33 +1,43 @@
 <header>
+  @let testId = testIds();
   <div class="row">
-    <button matFab extended (click)="editStartedAt()">
+    <button
+      [attr.data-testid]="testId.startedAt" matFab extended
+      (click)="editStartedAt()">
       <mat-icon>access_time</mat-icon>
-      {{ startedAt() }}
+      <span [attr.data-testid]="testId.startedAtValue">{{ startedAt() }}</span>
     </button>
     @if (finishedAt(); as finishedAt) {
-      <button matFab extended (click)="editFinishedAt()">
+      <button
+        [attr.data-testid]="testId.finishedAt"
+        matFab extended (click)="editFinishedAt()">
         <mat-icon>access_time_filled</mat-icon>
-        {{ finishedAt }}
+        <span [attr.data-testid]="testId.finishedAtValue">{{ finishedAt }}</span>
       </button>
     }
     @if (duration(); as duration) {
-      <span class="metadata">
+      <span
+        class="metadata">
         <mat-icon>hourglass_empty</mat-icon>
-        {{ duration }}
+        <span [attr.data-testid]="testId.duration">{{ duration }}</span>
       </span>
     }
 
-    <button class="ml-auto info" matMiniFab aria-label="Show session context menu" [matMenuTriggerFor]="menu">
+    <button
+      [attr.data-testid]="testId.menu"
+      class="ml-auto info" matMiniFab aria-label="Show session context menu" [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
       @if (isFinal()) {
         <button mat-menu-item (click)="editStart.emit()">
-          <mat-icon>edit</mat-icon> Edit
+          <mat-icon>edit</mat-icon>
+          Edit
         </button>
       }
       <button mat-menu-item class="danger" (click)="deleteSession()">
-        <mat-icon>delete_forever</mat-icon> Delete
+        <mat-icon>delete_forever</mat-icon>
+        Delete
       </button>
     </mat-menu>
 
