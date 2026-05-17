@@ -57,14 +57,6 @@ export class ExerciseCard {
     this.sessionEditor.deleteExercise(exerciseLog);
   }
 
-  protected deleteSet(exerciseId: string, $index: number): void {
-    this.sessionEditor.deleteSet(exerciseId, $index);
-  }
-
-  protected editSet(exerciseId: string, set: ExerciseSet, $index: number): void {
-    this.sessionEditor.editSet(exerciseId, set, $index);
-  }
-
   protected addSet($event: ExerciseSet, exerciseId: string): void {
     this.sessionEditor.addSet($event, exerciseId);
   }

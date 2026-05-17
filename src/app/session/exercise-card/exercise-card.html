@@ -22,9 +22,9 @@
         <mat-list-item role="listitem">
           <app-set-view
             [set]="set"
+            [index]="$index"
+            [exerciseId]="entry().exerciseId"
             [isEditable]="isEditable()"
-            (deleteSet)="deleteSet(entry().exerciseId, $index)"
-            (editSet)="editSet(entry().exerciseId, set, $index)"
           />
         </mat-list-item>
       }

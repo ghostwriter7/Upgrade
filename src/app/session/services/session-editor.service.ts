@@ -9,7 +9,7 @@ import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { EditSet } from '../edit-set/edit-set';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { ExerciseLog } from '../../domain/model/session.model';
+import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditNote } from '../edit-note/edit-note';
 
@@ -18,7 +18,7 @@ export class SessionEditorService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly sessionStore = inject(SessionStore);
   private readonly dialog = inject(DialogService);
-  private readonly initialSession = inject(SESSION);
+  private readonly initialSession = inject(SESSION, { optional: true }) ?? Session.createEmpty();
   private readonly sessionDraft = signal(this.initialSession);
   private readonly isEditable = signal(!this.initialSession.finishedAt);
   private readonly setFormActiveForExerciseId = signal<string | null>(null);
@@ -64,9 +64,8 @@ export class SessionEditorService {
       session.finishedAt = DateHelper.now();
       return session.clone();
     });
-
-    const session = this.sessionDraft();
-    this.sessionStore.save(session);
+    this.sessionStore.save(this.sessionDraft());
+    this.isEditable.set(false);
   }
 
   public patchStartedAt(startedAt: TemporalType.Instant): void {

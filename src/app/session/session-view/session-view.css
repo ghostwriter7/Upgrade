@@ -9,8 +9,3 @@
   max-height: calc(var(--page-height) - 100px);
   overflow-y: auto;
 }
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-}

@@ -11,26 +11,7 @@
     <app-exercise-card [entry]="entry" [isNonDeletable]="$count === 1"/>
   }
 
-  @if (isEditable()) {
-    <div class="actions">
-      @if (isUnfinished()) {
-        <button matFab extended [disabled]="isSessionInvalid()" (click)="completeSession()">
-          <mat-icon>save</mat-icon>
-          Complete
-        </button>
-      } @else {
-        <button class="info" matFab extended (click)="cancelEdit()">
-          <mat-icon>cancel</mat-icon>
-          Cancel
-        </button>
-      }
-
-      <button matFab extended (click)="showExerciseDialog()">
-        <mat-icon>add</mat-icon>
-        Skill
-      </button>
-    </div>
-  }
+  <app-session-actions />
 </div>
 
 @if (isNew()) {

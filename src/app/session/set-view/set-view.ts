@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import {
   ExerciseSet,
   IsoSet,
@@ -7,6 +7,7 @@ import {
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { SessionEditorService } from '../services/session-editor.service';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,10 +19,12 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 export class SetView {
   public isEditable = input.required<boolean>();
   public set = input.required<ExerciseSet>();
-  public editSet = output<void>();
-  public deleteSet = output<void>();
+  public index = input.required<number>();
+  public exerciseId = input.required<string>();
 
-  public displayValue = computed(() => {
+  private readonly sessionEditor = inject(SessionEditorService);
+
+  protected readonly displayValue = computed(() => {
     const set = this.set();
     switch (set.type) {
       case 'bodyweight':
@@ -39,4 +42,12 @@ export class SetView {
       }
     }
   });
+
+  protected editSet() {
+    this.sessionEditor.editSet(this.exerciseId(), this.set(), this.index());
+  }
+
+  protected deleteSet() {
+    this.sessionEditor.deleteSet(this.exerciseId(), this.index());
+  }
 }

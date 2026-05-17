@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { MatFabButton } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { MatIcon } from '@angular/material/icon';
 import { Timer } from '../timer/timer';
 import { DialogService } from '../../common/service/dialog.service';
 import { SessionEditorService } from '../services/session-editor.service';
 import { ExerciseCard } from '../exercise-card/exercise-card';
+import { SessionActions } from '../session-actions/session-actions';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -16,10 +15,9 @@ import { ExerciseCard } from '../exercise-card/exercise-card';
   imports: [
     ReactiveFormsModule,
     SessionHeader,
-    MatIcon,
     Timer,
-    MatFabButton,
     ExerciseCard,
+    SessionActions,
   ],
   providers: [DialogService, SessionEditorService],
   templateUrl: './session-view.html',
