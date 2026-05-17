@@ -8,47 +8,7 @@
   />
 
   @for (entry of editedSession().exercises; track entry.exerciseId) {
-    <mat-card>
-      <mat-card-header class="exercise-header">
-        <mat-card-title>{{ entry.exerciseId | exerciseName }}</mat-card-title>
-        @if (isEditable()) {
-          <button class="ml-auto info" matMiniFab aria-label="Show exercise context menu" [matMenuTriggerFor]="menu">
-            <mat-icon>menu</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="showSetForm(entry.exerciseId)">Add Set</button>
-            <button mat-menu-item [disabled]="entry.isEmpty" (click)="copyLastSet(entry.exerciseId)">Copy Last Set</button>
-            <button mat-menu-item (click)="editExerciseNote(entry)">Notes</button>
-            <button class="danger" mat-menu-item [disabled]="$count === 1" (click)="deleteExercise(entry)">Delete</button>
-          </mat-menu>
-        }
-      </mat-card-header>
-      <mat-card-content>
-        @if (entry.notes) {
-          <p>{{ entry.notes }}</p>
-        }
-        <mat-list role="list">
-          @for (set of entry.sets; track $index) {
-            <mat-list-item role="listitem">
-              <app-set-view
-                [set]="set"
-                [isEditable]="isEditable()"
-                (deleteSet)="deleteSet(entry.exerciseId, $index)"
-                (editSet)="editSet(entry.exerciseId, set, $index)"
-              />
-            </mat-list-item>
-          }
-        </mat-list>
-
-        @if (setFormActiveForExerciseId() === entry.exerciseId) {
-          <app-add-set-form
-            [exerciseLog]="entry"
-            (newSet)="addSet($event, entry.exerciseId)"
-            (cancelAddSet)="onCancelAddSet()"
-          />
-        }
-      </mat-card-content>
-    </mat-card>
+    <app-exercise-card [entry]="entry" [isNonDeletable]="$count === 1"/>
   }
 
   @if (isEditable()) {

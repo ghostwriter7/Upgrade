@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePage } from './home/home-page/home-page';
 import { Session } from './domain/model/session.model';
+import { SESSION } from './session/consts/session.token';
 
 export const routes: Routes = [
   {
@@ -11,11 +12,9 @@ export const routes: Routes = [
   {
     path: 'session/new',
     data: {
-      isNew: true
+      isNew: true,
     },
-    resolve: {
-      session: () => Session.createEmpty()
-    },
+    providers: [{ provide: SESSION, useFactory: Session.createEmpty }],
     loadComponent: () => import('./session/session-view/session-view'),
   },
   {
