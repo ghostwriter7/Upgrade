@@ -12,9 +12,11 @@ export class Recorder {
   private readonly video = viewChild.required<ElementRef<HTMLVideoElement>>('video');
 
   protected async record(): Promise<void> {
+
     const stream = await navigator.mediaDevices.getUserMedia({ video: true });
     const video = this.video().nativeElement;
     video.srcObject = stream;
+    await video.requestFullscreen();
     await video.play();
   }
 }
