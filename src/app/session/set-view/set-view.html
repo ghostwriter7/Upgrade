@@ -1,11 +1,11 @@
-<div class="info" [class.highlight]="displayActions()" (pointerdown)="activateActions()">
+<div class="info" [class.highlight]="displayActions()" (click)="activateActions()">
   {{ displayValue() }}
 
   @if (displayActions()) {
     <div class="actions">
-      <button matMiniFab (click)="copySet()"><mat-icon>update</mat-icon></button>
-      <button matMiniFab (click)="editSet()"><mat-icon>edit</mat-icon></button>
-      <button matMiniFab class="danger" (click)="deleteSet()"><mat-icon>delete</mat-icon></button>
+      <button matMiniFab (click)="copySet($event)"><mat-icon>update</mat-icon></button>
+      <button matMiniFab (click)="editSet($event)"><mat-icon>edit</mat-icon></button>
+      <button matMiniFab class="danger" (click)="deleteSet($event)"><mat-icon>delete</mat-icon></button>
     </div>
   }
 </div>

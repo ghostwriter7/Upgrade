@@ -72,15 +72,19 @@ export class SetView {
     }
   }
 
-  protected editSet(): void {
+  protected editSet(event: Event): void {
+    event.stopPropagation();
     this.sessionEditor.editSet(this.exerciseId(), this.set(), this.index());
   }
 
-  protected deleteSet(): void {
+  protected deleteSet(event: Event): void {
+    event.stopPropagation();
+    this.displayActions.set(false);
     this.sessionEditor.deleteSet(this.exerciseId(), this.index());
   }
 
-  protected copySet(): void {
+  protected copySet(event: Event): void {
+    event.stopPropagation();
     this.sessionEditor.copySet(this.exerciseId(), this.index());
   }
 }
