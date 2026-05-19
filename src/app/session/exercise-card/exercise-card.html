@@ -1,16 +1,14 @@
 <mat-card>
-  <mat-card-header class="exercise-header">
+  <mat-card-header class="exercise-header" (click)="activateActions()">
     <mat-card-title>{{ entry().exerciseId | exerciseName }}</mat-card-title>
-    @if (isEditable()) {
-      <button class="ml-auto info" matMiniFab aria-label="Show exercise context menu" [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="showSetForm(entry().exerciseId)">Add Set</button>
-        <button mat-menu-item [disabled]="entry().isEmpty" (click)="copyLastSet(entry().exerciseId)">Copy Last Set</button>
-        <button mat-menu-item (click)="editExerciseNote(entry())">Notes</button>
-        <button class="danger" mat-menu-item [disabled]="isNonDeletable()" (click)="deleteExercise(entry())">Delete</button>
-      </mat-menu>
+
+    @if (displayActions()) {
+      <div class="actions">
+        <button matMiniFab (click)="showSetForm($event,entry().exerciseId)"><mat-icon>add</mat-icon></button>
+        <button matMiniFab (click)="copyLastSet($event, entry().exerciseId)"><mat-icon>update</mat-icon></button>
+        <button matMiniFab (click)="editExerciseNote($event, entry())"><mat-icon>note_add</mat-icon></button>
+        <button matMiniFab class="danger" [disabled]="isNonDeletable()" (click)="deleteExercise($event, entry())"><mat-icon>delete</mat-icon></button>
+      </div>
     }
   </mat-card-header>
   <mat-card-content>

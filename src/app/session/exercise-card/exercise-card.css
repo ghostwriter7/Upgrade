@@ -1,3 +1,9 @@
 .exercise-header {
   align-items: center;
 }
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  padding-inline: var(--space-2);
+}
