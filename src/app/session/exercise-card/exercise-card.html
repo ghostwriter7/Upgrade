@@ -4,8 +4,10 @@
 
     @if (displayActions()) {
       <div class="actions">
-        <button matMiniFab (click)="showSetForm($event,entry().exerciseId)"><mat-icon>add</mat-icon></button>
-        <button matMiniFab (click)="copyLastSet($event, entry().exerciseId)"><mat-icon>update</mat-icon></button>
+        <button matMiniFab (click)="showSetForm($event, entry().exerciseId)"><mat-icon>add</mat-icon></button>
+        @if (!entry().isEmpty) {
+          <button matMiniFab (click)="copyLastSet($event, entry().exerciseId)"><mat-icon>update</mat-icon></button>
+        }
         <button matMiniFab (click)="editExerciseNote($event, entry())"><mat-icon>note_add</mat-icon></button>
         <button matMiniFab class="danger" [disabled]="isNonDeletable()" (click)="deleteExercise($event, entry())"><mat-icon>delete</mat-icon></button>
       </div>
