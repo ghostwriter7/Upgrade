@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SessionHeader } from '../session-header/session-header';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { Timer } from '../timer/timer';
-import { DialogService } from '../../common/service/dialog.service';
+import { DialogService } from '../../common/service/dialog/dialog.service';
 import { SessionEditorService } from '../services/session-editor.service';
 import { ExerciseCard } from '../exercise-card/exercise-card';
 import { SessionActions } from '../session-actions/session-actions';

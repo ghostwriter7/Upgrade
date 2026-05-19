@@ -3,7 +3,7 @@ import { describe, it, vi, beforeEach, Mock } from 'vitest';
 
 import { SessionEditorService } from './session-editor.service';
 import { SessionStore } from '../../store/session/session.store';
-import { DialogService } from '../../common/service/dialog.service';
+import { DialogService } from '../../common/service/dialog/dialog.service';
 import { BodyweightSet } from '../../domain/model/exercise-set.model';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { SESSION } from '../consts/session.token';

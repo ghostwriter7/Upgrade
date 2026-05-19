@@ -1,18 +1,25 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import {
-  ExerciseSet,
-  IsoSet,
-  WeightedSet,
-} from '../../domain/model/exercise-set.model';
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  ElementRef,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
+import { ExerciseSet, IsoSet, WeightedSet } from '../../domain/model/exercise-set.model';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { SessionEditorService } from '../services/session-editor.service';
+import { EventService } from '../../common/service/event/event.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ElementClickedEvent } from '../../common/events/element-clicked.event';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-set-view',
-  imports: [MatIcon, MatMiniFabButton, MatMenuTrigger, MatMenu, MatMenuItem],
+  imports: [MatIcon, MatMiniFabButton],
   templateUrl: './set-view.html',
   styleUrl: './set-view.css',
 })
@@ -23,7 +30,10 @@ export class SetView {
   public exerciseId = input.required<string>();
 
   private readonly sessionEditor = inject(SessionEditorService);
+  private readonly eventService = inject(EventService);
+  private readonly destroyRef = inject(DestroyRef);
 
+  protected readonly displayActions = signal(false);
   protected readonly displayValue = computed(() => {
     const set = this.set();
     switch (set.type) {
@@ -43,11 +53,34 @@ export class SetView {
     }
   });
 
-  protected editSet() {
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+
+  constructor() {
+    this.eventService
+      .listen(ElementClickedEvent)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((payload) => {
+        if (!(this.elementRef.nativeElement as HTMLElement).contains(payload.element)) {
+          this.displayActions.set(false);
+        }
+      });
+  }
+
+  protected activateActions(): void {
+    if (this.isEditable()) {
+      this.displayActions.set(true);
+    }
+  }
+
+  protected editSet(): void {
     this.sessionEditor.editSet(this.exerciseId(), this.set(), this.index());
   }
 
-  protected deleteSet() {
+  protected deleteSet(): void {
     this.sessionEditor.deleteSet(this.exerciseId(), this.index());
+  }
+
+  protected copySet(): void {
+    this.sessionEditor.copySet(this.exerciseId(), this.index());
   }
 }

@@ -4,7 +4,7 @@ import { SessionHeader } from './session-header';
 import { Session } from '../../domain/model/session.model';
 import { SessionStore } from '../../store/session/session.store';
 import { Router } from '@angular/router';
-import { DialogService } from '../../common/service/dialog.service';
+import { DialogService } from '../../common/service/dialog/dialog.service';
 import { Mock } from 'vitest';
 import { EditTime } from '../edit-time/edit-time';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';

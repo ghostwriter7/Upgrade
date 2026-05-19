@@ -4,7 +4,7 @@ import { debounceTime, filter, skip, tap } from 'rxjs';
 import { SessionStore } from '../../store/session/session.store';
 import { SESSION } from '../consts/session.token';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
-import { DialogService } from '../../common/service/dialog.service';
+import { DialogService } from '../../common/service/dialog/dialog.service';
 import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { EditSet } from '../edit-set/edit-set';
 import { DateHelper } from '../../common/helper/date.helper';
@@ -134,5 +134,9 @@ export class SessionEditorService {
 
   public cancelAddSet(): void {
     this.setFormActiveForExerciseId.set(null);
+  }
+
+  public copySet(exerciseId: string, index: number): void {
+    this.sessionDraft.update((session) => session.copySet(exerciseId, index));
   }
 }

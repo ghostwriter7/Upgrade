@@ -112,6 +112,17 @@ export class Session {
     return this.clone();
   }
 
+  public copySet(exerciseId: string, index: number): Session {
+    const exerciseIndex = this.getExerciseIndex(exerciseId);
+    const exercise = this.exercises[exerciseIndex];
+    const set = exercise.sets[index];
+
+    if (index < 0 || index >= exercise.sets.length) throw new Error('Invalid set index');
+
+    this.exercises = this.exercises.with(exerciseIndex, exercise.withSet(set));
+    return this.clone();
+  }
+
   public copyLastSet(exerciseId: string): Session {
     const index = this.getExerciseIndex(exerciseId);
     const exercise = this.exercises[index];

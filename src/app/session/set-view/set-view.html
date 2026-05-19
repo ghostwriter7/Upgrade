@@ -1,13 +1,11 @@
-<div class="info">
+<div class="info" [class.highlight]="displayActions()" (pointerdown)="activateActions()">
   {{ displayValue() }}
 
-  @if (isEditable()) {
-    <button matMiniFab aria-label="Show context menu" [matMenuTriggerFor]="menu" >
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="editSet()">Edit</button>
-      <button mat-menu-item (click)="deleteSet()">Delete</button>
-    </mat-menu>
+  @if (displayActions()) {
+    <div class="actions">
+      <button matMiniFab (click)="copySet()"><mat-icon>update</mat-icon></button>
+      <button matMiniFab (click)="editSet()"><mat-icon>edit</mat-icon></button>
+      <button matMiniFab class="danger" (click)="deleteSet()"><mat-icon>delete</mat-icon></button>
+    </div>
   }
 </div>

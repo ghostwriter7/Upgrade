@@ -9,7 +9,7 @@ import { SessionStore } from '../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { DialogService } from '../../common/service/dialog.service';
+import { DialogService } from '../../common/service/dialog/dialog.service';
 
 @Component({
   selector: 'app-session-header',
