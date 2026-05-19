@@ -1,5 +1,6 @@
 .exercise-header {
   align-items: center;
+  flex-direction: column;
 }
 
 .actions {

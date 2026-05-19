@@ -12,6 +12,7 @@ import { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditNote } from '../edit-note/edit-note';
+import { Recorder } from '../recorder/recorder';
 
 @Injectable()
 export class SessionEditorService {
@@ -138,5 +139,11 @@ export class SessionEditorService {
 
   public copySet(exerciseId: string, index: number): void {
     this.sessionDraft.update((session) => session.copySet(exerciseId, index));
+  }
+
+  public captureRecording(exerciseId: string): void {
+    this.dialog.open(Recorder, () => {
+
+    }, { width: '90svw', height: '90svh' });
   }
 }

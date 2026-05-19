@@ -97,4 +97,9 @@ export class ExerciseCard {
       this.displayActions.set(true);
     }
   }
+
+  protected async activateVideoCapture(event: Event, exerciseId: string): Promise<void> {
+    event.stopPropagation();
+    this.sessionEditor.captureRecording(exerciseId);
+  }
 }
