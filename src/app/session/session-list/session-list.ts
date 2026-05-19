@@ -38,17 +38,25 @@ export class SessionList {
       const loading = this.loading();
 
       if (!loading) {
+        const sessions = this.sessionStore.activeSessions();
         untracked(() => {
-          const sessions = this.sessionStore.activeSessions();
+          const injectors = this.injectors();
 
-          this.injectors.set(
-            sessions?.map((session) =>
-              Injector.create({
-                parent: injector,
-                providers: [{ provide: SESSION, useValue: session }],
-              }),
-            ) || [],
-          );
+          if (
+            injectors.length !== sessions?.length ||
+            injectors.some(
+              (injector, index) => injector.get(SESSION).uuid !== sessions?.[index].uuid,
+            )
+          ) {
+            this.injectors.set(
+              sessions?.map((session) =>
+                Injector.create({
+                  parent: injector,
+                  providers: [{ provide: SESSION, useValue: session }],
+                }),
+              ) || [],
+            );
+          }
         });
       }
     });
