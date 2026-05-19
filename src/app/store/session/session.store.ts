@@ -97,7 +97,7 @@ export const SessionStore = signalStore(
       },
 
       delete: (session: Session) => {
-        const dateId = session.isoDate!;
+        const dateId = session.isoDate;
         const sessionsByDate = { ...store.sessionsByDate() };
         sessionsByDate[dateId] = sessionsByDate[dateId]?.filter(
           ({ uuid }) => uuid !== session.uuid,

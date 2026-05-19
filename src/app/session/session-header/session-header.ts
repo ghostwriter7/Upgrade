@@ -10,6 +10,7 @@ import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '../../common/service/dialog/dialog.service';
+import { SessionEditorService } from '../services/session-editor.service';
 
 @Component({
   selector: 'app-session-header',
@@ -28,9 +29,6 @@ import { DialogService } from '../../common/service/dialog/dialog.service';
 export class SessionHeader {
   public isNew = input.required<boolean>();
   public session = input.required<Session>();
-  public startedAtChange = output<TemporalType.Instant>();
-  public finishedAtChange = output<TemporalType.Instant>();
-  public editStart = output();
 
   protected readonly testIds = computed(() => {
     const { uuid } = this.session();
@@ -71,6 +69,7 @@ export class SessionHeader {
   private readonly sessionStore = inject(SessionStore);
   private readonly router = inject(Router);
   private readonly dialog = inject(DialogService);
+  private readonly sessionEditor = inject(SessionEditorService);
 
   protected deleteSession(): void {
     this.dialog.open(ConfirmDeleteAlert, () => {
@@ -85,7 +84,7 @@ export class SessionHeader {
   protected editStartedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: TemporalType.Instant) => this.startedAtChange.emit(result),
+      (result: TemporalType.Instant) => this.sessionEditor.patchStartedAt(result),
       {
         data: { instant: this.session().startedAt, label: 'Edit Started At' },
       },
@@ -95,10 +94,14 @@ export class SessionHeader {
   protected editFinishedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: TemporalType.Instant) => this.finishedAtChange.emit(result),
+      (result: TemporalType.Instant) => this.sessionEditor.patchFinishedAt(result),
       {
         data: { instant: this.session().finishedAt, label: 'Edit Finished At' },
       },
     );
+  }
+
+  protected triggerEdit(): void {
+    this.sessionEditor.makeEditable();
   }
 }

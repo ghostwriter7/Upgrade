@@ -28,16 +28,4 @@ export default class SessionView {
   private readonly sessionEditor = inject(SessionEditorService);
 
   protected readonly editedSession = this.sessionEditor.$session;
-
-  protected onStartedAtChange(startedAt: TemporalType.Instant): void {
-    this.sessionEditor.patchStartedAt(startedAt);
-  }
-
-  protected onFinishedAtChange(finishedAt: TemporalType.Instant): void {
-    this.sessionEditor.patchFinishedAt(finishedAt);
-  }
-
-  protected onEditStart(): void {
-    this.sessionEditor.makeEditable();
-  }
 }

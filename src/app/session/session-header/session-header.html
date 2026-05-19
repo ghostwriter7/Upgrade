@@ -30,7 +30,7 @@
     </button>
     <mat-menu #menu="matMenu">
       @if (isFinal()) {
-        <button mat-menu-item (click)="editStart.emit()">
+        <button mat-menu-item (click)="triggerEdit()">
           <mat-icon>edit</mat-icon>
           Edit
         </button>
