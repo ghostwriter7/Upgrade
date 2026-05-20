@@ -13,6 +13,7 @@ import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditNote } from '../edit-note/edit-note';
 import { Recorder } from '../recorder/recorder';
+import { VideoMedia } from '../../domain/model/exercise-media.model';
 
 @Injectable()
 export class SessionEditorService {
@@ -142,8 +143,19 @@ export class SessionEditorService {
   }
 
   public captureRecording(exerciseId: string): void {
-    this.dialog.open(Recorder, () => {
+    this.dialog.open(
+      Recorder,
+      ({ video, duration }: { video: Blob; duration: number }) => {
+        const sessionId = this.sessionDraft().uuid;
 
-    }, { width: '90svw', height: '90svh' });
+        const videoMedia = VideoMedia.newVideo(exerciseId, sessionId, video, duration);
+        debugger
+
+      },
+      {
+        width: '90svw',
+        height: '90svh',
+      },
+    );
   }
 }

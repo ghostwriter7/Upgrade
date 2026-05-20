@@ -1,24 +1,19 @@
 import { Component, computed, effect, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
-import { MatButton, MatFabButton, MatMiniFabButton } from '@angular/material/button';
+import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 import { pad } from '../../common/function/pad-time.function';
 import { form, FormField } from '@angular/forms/signals';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-recorder',
-  imports: [
-    MatMiniFabButton,
-    MatIcon,
-    MatSlider,
-    FormField,
-    MatSliderRangeThumb,
-    MatFabButton,
-  ],
+  imports: [MatMiniFabButton, MatIcon, MatSlider, FormField, MatSliderRangeThumb, MatFabButton],
   templateUrl: './recorder.html',
   styleUrl: './recorder.css',
 })
 export class Recorder implements OnInit {
+  private readonly dialogRef = inject(MatDialogRef);
   private readonly video = viewChild.required<ElementRef<HTMLVideoElement>>('video');
   private readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly mediaRecorder = signal<MediaRecorder | null>(null);
@@ -130,11 +125,61 @@ export class Recorder implements OnInit {
     }
   }
 
-  protected save(): void {}
+  protected async save(): Promise<void> {
+    const { startTime, endTime } = this.model();
+    const video = this.video().nativeElement as HTMLMediaElement;
+    const stream = video.captureStream();
+    const recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+
+    const chunks: BlobPart[] = [];
+
+    recorder.ondataavailable = (e: BlobEvent) => chunks.push(e.data);
+
+    recorder.onstop = () => {
+      const trimmedVideo = new Blob(chunks, { type: 'video/webm' });
+      const duration = endTime - startTime;
+
+      this.dialogRef.close({ video: trimmedVideo, duration });
+    };
+
+    video.currentTime = startTime;
+    await this.waitForSeek(video);
+
+    recorder.start();
+    await video.play();
+
+    const monitor = () => {
+      if (video.currentTime >= endTime) {
+        recorder.stop();
+        video.pause();
+      } else {
+        requestAnimationFrame(monitor);
+      }
+    };
+
+    monitor();
+  }
 
   protected replay(): void {
     const video = this.video().nativeElement;
-    video.currentTime = this.form.startTime().value();
+    const { startTime, endTime } = this.model();
+    video.currentTime = startTime;
     video.play();
+
+    video.addEventListener('timeupdate', () => {
+      if (video.currentTime >= endTime) {
+        video.pause();
+      }
+    });
+  }
+
+  private async waitForSeek(video: HTMLMediaElement): Promise<void> {
+    return new Promise((resolve) => {
+      const handler = () => {
+        video.removeEventListener('seeked', handler);
+        resolve();
+      };
+      video.addEventListener('seeked', handler);
+    });
   }
 }
