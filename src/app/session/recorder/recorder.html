@@ -1,7 +1,33 @@
-<h2 mat-dialog-title>Record</h2>
-<mat-dialog-content>
+<header>
+  <h2>Record</h2>
+</header>
+<section class="content">
   <video autoplay playsinline muted #video></video>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button matButton (click)="record()">Record</button>
-</mat-dialog-actions>
+</section>
+<footer>
+  @switch (mode()) {
+    @case ('not-started') {
+      <button matMiniFab (click)="record()">
+        <mat-icon>play_arrow</mat-icon>
+      </button>
+    }
+    @case ('recording') {
+      <button matMiniFab (click)="pause()">
+        <mat-icon>pause</mat-icon>
+      </button>
+      <button matMiniFab (click)="stop()">
+        <mat-icon>stop</mat-icon>
+      </button>
+    }
+    @case ('paused') {
+      <button matMiniFab (click)="resume()">
+        <mat-icon>play_circle</mat-icon>
+      </button>
+      <button matMiniFab (click)="stop()">
+        <mat-icon>stop</mat-icon>
+      </button>
+    } @case ('finished') {
+      Trim & Save
+    }
+  }
+</footer>

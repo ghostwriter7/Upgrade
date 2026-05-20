@@ -1,3 +1,24 @@
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+header, footer {
+  padding: var(--space-4);
+}
+
+footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.content {
+  max-height: unset;
+  flex: 1;
+}
+
 video {
   width: 100%;
   height: 100%;
