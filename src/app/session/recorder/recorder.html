@@ -26,8 +26,25 @@
       <button matMiniFab (click)="stop()">
         <mat-icon>stop</mat-icon>
       </button>
-    } @case ('finished') {
-      Trim & Save
+    }
+    @case ('finished') {
+      <div class="edit-actions">
+        <div class="summary">
+          <span>{{ startTime() }}</span>
+          <span>{{ finishTime() }}</span>
+        </div>
+        <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
+          <input [formField]="form.startTime" matSliderStartThumb>
+          <input [formField]="form.endTime" matSliderEndThumb>
+        </mat-slider>
+        <div class="buttons">
+          <button matMiniFab (click)="replay()"><mat-icon>play_arrow</mat-icon></button>
+          <button matFab extended (click)="save()">
+            <mat-icon>save</mat-icon>
+            Save
+          </button>
+        </div>
+      </div>
     }
   }
 </footer>
