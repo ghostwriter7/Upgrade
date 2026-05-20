@@ -1,4 +1,5 @@
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
+import { pad } from '../function/pad-time.function';
 
 export class DateHelper {
   public static readonly WARSAW_TIMEZONE = 'Europe/Warsaw';
@@ -29,5 +30,13 @@ export class DateHelper {
     }
 
     return input.toZonedDateTimeISO(DateHelper.WARSAW_TIMEZONE);
+  }
+
+  public static stringifyDuration(durationInSeconds: number): string {
+    const { minutes, seconds, milliseconds } = Temporal.Duration.from({
+      milliseconds: Math.floor(durationInSeconds * 1000),
+    }).round({ largestUnit: 'minute' });
+    const twoDigitMilliseconds = milliseconds.toString().padStart(3, '0').slice(0, 2);
+    return `${pad(minutes)}:${pad(seconds)}:${twoDigitMilliseconds}`;
   }
 }

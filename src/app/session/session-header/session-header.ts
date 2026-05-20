@@ -42,7 +42,6 @@ export class SessionHeader {
       menu: `session-header-menu-${uuid}`,
     };
   });
-  protected readonly dynamicTestId = computed(() => this.session().uuid);
   protected readonly isFinal = computed(() => this.session().finishedAt !== null);
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),

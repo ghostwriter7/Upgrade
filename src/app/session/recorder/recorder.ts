@@ -2,9 +2,9 @@ import { Component, computed, effect, ElementRef, inject, OnInit, signal, viewCh
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
-import { pad } from '../../common/function/pad-time.function';
 import { form, FormField } from '@angular/forms/signals';
 import { MatDialogRef } from '@angular/material/dialog';
+import { DateHelper } from '../../common/helper/date.helper';
 
 @Component({
   selector: 'app-recorder',
@@ -20,22 +20,8 @@ export class Recorder implements OnInit {
   protected readonly mode = signal<'paused' | 'recording' | 'not-started' | 'finished'>(
     'not-started',
   );
-  protected readonly startTime = computed(() => {
-    const { startTime } = this.model();
-    const { minutes, seconds, milliseconds } = Temporal.Duration.from({
-      milliseconds: Math.floor(startTime * 1000),
-    }).round({ largestUnit: 'minute' });
-    const twoDigitMilliseconds = milliseconds.toString().slice(0, 2).padStart(2, '0');
-    return `${pad(minutes)}:${pad(seconds)}:${twoDigitMilliseconds}`;
-  });
-  protected readonly finishTime = computed(() => {
-    const { endTime } = this.model();
-    const { minutes, seconds, milliseconds } = Temporal.Duration.from({
-      milliseconds: Math.floor(endTime * 1000),
-    }).round({ largestUnit: 'minute' });
-    const twoDigitMilliseconds = milliseconds.toString().slice(0, 2).padStart(2, '0');
-    return `${pad(minutes)}:${pad(seconds)}:${twoDigitMilliseconds}`;
-  });
+  protected readonly startTime = computed(() => DateHelper.stringifyDuration(this.model().startTime));
+  protected readonly finishTime = computed(() => DateHelper.stringifyDuration(this.model().endTime));
   protected readonly duration = signal(0);
 
   protected readonly model = signal({

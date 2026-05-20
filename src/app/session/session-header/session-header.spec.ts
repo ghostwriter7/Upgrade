@@ -11,12 +11,14 @@ import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatMenuHarness } from '@angular/material/menu/testing';
 import { DateHelper } from '../../common/helper/date.helper';
+import { SessionEditorService } from '../services/session-editor.service';
 
 describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;
   let loader: ReturnType<typeof TestbedHarnessEnvironment.loader>;
 
   let sessionStore: { delete: Mock };
+  let sessionEditor: { patchStartedAt: Mock; patchFinishedAt: Mock; makeEditable: Mock; };
   let router: { navigate: Mock };
   let dialogService: { open: Mock };
 
@@ -91,11 +93,18 @@ describe('SessionHeader', () => {
       open: vi.fn(),
     };
 
+    sessionEditor = {
+      patchStartedAt: vi.fn(),
+      patchFinishedAt: vi.fn(),
+      makeEditable: vi.fn(),
+    }
+
     TestBed.configureTestingModule({
       imports: [SessionHeader],
       providers: [
         { provide: SessionStore, useValue: sessionStore },
         { provide: Router, useValue: router },
+        { provide: SessionEditorService, useValue: sessionEditor },
       ],
     });
 
@@ -172,22 +181,19 @@ describe('SessionHeader', () => {
     });
   });
 
-  it('should emit startedAtChange with edit started at dialog result', () => {
+  it('should delegate to SessionEditor with edit started at dialog result', () => {
     const changedStartedAt = Temporal.Instant.from('2026-05-17T09:30:00Z');
-    const startedAtChange = vi.fn();
 
     createComponent({
       session: createSession(false),
     });
-
-    fixture.componentInstance.startedAtChange.subscribe(startedAtChange);
 
     getStartedAtButton()?.click();
 
     const [, callback] = dialogService.open.mock.calls.at(-1)!;
     callback(changedStartedAt);
 
-    expect(startedAtChange).toHaveBeenCalledWith(changedStartedAt);
+    expect(sessionEditor.patchStartedAt).toHaveBeenCalledWith(changedStartedAt);
   });
 
   it('should open edit finished at dialog when finished time is clicked', () => {
@@ -204,22 +210,19 @@ describe('SessionHeader', () => {
     });
   });
 
-  it('should emit finishedAtChange with edit finished at dialog result', () => {
+  it('should delegate to SessionEditor with edit finished at dialog result', () => {
     const changedFinishedAt = Temporal.Instant.from('2026-05-17T12:00:00Z');
-    const finishedAtChange = vi.fn();
 
     createComponent({
       session: createSession(true),
     });
-
-    fixture.componentInstance.finishedAtChange.subscribe(finishedAtChange);
 
     getFinishedAtButton()?.click();
 
     const [, callback] = dialogService.open.mock.calls.at(-1)!;
     callback(changedFinishedAt);
 
-    expect(finishedAtChange).toHaveBeenCalledWith(changedFinishedAt);
+    expect(sessionEditor.patchFinishedAt).toHaveBeenCalledWith(changedFinishedAt);
   });
 
   it('should show Edit menu item when session is final', async () => {
@@ -243,17 +246,13 @@ describe('SessionHeader', () => {
   });
 
   it('should emit editStart when Edit menu item is clicked', async () => {
-    const editStart = vi.fn();
-
     createComponent({
       session: createSession(true),
     });
 
-    fixture.componentInstance.editStart.subscribe(editStart);
-
     await clickMenuItemByText('Edit');
 
-    expect(editStart).toHaveBeenCalledOnce();
+    expect(sessionEditor.makeEditable).toHaveBeenCalledOnce();
   });
 
   it('should show Delete menu item', async () => {
