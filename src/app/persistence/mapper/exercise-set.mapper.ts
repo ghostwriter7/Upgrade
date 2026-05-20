@@ -5,9 +5,12 @@ import {
   IsoSet,
   WeightedSet,
 } from '../../domain/model/exercise-set.model';
+import { Mapper } from './mapper.interface';
 
-export class ExerciseSetMapper {
-  public static toDomain(setDto: ExerciseSetDto): ExerciseSet {
+export class ExerciseSetMapper implements Mapper<ExerciseSet, ExerciseSetDto>{
+  public static readonly INSTANCE = new ExerciseSetMapper();
+
+  public toDomain(setDto: ExerciseSetDto): ExerciseSet {
     const { depth, exposureZone, breathQuality } = setDto;
     switch (setDto.type) {
       case 'bodyweight': return new BodyweightSet(setDto.reps, depth, exposureZone, breathQuality);
@@ -16,7 +19,7 @@ export class ExerciseSetMapper {
     }
   }
 
-  public static toDto(set: ExerciseSet): ExerciseSetDto {
+  public toDto(set: ExerciseSet): ExerciseSetDto {
     const common: Pick<ExerciseSet, 'exposureZone' | 'breathQuality' | 'depth'> = { depth: set.depth, breathQuality: set.breathQuality, exposureZone: set.exposureZone };
 
     if (set instanceof BodyweightSet)

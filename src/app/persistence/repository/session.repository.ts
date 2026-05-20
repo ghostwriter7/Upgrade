@@ -63,17 +63,17 @@ export class SessionRepository extends GenericRepository<SessionDto> {
       return store.index(IndexName.StartedAt).getAll(range);
     });
     const dtos: SessionDto[] = results.map((data) => SessionSchema.parse(data));
-    return dtos.map(SessionMapper.toDomain);
+    return dtos.map(SessionMapper.INSTANCE.toDomain);
   }
 
   public override async findAll(): Promise<Session[]> {
     const results = await super.findAll(StoreName.SESSIONS);
     const dtos: SessionDto[] = results.map((data) => SessionSchema.parse(data));
-    return dtos.map(SessionMapper.toDomain);
+    return dtos.map(SessionMapper.INSTANCE.toDomain);
   }
 
   public save(session: Session): Promise<void> {
-    const dto = SessionMapper.toDto(session);
+    const dto = SessionMapper.INSTANCE.toDto(session);
     return super.put(StoreName.SESSIONS, dto);
   }
 

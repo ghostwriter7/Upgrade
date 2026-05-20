@@ -13,9 +13,15 @@ export function databaseFactory(): Observable<IDBDatabase> {
     console.log(`Upgrading to version ${db.version}`);
 
     const existingObjectStores = db.objectStoreNames;
-    if (!existingObjectStores.contains('sessions')) {
+    if (!existingObjectStores.contains(StoreName.SESSIONS)) {
       const store = db.createObjectStore(StoreName.SESSIONS, { keyPath: 'uuid' });
       store.createIndex(IndexName.StartedAt, 'startedAt', { unique: false });
+    }
+
+    if (!existingObjectStores.contains(StoreName.MEDIA)) {
+      const store = db.createObjectStore(StoreName.MEDIA, { keyPath: 'uuid'});
+      store.createIndex(IndexName.MediaByExerciseId, 'exerciseId', { unique: false });
+      store.createIndex(IndexName.MediaBySessionAndExercise, ['sessionId', 'exerciseId'], { unique: false });
     }
   };
 

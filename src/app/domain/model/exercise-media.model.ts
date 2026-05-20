@@ -8,7 +8,7 @@ export class ExerciseMedia {
     public readonly exerciseId: string,
     public readonly sessionId: string,
     public readonly type: 'photo' | 'video',
-    public readonly mimeType: string,
+    public readonly mimeType: 'video/webm',
     public readonly blob: Blob,
     public readonly createdAt: TemporalType.Instant,
   ) {}
