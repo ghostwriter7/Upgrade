@@ -14,11 +14,13 @@ import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert
 import { EditNote } from '../edit-note/edit-note';
 import { Recorder } from '../recorder/recorder';
 import { VideoMedia } from '../../domain/model/exercise-media.model';
+import { MediaRepository } from '../../persistence/repository/media.repository';
 
 @Injectable()
 export class SessionEditorService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly sessionStore = inject(SessionStore);
+  private readonly mediaRepository = inject(MediaRepository);
   private readonly dialog = inject(DialogService);
   private readonly initialSession = inject(SESSION, { optional: true }) ?? Session.createEmpty();
   private readonly sessionDraft = signal(this.initialSession);
@@ -85,9 +87,13 @@ export class SessionEditorService {
   }
 
   public deleteExercise(entry: ExerciseLog): void {
-    this.dialog.open(ConfirmDeleteAlert, () =>
-      this.sessionDraft.update((session) => session.removeExercise(entry.exerciseId)),
-    );
+    this.dialog.open(ConfirmDeleteAlert, () => {
+      const exercise = this.sessionDraft().getExerciseById(entry.exerciseId);
+      if (exercise.hasMedia) {
+        exercise.mediaIds.forEach((mediaId) => this.mediaRepository.deleteMedia(mediaId));
+      }
+      this.sessionDraft.update((session) => session.removeExercise(entry.exerciseId));
+    });
   }
 
   public editExerciseNote(entry: ExerciseLog): void {
@@ -149,8 +155,10 @@ export class SessionEditorService {
         const sessionId = this.sessionDraft().uuid;
 
         const videoMedia = VideoMedia.newVideo(exerciseId, sessionId, video, duration);
-        debugger
-
+        this.mediaRepository.save(videoMedia);
+        this.sessionDraft.update((session) =>
+          session.addMediaToExercise(exerciseId, videoMedia.uuid),
+        );
       },
       {
         width: '90svw',

@@ -10,6 +10,7 @@ export class ExerciseEntryMapper implements Mapper<ExerciseLog, ExerciseEntryDto
     const exerciseEntry = new ExerciseLog(exerciseEntryDto.exerciseId);
     exerciseEntry.notes = exerciseEntryDto.notes;
     exerciseEntry.sets = exerciseEntryDto.sets.map(ExerciseSetMapper.INSTANCE.toDomain);
+    exerciseEntry.mediaIds = exerciseEntryDto.mediaIds;
     return exerciseEntry;
   }
 
@@ -18,6 +19,7 @@ export class ExerciseEntryMapper implements Mapper<ExerciseLog, ExerciseEntryDto
       exerciseId: exerciseEntry.exerciseId,
       notes: exerciseEntry.notes,
       sets: exerciseEntry.sets.map(ExerciseSetMapper.INSTANCE.toDto),
+      mediaIds: exerciseEntry.mediaIds
     }
   }
 }

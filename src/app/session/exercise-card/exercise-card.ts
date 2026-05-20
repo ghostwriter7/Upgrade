@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, computed,
   DestroyRef,
   ElementRef,
   inject,
@@ -21,6 +21,8 @@ import { SessionEditorService } from '../services/session-editor.service';
 import { EventService } from '../../common/service/event/event.service';
 import { ElementClickedEvent } from '../../common/events/element-clicked.event';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { EntryDetails } from '../entry-details/entry-details';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,6 +54,9 @@ export class ExerciseCard {
   private readonly header = viewChild.required(MatCardHeader, { read: ElementRef });
   private readonly eventService = inject(EventService);
   private readonly destroyRef = inject(DestroyRef);
+  protected readonly hasMedia = computed(() => this.entry().mediaIds.length);
+
+  private readonly bottomSheetService = inject(MatBottomSheet);
 
   constructor() {
     this.eventService
@@ -101,5 +106,9 @@ export class ExerciseCard {
   protected async activateVideoCapture(event: Event, exerciseId: string): Promise<void> {
     event.stopPropagation();
     this.sessionEditor.captureRecording(exerciseId);
+  }
+
+  protected showMedia(): void {
+    this.bottomSheetService.open(EntryDetails, { data: { exerciseLog: this.entry() } });
   }
 }

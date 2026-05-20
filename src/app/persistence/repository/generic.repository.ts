@@ -19,6 +19,14 @@ export abstract class GenericRepository<T> {
     return store.index(index).openKeyCursor(createRange());
   }
 
+  protected async findById(storeName: StoreName, id: string): Promise<T | undefined> {
+    const transaction = await this.createReadTransaction(storeName);
+    const store = transaction.objectStore(storeName);
+    const request = store.get(id);
+
+    return this.responseFromRequest<T>(request);
+  }
+
   protected async findAllBy(
     storeName: StoreName,
     query: (store: IDBObjectStore) => IDBRequest,

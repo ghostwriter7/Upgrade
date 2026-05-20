@@ -37,7 +37,8 @@ export const ExerciseSetSchema = z.discriminatedUnion('type', [
 export const ExerciseEntrySchema = z.object({
   exerciseId: z.uuid(),
   notes: z.string().nullable(),
-  sets: z.array(ExerciseSetSchema)
+  sets: z.array(ExerciseSetSchema),
+  mediaIds: z.array(z.uuid()).optional().default([])
 });
 
 export const SessionSchema = z.object({

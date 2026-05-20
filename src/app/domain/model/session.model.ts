@@ -6,6 +6,7 @@ import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 export class ExerciseLog {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
+  public mediaIds: string[] = [];
 
   constructor(public readonly exerciseId: string) {}
 
@@ -13,11 +14,21 @@ export class ExerciseLog {
     return this.sets.length === 0;
   }
 
+  public get hasMedia(): boolean {
+    return this.mediaIds.length > 0;
+  }
+
   public clone(): ExerciseLog {
     const log = new ExerciseLog(this.exerciseId);
     log.sets = this.sets;
     log.notes = this.notes;
+    log.mediaIds = this.mediaIds;
     return log;
+  }
+
+  public withMedia(mediaId: string): ExerciseLog {
+    this.mediaIds = [...this.mediaIds, mediaId];
+    return this.clone();
   }
 
   public withSet(set: ExerciseSet): ExerciseLog {
@@ -93,6 +104,13 @@ export class Session {
     return this.clone();
   }
 
+  public addMediaToExercise(exerciseId: string, mediaId: string): Session {
+    const exerciseIndex = this.getExerciseIndex(exerciseId);
+    const exerciseLog = this.exercises[exerciseIndex];
+    this.exercises = this.exercises.with(exerciseIndex, exerciseLog.withMedia(mediaId));
+    return this.clone();
+  }
+
   public removeExercise(exerciseId: string): Session {
     this.exercises = this.exercises.filter(
       (exerciseEntry) => exerciseEntry.exerciseId !== exerciseId,
@@ -156,7 +174,7 @@ export class Session {
     return index;
   }
 
-  private getExerciseById(exerciseId: string): ExerciseLog {
+  public getExerciseById(exerciseId: string): ExerciseLog {
     const exerciseEntry = this.exercises.find((entry) => entry.exerciseId === exerciseId);
 
     if (!exerciseEntry) throw new Error(`Exercise Entry for exercise ID: ${exerciseId} not found`);

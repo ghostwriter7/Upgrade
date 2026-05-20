@@ -1,6 +1,11 @@
 <mat-card>
   <mat-card-header class="exercise-header" (click)="activateActions()">
-    <mat-card-title>{{ entry().exerciseId | exerciseName }}</mat-card-title>
+    <mat-card-title>{{ entry().exerciseId | exerciseName }}
+
+      @if (hasMedia()) {
+        <button matMiniFab (click)="showMedia()"><mat-icon>perm_media</mat-icon></button>
+      }
+    </mat-card-title>
 
     @if (displayActions()) {
       <div class="actions">

@@ -26,7 +26,7 @@ export class VideoMedia extends ExerciseMedia {
     super(uuid, exerciseId, sessionId, 'video', 'video/webm', blob, createdAt);
   }
 
-  public static newVideo(exerciseId: string, sessionId: string, blob: Blob, duration: number): ExerciseMedia {
+  public static newVideo(exerciseId: string, sessionId: string, blob: Blob, duration: number): VideoMedia {
     return new VideoMedia(
       createUuid(),
       exerciseId,
