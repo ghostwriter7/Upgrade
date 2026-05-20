@@ -109,6 +109,6 @@ export class ExerciseCard {
   }
 
   protected showMedia(): void {
-    this.bottomSheetService.open(EntryDetails, { data: { exerciseLog: this.entry() } });
+    this.bottomSheetService.open(EntryDetails, { data: { exerciseLog: this.entry() }, height: '80svh' });
   }
 }
