@@ -1,15 +1,23 @@
 export const exercises = [
   {
     uuid: '37ad760d-3c2b-4c47-b02c-8d0911d542f6',
-    name: 'Arching (Standing / Kneeling)'
+    name: 'Arching (Standing / Kneeling)',
+  },
+  {
+    uuid: '15da2d20-75d3-4f06-8020-9467b1cb42d8',
+    name: 'Back Squats',
   },
   {
     uuid: 'bd172c3d-1980-4a35-9efc-00d8b2478f55',
-    name: 'Bridge Heel Lifts'
+    name: 'Bridge Heel Lifts',
+  },
+  {
+    uuid: 'eeae9752-e1fd-4739-b431-3edf20395794',
+    name: 'Chin Ups',
   },
   {
     uuid: 'b99d3dd1-7c00-4ab5-b4c3-40709ccc6398',
-    name: 'Cobra (Thoracic & Lumbar)'
+    name: 'Cobra (Thoracic & Lumbar)',
   },
   {
     uuid: 'a0124f1e-148a-49e0-8cfd-e0844f7635e1',
@@ -20,6 +28,14 @@ export const exercises = [
     uuid: 'e65ac292-43d6-49b4-a602-56ee2a03ed74',
     name: 'Couch Stretch - Low',
     description: 'Hips in low position. It targets hip flexors.',
+  },
+  {
+    uuid: 'bc0e8f0d-4fb7-4b6d-9bf7-70fadf57e9db',
+    name: 'Dips',
+  },
+  {
+    uuid: 'd17af9ea-cbcd-4a84-b8cb-b7256fb20e67',
+    name: 'Deadlifts',
   },
   {
     uuid: '90c214ea-fc73-48e8-9e69-35769fbcb51e',
@@ -43,7 +59,7 @@ export const exercises = [
   },
   {
     uuid: 'dd73f257-286c-40bf-bc6d-b6aabb40fd10',
-    name: 'Isometric Bridge'
+    name: 'Isometric Bridge',
   },
   {
     uuid: 'aad365b9-4660-429a-84f6-a590f9d75a10',
@@ -66,6 +82,10 @@ export const exercises = [
     name: 'Leg Elevated Pike Lift',
   },
   {
+    uuid: 'f32882c8-7ff8-4808-a59f-5312c0166331',
+    name: 'L-Sit',
+  },
+  {
     uuid: 'f4a5b2a5-267b-42b2-82da-9d491e88eae9',
     name: 'Pancake Active Lifts',
   },
@@ -84,6 +104,10 @@ export const exercises = [
   {
     uuid: '33fa651e-8259-4129-a906-bb942f0216b0',
     name: 'Pike Good Morning Standing',
+  },
+  {
+    uuid: '1832e4ec-fd4a-46eb-9e54-73a0e27eda96',
+    name: 'Pull-Ups',
   },
   {
     uuid: '4b2415a0-486a-4a27-9056-5c07006e1454',
