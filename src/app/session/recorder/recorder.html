@@ -2,42 +2,24 @@
   <h2>Record</h2>
 </header>
 <section class="content">
-  <video autoplay playsinline muted #video></video>
+  <video playsinline muted #video></video>
 </section>
 <footer>
-  @switch (mode()) {
-    @case ('not-started') {
-      <button matMiniFab (click)="record()">
-        <mat-icon>play_arrow</mat-icon>
-      </button>
-    }
-    @case ('recording') {
-      <button matMiniFab (click)="pause()">
-        <mat-icon>pause</mat-icon>
-      </button>
-      <button matMiniFab (click)="stop()">
-        <mat-icon>stop</mat-icon>
-      </button>
-    }
-    @case ('paused') {
-      <button matMiniFab (click)="resume()">
-        <mat-icon>play_circle</mat-icon>
-      </button>
-      <button matMiniFab (click)="stop()">
-        <mat-icon>stop</mat-icon>
-      </button>
-    }
-    @case ('finished') {
-      <div class="edit-actions">
-        <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
-          <input [formField]="form.frameAt" matSliderThumb>
-        </mat-slider>
-        <div class="buttons">
-          <button matFab extended (click)="captureFrame()">
-            Capture
-          </button>
-        </div>
+  @if (isRecording()) {
+    <button matFab extended (click)="stop()">
+      <mat-icon>stop</mat-icon>
+      Stop
+    </button>
+  } @else {
+    <div class="edit-actions">
+      <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
+        <input [formField]="form.frameAt" matSliderThumb>
+      </mat-slider>
+      <div class="buttons">
+        <button matFab extended (click)="captureFrame()">
+          Capture
+        </button>
       </div>
-    }
+    </div>
   }
 </footer>
