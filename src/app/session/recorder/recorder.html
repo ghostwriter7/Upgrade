@@ -29,19 +29,12 @@
     }
     @case ('finished') {
       <div class="edit-actions">
-        <div class="summary">
-          <span>{{ startTime() }}</span>
-          <span>{{ finishTime() }}</span>
-        </div>
         <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
-          <input [formField]="form.startTime" matSliderStartThumb>
-          <input [formField]="form.endTime" matSliderEndThumb>
+          <input [formField]="form.frameAt" matSliderThumb>
         </mat-slider>
         <div class="buttons">
-          <button matMiniFab (click)="replay()"><mat-icon>play_arrow</mat-icon></button>
-          <button matFab extended (click)="save()">
-            <mat-icon>save</mat-icon>
-            Save
+          <button matFab extended (click)="captureFrame()">
+            Capture
           </button>
         </div>
       </div>

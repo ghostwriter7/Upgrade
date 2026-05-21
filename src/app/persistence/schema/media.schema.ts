@@ -1,14 +1,14 @@
 import * as z from 'zod';
 
-export const VideoMediaSchema = z.object({
+export const ExerciseMediaSchema = z.object({
   uuid: z.uuidv4(),
   exerciseId: z.uuidv4(),
   sessionId: z.uuidv4(),
-  type: z.enum(['photo', 'video']),
-  mimeType: z.enum(['video/webm']),
+  mimeType: z.enum(['image/jpeg']),
   blob: z.instanceof(Blob),
   createdAt: z.iso.datetime(),
-  duration: z.number().positive(),
+  width: z.number(),
+  height: z.number()
 });
 
-export type VideoMediaDto = z.infer<typeof VideoMediaSchema>;
+export type ExerciseMediaDto = z.infer<typeof ExerciseMediaSchema>;

@@ -1,23 +1,23 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
-import { VideoMediaDto } from '../schema/media.schema';
-import { VideoMedia } from '../../domain/model/exercise-media.model';
+import { ExerciseMediaDto } from '../schema/media.schema';
+import { ExerciseMedia } from '../../domain/model/exercise-media.model';
 import { StoreName } from './store-name.enum';
-import { VideoMediaMapper } from '../mapper/video-media.mapper';
+import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
 
 @Injectable({ providedIn: 'root' })
-export class MediaRepository extends GenericRepository<VideoMediaDto> {
+export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
   constructor() {
     super();
   }
 
-  public async findMedia(id: string): Promise<VideoMedia | null> {
+  public async findMedia(id: string): Promise<ExerciseMedia | null> {
     const result = await super.findById(StoreName.MEDIA, id);
-    return result ? VideoMediaMapper.INSTANCE.toDomain(result) : null;
+    return result ? ExerciseMediaMapper.INSTANCE.toDomain(result) : null;
   }
 
-  public save(media: VideoMedia): Promise<void> {
-    return this.put(StoreName.MEDIA, VideoMediaMapper.INSTANCE.toDto(media));
+  public save(media: ExerciseMedia): Promise<void> {
+    return this.put(StoreName.MEDIA, ExerciseMediaMapper.INSTANCE.toDto(media));
   }
 
   public deleteMedia(mediaId: string): Promise<boolean> {

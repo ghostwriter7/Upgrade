@@ -7,33 +7,23 @@ export class ExerciseMedia {
     public readonly uuid: string,
     public readonly exerciseId: string,
     public readonly sessionId: string,
-    public readonly type: 'photo' | 'video',
-    public readonly mimeType: 'video/webm',
+    public readonly mimeType: 'image/jpeg',
     public readonly blob: Blob,
     public readonly createdAt: TemporalType.Instant,
+    public readonly width: number,
+    public readonly height: number
   ) {}
-}
 
-export class VideoMedia extends ExerciseMedia {
-  constructor(
-    uuid: string,
-    exerciseId: string,
-    sessionId: string,
-    blob: Blob,
-    createdAt: TemporalType.Instant,
-    public readonly duration: number,
-  ) {
-    super(uuid, exerciseId, sessionId, 'video', 'video/webm', blob, createdAt);
-  }
-
-  public static newVideo(exerciseId: string, sessionId: string, blob: Blob, duration: number): VideoMedia {
-    return new VideoMedia(
+  public static newImage(exerciseId: string, sessionId: string, blob: Blob, width: number, height: number): ExerciseMedia {
+    return new ExerciseMedia(
       createUuid(),
       exerciseId,
       sessionId,
+      'image/jpeg',
       blob,
       DateHelper.now(),
-      duration,
+      width,
+      height
     );
   }
 }
