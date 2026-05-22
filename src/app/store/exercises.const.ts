@@ -50,6 +50,10 @@ export const exercises = [
     name: 'Hip External Rotation Good Mornings',
   },
   {
+    uuid: '17f25c45-0477-426a-a331-04505a08c308',
+    name: 'Handstand',
+  },
+  {
     uuid: '652e6443-c842-420e-87dc-705621ac9364',
     name: 'Horse Stance Squats',
   },
