@@ -74,7 +74,7 @@ export class SetForm implements FormValueControl<SetData> {
     hidden(schemaPath.reps, ({ valueOf }) => valueOf(schemaPath.type) === 'iso');
     hidden(schemaPath.duration, ({ valueOf }) => valueOf(schemaPath.type) !== 'iso');
   });
-  protected readonly setTypeOptions: { label: string; value: ExerciseSetType }[] = [
+  protected readonly setTypeOptions: { label: string; value: ExerciseSetType; testId: `set-form-type-${string}` }[] = ([
     {
       label: 'Bodyweight',
       value: 'bodyweight',
@@ -87,7 +87,10 @@ export class SetForm implements FormValueControl<SetData> {
       label: 'Isometric',
       value: 'iso',
     },
-  ];
+  ] as const).map((option) => ({ ...option, testId: `set-form-type-${option.value}` }));
+  protected readonly durations = [5, 10, 15, 20, 25, 30].map((value) => ({ value, testId: `set-form-duration-${value}` }));
+  protected readonly reps = [1, 2, 3, 5, 8, 10].map((value) => ({ value, testId: `set-form-reps-${value}` }));
+  protected readonly weights = [1, 2, 3, 5, 8, 10].map((value) => ({ value, testId: `set-form-weight-${value}` }));
 
   protected decrementReps(): void {
     this.value.update((model) => ({ ...model, reps: Math.max(model.reps - 1, 1) }));

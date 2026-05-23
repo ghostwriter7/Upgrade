@@ -1,5 +1,6 @@
 <mat-card>
-  <mat-card-header class="exercise-header" (click)="activateActions()">
+  @let ids = testIds();
+  <mat-card-header [attr.data-testid]="ids.exerciseCardHeader" class="exercise-header" (click)="activateActions()">
     <mat-card-title>{{ entry().exerciseId | exerciseName }}
 
       @if (hasMedia()) {
@@ -10,9 +11,9 @@
     @if (displayActions()) {
       <div class="actions">
         <button matMiniFab (click)="activateVideoCapture($event, entry().exerciseId)"><mat-icon>video_camera_front</mat-icon></button>
-        <button matMiniFab (click)="showSetForm($event, entry().exerciseId)"><mat-icon>add</mat-icon></button>
-        <button matMiniFab (click)="editExerciseNote($event, entry())"><mat-icon>note_add</mat-icon></button>
-        <button matMiniFab class="danger" [disabled]="isNonDeletable()" (click)="deleteExercise($event, entry())"><mat-icon>delete</mat-icon></button>
+        <button [attr.data-testid]="ids.showSetFormButton" matMiniFab (click)="showSetForm($event, entry().exerciseId)"><mat-icon>add</mat-icon></button>
+        <button [attr.data-testid]="ids.editNoteButton" matMiniFab (click)="editNote($event, entry())"><mat-icon>note_add</mat-icon></button>
+        <button [attr.data-testid]="ids.deleteButton" matMiniFab class="danger" [disabled]="isNonDeletable()" (click)="deleteExercise($event, entry())"><mat-icon>delete</mat-icon></button>
       </div>
     }
   </mat-card-header>

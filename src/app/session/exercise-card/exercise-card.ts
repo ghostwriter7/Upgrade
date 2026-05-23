@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
-  Component, computed,
+  Component,
+  computed,
   DestroyRef,
   ElementRef,
   inject,
   input,
+  linkedSignal,
   signal,
   viewChild,
 } from '@angular/core';
@@ -44,6 +46,16 @@ export class ExerciseCard {
   public entry = input.required<ExerciseLog>();
   public isNonDeletable = input.required<boolean>();
 
+  protected readonly testIds = computed(() => {
+    const uuid = this.entry().exerciseId;
+    return {
+      exerciseCardHeader: `exercise-card-header-${uuid}`,
+      showSetFormButton: `exercise-card-show-set-form-btn-${uuid}`,
+      editNoteButton: `exercise-card-edit-note-btn-${uuid}`,
+      deleteButton: `exercise-card-delete-btn-${uuid}`,
+    }
+  });
+
   private readonly sessionEditor = inject(SessionEditorService);
   protected readonly displayActions = signal(false);
   private readonly header = viewChild.required(MatCardHeader, { read: ElementRef });
@@ -69,7 +81,7 @@ export class ExerciseCard {
     this.sessionEditor.displaySetForm(exerciseId);
   }
 
-  protected editExerciseNote(event: Event, exerciseLog: ExerciseLog): void {
+  protected editNote(event: Event, exerciseLog: ExerciseLog): void {
     event.stopPropagation();
     this.sessionEditor.editExerciseNote(exerciseLog);
   }
