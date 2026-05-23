@@ -11,9 +11,6 @@
       <div class="actions">
         <button matMiniFab (click)="activateVideoCapture($event, entry().exerciseId)"><mat-icon>video_camera_front</mat-icon></button>
         <button matMiniFab (click)="showSetForm($event, entry().exerciseId)"><mat-icon>add</mat-icon></button>
-        @if (!entry().isEmpty) {
-          <button matMiniFab (click)="copyLastSet($event, entry().exerciseId)"><mat-icon>content_copy</mat-icon></button>
-        }
         <button matMiniFab (click)="editExerciseNote($event, entry())"><mat-icon>note_add</mat-icon></button>
         <button matMiniFab class="danger" [disabled]="isNonDeletable()" (click)="deleteExercise($event, entry())"><mat-icon>delete</mat-icon></button>
       </div>

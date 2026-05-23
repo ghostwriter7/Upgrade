@@ -74,11 +74,6 @@ export class ExerciseCard {
     this.sessionEditor.showSetFormForExerciseId(exerciseId);
   }
 
-  protected copyLastSet(event: Event, exerciseId: string): void {
-    event.stopPropagation();
-    this.sessionEditor.copyLastSet(exerciseId);
-  }
-
   protected editExerciseNote(event: Event, exerciseLog: ExerciseLog): void {
     event.stopPropagation();
     this.sessionEditor.editExerciseNote(exerciseLog);
