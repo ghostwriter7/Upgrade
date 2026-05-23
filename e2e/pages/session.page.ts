@@ -19,7 +19,7 @@ export class SessionPage extends BasePage {
     return this.page.getByRole('button', { name: 'Skill' });
   }
 
-  public showExerciseSelector(): Promise<void> {
+  public showSkillSelector(): Promise<void> {
     return this.page.getByTestId('session-actions-add-exercise-btn').click();
   }
 
@@ -28,7 +28,7 @@ export class SessionPage extends BasePage {
   }
 
   public async addSkill(name: string): Promise<void> {
-    await this.showExerciseSelector();
+    await this.showSkillSelector();
     const exerciseSelector = this.page.getByTestId('exercise-selector');
     await exerciseSelector.getByText(name, { exact: true }).click();
     await exerciseSelector.getByTestId('exercise-selector-add-btn').click();
