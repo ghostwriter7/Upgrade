@@ -5,8 +5,8 @@ import { SessionStore } from '../../store/session/session.store';
 import { SESSION } from '../consts/session.token';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
 import { DialogService } from '../../common/service/dialog/dialog.service';
-import { ExerciseSet } from '../../domain/model/exercise-set.model';
-import { EditSet } from '../edit-set/edit-set';
+import { BodyweightSet, ExerciseSet } from '../../domain/model/exercise-set.model';
+import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
@@ -15,6 +15,7 @@ import { EditNote } from '../edit-note/edit-note';
 import { Recorder } from '../recorder/recorder';
 import { ExerciseMedia } from '../../domain/model/exercise-media.model';
 import { MediaRepository } from '../../persistence/repository/media.repository';
+import { SetData } from '../set-form/set-form';
 
 @Injectable()
 export class SessionEditorService {
@@ -25,12 +26,10 @@ export class SessionEditorService {
   private readonly initialSession = inject(SESSION, { optional: true }) ?? Session.createEmpty();
   private readonly sessionDraft = signal(this.initialSession);
   private readonly isEditable = signal(!this.initialSession.finishedAt);
-  private readonly setFormActiveForExerciseId = signal<string | null>(null);
 
   public readonly $session = this.sessionDraft.asReadonly();
   public readonly $isEditable = this.isEditable.asReadonly();
   public readonly $isSessionInvalid = computed(() => this.sessionDraft().isEmpty);
-  public readonly $setFormActiveForExerciseId = this.setFormActiveForExerciseId.asReadonly();
   public readonly $isUnfinished = computed(() => !this.sessionDraft().finishedAt);
 
   constructor() {
@@ -45,18 +44,13 @@ export class SessionEditorService {
       .subscribe();
   }
 
-  public addSet(set: ExerciseSet, exerciseId: string): void {
-    this.sessionDraft.update((session) => session.addSet(exerciseId, set));
-    this.setFormActiveForExerciseId.set(null);
-  }
-
   public deleteSet(exerciseId: string, index: number): void {
     this.sessionDraft.update((session) => session.removeSet(exerciseId, index));
   }
 
   public editSet(exerciseId: string, set: ExerciseSet, index: number): void {
     this.dialog.open(
-      EditSet,
+      UpsertSet,
       (result: ExerciseSet) =>
         this.sessionDraft.update((session) => session.updateSet(exerciseId, index, result)),
       { data: { set } },
@@ -124,12 +118,15 @@ export class SessionEditorService {
     );
   }
 
-  public showSetFormForExerciseId(exerciseId: string): void {
-    this.setFormActiveForExerciseId.set(exerciseId);
-  }
-
-  public copyLastSet(exerciseId: string): void {
-    this.sessionDraft.update((session) => session.copyLastSet(exerciseId));
+  public displaySetForm(exerciseId: string): void {
+    // TODO Query the ExerciseStore for the last set for the given exercise and open the form with it.
+    const set = new BodyweightSet(1, null, null, null);
+    this.dialog.open(
+      UpsertSet,
+      (result: ExerciseSet) =>
+        this.sessionDraft.update((session) => session.addSet(exerciseId, result)),
+      { data: { set, label: 'Add Set', button: 'Save' } },
+    );
   }
 
   public makeEditable(): void {
@@ -138,10 +135,6 @@ export class SessionEditorService {
 
   public cancelEdit(): void {
     this.isEditable.set(false);
-  }
-
-  public cancelAddSet(): void {
-    this.setFormActiveForExerciseId.set(null);
   }
 
   public copySet(exerciseId: string, index: number): void {
@@ -156,9 +149,7 @@ export class SessionEditorService {
 
         const media = ExerciseMedia.newImage(exerciseId, sessionId, image, width, height);
         this.mediaRepository.save(media);
-        this.sessionDraft.update((session) =>
-          session.addMediaToExercise(exerciseId, media.uuid),
-        );
+        this.sessionDraft.update((session) => session.addMediaToExercise(exerciseId, media.uuid));
       },
       {
         width: '90svw',

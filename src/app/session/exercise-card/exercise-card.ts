@@ -49,7 +49,6 @@ export class ExerciseCard {
 
   private readonly sessionEditor = inject(SessionEditorService);
   protected readonly isEditable = this.sessionEditor.$isEditable;
-  protected readonly setFormActiveForExerciseId = this.sessionEditor.$setFormActiveForExerciseId;
   protected readonly displayActions = signal(false);
   private readonly header = viewChild.required(MatCardHeader, { read: ElementRef });
   private readonly eventService = inject(EventService);
@@ -71,7 +70,7 @@ export class ExerciseCard {
 
   protected showSetForm(event: Event, exerciseId: string): void {
     event.stopPropagation();
-    this.sessionEditor.showSetFormForExerciseId(exerciseId);
+    this.sessionEditor.displaySetForm(exerciseId);
   }
 
   protected editExerciseNote(event: Event, exerciseLog: ExerciseLog): void {
@@ -82,14 +81,6 @@ export class ExerciseCard {
   protected deleteExercise(event: Event, exerciseLog: ExerciseLog): void {
     event.stopPropagation();
     this.sessionEditor.deleteExercise(exerciseLog);
-  }
-
-  protected addSet($event: ExerciseSet, exerciseId: string): void {
-    this.sessionEditor.addSet($event, exerciseId);
-  }
-
-  protected onCancelAddSet(): void {
-    this.sessionEditor.cancelAddSet();
   }
 
   protected activateActions(): void {

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { EditSet } from './edit-set';
+import { UpsertSet } from './upsert-set.component';
 
 describe('EditSet', () => {
-  let component: EditSet;
-  let fixture: ComponentFixture<EditSet>;
+  let component: UpsertSet;
+  let fixture: ComponentFixture<UpsertSet>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [EditSet],
+      imports: [UpsertSet],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(EditSet);
+    fixture = TestBed.createComponent(UpsertSet);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -4,31 +4,38 @@ import { describe, it, vi, beforeEach, Mock } from 'vitest';
 import { SessionEditorService } from './session-editor.service';
 import { SessionStore } from '../../store/session/session.store';
 import { DialogService } from '../../common/service/dialog/dialog.service';
-import { BodyweightSet } from '../../domain/model/exercise-set.model';
+import { BodyweightSet, ExerciseSet } from '../../domain/model/exercise-set.model';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { SESSION } from '../consts/session.token';
-import { EditSet } from '../edit-set/edit-set';
+import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditNote } from '../edit-note/edit-note';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
+import { MediaRepository } from '../../persistence/repository/media.repository';
 
 describe('SessionEditor', () => {
   let service: SessionEditorService;
   let sessionStore: { save: Mock };
   let dialogService: { open: Mock };
+  let mediaRepository: { deleteMedia: Mock; save: Mock };
 
   const mockExerciseExists = (exerciseId: string): void => {
     service['sessionDraft'].update((s) => s.addExercise(exerciseId));
   };
 
+  const addSet = (exerciseId: string, set: ExerciseSet): void => {
+    service['sessionDraft'].update((session) => session.addSet(exerciseId, set));
+  };
+
   const configureTestingModule = (session?: Session): void => {
     sessionStore = { save: vi.fn() };
     dialogService = { open: vi.fn() };
-
+    mediaRepository = { deleteMedia: vi.fn(), save: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         { provide: SessionStore, useValue: sessionStore },
         { provide: DialogService, useValue: dialogService },
+        { provide: MediaRepository, useValue: mediaRepository },
         SessionEditorService,
         ...(session ? [{ provide: SESSION, useValue: session }] : []),
       ],
@@ -36,7 +43,6 @@ describe('SessionEditor', () => {
 
     service = TestBed.inject(SessionEditorService);
   };
-
 
   describe('New Session', () => {
     beforeEach(() => {
@@ -48,7 +54,6 @@ describe('SessionEditor', () => {
       TestBed.resetTestingModule();
       vi.useRealTimers();
     });
-
 
     it('$isEditable should return true when the session is new', () =>
       expect(service.$isEditable()).toBe(true));
@@ -69,21 +74,9 @@ describe('SessionEditor', () => {
       it('should return false when the session draft has working sets', () => {
         const exerciseId = 'exerciseId';
         mockExerciseExists(exerciseId);
-        service.addSet(new BodyweightSet(10, null, null, null), exerciseId);
+        addSet(exerciseId, new BodyweightSet(10, null, null, null));
 
         expect(service.$isSessionInvalid()).toBe(false);
-      });
-    });
-
-    describe('$setFormActiveForExerciseId', () => {
-      it('should return null when the set form has not been opened yet', () =>
-        expect(service.$setFormActiveForExerciseId()).toBeNull());
-
-      it('should return exercise ID when the set form has been opened for a specific exercise', () => {
-        const exerciseId = 'exerciseId';
-        service.showSetFormForExerciseId(exerciseId);
-
-        expect(service.$setFormActiveForExerciseId()).toBe(exerciseId);
       });
     });
 
@@ -93,21 +86,25 @@ describe('SessionEditor', () => {
     it('should add a set to an exercise', () => {
       mockExerciseExists('A');
       mockExerciseExists('B');
-      const set = new BodyweightSet(10, null, null, null);
+      const expectedSet = new BodyweightSet(10, null, null, null);
 
-      service.addSet(set, 'B');
+      service.displaySetForm('B');
+      const [, callback] = dialogService.open.mock.calls.at(-1)!;
+      callback(expectedSet);
 
-      expect(service.$setFormActiveForExerciseId()).toBeNull();
+      expect(dialogService.open).toHaveBeenCalledWith(UpsertSet, expect.any(Function), {
+        data: { set: new BodyweightSet(1, null, null, null), label: 'Add Set', button: 'Save' },
+      });
       expect(service.$session().exercises).toEqual([
         new ExerciseLog('A'),
-        new ExerciseLog('B').withSet(set),
+        new ExerciseLog('B').withSet(expectedSet),
       ]);
     });
 
     it('should delete a set from an exercise', () => {
       mockExerciseExists('A');
       const set = new BodyweightSet(10, null, null, null);
-      service.addSet(set, 'A');
+      addSet('A', set);
 
       service.deleteSet('A', 0);
 
@@ -118,11 +115,11 @@ describe('SessionEditor', () => {
       const originalSet = new BodyweightSet(10, null, null, null);
       const editedSet = new BodyweightSet(20, null, null, null);
       mockExerciseExists('A');
-      service.addSet(originalSet, 'A');
+      addSet('A', originalSet);
 
       service.editSet('A', originalSet, 0);
 
-      expect(dialogService.open).toHaveBeenCalledWith(EditSet, expect.any(Function), {
+      expect(dialogService.open).toHaveBeenCalledWith(UpsertSet, expect.any(Function), {
         data: { set: originalSet },
       });
 
@@ -134,7 +131,7 @@ describe('SessionEditor', () => {
 
     it('should complete the session, save it immediately and make it non-editable', () => {
       mockExerciseExists('A');
-      service.addSet(new BodyweightSet(10, null, null, null), 'A');
+      addSet('A', new BodyweightSet(10, null, null, null));
 
       service.completeSession();
 
@@ -237,20 +234,6 @@ describe('SessionEditor', () => {
       expect(service.$session().exercises).toEqual([]);
     });
 
-
-    it('should copy the last set for an exercise', () => {
-      const firstSet = new BodyweightSet(10, null, null, null);
-
-      mockExerciseExists('A');
-      service.addSet(firstSet, 'A');
-
-      service.copyLastSet('A');
-
-      expect(service.$session().exercises).toEqual([
-        new ExerciseLog('A').withSet(firstSet).withSet(firstSet),
-      ]);
-    });
-
     it('should make the session editable', () => {
       service.cancelEdit();
 
@@ -267,18 +250,10 @@ describe('SessionEditor', () => {
       expect(service.$isEditable()).toBe(false);
     });
 
-    it('should cancel add set mode', () => {
-      service.showSetFormForExerciseId('A');
-
-      service.cancelAddSet();
-
-      expect(service.$setFormActiveForExerciseId()).toBeNull();
-    });
-
     it('should auto-save non-empty session draft changes after debounce', async () => {
       mockExerciseExists('A');
       TestBed.tick();
-      service.addSet(new BodyweightSet(10, null, null, null), 'A');
+      addSet('A', new BodyweightSet(10, null, null, null));
       TestBed.tick();
 
       expect(sessionStore.save).not.toHaveBeenCalled();

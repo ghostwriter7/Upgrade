@@ -1,8 +1,8 @@
-<h2 mat-dialog-title>Edit Set</h2>
+<h2 mat-dialog-title>{{ label }}</h2>
 <mat-dialog-content>
   <app-set-form [value]="setData" #form />
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="success" matButton [disabled]="form.isInvalid()" (click)="handleUpdate(form.value())">Update</button>
+  <button class="success" matButton [disabled]="form.isInvalid()" (click)="handleUpdate(form.value())">{{ button }}</button>
   <button class="info" matButton mat-dialog-close>Cancel</button>
 </mat-dialog-actions>

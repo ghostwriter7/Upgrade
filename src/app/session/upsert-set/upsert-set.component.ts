@@ -13,15 +13,18 @@ import { SetData, SetForm } from '../set-form/set-form';
 import { SetDataMapper } from '../set-form/mapper/set-data.mapper';
 
 @Component({
-  selector: 'app-edit-set',
+  selector: 'app-upsert-set',
   imports: [MatButton, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, SetForm],
-  templateUrl: './edit-set.html',
-  styleUrl: './edit-set.css',
+  templateUrl: './upsert-set.component.html',
+  styleUrl: './upsert-set.component.css',
 })
-export class EditSet {
-  private readonly data: { set: ExerciseSet } = inject(MAT_DIALOG_DATA);
+export class UpsertSet {
+  private readonly data: { set: ExerciseSet, label: string; button: string; } = inject(MAT_DIALOG_DATA);
   protected readonly setData = SetDataMapper.toDto(this.data.set);
   private readonly dialogRef = inject(MatDialogRef)
+
+  protected readonly label = this.data.label ?? 'Edit Set';
+  protected readonly button = this.data.button ?? 'Update';
 
   protected handleUpdate(setData: SetData): void {
     const exerciseSet = SetDataMapper.toDomain(setData);

@@ -33,12 +33,12 @@
       }
     </mat-list>
 
-    @if (setFormActiveForExerciseId() === entry().exerciseId) {
-      <app-add-set-form
-        [exerciseLog]="entry()"
-        (newSet)="addSet($event, entry().exerciseId)"
-        (cancelAddSet)="onCancelAddSet()"
-      />
-    }
+<!--    @if (setFormActiveForExerciseId() === entry().exerciseId) {-->
+<!--      <app-add-set-form-->
+<!--        [exerciseLog]="entry()"-->
+<!--        (newSet)="addSet($event, entry().exerciseId)"-->
+<!--        (cancelAddSet)="onCancelAddSet()"-->
+<!--      />-->
+<!--    }-->
   </mat-card-content>
 </mat-card>
