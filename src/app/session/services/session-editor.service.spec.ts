@@ -27,7 +27,7 @@ describe('SessionEditor', () => {
     service['sessionDraft'].update((session) => session.addSet(exerciseId, set));
   };
 
-  const configureTestingModule = (session?: Session): void => {
+  const configureTestingModule = (session: Session = Session.createEmpty()): void => {
     sessionStore = { save: vi.fn() };
     dialogService = { open: vi.fn() };
     mediaRepository = { deleteMedia: vi.fn(), save: vi.fn() };
@@ -37,7 +37,7 @@ describe('SessionEditor', () => {
         { provide: DialogService, useValue: dialogService },
         { provide: MediaRepository, useValue: mediaRepository },
         SessionEditorService,
-        ...(session ? [{ provide: SESSION, useValue: session }] : []),
+        { provide: SESSION, useValue: session },
       ],
     });
 
@@ -235,19 +235,9 @@ describe('SessionEditor', () => {
     });
 
     it('should make the session editable', () => {
-      service.cancelEdit();
-
       service.makeEditable();
 
       expect(service.$isEditable()).toBe(true);
-    });
-
-    it('should cancel edit mode', () => {
-      service.makeEditable();
-
-      service.cancelEdit();
-
-      expect(service.$isEditable()).toBe(false);
     });
 
     it('should auto-save non-empty session draft changes after debounce', async () => {
@@ -324,14 +314,6 @@ describe('SessionEditor', () => {
       service.makeEditable();
 
       expect(service.$isEditable()).toBe(true);
-    });
-
-    it('should cancel editing a finished session', () => {
-      service.makeEditable();
-
-      service.cancelEdit();
-
-      expect(service.$isEditable()).toBe(false);
     });
   });
 });

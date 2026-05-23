@@ -15,7 +15,6 @@ import { EditNote } from '../edit-note/edit-note';
 import { Recorder } from '../recorder/recorder';
 import { ExerciseMedia } from '../../domain/model/exercise-media.model';
 import { MediaRepository } from '../../persistence/repository/media.repository';
-import { SetData } from '../set-form/set-form';
 
 @Injectable()
 export class SessionEditorService {
@@ -23,7 +22,7 @@ export class SessionEditorService {
   private readonly sessionStore = inject(SessionStore);
   private readonly mediaRepository = inject(MediaRepository);
   private readonly dialog = inject(DialogService);
-  private readonly initialSession = inject(SESSION, { optional: true }) ?? Session.createEmpty();
+  private readonly initialSession = inject(SESSION);
   private readonly sessionDraft = signal(this.initialSession);
   private readonly isEditable = signal(!this.initialSession.finishedAt);
 
@@ -131,10 +130,6 @@ export class SessionEditorService {
 
   public makeEditable(): void {
     this.isEditable.set(true);
-  }
-
-  public cancelEdit(): void {
-    this.isEditable.set(false);
   }
 
   public copySet(exerciseId: string, index: number): void {

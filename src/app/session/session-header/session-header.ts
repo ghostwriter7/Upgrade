@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, output } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Session } from '../../domain/model/session.model';
@@ -101,6 +101,7 @@ export class SessionHeader {
   }
 
   protected triggerEdit(): void {
-    this.sessionEditor.makeEditable();
+    this.sessionStore.setEditedSession(this.session());
+    this.router.navigate(['/session/edit']);
   }
 }

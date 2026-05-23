@@ -14,12 +14,14 @@ import { DateHelper } from '../../common/helper/date.helper';
 
 interface State {
   activeDate: string;
+  editedSession: Session | null;
   sessionsByDate: Record<string, Session[] | undefined>;
   countsByMonthAndYear: Record<string, Record<number, number>>;
 }
 
 const initialState: State = {
   activeDate: DateHelper.toLocal(DateHelper.now()).toPlainDate().toString(),
+  editedSession: null,
   sessionsByDate: {},
   countsByMonthAndYear: {},
 };
@@ -55,6 +57,8 @@ export const SessionStore = signalStore(
 
     return {
       setActiveDate: (activeDate: string) => patchState(store, { activeDate }),
+
+      setEditedSession: (editedSession: Session | null) => patchState(store, { editedSession }),
 
       getCountsByMonthAndYear: async (
         month: number,

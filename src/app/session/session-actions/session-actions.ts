@@ -25,7 +25,7 @@ export class SessionActions {
   }
 
   protected cancelEdit(): void {
-    this.sessionEditor.cancelEdit();
+    this.router.navigate(['/session', this.sessionEditor.$session().isoDate]);
   }
 
   protected showExerciseDialog(): void {

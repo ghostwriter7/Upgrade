@@ -28,7 +28,6 @@ import { EntryDetails } from '../entry-details/entry-details';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-exercise-card',
   imports: [
-    AddSetForm,
     ExerciseNamePipe,
     MatCard,
     MatCardContent,
