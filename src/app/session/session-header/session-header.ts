@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Session } from '../../domain/model/session.model';
@@ -30,6 +30,7 @@ export class SessionHeader {
   public isNew = input.required<boolean>();
   public session = input.required<Session>();
 
+  protected readonly showEdit = linkedSignal(() => !this.isNew());
   protected readonly testIds = computed(() => {
     const { uuid } = this.session();
 
@@ -42,7 +43,6 @@ export class SessionHeader {
       menu: `session-header-menu-${uuid}`,
     };
   });
-  protected readonly isFinal = computed(() => this.session().finishedAt !== null);
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
   );

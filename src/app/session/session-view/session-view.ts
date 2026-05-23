@@ -4,6 +4,7 @@ import {
   DestroyRef,
   inject,
   input,
+  OnInit,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SessionHeader } from '../session-header/session-header';
@@ -36,22 +37,25 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './session-view.html',
   styleUrl: './session-view.css',
 })
-export default class SessionView {
+export default class SessionView implements OnInit {
   public isNew = input(false);
 
   private readonly sessionEditor = inject(SessionEditorService);
   private readonly sessionStore = inject(SessionStore);
 
   protected readonly editedSession = this.sessionEditor.$session;
+
   protected readonly isEditable = this.sessionEditor.$isEditable;
 
   private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor() {
+  public ngOnInit(): void {
     const isEditable = this.route.snapshot.url.some((urlSegment) => urlSegment.path === 'edit');
     if (isEditable) {
-      this.sessionEditor.makeEditable();
-      inject(DestroyRef).onDestroy(() => this.sessionStore.setEditedSession(null));
+      this.destroyRef.onDestroy(() => this.sessionStore.setEditedSession(null));
     }
+
+    this.sessionEditor.setIsEditable(isEditable || this.isNew());
   }
 }

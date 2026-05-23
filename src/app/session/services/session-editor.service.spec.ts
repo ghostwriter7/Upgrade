@@ -234,12 +234,6 @@ describe('SessionEditor', () => {
       expect(service.$session().exercises).toEqual([]);
     });
 
-    it('should make the session editable', () => {
-      service.makeEditable();
-
-      expect(service.$isEditable()).toBe(true);
-    });
-
     it('should auto-save non-empty session draft changes after debounce', async () => {
       mockExerciseExists('A');
       TestBed.tick();
@@ -308,12 +302,6 @@ describe('SessionEditor', () => {
 
     it('$isUnfinished should return false when the initial session is finished', () => {
       expect(service.$isUnfinished()).toBe(false);
-    });
-
-    it('should allow making a finished session editable', () => {
-      service.makeEditable();
-
-      expect(service.$isEditable()).toBe(true);
     });
   });
 });

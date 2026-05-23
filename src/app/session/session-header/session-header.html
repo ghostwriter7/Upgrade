@@ -29,7 +29,7 @@
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      @if (isFinal()) {
+      @if (showEdit()) {
         <button mat-menu-item (click)="triggerEdit()">
           <mat-icon>edit</mat-icon>
           Edit

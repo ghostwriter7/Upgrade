@@ -24,7 +24,6 @@ import { ElementClickedEvent } from '../../common/events/element-clicked.event';
   styleUrl: './set-view.css',
 })
 export class SetView {
-  public isEditable = input.required<boolean>();
   public set = input.required<ExerciseSet>();
   public index = input.required<number>();
   public exerciseId = input.required<string>();
@@ -33,6 +32,7 @@ export class SetView {
   private readonly eventService = inject(EventService);
   private readonly destroyRef = inject(DestroyRef);
 
+  protected readonly isEditable = this.sessionEditor.$isEditable;
   protected readonly displayActions = signal(false);
   protected readonly displayValue = computed(() => {
     const set = this.set();

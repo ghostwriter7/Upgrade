@@ -8,7 +8,6 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { AddSetForm } from '../add-set-form/add-set-form';
 import { ExerciseNamePipe } from '../../ui/pipes/exercise-name-pipe';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -16,7 +15,6 @@ import { MatList, MatListItem } from '@angular/material/list';
 import { MatMiniFabButton } from '@angular/material/button';
 import { SetView } from '../set-view/set-view';
 import { ExerciseLog } from '../../domain/model/session.model';
-import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { SessionEditorService } from '../services/session-editor.service';
 import { EventService } from '../../common/service/event/event.service';
 import { ElementClickedEvent } from '../../common/events/element-clicked.event';
@@ -47,7 +45,6 @@ export class ExerciseCard {
   public isNonDeletable = input.required<boolean>();
 
   private readonly sessionEditor = inject(SessionEditorService);
-  protected readonly isEditable = this.sessionEditor.$isEditable;
   protected readonly displayActions = signal(false);
   private readonly header = viewChild.required(MatCardHeader, { read: ElementRef });
   private readonly eventService = inject(EventService);
@@ -83,7 +80,7 @@ export class ExerciseCard {
   }
 
   protected activateActions(): void {
-    if (this.isEditable()) {
+    if (this.sessionEditor.$isEditable()) {
       this.displayActions.set(true);
     }
   }

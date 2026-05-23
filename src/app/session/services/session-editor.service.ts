@@ -9,7 +9,7 @@ import { BodyweightSet, ExerciseSet } from '../../domain/model/exercise-set.mode
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
-import { ExerciseLog, Session } from '../../domain/model/session.model';
+import { ExerciseLog } from '../../domain/model/session.model';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditNote } from '../edit-note/edit-note';
 import { Recorder } from '../recorder/recorder';
@@ -24,7 +24,7 @@ export class SessionEditorService {
   private readonly dialog = inject(DialogService);
   private readonly initialSession = inject(SESSION);
   private readonly sessionDraft = signal(this.initialSession);
-  private readonly isEditable = signal(!this.initialSession.finishedAt);
+  private readonly isEditable = signal(false);
 
   public readonly $session = this.sessionDraft.asReadonly();
   public readonly $isEditable = this.isEditable.asReadonly();
@@ -41,6 +41,10 @@ export class SessionEditorService {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  public setIsEditable(isEditable: boolean): void {
+    this.isEditable.set(isEditable);
   }
 
   public deleteSet(exerciseId: string, index: number): void {
@@ -126,10 +130,6 @@ export class SessionEditorService {
         this.sessionDraft.update((session) => session.addSet(exerciseId, result)),
       { data: { set, label: 'Add Set', button: 'Save' } },
     );
-  }
-
-  public makeEditable(): void {
-    this.isEditable.set(true);
   }
 
   public copySet(exerciseId: string, index: number): void {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { SessionEditorService } from '../services/session-editor.service';
@@ -15,9 +15,9 @@ export class SessionActions {
   private readonly sessionEditor = inject(SessionEditorService);
   private readonly router = inject(Router);
 
-  protected readonly isEditable = this.sessionEditor.$isEditable;
   protected readonly isUnfinished = this.sessionEditor.$isUnfinished;
   protected readonly isSessionInvalid = this.sessionEditor.$isSessionInvalid;
+  protected readonly isEditable = this.sessionEditor.$isEditable;
 
   protected completeSession(): void {
     this.sessionEditor.completeSession();
