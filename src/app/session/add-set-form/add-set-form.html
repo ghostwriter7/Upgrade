@@ -1,9 +1,0 @@
-<app-set-form (valueChange)="setModel.set($event)" [value]="setModel()" #setForm />
-<div class="actions">
-  <button matMiniFab aria-label="Add set" [disabled]="setForm.isInvalid()" (click)="addSet()">
-    <mat-icon>check</mat-icon>
-  </button>
-  <button matMiniFab class="info" aria-label="Cancel set creation" (click)="cancelAddSet.emit()">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
