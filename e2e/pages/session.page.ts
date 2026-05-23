@@ -1,21 +1,73 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
+import { getExerciseUuid } from '../support/exercise.utils';
+import { BasePage } from './base.page';
 
-export class SessionPage {
-  constructor(private readonly page: Page) {}
+export class SessionPage extends BasePage {
+  constructor(page: Page) {
+    super(page);
+  }
 
-  public get completeButton() {
+  public get completeButton(): Locator {
     return this.page.getByRole('button', { name: 'Complete' });
   }
 
-  public get cancelButton() {
+  public get cancelButton(): Locator {
     return this.page.getByRole('button', { name: 'Cancel' });
   }
 
-  public showExerciseSelector() {
+  public get addSkillButton(): Locator {
+    return this.page.getByRole('button', { name: 'Skill' });
+  }
+
+  public showExerciseSelector(): Promise<void> {
     return this.page.getByTestId('session-actions-add-exercise-btn').click();
   }
 
-  public completeSession() {
+  public completeSession(): Promise<void> {
     return this.completeButton.click();
+  }
+
+  public async addSkill(name: string): Promise<void> {
+    await this.showExerciseSelector();
+    const exerciseSelector = this.page.getByTestId('exercise-selector');
+    await exerciseSelector.getByText(name, { exact: true }).click();
+    await exerciseSelector.getByTestId('exercise-selector-add-btn').click();
+  }
+
+  public async showActionsForExercise(name: string): Promise<void> {
+    await this.page.getByTestId(`exercise-card-header-${getExerciseUuid(name)}`).click();
+  }
+
+  public async showAddSetFormForExercise(name: string): Promise<void> {
+    await this.showActionsForExercise(name);
+    await this.page.getByTestId(`exercise-card-show-set-form-btn-${getExerciseUuid(name)}`).click();
+  }
+
+  public async addIsoSet(duration: number, weight?: number): Promise<void> {
+    await this.selectSetType('iso');
+    await this.page.getByTestId(`set-form-duration-${duration}`).click();
+    if (weight !== undefined) await this.page.getByTestId(`set-form-weight-${weight}`).click();
+    await this.clickSaveSet();
+  }
+
+  public async addWeightSet(reps: number, weight: number): Promise<void> {
+    await this.selectSetType('weight');
+    await this.page.getByTestId(`set-form-reps-${reps}`).click();
+    await this.page.getByTestId(`set-form-weight-${weight}`).click();
+    await this.clickSaveSet();
+  }
+
+  public async addBodyweightSet(reps: number): Promise<void> {
+    await this.selectSetType('bodyweight');
+    await this.page.getByTestId(`set-form-reps-${reps}`).click();
+    await this.clickSaveSet();
+  }
+
+  public selectSetType(type: 'bodyweight' | 'iso' | 'weight'): Promise<void> {
+    return this.page.getByTestId(`set-form-type-${type}`).click();
+  }
+
+  public clickSaveSet(): Promise<void> {
+    return this.page.getByTestId('upsert-set-save-btn').click();
   }
 }

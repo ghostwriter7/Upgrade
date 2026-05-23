@@ -16,6 +16,7 @@ interface CalendarCell {
   day: number | null;
   date: string;
   hasSessions?: boolean;
+  testId: string;
 }
 
 @Component({
@@ -49,7 +50,7 @@ export class SessionCalendar {
 
     const sessionCountByDate = this.sessionCountByDate();
     const { year, month } = this.activeYearAndMonth();
-    const cells: CalendarCell[] = [];
+    const cells: Omit<CalendarCell, 'testId'>[] = [];
 
     const {
       year: leadingYear,
@@ -75,10 +76,7 @@ export class SessionCalendar {
       });
     }
 
-    const {
-      year: nextYear,
-      month: nextMonth,
-    } = this.firstDayOfMonth().add({ months: 1 });
+    const { year: nextYear, month: nextMonth } = this.firstDayOfMonth().add({ months: 1 });
     let nextDate = 1;
     while (cells.length % 7 !== 0) {
       cells.push({
@@ -87,7 +85,7 @@ export class SessionCalendar {
       });
     }
 
-    return cells;
+    return cells.map((cell, index) => ({ ...cell, testId: `session-calendar-cell-${cell.day}` }));
   });
 
   private readonly sessionStore = inject(SessionStore);

@@ -24,6 +24,9 @@ import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angula
   ],
   templateUrl: './exercise-selector.html',
   styleUrl: './exercise-selector.css',
+  host: {
+    'data-testid': 'exercise-selector',
+  }
 })
 export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
