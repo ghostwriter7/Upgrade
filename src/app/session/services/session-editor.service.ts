@@ -5,7 +5,7 @@ import { SessionStore } from '../../store/session/session.store';
 import { SESSION } from '../consts/session.token';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
 import { DialogService } from '../../common/service/dialog/dialog.service';
-import { BodyweightSet, ExerciseSet } from '../../domain/model/exercise-set.model';
+import { BodyweightSetBuilder, ExerciseSet } from '../../domain/model/exercise-set.model';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Temporal as TemporalType } from '@js-temporal/polyfill';
@@ -123,7 +123,12 @@ export class SessionEditorService {
 
   public displaySetForm(exerciseId: string): void {
     // TODO Query the ExerciseStore for the last set for the given exercise and open the form with it.
-    const set = new BodyweightSet(1, null, null, null);
+    const set = new BodyweightSetBuilder()
+      .withReps(1)
+      .withSessionId(this.sessionDraft().uuid)
+      .withExerciseId(exerciseId)
+      .withIndex(this.sessionDraft().getExerciseById(exerciseId).sets.length)
+      .build();
     this.dialog.open(
       UpsertSet,
       (result: ExerciseSet) =>

@@ -27,7 +27,7 @@ export abstract class GenericRepository<T> {
     return this.responseFromRequest<T>(request);
   }
 
-  protected async findAllBy(
+  protected async findAllBy<T>(
     storeName: StoreName,
     query: (store: IDBObjectStore) => IDBRequest,
   ): Promise<T[]> {
@@ -46,7 +46,7 @@ export abstract class GenericRepository<T> {
     return this.responseFromRequest<T[]>(request);
   }
 
-  protected async put(storeName: StoreName, entity: T): Promise<void> {
+  protected async put(storeName: StoreName, entity: unknown): Promise<void> {
     const transaction = await this.createWriteTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.put(entity);
@@ -73,7 +73,7 @@ export abstract class GenericRepository<T> {
     return db.transaction(storeName, 'readonly');
   }
 
-  protected async createWriteTransaction(storeName: StoreName): Promise<IDBTransaction> {
+  protected async createWriteTransaction(storeName: StoreName | Iterable<StoreName>): Promise<IDBTransaction> {
     const db = await this.getDb();
     return db.transaction(storeName, 'readwrite');
   }

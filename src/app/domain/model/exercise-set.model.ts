@@ -1,16 +1,14 @@
-import { Depth } from '../enum/depth.enum';
-import { ExposureZone } from '../enum/exposure-zone.enum';
-import { BreathQuality } from '../enum/breath-quality.enum';
-
 export const ExerciseSetTypes = ['bodyweight', 'weight', 'iso'] as const;
 export type ExerciseSetType = (typeof ExerciseSetTypes)[number];
 
 export abstract class ExerciseSet {
+  public id?: number;
+
   protected constructor(
+    public readonly sessionId: string,
+    public readonly exerciseId: string,
     public readonly type: ExerciseSetType,
-    public readonly depth: Depth | null,
-    public readonly exposureZone: ExposureZone | null,
-    public readonly breathQuality: BreathQuality | null,
+    public readonly index: number,
   ) {}
 
   public abstract get quantity(): number;
@@ -18,12 +16,12 @@ export abstract class ExerciseSet {
 
 export class BodyweightSet extends ExerciseSet {
   constructor(
+    sessionId: string,
+    exerciseId: string,
+    index: number,
     public readonly reps: number,
-    depth: Depth | null,
-    exposureZone: ExposureZone | null,
-    breathQuality: BreathQuality | null,
   ) {
-    super('bodyweight', depth, exposureZone, breathQuality);
+    super(sessionId, exerciseId, 'bodyweight', index);
   }
 
   public get quantity(): number {
@@ -33,13 +31,13 @@ export class BodyweightSet extends ExerciseSet {
 
 export class WeightedSet extends ExerciseSet {
   constructor(
+    sessionId: string,
+    exerciseId: string,
+    index: number,
     public readonly reps: number,
     public readonly weight: number,
-    depth: Depth | null,
-    exposureZone: ExposureZone | null,
-    breathQuality: BreathQuality | null,
   ) {
-    super('weight', depth, exposureZone, breathQuality);
+    super(sessionId, exerciseId, 'weight', index);
   }
 
   public get quantity(): number {
@@ -49,16 +47,181 @@ export class WeightedSet extends ExerciseSet {
 
 export class IsoSet extends ExerciseSet {
   constructor(
+    sessionId: string,
+    exerciseId: string,
+    index: number,
     public readonly duration: number,
-    depth: Depth | null,
-    exposureZone: ExposureZone | null,
-    breathQuality: BreathQuality | null,
     public readonly weight?: number,
   ) {
-    super('iso', depth, exposureZone, breathQuality);
+    super(sessionId, exerciseId, 'iso', index);
   }
 
   public get quantity(): number {
     return this.duration;
+  }
+}
+
+export abstract class ExerciseSetBuilder {
+  protected sessionId?: string;
+  protected exerciseId?: string;
+  protected id?: number;
+  protected index?: number;
+
+  protected constructor(protected readonly type: ExerciseSetType) {}
+
+  public abstract build(): ExerciseSet;
+
+  public withSessionId(sessionId: string): this {
+    this.sessionId = sessionId;
+    return this;
+  }
+
+  public withExerciseId(exerciseId: string): this {
+    this.exerciseId = exerciseId;
+    return this;
+  }
+
+  public withId(id?: number): this {
+    this.id = id;
+    return this;
+  }
+
+  public withIndex(index: number): this {
+    this.index = index;
+    return this;
+  }
+
+  protected requireSessionId(): string {
+    if (this.sessionId === undefined) {
+      throw new Error(`${this.type} set requires sessionId`);
+    }
+
+    return this.sessionId;
+  }
+
+  protected requireExerciseId(): string {
+    if (this.exerciseId === undefined) {
+      throw new Error(`${this.type} set requires exerciseId`);
+    }
+
+    return this.exerciseId;
+  }
+
+  protected requireIndex(): number {
+    if (this.index === undefined) {
+      throw new Error(`${this.type} set requires index`);
+    }
+
+    return this.index;
+  }
+
+  protected applyId<T extends ExerciseSet>(set: T): T {
+    if (this.id !== undefined) {
+      set.id = this.id;
+    }
+
+    return set;
+  }
+}
+
+export class BodyweightSetBuilder extends ExerciseSetBuilder {
+  private reps?: number;
+
+  constructor() {
+    super('bodyweight');
+  }
+
+  public build(): BodyweightSet {
+    if (this.reps === undefined || this.reps === 0) {
+      throw new Error('bodyweight set requires reps');
+    }
+
+    return this.applyId(
+      new BodyweightSet(
+        this.requireSessionId(),
+        this.requireExerciseId(),
+        this.requireIndex(),
+        this.reps,
+      ),
+    );
+  }
+
+  public withReps(reps: number): this {
+    this.reps = reps;
+    return this;
+  }
+}
+
+export class IsoSetBuilder extends ExerciseSetBuilder {
+  private duration?: number;
+  private weight?: number;
+
+  constructor() {
+    super('iso');
+  }
+
+  public build(): IsoSet {
+    if (this.duration === undefined || this.duration === 0) {
+      throw new Error('iso set requires duration');
+    }
+
+    return this.applyId(
+      new IsoSet(
+        this.requireSessionId(),
+        this.requireExerciseId(),
+        this.requireIndex(),
+        this.duration,
+        this.weight,
+      ),
+    );
+  }
+
+  public withDuration(duration: number): this {
+    this.duration = duration;
+    return this;
+  }
+
+  public withWeight(weight?: number): this {
+    this.weight = weight;
+    return this;
+  }
+}
+
+export class WeightSetBuilder extends ExerciseSetBuilder {
+  private weight?: number;
+  private reps?: number;
+
+  constructor() {
+    super('weight');
+  }
+
+  public withWeight(weight: number): this {
+    this.weight = weight;
+    return this;
+  }
+
+  public withReps(reps: number): this {
+    this.reps = reps;
+    return this;
+  }
+
+  public build(): WeightedSet {
+    if (this.reps === undefined || this.reps === 0) {
+      throw new Error('weight set requires reps');
+    }
+
+    if (this.weight === undefined || this.weight === 0) {
+      throw new Error('weight set requires weight');
+    }
+
+    return this.applyId(
+      new WeightedSet(
+        this.requireSessionId(),
+        this.requireExerciseId(),
+        this.requireIndex(),
+        this.reps,
+        this.weight,
+      ),
+    );
   }
 }

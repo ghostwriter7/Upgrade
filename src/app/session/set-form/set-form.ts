@@ -12,41 +12,17 @@ import {
   required,
   validate,
 } from '@angular/forms/signals';
-import { MatChipListbox, MatChipOption } from '@angular/material/chips';
-import { ExposureZoneOptions } from '../../domain/consts/exposure-zone-options.const';
-import { DepthOptions } from '../../domain/consts/depth-options.const';
-import { BreathQualityOptions } from '../../domain/consts/breath-quality-options.const';
-import { Depth } from '../../domain/enum/depth.enum';
-import { BreathQuality } from '../../domain/enum/breath-quality.enum';
-import { ExposureZone } from '../../domain/enum/exposure-zone.enum';
-import { MatCard, MatCardContent } from '@angular/material/card';
-import { NgClass } from '@angular/common';
 
 export interface SetData {
   type: ExerciseSetType;
   reps: number;
   weight: number;
   duration: number;
-  depth: Depth | null;
-  breathQuality: BreathQuality | null;
-  exposureZone: ExposureZone | null;
 }
 
 @Component({
   selector: 'app-set-form',
-  imports: [
-    MatButton,
-    MatButtonToggle,
-    MatButtonToggleGroup,
-    MatIcon,
-    MatMiniFabButton,
-    FormField,
-    MatChipListbox,
-    MatChipOption,
-    MatCard,
-    MatCardContent,
-    NgClass,
-  ],
+  imports: [MatButton, MatButtonToggle, MatButtonToggleGroup, MatIcon, MatMiniFabButton, FormField],
   templateUrl: './set-form.html',
   styleUrl: './set-form.css',
 })
@@ -55,9 +31,6 @@ export class SetForm implements FormValueControl<SetData> {
 
   public readonly isInvalid = computed(() => this.setForm().invalid());
 
-  protected readonly exposureZoneOptions = ExposureZoneOptions;
-  protected readonly depthOptions = DepthOptions;
-  protected readonly breathQualityOptions = BreathQualityOptions;
   protected readonly setForm = form<SetData>(this.value, (schemaPath) => {
     required(schemaPath.reps);
     required(schemaPath.duration);
@@ -74,23 +47,38 @@ export class SetForm implements FormValueControl<SetData> {
     hidden(schemaPath.reps, ({ valueOf }) => valueOf(schemaPath.type) === 'iso');
     hidden(schemaPath.duration, ({ valueOf }) => valueOf(schemaPath.type) !== 'iso');
   });
-  protected readonly setTypeOptions: { label: string; value: ExerciseSetType; testId: `set-form-type-${string}` }[] = ([
-    {
-      label: 'Bodyweight',
-      value: 'bodyweight',
-    },
-    {
-      label: 'Weighted',
-      value: 'weight',
-    },
-    {
-      label: 'Isometric',
-      value: 'iso',
-    },
-  ] as const).map((option) => ({ ...option, testId: `set-form-type-${option.value}` }));
-  protected readonly durations = [5, 10, 15, 20, 25, 30].map((value) => ({ value, testId: `set-form-duration-${value}` }));
-  protected readonly reps = [1, 2, 3, 5, 8, 10].map((value) => ({ value, testId: `set-form-reps-${value}` }));
-  protected readonly weights = [1, 2, 3, 5, 8, 10].map((value) => ({ value, testId: `set-form-weight-${value}` }));
+  protected readonly setTypeOptions: {
+    label: string;
+    value: ExerciseSetType;
+    testId: `set-form-type-${string}`;
+  }[] = (
+    [
+      {
+        label: 'Bodyweight',
+        value: 'bodyweight',
+      },
+      {
+        label: 'Weighted',
+        value: 'weight',
+      },
+      {
+        label: 'Isometric',
+        value: 'iso',
+      },
+    ] as const
+  ).map((option) => ({ ...option, testId: `set-form-type-${option.value}` }));
+  protected readonly durations = [5, 10, 15, 20, 25, 30].map((value) => ({
+    value,
+    testId: `set-form-duration-${value}`,
+  }));
+  protected readonly reps = [1, 2, 3, 5, 8, 10].map((value) => ({
+    value,
+    testId: `set-form-reps-${value}`,
+  }));
+  protected readonly weights = [1, 2, 3, 5, 8, 10].map((value) => ({
+    value,
+    testId: `set-form-weight-${value}`,
+  }));
 
   protected decrementReps(): void {
     this.value.update((model) => ({ ...model, reps: Math.max(model.reps - 1, 1) }));

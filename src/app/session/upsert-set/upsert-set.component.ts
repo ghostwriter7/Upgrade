@@ -27,7 +27,8 @@ export class UpsertSet {
   protected readonly button = this.data.button ?? 'Update';
 
   protected handleUpdate(setData: SetData): void {
-    const exerciseSet = SetDataMapper.toDomain(setData);
+    const { exerciseId, sessionId, index = 0 } = this.data.set;
+    const exerciseSet = SetDataMapper.toDomain(setData, exerciseId, sessionId, index);
     this.dialogRef.close(exerciseSet);
   }
 }
