@@ -17,8 +17,8 @@ describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;
   let loader: ReturnType<typeof TestbedHarnessEnvironment.loader>;
 
-  let sessionStore: { delete: Mock };
-  let sessionEditor: { patchStartedAt: Mock; patchFinishedAt: Mock; makeEditable: Mock; };
+  let sessionStore: { delete: Mock; setEditedSession: Mock };
+  let sessionEditor: { patchStartedAt: Mock; patchFinishedAt: Mock; makeEditable: Mock };
   let router: { navigate: Mock };
   let dialogService: { open: Mock };
 
@@ -83,6 +83,7 @@ describe('SessionHeader', () => {
   beforeEach(() => {
     sessionStore = {
       delete: vi.fn(),
+      setEditedSession: vi.fn(),
     };
 
     router = {
@@ -97,7 +98,7 @@ describe('SessionHeader', () => {
       patchStartedAt: vi.fn(),
       patchFinishedAt: vi.fn(),
       makeEditable: vi.fn(),
-    }
+    };
 
     TestBed.configureTestingModule({
       imports: [SessionHeader],
@@ -235,8 +236,9 @@ describe('SessionHeader', () => {
     expect(itemTexts).toContain('edit Edit');
   });
 
-  it('should not show Edit menu item when session is unfinished', async () => {
+  it('should not show Edit menu item when session is new', async () => {
     createComponent({
+      isNew: true,
       session: createSession(false),
     });
 
@@ -245,14 +247,15 @@ describe('SessionHeader', () => {
     expect(itemTexts).not.toContain('edit Edit');
   });
 
-  it('should emit editStart when Edit menu item is clicked', async () => {
+  it('should set edited session when Edit menu item is clicked', async () => {
     createComponent({
       session: createSession(true),
     });
 
     await clickMenuItemByText('Edit');
 
-    expect(sessionEditor.makeEditable).toHaveBeenCalledOnce();
+    expect(sessionStore.setEditedSession).toHaveBeenCalledOnce();
+    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(['/session/edit']);
   });
 
   it('should show Delete menu item', async () => {
