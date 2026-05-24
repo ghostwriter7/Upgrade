@@ -20,31 +20,4 @@ export const ExerciseStore = signalStore(
   withMethods((store) => ({
     getExerciseById: (uuid: string) => store.exercises().find((exercise) => exercise.uuid === uuid),
   })),
-  withMethods((store) => {
-    const getExerciseIndex = (uuid: string): number =>
-      store.exercises().findIndex((exercise) => exercise.uuid === uuid);
-
-    return {
-      create: (exercise: Exercise) =>
-        patchState(store, (state) => ({
-          ...state,
-          exercises: [...state.exercises, exercise].sort((a, b) => a.name.localeCompare(b.name)),
-        })),
-      update: (exercise: Exercise) => {
-        const existingExerciseIndex = getExerciseIndex(exercise.uuid);
-
-        if (existingExerciseIndex === -1)
-          throw new Error(`Exercise with UUID ${exercise.uuid} not found`);
-
-        const existingExercise = store.exercises()[existingExerciseIndex];
-        patchState(store, (state) => ({
-          ...state,
-          exercises: state.exercises.with(existingExerciseIndex, {
-            ...existingExercise,
-            ...exercise,
-          }),
-        }));
-      },
-    };
-  }),
 );
