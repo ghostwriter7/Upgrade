@@ -160,7 +160,7 @@ describe('SessionStore', () => {
   describe('Save a session', () => {
     it('should save a new session and increment a counter', () => {
       const { sessionOne, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
+      store.updateCache(sessionOne);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionOne);
       expectSessionsByDate({ [sessionOne.isoDate]: [sessionOne] });
@@ -169,10 +169,10 @@ describe('SessionStore', () => {
 
     it('should properly save a new session when an existing session for the same day exists', () => {
       const { sessionOne, sessionTwo, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
+      store.updateCache(sessionOne);
       sessionRepositoryMock.save.mockClear();
 
-      store.save(sessionTwo);
+      store.updateCache(sessionTwo);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionTwo);
       expectSessionsByDate({ [sessionTwo.isoDate]: [sessionOne, sessionTwo] });
@@ -181,10 +181,10 @@ describe('SessionStore', () => {
 
     it('should properly save a new session when another session exists in the cache for another day', () => {
       const { sessionOne, sessionThree, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
+      store.updateCache(sessionOne);
       sessionRepositoryMock.save.mockClear();
 
-      store.save(sessionThree);
+      store.updateCache(sessionThree);
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionThree);
       expectSessionsByDate({
@@ -201,11 +201,11 @@ describe('SessionStore', () => {
 
     it('should update a session instead of inserting a duplicate', () => {
       const { sessionOne, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
+      store.updateCache(sessionOne);
       sessionRepositoryMock.save.mockClear();
       const updatedSession = sessionOne.addExercise('anyExerciseId');
 
-      store.save(updatedSession)
+      store.updateCache(updatedSession)
 
       expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(updatedSession);
       expectSessionsByDate({ [updatedSession.isoDate]: [updatedSession] });
@@ -216,7 +216,7 @@ describe('SessionStore', () => {
   describe('Delete a session', () => {
     it('should delete a session and decrement a counter when no other sessions exist for the same day', () => {
       const { sessionOne, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
+      store.updateCache(sessionOne);
 
       store.delete(sessionOne);
 
@@ -227,8 +227,8 @@ describe('SessionStore', () => {
 
     it('should delete a session when another session exists for the same day', () => {
       const { sessionOne, sessionTwo, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
-      store.save(sessionTwo);
+      store.updateCache(sessionOne);
+      store.updateCache(sessionTwo);
 
       store.delete(sessionOne);
 
@@ -239,8 +239,8 @@ describe('SessionStore', () => {
 
     it('should delete a session when another session exists in the cache (different day)', () => {
       const { sessionOne, sessionThree, yearMonthId } = createSessionFixture();
-      store.save(sessionOne);
-      store.save(sessionThree);
+      store.updateCache(sessionOne);
+      store.updateCache(sessionThree);
 
       store.delete(sessionOne);
 

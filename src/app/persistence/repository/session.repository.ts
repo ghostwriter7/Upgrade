@@ -3,7 +3,7 @@ import { Session } from '../../domain/model/session.model';
 import { GenericRepository } from './generic.repository';
 import { StoreName } from './store-name.enum';
 import { SessionDto, SessionSchema } from '../schema/session.schema';
-import { SessionMapper } from '../mapper/session.mapper';
+import { SessionMapper } from '../mapper/session/session.mapper';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { IndexName } from './index-name.enum';
 import { DateHelper } from '../../common/helper/date.helper';

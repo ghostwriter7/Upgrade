@@ -1,8 +1,8 @@
-import { SessionDto } from '../schema/session.schema';
-import { Session } from '../../domain/model/session.model';
-import { DateHelper } from '../../common/helper/date.helper';
-import { ExerciseEntryMapper } from './exercise-entry/exercise-entry.mapper';
-import { Mapper } from './mapper.interface';
+import { SessionDto } from '../../schema/session.schema';
+import { Session } from '../../../domain/model/session.model';
+import { DateHelper } from '../../../common/helper/date.helper';
+import { ExerciseEntryMapper } from '../exercise-entry/exercise-entry.mapper';
+import { Mapper } from '../mapper.interface';
 
 export class SessionMapper implements Mapper<Session, SessionDto> {
   public static readonly INSTANCE = new SessionMapper();

@@ -135,8 +135,8 @@ export class SessionEditorService {
         if (exerciseIds.size !== 0) {
           exerciseIds.forEach((exerciseId) => {
             this.sessionDraft.update((session) => session.addExercise(exerciseId));
-            this.sessionRepository.save(this.sessionDraft());
           });
+          this.sessionRepository.save(this.sessionDraft());
         }
       },
       { data: { session: this.sessionDraft() }, width: '90svw', height: '80svh' },
