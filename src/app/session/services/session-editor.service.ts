@@ -50,20 +50,20 @@ export class SessionEditorService {
     this.isEditable.set(isEditable);
   }
 
-  public deleteSet(exerciseId: string, index: number, id: number): void {
-    this.sessionDraft.update((session) => session.removeSet(exerciseId, index));
-    this.setRepository.deleteSet(id);
-    const affectedSets = this.sessionDraft().getExerciseById(exerciseId).sets.slice(index);
+  public deleteSet(set: ExerciseSet): void {
+    this.sessionDraft.update((session) => session.removeSet(set));
+    this.setRepository.deleteSet(set.id!);
+    const affectedSets = this.sessionDraft().getExerciseById(set.exerciseId).sets.slice(set.index);
     affectedSets.forEach((set) => this.setRepository.upsertSet(set));
   }
 
   public editSet(set: ExerciseSet): void {
     this.dialog.open(
       UpsertSet,
-      (result: ExerciseSet) => {
-        result.id = set.id;
-        this.sessionDraft.update((session) => session.updateSet(result));
-        this.setRepository.upsertSet(result);
+      (updatedSet: ExerciseSet) => {
+        updatedSet.id = set.id;
+        this.sessionDraft.update((session) => session.updateSet(updatedSet));
+        this.setRepository.upsertSet(updatedSet);
       },
       { data: { set } },
     );
@@ -153,20 +153,20 @@ export class SessionEditorService {
       .build();
     this.dialog.open(
       UpsertSet,
-      async (result: ExerciseSet) => {
-        result.id = await this.setRepository.upsertSet(result);
-        this.sessionDraft.update((session) => session.addSet(exerciseId, result));
+      async (newSet: ExerciseSet) => {
+        newSet.id = await this.setRepository.upsertSet(newSet);
+        this.sessionDraft.update((session) => session.addSet(newSet));
         this.sessionRepository.save(this.sessionDraft());
       },
       { data: { set, label: 'Add Set', button: 'Save' } },
     );
   }
 
-  public async copySet(exerciseId: string, index: number): Promise<void> {
-    const exercise = this.sessionDraft().getExerciseById(exerciseId);
-    const set = exercise.cloneSetAtIndex(index);
-    set.id = await this.setRepository.upsertSet(set);
-    this.sessionDraft.update((session) => session.addSet(exerciseId, set));
+  public async copySet(set: ExerciseSet): Promise<void> {
+    const exercise = this.sessionDraft().getExerciseById(set.exerciseId);
+    const copiedSet = exercise.cloneSetAtIndex(set.index);
+    copiedSet.id = await this.setRepository.upsertSet(copiedSet);
+    this.sessionDraft.update((session) => session.addSet(copiedSet));
   }
 
   public captureRecording(exerciseId: string): void {

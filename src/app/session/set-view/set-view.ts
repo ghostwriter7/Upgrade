@@ -25,8 +25,6 @@ import { ElementClickedEvent } from '../../common/events/element-clicked.event';
 })
 export class SetView {
   public set = input.required<ExerciseSet>();
-  public index = input.required<number>();
-  public exerciseId = input.required<string>();
 
   private readonly sessionEditor = inject(SessionEditorService);
   private readonly eventService = inject(EventService);
@@ -80,11 +78,11 @@ export class SetView {
   protected deleteSet(event: Event): void {
     event.stopPropagation();
     this.displayActions.set(false);
-    this.sessionEditor.deleteSet(this.exerciseId(), this.index(), this.set().id!);
+    this.sessionEditor.deleteSet(this.set());
   }
 
   protected copySet(event: Event): void {
     event.stopPropagation();
-    this.sessionEditor.copySet(this.exerciseId(), this.index());
+    this.sessionEditor.copySet(this.set());
   }
 }
