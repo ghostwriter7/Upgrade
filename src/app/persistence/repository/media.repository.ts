@@ -16,7 +16,7 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
     return result ? ExerciseMediaMapper.INSTANCE.toDomain(result) : null;
   }
 
-  public save(media: ExerciseMedia): Promise<void> {
+  public save(media: ExerciseMedia): Promise<IDBValidKey> {
     return this.put(StoreName.MEDIA, ExerciseMediaMapper.INSTANCE.toDto(media));
   }
 

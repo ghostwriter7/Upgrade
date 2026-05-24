@@ -1,6 +1,6 @@
 import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { debounceTime, filter, skip, tap } from 'rxjs';
+import { filter, skip, tap } from 'rxjs';
 import { SessionStore } from '../../store/session/session.store';
 import { SESSION } from '../consts/session.token';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
@@ -15,11 +15,15 @@ import { EditNote } from '../edit-note/edit-note';
 import { Recorder } from '../recorder/recorder';
 import { ExerciseMedia } from '../../domain/model/exercise-media.model';
 import { MediaRepository } from '../../persistence/repository/media.repository';
+import { SessionRepository } from '../../persistence/repository/session.repository';
+import { SetRepository } from '../../persistence/repository/set.repository';
 
 @Injectable()
 export class SessionEditorService {
   private readonly destroyRef = inject(DestroyRef);
   private readonly sessionStore = inject(SessionStore);
+  private readonly setRepository = inject(SetRepository);
+  private readonly sessionRepository = inject(SessionRepository);
   private readonly mediaRepository = inject(MediaRepository);
   private readonly dialog = inject(DialogService);
   private readonly initialSession = inject(SESSION);
@@ -36,8 +40,7 @@ export class SessionEditorService {
       .pipe(
         skip(1),
         filter((session) => !session.isEmpty),
-        debounceTime(1000),
-        tap((session) => this.sessionStore.save(session)),
+        tap((session) => this.sessionStore.updateCache(session)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
@@ -47,15 +50,21 @@ export class SessionEditorService {
     this.isEditable.set(isEditable);
   }
 
-  public deleteSet(exerciseId: string, index: number): void {
+  public deleteSet(exerciseId: string, index: number, id: number): void {
     this.sessionDraft.update((session) => session.removeSet(exerciseId, index));
+    this.setRepository.deleteSet(id);
+    const affectedSets = this.sessionDraft().getExerciseById(exerciseId).sets.slice(index);
+    affectedSets.forEach((set) => this.setRepository.upsertSet(set));
   }
 
-  public editSet(exerciseId: string, set: ExerciseSet, index: number): void {
+  public editSet(set: ExerciseSet): void {
     this.dialog.open(
       UpsertSet,
-      (result: ExerciseSet) =>
-        this.sessionDraft.update((session) => session.updateSet(exerciseId, index, result)),
+      (result: ExerciseSet) => {
+        result.id = set.id;
+        this.sessionDraft.update((session) => session.updateSet(result));
+        this.setRepository.upsertSet(result);
+      },
       { data: { set } },
     );
   }
@@ -65,7 +74,8 @@ export class SessionEditorService {
       session.finishedAt = DateHelper.now();
       return session.clone();
     });
-    this.sessionStore.save(this.sessionDraft());
+    this.sessionStore.updateCache(this.sessionDraft());
+    this.sessionRepository.save(this.sessionDraft());
     this.isEditable.set(false);
   }
 
@@ -74,6 +84,7 @@ export class SessionEditorService {
       session.startedAt = startedAt;
       return session.clone();
     });
+    this.sessionRepository.save(this.sessionDraft());
   }
 
   public patchFinishedAt(finishedAt: TemporalType.Instant): void {
@@ -81,6 +92,7 @@ export class SessionEditorService {
       session.finishedAt = finishedAt;
       return session.clone();
     });
+    this.sessionRepository.save(this.sessionDraft());
   }
 
   public deleteExercise(entry: ExerciseLog): void {
@@ -89,15 +101,24 @@ export class SessionEditorService {
       if (exercise.hasMedia) {
         exercise.mediaIds.forEach((mediaId) => this.mediaRepository.deleteMedia(mediaId));
       }
+      if (!exercise.isEmpty) {
+        Iterator.from(exercise.sets)
+          .map(({ id }) => id)
+          .filter((id) => id !== undefined)
+          .forEach((id) => this.setRepository.deleteSet(id));
+      }
       this.sessionDraft.update((session) => session.removeExercise(entry.exerciseId));
+      this.sessionRepository.save(this.sessionDraft());
     });
   }
 
   public editExerciseNote(entry: ExerciseLog): void {
     this.dialog.open(
       EditNote,
-      (note: string) =>
-        this.sessionDraft.update((session) => session.setExerciseNotes(entry.exerciseId, note)),
+      (note: string) => {
+        this.sessionDraft.update((session) => session.setExerciseNotes(entry.exerciseId, note));
+        this.sessionRepository.save(this.sessionDraft());
+      },
       {
         data: { note: entry.notes },
         width: '90svw',
@@ -114,6 +135,7 @@ export class SessionEditorService {
         if (exerciseIds.size !== 0) {
           exerciseIds.forEach((exerciseId) => {
             this.sessionDraft.update((session) => session.addExercise(exerciseId));
+            this.sessionRepository.save(this.sessionDraft());
           });
         }
       },
@@ -131,14 +153,20 @@ export class SessionEditorService {
       .build();
     this.dialog.open(
       UpsertSet,
-      (result: ExerciseSet) =>
-        this.sessionDraft.update((session) => session.addSet(exerciseId, result)),
+      async (result: ExerciseSet) => {
+        result.id = await this.setRepository.upsertSet(result);
+        this.sessionDraft.update((session) => session.addSet(exerciseId, result));
+        this.sessionRepository.save(this.sessionDraft());
+      },
       { data: { set, label: 'Add Set', button: 'Save' } },
     );
   }
 
-  public copySet(exerciseId: string, index: number): void {
-    this.sessionDraft.update((session) => session.copySet(exerciseId, index));
+  public async copySet(exerciseId: string, index: number): Promise<void> {
+    const exercise = this.sessionDraft().getExerciseById(exerciseId);
+    const set = exercise.cloneSetAtIndex(index);
+    set.id = await this.setRepository.upsertSet(set);
+    this.sessionDraft.update((session) => session.addSet(exerciseId, set));
   }
 
   public captureRecording(exerciseId: string): void {

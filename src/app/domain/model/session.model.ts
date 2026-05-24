@@ -26,6 +26,16 @@ export class ExerciseLog {
     return log;
   }
 
+  public cloneSetAtIndex(index: number): ExerciseSet {
+    const set = this.sets.at(index);
+    if (!set) {
+      throw new Error(`Set at index ${index} does not exist`);
+    }
+
+   return set.clone()
+      .withIndex(this.sets.length);
+  }
+
   public withMedia(mediaId: string): ExerciseLog {
     this.mediaIds = [...this.mediaIds, mediaId];
     return this.clone();
@@ -38,6 +48,9 @@ export class ExerciseLog {
 
   public removeSetAt(index: number): ExerciseLog {
     this.checkIndex(index);
+    for (let i = index + 1; i < this.sets.length ; i++) {
+      this.sets[index].index--;
+    }
     this.sets = this.sets.toSpliced(index, 1);
     return this.clone();
   }
@@ -130,41 +143,23 @@ export class Session {
     return this.clone();
   }
 
-  public copySet(exerciseId: string, index: number): Session {
-    const exerciseIndex = this.getExerciseIndex(exerciseId);
-    const exercise = this.exercises[exerciseIndex];
-    const set = exercise.sets[index];
-
-    if (index < 0 || index >= exercise.sets.length) throw new Error('Invalid set index');
-
-    this.exercises = this.exercises.with(exerciseIndex, exercise.withSet(set));
-    return this.clone();
-  }
-
-  public copyLastSet(exerciseId: string): Session {
-    const index = this.getExerciseIndex(exerciseId);
-    const exercise = this.exercises[index];
-    const lastSet = exercise.sets.at(-1);
-
-    if (!lastSet) throw new Error('Exercise has no sets to copy');
-
-    this.exercises = this.exercises.with(index, exercise.withSet(lastSet));
-    return this.clone();
-  }
-
-
-    public removeSet(exerciseId: string, index: number): Session {
-    const exerciseIndex = this.getExerciseIndex(exerciseId);
-    this.exercises = this.exercises.with(exerciseIndex, this.exercises[exerciseIndex].removeSetAt(index));
-    return this.clone();
-  }
-
-  public updateSet(exerciseId: string, index: number, set: ExerciseSet): Session {
+  public removeSet(exerciseId: string, index: number): Session {
     const exerciseIndex = this.getExerciseIndex(exerciseId);
     this.exercises = this.exercises.with(
       exerciseIndex,
-      this.exercises[exerciseIndex].withUpdatedSet(set, index),
+      this.exercises[exerciseIndex].removeSetAt(index),
     );
+    return this.clone();
+  }
+
+  public updateSet(set: ExerciseSet): Session {
+    const exerciseIndex = this.getExerciseIndex(set.exerciseId);
+    const exercise = this.exercises[exerciseIndex];
+    const setIndex = exercise.sets.findIndex(({ id }) => set.id === id);
+    if (setIndex === -1)
+      throw new Error(`Set with ID: ${set.id} not found in exercise ${exercise.exerciseId}`);
+
+    this.exercises = this.exercises.with(exerciseIndex, exercise.withUpdatedSet(set, setIndex));
     return this.clone();
   }
 

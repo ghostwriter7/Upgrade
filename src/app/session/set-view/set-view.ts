@@ -74,13 +74,13 @@ export class SetView {
 
   protected editSet(event: Event): void {
     event.stopPropagation();
-    this.sessionEditor.editSet(this.exerciseId(), this.set(), this.index());
+    this.sessionEditor.editSet(this.set());
   }
 
   protected deleteSet(event: Event): void {
     event.stopPropagation();
     this.displayActions.set(false);
-    this.sessionEditor.deleteSet(this.exerciseId(), this.index());
+    this.sessionEditor.deleteSet(this.exerciseId(), this.index(), this.set().id!);
   }
 
   protected copySet(event: Event): void {

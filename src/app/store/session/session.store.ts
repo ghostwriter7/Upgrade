@@ -79,7 +79,7 @@ export const SessionStore = signalStore(
         return counts;
       },
 
-      save: (session: Session) => {
+      updateCache: (session: Session) => {
         const dateId = session.isoDate;
         const sessionsByDate = { ...store.sessionsByDate() };
         const thisDateSessions = sessionsByDate[dateId] || [];
@@ -96,8 +96,6 @@ export const SessionStore = signalStore(
           sessionsByDate[dateId] = thisDateSessions.with(existingIndex, session);
           patchState(store, { sessionsByDate });
         }
-
-        sessionRepository.save(session);
       },
 
       delete: (session: Session) => {

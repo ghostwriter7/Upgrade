@@ -9,7 +9,6 @@ import { IndexName } from './index-name.enum';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
 import { ExerciseSetMapper } from '../mapper/exercise-set.mapper';
-import { ExerciseSet } from '../../domain/model/exercise-set.model';
 
 @Injectable({ providedIn: 'root' })
 export class SessionRepository extends GenericRepository<SessionDto> {
@@ -99,14 +98,8 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     });
   }
 
-  public async save(session: Session): Promise<void> {
+  public async save(session: Session): Promise<IDBValidKey> {
     const dto = SessionMapper.INSTANCE.toDto(session);
-
-    const setDTOs = session.exercises.flatMap((exercise) =>
-      exercise.sets.map(ExerciseSetMapper.INSTANCE.toDto),
-    );
-    await Promise.all(setDTOs.map((setDTO) => super.put(StoreName.SETS, setDTO)));
-
     return super.put(StoreName.SESSIONS, dto);
   }
 

@@ -46,18 +46,18 @@ export abstract class GenericRepository<T> {
     return this.responseFromRequest<T[]>(request);
   }
 
-  protected async put(storeName: StoreName, entity: unknown): Promise<void> {
+  protected async put(storeName: StoreName, entity: unknown): Promise<IDBValidKey> {
     const transaction = await this.createWriteTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.put(entity);
 
     return new Promise((resolve, reject) => {
-      request.onsuccess = () => resolve();
+      request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(request.error!);
     });
   }
 
-  protected async delete(storeName: StoreName, entityId: string): Promise<boolean> {
+  protected async delete(storeName: StoreName, entityId: string | number): Promise<boolean> {
     const transaction = await this.createWriteTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.delete(entityId);

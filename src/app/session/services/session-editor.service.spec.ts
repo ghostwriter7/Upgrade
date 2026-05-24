@@ -28,9 +28,9 @@ describe('SessionEditor', () => {
   };
 
   const configureTestingModule = (session: Session = Session.createEmpty()): void => {
-    sessionStore = { save: vi.fn() };
+    sessionStore = { updateCache: vi.fn() };
     dialogService = { open: vi.fn() };
-    mediaRepository = { deleteMedia: vi.fn(), save: vi.fn() };
+    mediaRepository = { deleteMedia: vi.fn(), updateCache: vi.fn() };
     TestBed.configureTestingModule({
       providers: [
         { provide: SessionStore, useValue: sessionStore },

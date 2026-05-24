@@ -8,10 +8,17 @@ export abstract class ExerciseSet {
     public readonly sessionId: string,
     public readonly exerciseId: string,
     public readonly type: ExerciseSetType,
-    public readonly index: number,
+    public index: number,
   ) {}
 
   public abstract get quantity(): number;
+
+  public abstract clone(): ExerciseSet;
+
+  public withIndex(index: number): ExerciseSet {
+    this.index = index;
+    return this.clone();
+  }
 }
 
 export class BodyweightSet extends ExerciseSet {
@@ -26,6 +33,10 @@ export class BodyweightSet extends ExerciseSet {
 
   public get quantity(): number {
     return this.reps;
+  }
+
+  public clone(): ExerciseSet {
+    return new BodyweightSet(this.sessionId, this.exerciseId, this.index, this.reps);
   }
 }
 
@@ -43,6 +54,10 @@ export class WeightedSet extends ExerciseSet {
   public get quantity(): number {
     return this.reps;
   }
+
+  public clone(): ExerciseSet {
+    return new WeightedSet(this.sessionId, this.exerciseId, this.index, this.reps, this.weight);
+  }
 }
 
 export class IsoSet extends ExerciseSet {
@@ -58,6 +73,10 @@ export class IsoSet extends ExerciseSet {
 
   public get quantity(): number {
     return this.duration;
+  }
+
+  public clone(): ExerciseSet {
+    return new IsoSet(this.sessionId, this.exerciseId, this.index, this.duration, this.weight);
   }
 }
 
