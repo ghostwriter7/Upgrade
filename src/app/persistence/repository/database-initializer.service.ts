@@ -2,14 +2,13 @@ import { DatabaseVersion } from './database-version.const';
 import { Observable, ReplaySubject } from 'rxjs';
 import { StoreName } from './store-name.enum';
 import { IndexName } from './index-name.enum';
-import { ExerciseSetMigration } from '../migration/exercise-set.migration';
 
 export function databaseFactory(): Observable<IDBDatabase> {
   const db = indexedDB.open('upgrade', DatabaseVersion);
   const databaseSubject = new ReplaySubject<IDBDatabase>(1);
 
   db.onupgradeneeded = (event: IDBVersionChangeEvent): void => {
-    const { result: db, transaction } = (event.target as IDBRequest);
+    const db = (event.target as IDBRequest).result;
 
     console.log(`Upgrading to version ${db.version}`);
 
@@ -29,7 +28,6 @@ export function databaseFactory(): Observable<IDBDatabase> {
       const store = db.createObjectStore(StoreName.SETS, { autoIncrement: true, keyPath: 'id' });
       store.createIndex(IndexName.SetBySession, 'sessionId', { unique: false });
       store.createIndex(IndexName.SetByExercise, 'exerciseId', { unique: false });
-      new ExerciseSetMigration().perform(transaction!);
     }
   };
 
