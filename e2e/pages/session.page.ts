@@ -43,6 +43,10 @@ export class SessionPage extends BasePage {
     await this.page.getByTestId(`exercise-card-show-set-form-btn-${getExerciseUuid(name)}`).click();
   }
 
+  public closeAddSetForm(): Promise<void> {
+    return this.page.getByTestId('exercise-selector-cancel-btn').click();
+  }
+
   public async addIsoSet(duration: number, weight?: number): Promise<void> {
     await this.selectSetType('iso');
     await this.page.getByTestId(`set-form-duration-${duration}`).click();

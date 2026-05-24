@@ -40,3 +40,30 @@ test('should create a session with one exercise set', async ({ page }) => {
     await expect(homePage.todayCell).toContainClass('calendar__cell--has-session');
   });
 });
+
+test('should keep the Complete button disabled as long as there is no exercise set', async ({ page }) => {
+  const homePage = new HomePage(page);
+  const sessionPage = new SessionPage(page);
+
+  await test.step('Start Session', async () => {
+    await homePage.goTo();
+    await homePage.startSession();
+
+    await expect(sessionPage.completeButton).toBeDisabled();
+    await expect(sessionPage.addSkillButton).toBeEnabled();
+  });
+
+  await test.step('Add Skill', async () => {
+    await sessionPage.addSkill('Chin Ups');
+
+    await expect(sessionPage.completeButton).toBeDisabled();
+  });
+
+  await test.step('Open the add-set form', async () => {
+    await sessionPage.showAddSetFormForExercise('Chin Ups');
+    await sessionPage.selectSetType('iso');
+    await sessionPage.closeAddSetForm();
+
+    await expect(sessionPage.completeButton).toBeDisabled();
+  });
+});
