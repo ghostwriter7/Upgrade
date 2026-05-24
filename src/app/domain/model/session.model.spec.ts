@@ -1,4 +1,4 @@
-import { describe, expect, it, vi} from 'vitest'
+import { describe, expect, it } from 'vitest';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Session } from './session.model';
 import { BodyweightSet } from './exercise-set.model';
@@ -41,7 +41,7 @@ describe('Session', () => {
       session.addExercise('A');
       session.addExercise('B');
       session.addExercise('C');
-      session.addSet('C', new BodyweightSet(5, null, null, null));
+      session.addSet(new BodyweightSet(session.uuid, 'C', 0, 5));
 
       expect(session.isEmpty).toEqual(false);
     });

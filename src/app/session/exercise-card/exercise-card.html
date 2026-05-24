@@ -24,11 +24,7 @@
     <mat-list role="list">
       @for (set of entry().sets; track $index) {
         <mat-list-item role="listitem">
-          <app-set-view
-            [set]="set"
-            [index]="$index"
-            [exerciseId]="entry().exerciseId"
-          />
+          <app-set-view [set]="set" />
         </mat-list-item>
       }
     </mat-list>

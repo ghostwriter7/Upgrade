@@ -1,4 +1,4 @@
-import { ExerciseSetDto } from '../schema/set.schema';
+import { ExerciseSetDto } from '../../schema/set.schema';
 import {
   BodyweightSet,
   BodyweightSetBuilder,
@@ -9,8 +9,8 @@ import {
   IsoSetBuilder,
   WeightedSet,
   WeightSetBuilder,
-} from '../../domain/model/exercise-set.model';
-import { Mapper } from './mapper.interface';
+} from '../../../domain/model/exercise-set.model';
+import { Mapper } from '../mapper.interface';
 
 export class ExerciseSetMapper implements Mapper<ExerciseSet, ExerciseSetDto> {
   public static readonly INSTANCE = new ExerciseSetMapper();

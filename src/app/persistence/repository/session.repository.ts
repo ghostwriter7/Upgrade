@@ -8,7 +8,7 @@ import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { IndexName } from './index-name.enum';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
-import { ExerciseSetMapper } from '../mapper/exercise-set.mapper';
+import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class SessionRepository extends GenericRepository<SessionDto> {
@@ -91,7 +91,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
       const setByExerciseId = Object.groupBy(sets, (set) => set.exerciseId);
       for (const exerciseId of Object.keys(setByExerciseId)) {
         for (const set of setByExerciseId[exerciseId]!) {
-          session = session.addSet(exerciseId, ExerciseSetMapper.INSTANCE.toDomain(set));
+          session = session.addSet(ExerciseSetMapper.INSTANCE.toDomain(set));
         }
       }
       return session;

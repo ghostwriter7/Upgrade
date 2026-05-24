@@ -137,17 +137,17 @@ export class Session {
     return this.clone();
   }
 
-  public addSet(exerciseId: string, set: ExerciseSet): Session {
-    const index = this.getExerciseIndex(exerciseId);
+  public addSet(set: ExerciseSet): Session {
+    const index = this.getExerciseIndex(set.exerciseId);
     this.exercises = this.exercises.with(index, this.exercises[index].withSet(set));
     return this.clone();
   }
 
-  public removeSet(exerciseId: string, index: number): Session {
-    const exerciseIndex = this.getExerciseIndex(exerciseId);
+  public removeSet(set: ExerciseSet): Session {
+    const exerciseIndex = this.getExerciseIndex(set.exerciseId);
     this.exercises = this.exercises.with(
       exerciseIndex,
-      this.exercises[exerciseIndex].removeSetAt(index),
+      this.exercises[exerciseIndex].removeSetAt(set.index),
     );
     return this.clone();
   }
