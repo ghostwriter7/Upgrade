@@ -7,8 +7,8 @@ import {
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { ExerciseStore } from '../../store/exercises.store';
-import { Session } from '../../domain/model/session.model';
+import { ExerciseStore } from '../../../store/exercises.store';
+import { Session } from '../../../domain/model/session.model';
 import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 
 @Component({

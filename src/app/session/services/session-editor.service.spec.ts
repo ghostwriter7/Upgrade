@@ -11,7 +11,7 @@ import {
 } from '../../domain/model/exercise-set.model';
 import { ExerciseLog, Session } from '../../domain/model/session.model';
 import { SESSION } from '../consts/session.token';
-import { UpsertSet } from '../upsert-set/upsert-set.component';
+import { UpsertSet } from '../components/upsert-set/upsert-set.component';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditNote } from '../edit-note/edit-note';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';

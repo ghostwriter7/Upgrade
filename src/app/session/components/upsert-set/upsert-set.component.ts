@@ -7,10 +7,10 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { ExerciseSet } from '../../domain/model/exercise-set.model';
+import { ExerciseSet } from '../../../domain/model/exercise-set.model';
 import { MatButton } from '@angular/material/button';
-import { SetData, SetForm } from '../set-form/set-form';
-import { SetDataMapper } from '../set-form/mapper/set-data.mapper';
+import { SetData, SetForm } from '../../set-form/set-form';
+import { SetDataMapper } from '../../set-form/mapper/set-data.mapper';
 
 @Component({
   selector: 'app-upsert-set',

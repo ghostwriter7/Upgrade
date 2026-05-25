@@ -8,11 +8,11 @@ import {
   signal,
   untracked,
 } from '@angular/core';
-import { SessionStore } from '../../store/session/session.store';
-import { Loader } from '../../ui/loader/loader';
+import { SessionStore } from '../../../store/session/session.store';
+import { Loader } from '../../../ui/loader/loader';
 import SessionView from '../session-view/session-view';
 import { NgComponentOutlet } from '@angular/common';
-import { SESSION } from '../consts/session.token';
+import { SESSION } from '../../consts/session.token';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 
 @Component({

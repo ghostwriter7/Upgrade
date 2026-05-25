@@ -1,7 +1,7 @@
 import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { pad } from '../../common/function/pad-time.function';
+import { pad } from '../../../common/function/pad-time.function';
 import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({

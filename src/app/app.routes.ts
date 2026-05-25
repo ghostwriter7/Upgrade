@@ -14,7 +14,7 @@ export const routes: Routes = [
     data: {
       isNew: true,
     },
-    loadComponent: () => import('./session/session-view/session-view'),
+    loadComponent: () => import('./session/components/session-view/session-view'),
   },
   {
     path: 'session/edit',
@@ -22,10 +22,10 @@ export const routes: Routes = [
       isNew: false,
     },
     canActivate: [() => !!inject(SessionStore).editedSession()],
-    loadComponent: () => import('./session/session-view/session-view'),
+    loadComponent: () => import('./session/components/session-view/session-view'),
   },
   {
     path: 'session/:date',
-    loadComponent: () => import('./session/session-page/session-page'),
+    loadComponent: () => import('./session/components/session-page/session-page'),
   },
 ];

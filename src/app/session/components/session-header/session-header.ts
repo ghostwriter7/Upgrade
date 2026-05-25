@@ -1,16 +1,16 @@
 import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { Session } from '../../domain/model/session.model';
+import { Session } from '../../../domain/model/session.model';
 import { Router } from '@angular/router';
-import { DateHelper } from '../../common/helper/date.helper';
+import { DateHelper } from '../../../common/helper/date.helper';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
-import { SessionStore } from '../../store/session/session.store';
+import { SessionStore } from '../../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { DialogService } from '../../common/service/dialog/dialog.service';
-import { SessionEditorService } from '../services/session-editor.service';
+import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { SessionEditorService } from '../../services/session-editor.service';
 
 @Component({
   selector: 'app-session-header',

@@ -6,20 +6,19 @@ import {
   ElementRef,
   inject,
   input,
-  linkedSignal,
   signal,
   viewChild,
 } from '@angular/core';
-import { ExerciseNamePipe } from '../../ui/pipes/exercise-name-pipe';
+import { ExerciseNamePipe } from '../../../ui/pipes/exercise-name-pipe';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatMiniFabButton } from '@angular/material/button';
 import { SetView } from '../set-view/set-view';
-import { ExerciseLog } from '../../domain/model/session.model';
-import { SessionEditorService } from '../services/session-editor.service';
-import { EventService } from '../../common/service/event/event.service';
-import { ElementClickedEvent } from '../../common/events/element-clicked.event';
+import { ExerciseLog } from '../../../domain/model/session.model';
+import { SessionEditorService } from '../../services/session-editor.service';
+import { EventService } from '../../../common/service/event/event.service';
+import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EntryDetails } from '../entry-details/entry-details';

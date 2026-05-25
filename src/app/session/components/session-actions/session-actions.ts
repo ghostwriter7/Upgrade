@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { SessionEditorService } from '../services/session-editor.service';
+import { SessionEditorService } from '../../services/session-editor.service';
 import { Router } from '@angular/router';
 
 @Component({

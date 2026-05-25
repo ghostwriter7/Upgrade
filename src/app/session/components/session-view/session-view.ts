@@ -9,13 +9,13 @@ import {
 import { ReactiveFormsModule } from '@angular/forms';
 import { SessionHeader } from '../session-header/session-header';
 import { Timer } from '../timer/timer';
-import { DialogService } from '../../common/service/dialog/dialog.service';
-import { SessionEditorService } from '../services/session-editor.service';
+import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { SessionEditorService } from '../../services/session-editor.service';
 import { ExerciseCard } from '../exercise-card/exercise-card';
 import { SessionActions } from '../session-actions/session-actions';
-import { SESSION } from '../consts/session.token';
-import { SessionStore } from '../../store/session/session.store';
-import { Session } from '../../domain/model/session.model';
+import { SESSION } from '../../consts/session.token';
+import { SessionStore } from '../../../store/session/session.store';
+import { Session } from '../../../domain/model/session.model';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({

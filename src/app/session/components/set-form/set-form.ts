@@ -2,7 +2,7 @@ import { Component, computed, model } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatIcon } from '@angular/material/icon';
-import { ExerciseSetType } from '../../domain/model/exercise-set.model';
+import { ExerciseSetType } from '../../../domain/model/exercise-set.model';
 import {
   form,
   FormField,

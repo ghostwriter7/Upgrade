@@ -8,13 +8,13 @@ import {
   input,
   signal,
 } from '@angular/core';
-import { ExerciseSet, IsoSet, WeightedSet } from '../../domain/model/exercise-set.model';
+import { ExerciseSet, IsoSet, WeightedSet } from '../../../domain/model/exercise-set.model';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
-import { SessionEditorService } from '../services/session-editor.service';
-import { EventService } from '../../common/service/event/event.service';
+import { SessionEditorService } from '../../services/session-editor.service';
+import { EventService } from '../../../common/service/event/event.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ElementClickedEvent } from '../../common/events/element-clicked.event';
+import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
