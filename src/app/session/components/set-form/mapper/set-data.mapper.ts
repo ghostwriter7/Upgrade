@@ -9,7 +9,7 @@ import {
   IsoSetBuilder,
   WeightedSet,
   WeightSetBuilder,
-} from '../../../domain/model/exercise-set.model';
+} from '../../../../domain/model/exercise-set.model';
 
 export class SetDataMapper {
   public static toDomain(
