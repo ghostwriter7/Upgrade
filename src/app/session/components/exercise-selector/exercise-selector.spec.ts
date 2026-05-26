@@ -1,39 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { describe, it, expect } from 'vitest';
 import { ExerciseSelector } from './exercise-selector';
 import { Exercise } from '../../../domain/model/exercise.model';
 import { ExerciseStore } from '../../../store/exercises.store';
 import { Session } from '../../../domain/model/session.model';
-import { HarnessLoader } from '@angular/cdk/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatListOptionHarness, MatSelectionListHarness } from '@angular/material/list/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { DialogTestHostComponent } from '../../../../test/dialog-test-host';
+import { TestBedUtils } from '../../../../test/test-bed.utils';
 
 const chinUpId = 'aaa';
 const squatsId = 'bbb';
 const frontSplitId = 'ccc';
 
 describe('ExerciseSelector', () => {
-  let fixture: ComponentFixture<DialogTestHostComponent>;
-  let rootLoader: HarnessLoader;
 
   const session = Session.createEmpty().addExercise(chinUpId);
 
-  const openDialog = async (): Promise<{ dialog: MatDialogHarness; result: Promise<unknown> }> => {
-    const result = fixture.componentInstance.openDialog(ExerciseSelector, { data: { session } });
-    fixture.detectChanges();
-
-    return { dialog: await rootLoader.getHarness(MatDialogHarness), result };
-  };
+  let openDialog: () => Promise<{ dialog: MatDialogHarness; result: Promise<unknown> }>;
 
   const getOptionTexts = async (options: MatListOptionHarness[]): Promise<string[]> =>
     Promise.all(options.map((option) => option.getFullText()));
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
+    const results = await TestBedUtils.configure({
       providers: [
         {
           provide: ExerciseStore,
@@ -46,13 +36,10 @@ describe('ExerciseSelector', () => {
           },
         },
       ],
-      imports: [DialogTestHostComponent, ExerciseSelector],
-    }).compileComponents();
+      targetComponent: ExerciseSelector,
+    });
 
-    fixture = TestBed.createComponent(DialogTestHostComponent);
-    rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
-
-    await fixture.whenStable();
+    openDialog = () => results.openDialog({ session });
   });
 
   it('should open the exercise selector dialog', async () => {
