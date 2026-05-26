@@ -1,8 +1,5 @@
 :host {
   width: 100%;
-}
-
-.session-view {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

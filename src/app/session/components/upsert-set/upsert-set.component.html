@@ -3,6 +3,12 @@
   <app-set-form [value]="setData" #form />
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button data-testid="upsert-set-save-btn" class="success" matButton [disabled]="form.isInvalid()" (click)="handleUpdate(form.value())">{{ button }}</button>
+  <button
+    data-testid="upsert-set-save-btn"
+    class="success" matButton
+    [disabled]="form.isInvalid()"
+    [mat-dialog-close]="form.value()"
+  >{{ button }}
+  </button>
   <button data-testid="upsert-set-cancel-btn" class="info" matButton mat-dialog-close>Cancel</button>
 </mat-dialog-actions>

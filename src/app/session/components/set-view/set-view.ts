@@ -11,10 +11,17 @@ import {
 import { ExerciseSet, IsoSet, WeightedSet } from '../../../domain/model/exercise-set.model';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
-import { SessionEditorService } from '../../services/session-editor.service';
 import { EventService } from '../../../common/service/event/event.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
+import { CommandBus } from '../../routers/command-bus';
+import { DeleteSetCommand } from '../../commands/delete-set.command';
+import { CopySetCommand } from '../../commands/copy-set.command';
+import { UpsertSet } from '../upsert-set/upsert-set.component';
+import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { UpdateSetCommand } from '../../commands/update-set.command';
+import { SetDataMapper } from '../set-form/mapper/set-data.mapper';
+import { SetData } from '../set-form/set-form';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,13 +31,14 @@ import { ElementClickedEvent } from '../../../common/events/element-clicked.even
   styleUrl: './set-view.css',
 })
 export class SetView {
+  public isEditable = input(false);
   public set = input.required<ExerciseSet>();
 
-  private readonly sessionEditor = inject(SessionEditorService);
   private readonly eventService = inject(EventService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly commandBus = inject(CommandBus);
+  private readonly dialogService = inject(DialogService);
 
-  protected readonly isEditable = this.sessionEditor.$isEditable;
   protected readonly displayActions = signal(false);
   protected readonly displayValue = computed(() => {
     const set = this.set();
@@ -72,17 +80,31 @@ export class SetView {
 
   protected editSet(event: Event): void {
     event.stopPropagation();
-    this.sessionEditor.editSet(this.set());
+    const set = this.set();
+    this.dialogService.open(
+      UpsertSet,
+      (setData: SetData) => {
+        const updatedSet = SetDataMapper.toDomain(
+          setData,
+          set.exerciseId,
+          set.sessionId,
+          set.index,
+        );
+        updatedSet.id = this.set().id;
+        this.commandBus.dispatch(new UpdateSetCommand(updatedSet));
+      },
+      { data: { set: SetDataMapper.toDto(set) } },
+    );
   }
 
   protected deleteSet(event: Event): void {
     event.stopPropagation();
     this.displayActions.set(false);
-    this.sessionEditor.deleteSet(this.set());
+    this.commandBus.dispatch(new DeleteSetCommand(this.set()));
   }
 
   protected copySet(event: Event): void {
     event.stopPropagation();
-    this.sessionEditor.copySet(this.set());
+    this.commandBus.dispatch(new CopySetCommand(this.set()));
   }
 }

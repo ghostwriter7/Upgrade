@@ -1,0 +1,15 @@
+<div class="session-editor">
+  <app-session-header [isNew]="isNew()" [session]="session()!" />
+
+  @for (entry of session()!.exercises; track entry.exerciseId) {
+    <app-exercise-card
+      [entry]="entry"
+      [isNonDeletable]="$count === 1"
+      [isEditable]="true"
+    />
+  }
+
+  <app-session-actions [isEditable]="true" />
+</div>
+
+<app-timer />

@@ -3,26 +3,35 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SessionActions } from './session-actions';
 import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import { Mock } from 'vitest';
-import { SessionEditorService } from '../services/session-editor.service';
 import { Router } from '@angular/router';
+import { Session } from '../../../domain/model/session.model';
+import { SessionStateHolder } from '../../store/session-state-holder.store';
+import { CommandBus } from '../../routers/command-bus';
+import { CompleteSessionCommand } from '../../commands/complete-session.command';
+import { DialogService } from '../../../common/service/dialog/dialog.service';
 
 describe('SessionActions', () => {
   let fixture: ComponentFixture<SessionActions>;
-  let sessionEditor: {
-    $isEditable: WritableSignal<boolean>;
-    $isUnfinished: WritableSignal<boolean>;
-    $isSessionInvalid: WritableSignal<boolean>;
-    $session: Signal<{ isoDate: string }>;
-    completeSession: Mock;
-    cancelEdit: Mock;
-    showExerciseDialog: Mock;
-  };
+
   let router: {
     navigate: Mock;
   };
 
-  const createComponent = (): void => {
+  let commandBus: {
+    dispatch: Mock;
+  }
+
+  let sessionStateHolder: {
+    isUnfinished: WritableSignal<boolean>;
+    isSessionInvalid: WritableSignal<boolean>;
+    session: Signal<Pick<Session, 'isoDate'>>
+  }
+
+  let dialogService: { open: Mock; }
+
+  const createComponent = (isEditable = false): void => {
     fixture = TestBed.createComponent(SessionActions);
+    fixture.componentRef.setInput('isEditable', isEditable);
     fixture.detectChanges();
   };
 
@@ -33,32 +42,36 @@ describe('SessionActions', () => {
     getButtons().find((button) => button.textContent?.includes(text));
 
   beforeEach(async () => {
-    sessionEditor = {
-      $isEditable: signal(true),
-      $isUnfinished: signal(true),
-      $isSessionInvalid: signal(false),
-      $session: computed(() => ({ isoDate: '2026-05-17' })),
-      completeSession: vi.fn(),
-      cancelEdit: vi.fn(),
-      showExerciseDialog: vi.fn(),
-    };
+    sessionStateHolder = {
+      isUnfinished: signal(true),
+      isSessionInvalid: signal(false),
+      session: computed(() => ({ isoDate: '2026-05-17' })),
+    }
+
+    commandBus = {
+      dispatch: vi.fn(),
+    }
 
     router = {
       navigate: vi.fn(),
     };
 
+    dialogService = {
+      open: vi.fn(),
+    }
+
     await TestBed.configureTestingModule({
       imports: [SessionActions],
       providers: [
-        { provide: SessionEditorService, useValue: sessionEditor },
         { provide: Router, useValue: router },
+        { provide: SessionStateHolder, useValue: sessionStateHolder },
+        { provide: CommandBus, useValue: commandBus },
+        { provide: DialogService, useValue: dialogService }
       ],
     }).compileComponents();
   });
 
   it('should not render actions when session is not editable', () => {
-    sessionEditor.$isEditable.set(false);
-
     createComponent();
 
     expect(fixture.nativeElement.querySelector('.actions')).toBeNull();
@@ -66,11 +79,10 @@ describe('SessionActions', () => {
   });
 
   it('should render Complete and Skill buttons when session is editable and unfinished', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(true);
-    sessionEditor.$isSessionInvalid.set(false);
+    sessionStateHolder.isUnfinished.set(true);
+    sessionStateHolder.isSessionInvalid.set(false);
 
-    createComponent();
+    createComponent(true);
 
     expect(getButtonByText('Complete')).toBeDefined();
     expect(getButtonByText('Skill')).toBeDefined();
@@ -78,56 +90,51 @@ describe('SessionActions', () => {
   });
 
   it('should disable Complete button when session is invalid', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(true);
-    sessionEditor.$isSessionInvalid.set(true);
+    sessionStateHolder.isUnfinished.set(true);
+    sessionStateHolder.isSessionInvalid.set(true);
 
-    createComponent();
+    createComponent(true);
 
     expect(getButtonByText('Complete')?.disabled).toBe(true);
   });
 
   it('should enable Complete button when session is valid', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(true);
-    sessionEditor.$isSessionInvalid.set(false);
+    sessionStateHolder.isUnfinished.set(true);
+    sessionStateHolder.isSessionInvalid.set(false);
 
-    createComponent();
+    createComponent(true);
 
     expect(getButtonByText('Complete')?.disabled).toBe(false);
   });
 
   it('should complete the session and navigate to the session date when Complete is clicked', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(true);
-    sessionEditor.$isSessionInvalid.set(false);
+    sessionStateHolder.isUnfinished.set(true);
+    sessionStateHolder.isSessionInvalid.set(false);
 
-    createComponent();
+    createComponent(true);
 
     getButtonByText('Complete')?.click();
 
-    expect(sessionEditor.completeSession).toHaveBeenCalledOnce();
+    expect(commandBus.dispatch).toHaveBeenCalledExactlyOnceWith(new CompleteSessionCommand());
     expect(router.navigate).toHaveBeenCalledWith(['/session', '2026-05-17']);
   });
 
   it('should not complete the session when disabled Complete button is clicked', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(true);
-    sessionEditor.$isSessionInvalid.set(true);
+    sessionStateHolder.isUnfinished.set(true);
+    sessionStateHolder.isSessionInvalid.set(true);
 
-    createComponent();
+    createComponent(true);
 
     getButtonByText('Complete')?.click();
 
-    expect(sessionEditor.completeSession).not.toHaveBeenCalled();
+    expect(commandBus.dispatch).not.toHaveBeenCalled();
     expect(router.navigate).not.toHaveBeenCalled();
   });
 
   it('should render Cancel and Skill buttons when session is editable and already finished', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(false);
+    sessionStateHolder.isUnfinished.set(false);
 
-    createComponent();
+    createComponent(true);
 
     expect(getButtonByText('Cancel')).toBeDefined();
     expect(getButtonByText('Skill')).toBeDefined();
@@ -135,24 +142,23 @@ describe('SessionActions', () => {
   });
 
   it('should cancel edit when Cancel is clicked', () => {
-    sessionEditor.$isEditable.set(true);
-    sessionEditor.$isUnfinished.set(false);
+    sessionStateHolder.isUnfinished.set(false);
 
-    createComponent();
+    createComponent(true);
 
     getButtonByText('Cancel')?.click();
 
-    expect(sessionEditor.cancelEdit).toHaveBeenCalledOnce();
+    expect(router.navigate).toHaveBeenCalledExactlyOnceWith(['/session', sessionStateHolder.session().isoDate]);
   });
 
   it('should show exercise dialog when Skill is clicked', () => {
-    sessionEditor.$isEditable.set(true);
+    sessionStateHolder.isUnfinished.set(false);
 
-    createComponent();
+    createComponent(true);
 
     getButtonByText('Skill')?.click();
 
-    expect(sessionEditor.showExerciseDialog).toHaveBeenCalledOnce();
+    expect(dialogService.open).toHaveBeenCalledOnce();
   });
 
   it('should update the rendered actions when editability changes', () => {
@@ -161,7 +167,7 @@ describe('SessionActions', () => {
     expect(getButtonByText('Complete')).toBeDefined();
     expect(getButtonByText('Skill')).toBeDefined();
 
-    sessionEditor.$isEditable.set(false);
+    fixture.componentRef.setInput('isEditable', false);
     fixture.detectChanges();
 
     expect(getButtons()).toEqual([]);
@@ -173,7 +179,7 @@ describe('SessionActions', () => {
     expect(getButtonByText('Complete')).toBeDefined();
     expect(getButtonByText('Cancel')).toBeUndefined();
 
-    sessionEditor.$isUnfinished.set(false);
+    sessionStateHolder.isUnfinished.set(false);
     fixture.detectChanges();
 
     expect(getButtonByText('Complete')).toBeUndefined();

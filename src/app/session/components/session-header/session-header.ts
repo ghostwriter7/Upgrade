@@ -10,18 +10,14 @@ import { EditTime } from '../edit-time/edit-time';
 import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
-import { SessionEditorService } from '../../services/session-editor.service';
+import { SessionStateHolder } from '../../store/session-state-holder.store';
+import { PatchStartedAtCommand } from '../../commands/patch-started-at.command';
+import { CommandBus } from '../../routers/command-bus';
+import { PatchFinishedAtCommand } from '../../commands/patch-finished-at.command';
 
 @Component({
   selector: 'app-session-header',
-  imports: [
-    MatFabButton,
-    MatIcon,
-    MatMiniFabButton,
-    MatMenu,
-    MatMenuItem,
-    MatMenuTrigger,
-  ],
+  imports: [MatFabButton, MatIcon, MatMiniFabButton, MatMenu, MatMenuItem, MatMenuTrigger],
   templateUrl: './session-header.html',
   providers: [DialogService],
   styleUrl: './session-header.css',
@@ -68,10 +64,12 @@ export class SessionHeader {
   private readonly sessionStore = inject(SessionStore);
   private readonly router = inject(Router);
   private readonly dialog = inject(DialogService);
-  private readonly sessionEditor = inject(SessionEditorService);
+  private readonly sessionStateHolder = inject(SessionStateHolder);
+  private readonly commandBus = inject(CommandBus);
 
   protected deleteSession(): void {
     this.dialog.open(ConfirmDeleteAlert, () => {
+      // TODO Revisit this logic
       if (this.isNew()) {
         this.router.navigate(['/']);
       } else {
@@ -83,7 +81,7 @@ export class SessionHeader {
   protected editStartedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: TemporalType.Instant) => this.sessionEditor.patchStartedAt(result),
+      (result: TemporalType.Instant) => this.commandBus.dispatch(new PatchStartedAtCommand(result)),
       {
         data: { instant: this.session().startedAt, label: 'Edit Started At' },
       },
@@ -93,7 +91,8 @@ export class SessionHeader {
   protected editFinishedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: TemporalType.Instant) => this.sessionEditor.patchFinishedAt(result),
+      (result: TemporalType.Instant) =>
+        this.commandBus.dispatch(new PatchFinishedAtCommand(result)),
       {
         data: { instant: this.session().finishedAt, label: 'Edit Finished At' },
       },
@@ -101,7 +100,7 @@ export class SessionHeader {
   }
 
   protected triggerEdit(): void {
-    this.sessionStore.setEditedSession(this.session());
+    this.sessionStateHolder.set(this.session());
     this.router.navigate(['/session/edit']);
   }
 }

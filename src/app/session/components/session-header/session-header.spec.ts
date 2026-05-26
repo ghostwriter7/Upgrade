@@ -1,26 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SessionHeader } from './session-header';
-import { Session } from '../../domain/model/session.model';
-import { SessionStore } from '../../store/session/session.store';
 import { Router } from '@angular/router';
-import { DialogService } from '../../common/service/dialog/dialog.service';
 import { Mock } from 'vitest';
 import { EditTime } from '../edit-time/edit-time';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatMenuHarness } from '@angular/material/menu/testing';
-import { DateHelper } from '../../common/helper/date.helper';
-import { SessionEditorService } from '../services/session-editor.service';
+import { DateHelper } from '../../../common/helper/date.helper';
+import { Session } from '../../../domain/model/session.model';
+import { SessionStore } from '../../../store/session/session.store';
+import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { SessionStateHolder } from '../../store/session-state-holder.store';
+import { CommandBus } from '../../routers/command-bus';
+import { PatchStartedAtCommand } from '../../commands/patch-started-at.command';
+import { PatchFinishedAtCommand } from '../../commands/patch-finished-at.command';
 
 describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;
   let loader: ReturnType<typeof TestbedHarnessEnvironment.loader>;
 
   let sessionStore: { delete: Mock; setEditedSession: Mock };
-  let sessionEditor: { patchStartedAt: Mock; patchFinishedAt: Mock; makeEditable: Mock };
   let router: { navigate: Mock };
   let dialogService: { open: Mock };
+  let commandBus: { dispatch: Mock };
+  let sessionStateHolder: { set: Mock };
 
   const startedAt = DateHelper.from('2026-05-17T12:00:00+02:00[Europe/Warsaw]');
   const finishedAt = DateHelper.from('2026-05-17T13:30:00+02:00[Europe/Warsaw]');
@@ -94,10 +98,12 @@ describe('SessionHeader', () => {
       open: vi.fn(),
     };
 
-    sessionEditor = {
-      patchStartedAt: vi.fn(),
-      patchFinishedAt: vi.fn(),
-      makeEditable: vi.fn(),
+    sessionStateHolder = {
+      set: vi.fn(),
+    };
+
+    commandBus = {
+      dispatch: vi.fn(),
     };
 
     TestBed.configureTestingModule({
@@ -105,7 +111,8 @@ describe('SessionHeader', () => {
       providers: [
         { provide: SessionStore, useValue: sessionStore },
         { provide: Router, useValue: router },
-        { provide: SessionEditorService, useValue: sessionEditor },
+        { provide: SessionStateHolder, useValue: sessionStateHolder },
+        { provide: CommandBus, useValue: commandBus },
       ],
     });
 
@@ -182,7 +189,7 @@ describe('SessionHeader', () => {
     });
   });
 
-  it('should delegate to SessionEditor with edit started at dialog result', () => {
+  it('should dispatch PatchStartedAtCommand edit started at dialog result', () => {
     const changedStartedAt = Temporal.Instant.from('2026-05-17T09:30:00Z');
 
     createComponent({
@@ -194,7 +201,7 @@ describe('SessionHeader', () => {
     const [, callback] = dialogService.open.mock.calls.at(-1)!;
     callback(changedStartedAt);
 
-    expect(sessionEditor.patchStartedAt).toHaveBeenCalledWith(changedStartedAt);
+    expect(commandBus.dispatch).toHaveBeenCalledWith(new PatchStartedAtCommand(changedStartedAt));
   });
 
   it('should open edit finished at dialog when finished time is clicked', () => {
@@ -211,7 +218,7 @@ describe('SessionHeader', () => {
     });
   });
 
-  it('should delegate to SessionEditor with edit finished at dialog result', () => {
+  it('should dispatch PatchFinishedAtCommand with edit finished at dialog result', () => {
     const changedFinishedAt = Temporal.Instant.from('2026-05-17T12:00:00Z');
 
     createComponent({
@@ -223,7 +230,7 @@ describe('SessionHeader', () => {
     const [, callback] = dialogService.open.mock.calls.at(-1)!;
     callback(changedFinishedAt);
 
-    expect(sessionEditor.patchFinishedAt).toHaveBeenCalledWith(changedFinishedAt);
+    expect(commandBus.dispatch).toHaveBeenCalledWith(new PatchFinishedAtCommand(changedFinishedAt));
   });
 
   it('should show Edit menu item when session is final', async () => {

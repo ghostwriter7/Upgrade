@@ -10,6 +10,24 @@ export class SetRepository extends GenericRepository<ExerciseSet> {
     super();
   }
 
+  public async getLatestSetId(): Promise<number> {
+    const tx = await super.createReadTransaction(StoreName.SETS);
+    const request = tx.objectStore(StoreName.SETS).openKeyCursor(null, 'prev');
+
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => {
+        const cursor = request.result;
+
+        if (cursor) {
+          resolve(Number(cursor.key));
+        } else {
+          resolve(0);
+        }
+      };
+      request.onerror = () => reject(request.error);
+    });
+  }
+
   public deleteSet(setId: number): Promise<boolean> {
     return super.delete(StoreName.SETS, setId);
   }

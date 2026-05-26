@@ -1,13 +1,7 @@
-<div class="session-view">
-  <app-session-header [isNew]="isNew()" [session]="editedSession()" />
+<app-session-header [isNew]="false" [session]="session" />
 
-  @for (entry of editedSession().exercises; track entry.exerciseId) {
-    <app-exercise-card [entry]="entry" [isNonDeletable]="$count === 1"/>
-  }
-
-  <app-session-actions />
-</div>
-
-@if (isEditable()) {
-  <app-timer />
+@for (entry of session.exercises; track entry.exerciseId) {
+  <app-exercise-card [entry]="entry" [isNonDeletable]="true" />
 }
+
+<app-session-actions />

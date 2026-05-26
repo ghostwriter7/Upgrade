@@ -26,14 +26,14 @@ import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angula
   styleUrl: './exercise-selector.css',
   host: {
     'data-testid': 'exercise-selector',
-  }
+  },
 })
 export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
   private readonly exerciseStore = inject(ExerciseStore);
 
-  protected readonly hasNoneSelected = computed(() => this.selectedExerciseIds().size === 0);
-  protected readonly selectedExerciseIds = signal<Set<string>>(new Set());
+  protected readonly hasNoneSelected = computed(() => this.selectedExerciseIds().length === 0);
+  protected readonly selectedExerciseIds = signal<string[]>([]);
   private readonly activeExerciseIds = new Set(
     this.data.session.exercises.map(({ exerciseId }) => exerciseId),
   );
@@ -41,9 +41,9 @@ export class ExerciseSelector {
     this.exerciseStore.exercises().filter(({ uuid }) => !this.activeExerciseIds.has(uuid)),
   );
 
-
-  protected handleSelectionChange(selectionListChange: MatSelectionListChange): void  {
+  protected handleSelectionChange(selectionListChange: MatSelectionListChange): void {
     this.selectedExerciseIds.set(
-      new Set(selectionListChange.source.selectedOptions.selected.map((option) => option.value)));
+      selectionListChange.source.selectedOptions.selected.map((option) => option.value),
+    );
   }
 }
