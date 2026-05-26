@@ -1,4 +1,4 @@
-import { SetData } from '../set-form';
+import { SetData } from '../set-data.interface';
 import {
   BodyweightSet,
   BodyweightSetBuilder,

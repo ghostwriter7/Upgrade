@@ -2,7 +2,6 @@ import { Component, computed, model } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatIcon } from '@angular/material/icon';
-import { ExerciseSetType } from '../../../domain/model/exercise-set.model';
 import {
   form,
   FormField,
@@ -12,13 +11,13 @@ import {
   required,
   validate,
 } from '@angular/forms/signals';
-
-export interface SetData {
-  type: ExerciseSetType;
-  reps: number;
-  weight: number;
-  duration: number;
-}
+import {
+  durationOptions,
+  repOptions,
+  setTypeOptions,
+  weightOptions,
+} from './set-form-options.const';
+import { SetData } from './set-data.interface';
 
 @Component({
   selector: 'app-set-form',
@@ -47,38 +46,10 @@ export class SetForm implements FormValueControl<SetData> {
     hidden(schemaPath.reps, ({ valueOf }) => valueOf(schemaPath.type) === 'iso');
     hidden(schemaPath.duration, ({ valueOf }) => valueOf(schemaPath.type) !== 'iso');
   });
-  protected readonly setTypeOptions: {
-    label: string;
-    value: ExerciseSetType;
-    testId: `set-form-type-${string}`;
-  }[] = (
-    [
-      {
-        label: 'Bodyweight',
-        value: 'bodyweight',
-      },
-      {
-        label: 'Weighted',
-        value: 'weight',
-      },
-      {
-        label: 'Isometric',
-        value: 'iso',
-      },
-    ] as const
-  ).map((option) => ({ ...option, testId: `set-form-type-${option.value}` }));
-  protected readonly durations = [5, 10, 15, 20, 25, 30].map((value) => ({
-    value,
-    testId: `set-form-duration-${value}`,
-  }));
-  protected readonly reps = [1, 2, 3, 5, 8, 10].map((value) => ({
-    value,
-    testId: `set-form-reps-${value}`,
-  }));
-  protected readonly weights = [1, 2, 3, 5, 8, 10].map((value) => ({
-    value,
-    testId: `set-form-weight-${value}`,
-  }));
+  protected readonly setTypeOptions = setTypeOptions;
+  protected readonly durations = durationOptions;
+  protected readonly reps = repOptions;
+  protected readonly weights = weightOptions;
 
   protected decrementReps(): void {
     this.value.update((model) => ({ ...model, reps: Math.max(model.reps - 1, 1) }));
@@ -105,18 +76,18 @@ export class SetForm implements FormValueControl<SetData> {
   }
 
   protected setWeight(weight: number): void {
-    this.value.update((model) => ({ ...model, weight }));
+    this.update(({ weight }));
   }
 
   protected setReps(reps: number): void {
-    this.value.update((model) => ({ ...model, reps }));
+    this.update({ reps });
   }
 
   protected setDuration(duration: number): void {
-    this.value.update((model) => ({ ...model, duration }));
+    this.update({ duration });
   }
 
-  protected update(value: Partial<SetData>) {
+  private update(value: Partial<SetData>) {
     this.value.update((model) => ({ ...model, ...value }));
   }
 }

@@ -7,7 +7,8 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
-import { SetData, SetForm } from '../../components/set-form/set-form';
+import { SetForm } from '../set-form/set-form';
+import { SetData } from '../set-form/set-data.interface';
 
 @Component({
   selector: 'app-upsert-set',

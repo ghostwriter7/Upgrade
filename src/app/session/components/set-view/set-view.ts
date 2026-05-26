@@ -21,7 +21,7 @@ import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { UpdateSetCommand } from '../../commands/update-set.command';
 import { SetDataMapper } from '../set-form/mapper/set-data.mapper';
-import { SetData } from '../set-form/set-form';
+import { SetData } from '../set-form/set-data.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

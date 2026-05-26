@@ -24,7 +24,7 @@ import { EntryDetails } from '../entry-details/entry-details';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { CommandBus } from '../../routers/command-bus';
 import { CreateSetCommand } from '../../commands/create-set.command';
-import { SetData } from '../set-form/set-form';
+import { SetData } from '../set-form/set-data.interface';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { DeleteExerciseCommand } from '../../commands/delete-exercise.command';
