@@ -3,6 +3,4 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: calc(var(--page-height) - 100px);
-  overflow-y: auto;
 }
