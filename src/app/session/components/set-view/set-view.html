@@ -2,10 +2,6 @@
   {{ displayValue() }}
 
   @if (displayActions()) {
-    <div class="actions">
-      <button matMiniFab (click)="copySet($event)"><mat-icon>update</mat-icon></button>
-      <button matMiniFab (click)="editSet($event)"><mat-icon>edit</mat-icon></button>
-      <button matMiniFab class="danger" (click)="deleteSet($event)"><mat-icon>delete</mat-icon></button>
-    </div>
+    <app-set-actions [set]="set()" (setDelete)="onSetDeleted()"/>
   }
 </div>
