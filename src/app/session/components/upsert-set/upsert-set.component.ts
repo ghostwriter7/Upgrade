@@ -8,7 +8,7 @@ import {
 } from '@angular/material/dialog';
 import { MatButton } from '@angular/material/button';
 import { SetForm } from '../set-form/set-form';
-import { SetData } from '../set-form/set-data.interface';
+import { UpsertSetDialogData } from './upsert-set-dialog-data.interface';
 
 @Component({
   selector: 'app-upsert-set',
@@ -17,7 +17,7 @@ import { SetData } from '../set-form/set-data.interface';
   styleUrl: './upsert-set.component.css',
 })
 export class UpsertSet {
-  private readonly data: { set: SetData, label: string; button: string; } = inject(MAT_DIALOG_DATA);
+  private readonly data: UpsertSetDialogData = inject(MAT_DIALOG_DATA);
   protected readonly setData = this.data.set;
 
   protected readonly label = this.data.label ?? 'Edit Set';

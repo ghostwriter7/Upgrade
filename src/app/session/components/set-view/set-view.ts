@@ -22,6 +22,7 @@ import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { UpdateSetCommand } from '../../commands/update-set.command';
 import { SetDataMapper } from '../set-form/mapper/set-data.mapper';
 import { SetData } from '../set-form/set-data.interface';
+import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -93,7 +94,7 @@ export class SetView {
         updatedSet.id = this.set().id;
         this.commandBus.dispatch(new UpdateSetCommand(updatedSet));
       },
-      { data: { set: SetDataMapper.toDto(set) } },
+      { data: { set: SetDataMapper.toDto(set) } as UpsertSetDialogData },
     );
   }
 

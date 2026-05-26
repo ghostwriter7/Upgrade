@@ -4,10 +4,9 @@ import { ExerciseSelector } from './exercise-selector';
 import { Exercise } from '../../../domain/model/exercise.model';
 import { ExerciseStore } from '../../../store/exercises.store';
 import { Session } from '../../../domain/model/session.model';
-import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatListOptionHarness, MatSelectionListHarness } from '@angular/material/list/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { TestBedUtils } from '../../../../test/test-bed.utils';
+import { OpenDialogFn, TestBedUtils } from '../../../../test/test-bed.utils';
 
 const chinUpId = 'aaa';
 const squatsId = 'bbb';
@@ -17,7 +16,7 @@ describe('ExerciseSelector', () => {
 
   const session = Session.createEmpty().addExercise(chinUpId);
 
-  let openDialog: () => Promise<{ dialog: MatDialogHarness; result: Promise<unknown> }>;
+  let openDialog: OpenDialogFn;
 
   const getOptionTexts = async (options: MatListOptionHarness[]): Promise<string[]> =>
     Promise.all(options.map((option) => option.getFullText()));

@@ -32,6 +32,7 @@ import { EditNote } from '../edit-note/edit-note';
 import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note.command';
 import { Recorder } from '../recorder/recorder';
 import { CaptureRecordingCommand } from '../../commands/capture-recording.command';
+import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,7 +98,7 @@ export class ExerciseCard {
           set: { type: 'bodyweight', reps: 1, weight: 0, duration: 0 },
           label: 'Add Set',
           button: 'Save',
-        },
+        } as UpsertSetDialogData,
       },
     );
   }

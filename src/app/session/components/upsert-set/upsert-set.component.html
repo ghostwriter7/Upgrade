@@ -10,5 +10,5 @@
     [mat-dialog-close]="form.value()"
   >{{ button }}
   </button>
-  <button data-testid="upsert-set-cancel-btn" class="info" matButton mat-dialog-close>Cancel</button>
+  <button data-testid="upsert-set-cancel-btn" class="info" matButton [mat-dialog-close]="null">Cancel</button>
 </mat-dialog-actions>
