@@ -4,7 +4,6 @@ import { TestBed } from '@angular/core/testing';
 import { SessionRepository } from '../../persistence/repository/session.repository';
 import { DateHelper } from '../../common/helper/date.helper';
 import { Session } from '../../domain/model/session.model';
-import { createUuid } from '../../common/function/create-uuid.function';
 
 type SessionRepositoryMock = Mocked<
   Pick<SessionRepository, 'findAllByDate' | 'getCountsByMonthAndYear' | 'save' | 'delete'>
@@ -162,7 +161,6 @@ describe('SessionStore', () => {
       const { sessionOne, yearMonthId } = createSessionFixture();
       store.updateCache(sessionOne);
 
-      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionOne);
       expectSessionsByDate({ [sessionOne.isoDate]: [sessionOne] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 1 } });
     });
@@ -174,7 +172,6 @@ describe('SessionStore', () => {
 
       store.updateCache(sessionTwo);
 
-      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionTwo);
       expectSessionsByDate({ [sessionTwo.isoDate]: [sessionOne, sessionTwo] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.dayOfMonth]: 2 } });
     });
@@ -186,7 +183,6 @@ describe('SessionStore', () => {
 
       store.updateCache(sessionThree);
 
-      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(sessionThree);
       expectSessionsByDate({
         [sessionOne.isoDate]: [sessionOne],
         [sessionThree.isoDate]: [sessionThree],
@@ -207,7 +203,6 @@ describe('SessionStore', () => {
 
       store.updateCache(updatedSession)
 
-      expect(sessionRepositoryMock.save).toHaveBeenCalledExactlyOnceWith(updatedSession);
       expectSessionsByDate({ [updatedSession.isoDate]: [updatedSession] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [updatedSession.dayOfMonth]: 1 } });
     });

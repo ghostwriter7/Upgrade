@@ -8,7 +8,7 @@ export function databaseFactory(): Observable<IDBDatabase> {
   const databaseSubject = new ReplaySubject<IDBDatabase>(1);
 
   db.onupgradeneeded = (event: IDBVersionChangeEvent): void => {
-    const { result: db, transaction: tx } = (event.target as IDBRequest);
+    const db = (event.target as IDBRequest).result
 
     console.log(`Upgrading to version ${db.version}`);
 
@@ -24,24 +24,7 @@ export function databaseFactory(): Observable<IDBDatabase> {
       store.createIndex(IndexName.MediaBySessionAndExercise, ['sessionId', 'exerciseId'], { unique: false });
     }
 
-    if (existingObjectStores.contains(StoreName.SETS)) {
-      const existingStore = tx!.objectStore(StoreName.SETS);
-      const request = existingStore.getAll();
-      request.onsuccess = () => {
-        const existingSets = request.result;
-        db.deleteObjectStore(StoreName.SETS);
-
-        const newStore = db.createObjectStore(StoreName.SETS, { keyPath: 'id' });
-
-        newStore.createIndex(IndexName.SetBySession, 'sessionId', { unique: false });
-
-        newStore.createIndex(IndexName.SetByExercise, 'exerciseId', { unique: false });
-
-        for (const set of existingSets) {
-          newStore.put(set);
-        }
-      }
-    } else {
+    if (!existingObjectStores.contains(StoreName.SETS)) {
       const store = db.createObjectStore(StoreName.SETS, { keyPath: 'id' });
       store.createIndex(IndexName.SetBySession, 'sessionId', { unique: false });
       store.createIndex(IndexName.SetByExercise, 'exerciseId', { unique: false });
