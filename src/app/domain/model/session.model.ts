@@ -49,7 +49,7 @@ export class ExerciseLog {
   public removeSetAt(index: number): ExerciseLog {
     this.checkIndex(index);
     for (let i = index + 1; i < this.sets.length ; i++) {
-      this.sets[index].index--;
+      this.sets[i].index--;
     }
     this.sets = this.sets.toSpliced(index, 1);
     return this.clone();

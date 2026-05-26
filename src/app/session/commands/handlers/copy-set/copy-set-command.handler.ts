@@ -27,6 +27,6 @@ export class CopySetCommandHandler implements CommandHandler<CopySetCommand> {
 
     this.eventBus.dispatch(new SetCreatedEvent(copiedSet));
 
-    this.sessionStateHolder.set(session.addSet(set));
+    this.sessionStateHolder.set(session.addSet(copiedSet));
   }
 }
