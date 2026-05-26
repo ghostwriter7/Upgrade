@@ -20,7 +20,7 @@ describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;
   let loader: ReturnType<typeof TestbedHarnessEnvironment.loader>;
 
-  let sessionStore: { delete: Mock; setEditedSession: Mock };
+  let sessionStore: { delete: Mock; };
   let router: { navigate: Mock };
   let dialogService: { open: Mock };
   let commandBus: { dispatch: Mock };
@@ -87,7 +87,6 @@ describe('SessionHeader', () => {
   beforeEach(() => {
     sessionStore = {
       delete: vi.fn(),
-      setEditedSession: vi.fn(),
     };
 
     router = {
@@ -255,13 +254,12 @@ describe('SessionHeader', () => {
   });
 
   it('should set edited session when Edit menu item is clicked', async () => {
-    createComponent({
-      session: createSession(true),
-    });
+    const session = createSession(true);
+    createComponent({ session });
 
     await clickMenuItemByText('Edit');
 
-    expect(sessionStore.setEditedSession).toHaveBeenCalledOnce();
+    expect(sessionStateHolder.set).toHaveBeenCalledExactlyOnceWith(session);
     expect(router.navigate).toHaveBeenCalledExactlyOnceWith(['/session/edit']);
   });
 
