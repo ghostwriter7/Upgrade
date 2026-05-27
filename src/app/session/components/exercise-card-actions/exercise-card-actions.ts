@@ -34,6 +34,7 @@ export class ExerciseCardActions {
       showSetFormButton: `exercise-card-actions-show-set-form-btn-${uuid}`,
       editNoteButton: `exercise-card-actions-edit-note-btn-${uuid}`,
       deleteButton: `exercise-card-actions-delete-btn-${uuid}`,
+      videoCaptureButton: `exercise-card-actions-video-capture-btn-${uuid}`,
     };
   });
 
