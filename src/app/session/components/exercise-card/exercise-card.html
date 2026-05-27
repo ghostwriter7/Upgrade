@@ -6,7 +6,7 @@
     <mat-card-title>{{ entry().exerciseId | exerciseName }}
 
       @if (hasMedia()) {
-        <button matMiniFab (click)="showMedia()">
+        <button [attr.data-testid]="ids.showMediaButton" matMiniFab (click)="showMedia()">
           <mat-icon>perm_media</mat-icon>
         </button>
       }

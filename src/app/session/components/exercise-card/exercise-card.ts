@@ -51,6 +51,7 @@ export class ExerciseCard {
     const uuid = this.entry().exerciseId;
     return {
       exerciseCardHeader: `exercise-card-header-${uuid}`,
+      showMediaButton: `exercise-card-show-media-button-${uuid}`
     };
   });
 
