@@ -162,7 +162,7 @@ describe('SessionActions', () => {
   });
 
   it('should update the rendered actions when editability changes', () => {
-    createComponent();
+    createComponent(true);
 
     expect(getButtonByText('Complete')).toBeDefined();
     expect(getButtonByText('Skill')).toBeDefined();
@@ -174,7 +174,7 @@ describe('SessionActions', () => {
   });
 
   it('should update from Complete to Cancel when session becomes finished while editable', () => {
-    createComponent();
+    createComponent(true);
 
     expect(getButtonByText('Complete')).toBeDefined();
     expect(getButtonByText('Cancel')).toBeUndefined();
