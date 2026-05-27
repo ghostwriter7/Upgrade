@@ -9,10 +9,10 @@ import {
 } from '@angular/material/dialog';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { FieldTree, form, FormField } from '@angular/forms/signals';
 import { DateHelper } from '../../../common/helper/date.helper';
 import { pad } from '../../../common/function/pad-time.function';
+import { EditTimeDialogData } from './edit-time-dialog-data.interface';
 
 @Component({
   selector: 'app-edit-time',
@@ -32,8 +32,7 @@ import { pad } from '../../../common/function/pad-time.function';
   styleUrl: './edit-time.css',
 })
 export class EditTime {
-  protected readonly data: { label: string; instant: TemporalType.Instant } =
-    inject(MAT_DIALOG_DATA);
+  protected readonly data: EditTimeDialogData = inject(MAT_DIALOG_DATA);
   protected readonly form: FieldTree<{ time: string }>;
 
   protected readonly result = computed(() => {
@@ -42,15 +41,16 @@ export class EditTime {
 
     const initialInstant = this.data.instant;
 
-    return DateHelper.toLocal(initialInstant).with({
-      minute, hour
-    }).toInstant();
-  })
+    return DateHelper.toLocal(initialInstant)
+      .with({
+        minute,
+        hour,
+      })
+      .toInstant();
+  });
 
   constructor() {
     const { hour, minute } = DateHelper.toLocal(this.data.instant);
-    this.form = form(
-      signal({ time: `${pad(hour)}:${pad(minute)}` }),
-    );
+    this.form = form(signal({ time: `${pad(hour)}:${pad(minute)}` }));
   }
 }
