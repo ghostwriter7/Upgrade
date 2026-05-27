@@ -1,28 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import SessionView from './session-view';
-import { Component, input } from '@angular/core';
-import { ExerciseLog, Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session.model';
 import { SessionHeader } from '../session-header/session-header';
 import { ExerciseCard } from '../exercise-card/exercise-card';
-
-@Component({
-  selector: 'app-session-header',
-  template: '<div>Session Header</div>',
-})
-class SessionHeaderMock {
-  public isNew = input<boolean>(false);
-  public session = input<Session | null>(null);
-}
-
-@Component({
-  selector: 'app-exercise-card',
-  template: '<div>Exercise Card</div>',
-})
-class ExerciseCardMock {
-  public entry = input<ExerciseLog>();
-  public isNonDeletable = input(false);
-}
+import { SessionHeaderMock } from '../../../../test/mocks/session-header.mock';
+import { ExerciseCardMock } from '../../../../test/mocks/exercise-card.mock';
 
 describe('SessionView', () => {
   let component: SessionView;

@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  DestroyRef,
   inject,
   input,
   OnDestroy,
@@ -32,19 +31,14 @@ export default class SessionEditor implements OnInit, OnDestroy {
 
   protected readonly session = this.sessionStateHolder.session;
 
-  private readonly destroyRef = inject(DestroyRef);
-
   public ngOnInit(): void {
     if (this.isNew()) {
       this.sessionStateHolder.set(Session.createEmpty());
-    } else {
-      this.destroyRef.onDestroy(() => {
-        this.sessionStateHolder.set(null);
-      });
     }
   }
 
   public ngOnDestroy(): void {
     this.sessionStore.updateCache(this.sessionStateHolder.session()!);
+    if (!this.isNew()) this.sessionStateHolder.set(null);
   }
 }

@@ -17,8 +17,6 @@ import { AddExerciseCommand } from '../../commands/add-exercise.command';
   styleUrl: './session-actions.css',
 })
 export class SessionActions {
-  public isEditable = input(false);
-
   private readonly router = inject(Router);
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly commandBus = inject(CommandBus);
