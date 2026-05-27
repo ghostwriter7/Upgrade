@@ -2,9 +2,3 @@
   align-items: center;
   flex-direction: column;
 }
-
-.actions {
-  display: flex;
-  gap: var(--space-2);
-  padding-inline: var(--space-2);
-}

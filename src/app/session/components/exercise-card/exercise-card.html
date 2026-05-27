@@ -13,21 +13,7 @@
     </mat-card-title>
 
     @if (displayActions()) {
-      <div class="actions">
-        <button matMiniFab (click)="activateVideoCapture($event, entry().exerciseId)">
-          <mat-icon>video_camera_front</mat-icon>
-        </button>
-        <button [attr.data-testid]="ids.showSetFormButton" matMiniFab (click)="showSetForm($event, entry().exerciseId)">
-          <mat-icon>add</mat-icon>
-        </button>
-        <button [attr.data-testid]="ids.editNoteButton" matMiniFab (click)="editNote($event, entry())">
-          <mat-icon>note_add</mat-icon>
-        </button>
-        <button [attr.data-testid]="ids.deleteButton" matMiniFab class="danger" [disabled]="isNonDeletable()"
-                (click)="deleteExercise($event, entry())">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </div>
+      <app-exercise-card-actions [entry]="entry()" [isNonDeletable]="isNonDeletable()"/>
     }
   </mat-card-header>
   <mat-card-content>
