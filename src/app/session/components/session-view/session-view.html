@@ -1,7 +1,5 @@
-<app-session-header [isNew]="false" [session]="session" />
+<app-session-header [isNew]="false" [session]="session()" />
 
-@for (entry of session.exercises; track entry.exerciseId) {
+@for (entry of session().exercises; track entry.exerciseId) {
   <app-exercise-card [entry]="entry" [isNonDeletable]="true" />
 }
-
-<app-session-actions />

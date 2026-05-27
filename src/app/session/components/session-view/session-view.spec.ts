@@ -5,8 +5,6 @@ import { Component, input } from '@angular/core';
 import { ExerciseLog, Session } from '../../../domain/model/session.model';
 import { SessionHeader } from '../session-header/session-header';
 import { ExerciseCard } from '../exercise-card/exercise-card';
-import { SessionActions } from '../session-actions/session-actions';
-import { SESSION } from '../../consts/session.token';
 
 @Component({
   selector: 'app-session-header',
@@ -26,12 +24,6 @@ class ExerciseCardMock {
   public isNonDeletable = input(false);
 }
 
-@Component({
-  selector: 'app-session-actions',
-  template: '<div>Session Actions</div>',
-})
-class SessionActionsMock {}
-
 describe('SessionView', () => {
   let component: SessionView;
   let fixture: ComponentFixture<SessionView>;
@@ -39,15 +31,15 @@ describe('SessionView', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SessionView],
-      providers: [{ provide: SESSION, useValue: Session.createEmpty() }],
     })
       .overrideComponent(SessionView, {
-        add: { imports: [SessionHeaderMock, ExerciseCardMock, SessionActionsMock] },
-        remove: { imports: [SessionHeader, ExerciseCard, SessionActions] },
+        add: { imports: [SessionHeaderMock, ExerciseCardMock] },
+        remove: { imports: [SessionHeader, ExerciseCard] },
       })
       .compileComponents();
 
     fixture = TestBed.createComponent(SessionView);
+    fixture.componentRef.setInput('session', Session.createEmpty());
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

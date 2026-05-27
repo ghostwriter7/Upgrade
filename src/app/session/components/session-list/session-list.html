@@ -1,12 +1,16 @@
 @if (loading()) {
   <app-loader />
 } @else {
-  @for (injector of injectors(); track injector) {
-    <ng-container
-      *ngComponentOutlet="
-      sessionViewComponent;
-      injector: injector
-    "
-    />
+  @for (session of sessions(); track session.uuid) {
+    <app-session-view [session]="session" />
+  } @empty {
+    <output class="empty-sessions" aria-live="polite">
+      <mat-icon class="empty-sessions__icon" aria-hidden="true">
+        event_busy
+      </mat-icon>
+
+      <h2 class="empty-sessions__title">No sessions</h2>
+
+    </output>
   }
 }

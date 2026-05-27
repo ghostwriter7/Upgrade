@@ -6,3 +6,20 @@
 
   height: calc(var(--page-height) - 80px);
 }
+
+.empty-sessions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+
+  margin: var(--space-6) var(--space-4);
+  padding: var(--space-6);
+  text-align: center;
+
+  background: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  border: 1px solid var(--mat-sys-secondary);
+  border-radius: var(--mat-sys-corner-medium);
+}
