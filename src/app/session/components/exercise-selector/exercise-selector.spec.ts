@@ -5,8 +5,8 @@ import { Exercise } from '../../../domain/model/exercise.model';
 import { ExerciseStore } from '../../../store/exercises.store';
 import { Session } from '../../../domain/model/session.model';
 import { MatListOptionHarness, MatSelectionListHarness } from '@angular/material/list/testing';
-import { MatButtonHarness } from '@angular/material/button/testing';
 import { OpenDialogFn, TestBedUtils } from '../../../../test/test-bed.utils';
+import { getButton } from '../../../../test/harness.utils';
 
 const chinUpId = 'aaa';
 const squatsId = 'bbb';
@@ -62,11 +62,7 @@ describe('ExerciseSelector', () => {
   it('should disable the Add button while no exercise is selected', async () => {
     const { dialog } = await openDialog();
 
-    const addButton = await dialog.getHarness(
-      MatButtonHarness.with({
-        text: 'Add',
-      }),
-    );
+    const addButton = await getButton(dialog, 'Add');
     const isDisabled = await addButton.isDisabled();
 
     expect(isDisabled).toBe(true);
@@ -79,11 +75,7 @@ describe('ExerciseSelector', () => {
     const options = await selectionList.getItems();
     await options[0].select();
 
-    const addButton = await dialog.getHarness(
-      MatButtonHarness.with({
-        text: 'Add',
-      }),
-    );
+    const addButton = await getButton(dialog, 'Add');
     const isDisabled = await addButton.isDisabled();
 
     expect(isDisabled).toBe(false);
@@ -98,11 +90,7 @@ describe('ExerciseSelector', () => {
     await options[0].select();
     await options[1].select();
 
-    const addButton = await dialog.getHarness(
-      MatButtonHarness.with({
-        text: 'Add',
-      }),
-    );
+    const addButton = await getButton(dialog, 'Add');
     await addButton.click();
 
     expect(await result).toEqual([squatsId, frontSplitId]);
@@ -111,11 +99,7 @@ describe('ExerciseSelector', () => {
   it('should close without a result when Cancel is clicked', async () => {
     const { dialog, result } = await openDialog();
 
-    const cancelButton = await dialog.getHarness(
-      MatButtonHarness.with({
-        text: 'Cancel',
-      }),
-    );
+    const cancelButton = await getButton(dialog, 'Cancel');
     await cancelButton.click();
 
     expect(await result).toBe('');

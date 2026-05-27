@@ -8,7 +8,7 @@ import { Mock } from 'vitest';
 import { Router } from '@angular/router';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { MatButtonHarness } from '@angular/material/button/testing';
+import { getButtonByTestId } from '../../../../test/harness.utils';
 
 @Component({
   selector: 'app-session-list',
@@ -52,9 +52,6 @@ describe('SessionPage', () => {
     await fixture.whenStable();
   });
 
-  const getButton = (testId: string) =>
-    loader.getHarness(MatButtonHarness.with({ selector: `[data-testid="${testId}"]` }));
-
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -71,7 +68,7 @@ describe('SessionPage', () => {
   });
 
   it('should navigate to the previous day', async () => {
-    const previousButton = await getButton('session-page-previous-day-btn');
+    const previousButton = await getButtonByTestId(loader, 'session-page-previous-day-btn');
 
     await previousButton.click();
 
@@ -79,7 +76,7 @@ describe('SessionPage', () => {
   });
 
   it('should navigate to the next day', async () => {
-    const nextButton = await getButton('session-page-next-day-btn');
+    const nextButton = await getButtonByTestId(loader, 'session-page-next-day-btn');
 
     await nextButton.click();
 

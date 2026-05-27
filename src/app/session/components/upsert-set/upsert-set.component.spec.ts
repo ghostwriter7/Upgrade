@@ -4,8 +4,8 @@ import { UpsertSetDialogData } from './upsert-set-dialog-data.interface';
 import { Component, input, signal } from '@angular/core';
 import { SetForm } from '../set-form/set-form';
 import { SetData } from '../set-form/set-data.interface';
-import { MatButtonHarness } from '@angular/material/button/testing';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
+import { getButton } from '../../../../test/harness.utils';
 
 const mockSetFormInvalid = signal(false);
 
@@ -40,13 +40,6 @@ describe('UpsertSet', () => {
     weight: 80,
     type: 'weight',
   };
-
-  const getButton = (dialog: MatDialogHarness, text: string) =>
-    dialog.getHarness(
-      MatButtonHarness.with({
-        text,
-      }),
-    );
 
   const click = async (dialog: MatDialogHarness, text: string) => {
     const button = await getButton(dialog, text);

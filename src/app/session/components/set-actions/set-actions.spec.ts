@@ -14,6 +14,7 @@ import { CopySetCommand } from '../../commands/copy-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { DeleteSetCommand } from '../../commands/delete-set.command';
+import { getButtonByTestId } from '../../../../test/harness.utils';
 
 describe('SetActions', () => {
   let component: SetActions;
@@ -44,11 +45,8 @@ describe('SetActions', () => {
     await fixture.whenStable();
   });
 
-  const getButton = (testId: string) =>
-    loader.getHarness(MatButtonHarness.with({ selector: `[data-testid="${testId}"]` }));
-
   const click = async (button: string) => {
-    const btn = await getButton(`set-actions-${button}-btn`);
+    const btn = await getButtonByTestId(loader, `set-actions-${button}-btn`);
     return btn.click();
   };
 
