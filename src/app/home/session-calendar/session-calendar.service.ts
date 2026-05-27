@@ -1,4 +1,4 @@
-import { computed, DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { computed, DestroyRef, effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { Temporal } from '@js-temporal/polyfill';
 import { SessionStore } from '../../store/session/session.store';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -63,13 +63,21 @@ export class SessionCalendarService {
       });
     }
 
-    return cells.map((cell, index) => ({ ...cell, testId: `session-calendar-cell-${cell.day}` }));
+    return cells.map((cell) => ({ ...cell, testId: `session-calendar-cell-${cell.day}` }));
   });
 
   private readonly sessionStore = inject(SessionStore);
   private readonly destroyRef = inject(DestroyRef);
 
   constructor() {
+    effect(() => {
+      const countsByMonthAndYear = this.sessionStore.countsByMonthAndYear();
+      const { year, month } = this.activeYearAndMonth();
+      const sessionCount = countsByMonthAndYear[`${year}-${month}`] ?? {};
+
+      untracked(() => this.sessionCountByDate.set(sessionCount));
+    });
+
     toObservable(this.activeYearAndMonth)
       .pipe(
         switchMap(({ year, month }) =>

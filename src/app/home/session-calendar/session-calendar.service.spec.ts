@@ -2,6 +2,7 @@ import { describe, Mock, test, vi } from 'vitest';
 import { SessionCalendarService } from './session-calendar.service';
 import { TestBed } from '@angular/core/testing';
 import { SessionStore } from '../../store/session/session.store';
+import { signal, WritableSignal } from '@angular/core';
 
 async function flushPromises() {
   TestBed.tick();
@@ -12,6 +13,7 @@ describe('SessionCalendarService', () => {
   let service: SessionCalendarService;
   let sessionStore: {
     getCountsByMonthAndYear: Mock;
+    countsByMonthAndYear: WritableSignal<Record<string, Record<number, number>>>;
   };
 
   beforeEach(() => {
@@ -19,6 +21,7 @@ describe('SessionCalendarService', () => {
 
     sessionStore = {
       getCountsByMonthAndYear: vi.fn().mockResolvedValue({}),
+      countsByMonthAndYear: signal({}),
     };
 
     TestBed.configureTestingModule({
@@ -37,6 +40,28 @@ describe('SessionCalendarService', () => {
     await flushPromises();
 
     expect(sessionStore.getCountsByMonthAndYear).toHaveBeenCalledWith(5, 2026);
+  });
+
+  test('updates local counts when global counts change and regenerates calendar', async () => {
+    sessionStore.getCountsByMonthAndYear.mockResolvedValue({ 1: 1 });
+    await flushPromises();
+
+    const cells = service.$calendarCells();
+    expect(cells[4]).toMatchObject({
+      day: 1,
+      hasSessions: true,
+      date: '2026-05-01',
+    });
+
+    sessionStore.countsByMonthAndYear.set({ '2026-5': { 1: 0 } });
+    await flushPromises();
+
+    const updatedCells = service.$calendarCells();
+    expect(updatedCells[4]).toMatchObject({
+      day: 1,
+      hasSessions: false,
+      date: '2026-05-01',
+    });
   });
 
   test('builds calendar cells for the active month', async () => {
@@ -65,10 +90,7 @@ describe('SessionCalendarService', () => {
 
   test('marks cells that have sessions', async () => {
     sessionStore.getCountsByMonthAndYear.mockReset();
-    sessionStore.getCountsByMonthAndYear.mockResolvedValue({
-      3: 2,
-      14: 1,
-    });
+    sessionStore.getCountsByMonthAndYear.mockResolvedValue({ 3: 2, 14: 1 });
 
     await flushPromises();
 
