@@ -28,4 +28,8 @@ export const routes: Routes = [
     path: 'session/:date',
     loadComponent: () => import('./session/components/session-page/session-page'),
   },
+  {
+    path: 'backup',
+    loadComponent: () => import('./backup/components/backup-page/backup-page'),
+  }
 ];

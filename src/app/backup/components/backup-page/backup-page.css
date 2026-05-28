@@ -1,0 +1,8 @@
+:host {
+  width: 100%;
+  height: var(--page-height);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  margin: var(--space-4);
+}
