@@ -40,11 +40,11 @@ export class SessionPage extends BasePage {
 
   public async showAddSetFormForExercise(name: string): Promise<void> {
     await this.showActionsForExercise(name);
-    await this.page.getByTestId(`exercise-card-show-set-form-btn-${getExerciseUuid(name)}`).click();
+    await this.page.getByTestId(`exercise-card-actions-show-set-form-btn-${getExerciseUuid(name)}`).click();
   }
 
   public closeAddSetForm(): Promise<void> {
-    return this.page.getByTestId('exercise-selector-cancel-btn').click();
+    return this.page.getByTestId('upsert-set-cancel-btn').click();
   }
 
   public async addIsoSet(duration: number, weight?: number): Promise<void> {
