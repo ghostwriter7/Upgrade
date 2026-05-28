@@ -1,10 +1,8 @@
-<header>
-  <h2>Record</h2>
-</header>
-<section class="content">
+<h2 mat-dialog-title>Record</h2>
+<mat-dialog-content class="content">
   <video playsinline muted #video></video>
-</section>
-<footer>
+</mat-dialog-content>
+<mat-dialog-actions>
   @if (isRecording()) {
     <button matFab extended (click)="stop()">
       <mat-icon>stop</mat-icon>
@@ -22,4 +20,4 @@
       </div>
     </div>
   }
-</footer>
+</mat-dialog-actions>

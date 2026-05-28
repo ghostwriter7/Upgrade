@@ -1,22 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { Recorder } from './recorder';
+import { OpenDialogFnResult, TestBedUtils } from '../../../../test/test-bed.utils';
 
 describe('Recorder', () => {
-  let component: Recorder;
-  let fixture: ComponentFixture<Recorder>;
+  let openDialog: (data: unknown) => OpenDialogFnResult;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Recorder],
-    }).compileComponents();
+    const result = await TestBedUtils.configureForDialog({
+      targetComponent: Recorder,
+    });
 
-    fixture = TestBed.createComponent(Recorder);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
+    openDialog = result.openDialog;
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render a title', async () => {
+    const { dialog } = await openDialog(undefined);
+
+    await expect(dialog.getTitleText()).resolves.toBe('Record');
   });
 });

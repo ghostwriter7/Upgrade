@@ -3,12 +3,21 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { form, FormField } from '@angular/forms/signals';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogActions, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { VideoFrameCapturer } from './video-frame-capturer';
 
 @Component({
   selector: 'app-recorder',
-  imports: [MatIcon, MatSlider, FormField, MatFabButton, MatSliderThumb],
+  imports: [
+    MatIcon,
+    MatSlider,
+    FormField,
+    MatFabButton,
+    MatSliderThumb,
+    MatDialogTitle,
+    MatDialogContent,
+    MatDialogActions,
+  ],
   templateUrl: './recorder.html',
   styleUrl: './recorder.css',
 })
@@ -37,7 +46,9 @@ export class Recorder implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.elementRef.nativeElement.requestFullscreen().then(() => this.startRecording());
+    if (this.elementRef.nativeElement.requestFullscreen) {
+      this.elementRef.nativeElement.requestFullscreen().then(() => this.startRecording());
+    }
   }
 
   protected stop(): void {
