@@ -1,5 +1,4 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { Temporal } from '@js-temporal/polyfill';
 import { SessionStore } from '../../store/session/session.store';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { from, switchMap, tap } from 'rxjs';
