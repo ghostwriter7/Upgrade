@@ -20,6 +20,10 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     return sessions.map(SessionMapper.INSTANCE.toDomain);
   }
 
+  public deleteAllSessions(): Promise<void> {
+    return super.deleteAll(StoreName.SESSIONS);
+  }
+
   public async getCountsByMonthAndYear(
     month: number,
     year: number,

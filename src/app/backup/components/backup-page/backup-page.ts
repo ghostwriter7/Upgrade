@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { MatButton } from '@angular/material/button';
 import { ExportDataService } from '../../services/export-data.service';
 import { Loader } from '../../../ui/loader/loader';
+import { ImportDataService } from '../../services/import-data.service';
 
 @Component({
   selector: 'app-backup-page',
@@ -13,9 +14,27 @@ import { Loader } from '../../../ui/loader/loader';
 export default class BackupPage {
   protected readonly loading = signal(false);
   private readonly exportDataService = inject(ExportDataService);
+  private readonly importDataService = inject(ImportDataService);
 
-  protected exportData(): void {
+  protected async exportData(): Promise<void> {
     this.loading.set(true);
-    this.exportDataService.exportData();
+    try {
+      await this.exportDataService.exportData();
+    } catch (error) {
+      alert(error);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  protected async importData(): Promise<void> {
+    this.loading.set(true);
+    try {
+      await this.importDataService.importData();
+    } catch (error) {
+      alert(error);
+    } finally {
+      this.loading.set(false);
+    }
   }
 }

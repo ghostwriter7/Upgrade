@@ -11,6 +11,10 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     super();
   }
 
+  public deleteAllSets(): Promise<void> {
+    return super.deleteAll(StoreName.SETS);
+  }
+
   public async getAllSets(): Promise<ExerciseSet[]> {
     const sets = await super.findAll(StoreName.SETS);
     return sets.map(ExerciseSetMapper.INSTANCE.toDomain);

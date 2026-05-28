@@ -68,6 +68,17 @@ export abstract class GenericRepository<T> {
     });
   }
 
+  protected async deleteAll(storeName: StoreName): Promise<void> {
+    const transaction = await this.createWriteTransaction(storeName);
+    const store = transaction.objectStore(storeName);
+    const request = store.clear();
+
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(request.error!);
+    });
+  }
+
   protected async createReadTransaction(storeName: StoreName): Promise<IDBTransaction> {
     const db = await this.getDb();
     return db.transaction(storeName, 'readonly');
