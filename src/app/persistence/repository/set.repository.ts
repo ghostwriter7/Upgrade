@@ -3,11 +3,17 @@ import { ExerciseSet } from '../../domain/model/exercise-set.model';
 import { Injectable } from '@angular/core';
 import { StoreName } from './store-name.enum';
 import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
+import { ExerciseSetDto } from '../schema/set.schema';
 
 @Injectable({ providedIn: 'root' })
-export class SetRepository extends GenericRepository<ExerciseSet> {
+export class SetRepository extends GenericRepository<ExerciseSetDto> {
   constructor() {
     super();
+  }
+
+  public async getAllSets(): Promise<ExerciseSet[]> {
+    const sets = await super.findAll(StoreName.SETS);
+    return sets.map(ExerciseSetMapper.INSTANCE.toDomain);
   }
 
   public async getLatestSetId(): Promise<number> {

@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core
 import { SessionStore } from '../../../store/session/session.store';
 import { Loader } from '../../../ui/loader/loader';
 import SessionView from '../session-view/session-view';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -13,7 +12,7 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './session-list.css',
 })
 export class SessionList {
-  public date = input.required<TemporalType.ZonedDateTime>();
+  public date = input.required<Temporal.ZonedDateTime>();
 
   private readonly sessionStore = inject(SessionStore);
 

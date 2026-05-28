@@ -1,2 +1,6 @@
-<button class="info" matButton>Export Data</button>
-<button class="info" matButton>Import Data</button>
+<button class="info" matButton [disabled]="loading()" (click)="exportData()">Export Data</button>
+<button class="info" matButton [disabled]="loading()">Import Data</button>
+
+@if (loading()) {
+  <app-loader />
+}

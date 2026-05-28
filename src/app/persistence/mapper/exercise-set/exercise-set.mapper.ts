@@ -17,7 +17,7 @@ export class ExerciseSetMapper implements Mapper<ExerciseSet, ExerciseSetDto> {
 
   public toDomain(setDto: ExerciseSetDto): ExerciseSet {
     const { sessionId, exerciseId, id, index } = setDto;
-    const builder = this.getBuilderFor(setDto.type);
+    const builder = ExerciseSetMapper.getBuilderFor(setDto.type);
 
     builder.withSessionId(sessionId).withExerciseId(exerciseId).withId(id).withIndex(index);
 
@@ -56,7 +56,7 @@ export class ExerciseSetMapper implements Mapper<ExerciseSet, ExerciseSetDto> {
     throw new Error(`Unsupported exercise set type: ${set.constructor.name}`);
   }
 
-  private getBuilderFor(type: ExerciseSetType): ExerciseSetBuilder {
+  private static getBuilderFor(type: ExerciseSetType): ExerciseSetBuilder {
     switch (type) {
       case 'bodyweight':
         return new BodyweightSetBuilder();

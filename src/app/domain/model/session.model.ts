@@ -1,7 +1,6 @@
 import { ExerciseSet } from './exercise-set.model';
 import { createUuid } from '../../common/function/create-uuid.function';
 import { DateHelper } from '../../common/helper/date.helper';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 
 export class ExerciseLog {
   public sets: ExerciseSet[] = [];
@@ -76,12 +75,12 @@ export class ExerciseLog {
 export class Session {
   public exercises: ExerciseLog[] = [];
   public notes: string | null = null;
-  public startedAt: TemporalType.Instant = DateHelper.now();
-  public finishedAt: TemporalType.Instant | null = null;
+  public startedAt: Temporal.Instant = DateHelper.now();
+  public finishedAt: Temporal.Instant | null = null;
 
   constructor(
     public readonly uuid: string,
-    public readonly createdAt: TemporalType.Instant,
+    public readonly createdAt: Temporal.Instant,
   ) {}
 
   public get dayOfMonth(): number {

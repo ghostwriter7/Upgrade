@@ -7,7 +7,6 @@ import { DateHelper } from '../../../common/helper/date.helper';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { SessionStore } from '../../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
@@ -81,7 +80,7 @@ export class SessionHeader {
   protected editStartedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: TemporalType.Instant) => this.commandBus.dispatch(new PatchStartedAtCommand(result)),
+      (result: Temporal.Instant) => this.commandBus.dispatch(new PatchStartedAtCommand(result)),
       {
         data: { instant: this.session().startedAt, label: 'Edit Started At' },
       },
@@ -91,7 +90,7 @@ export class SessionHeader {
   protected editFinishedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: TemporalType.Instant) =>
+      (result: Temporal.Instant) =>
         this.commandBus.dispatch(new PatchFinishedAtCommand(result)),
       {
         data: { instant: this.session().finishedAt, label: 'Edit Finished At' },

@@ -1,10 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SessionCalendar } from './session-calendar';
-import { SessionStore } from '../../store/session/session.store';
 import { SessionCalendarService } from './session-calendar.service';
 import { signal, WritableSignal } from '@angular/core';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { CalendarCell } from './session-calendar.model';
 import { Mock } from 'vitest';
 import { By } from '@angular/platform-browser';
@@ -13,7 +11,7 @@ describe('SessionCalendar', () => {
   let component: SessionCalendar;
   let fixture: ComponentFixture<SessionCalendar>;
   let sessionCalendarService: {
-    $firstDayOfMonth: WritableSignal<TemporalType.PlainDate>;
+    $firstDayOfMonth: WritableSignal<Temporal.PlainDate>;
     $calendarCells: WritableSignal<CalendarCell[]>;
     showNextMonth: Mock;
     showPreviousMonth: Mock;

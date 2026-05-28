@@ -9,7 +9,6 @@ import {
 } from '@ngrx/signals';
 import { computed, effect, inject, untracked } from '@angular/core';
 import { SessionRepository } from '../../persistence/repository/session.repository';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { DateHelper } from '../../common/helper/date.helper';
 
 interface State {
@@ -35,7 +34,7 @@ export const SessionStore = signalStore(
     }),
   })),
   withMethods((store, sessionRepository = inject(SessionRepository)) => {
-    const createCountId = (date: TemporalType.Instant | TemporalType.PlainDate): string => {
+    const createCountId = (date: Temporal.Instant | Temporal.PlainDate): string => {
       const zonedDate = DateHelper.toLocal(date);
       return `${zonedDate.year}-${zonedDate.month}`;
     };

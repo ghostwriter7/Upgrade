@@ -38,7 +38,7 @@ export abstract class GenericRepository<T> {
     return this.responseFromRequest<T[]>(request);
   }
 
-  protected async findAll(storeName: StoreName): Promise<unknown[]> {
+  protected async findAll(storeName: StoreName): Promise<T[]> {
     const transaction = await this.createReadTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.getAll();

@@ -1,4 +1,3 @@
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { createUuid } from '../../common/function/create-uuid.function';
 import { DateHelper } from '../../common/helper/date.helper';
 
@@ -9,7 +8,7 @@ export class ExerciseMedia {
     public readonly sessionId: string,
     public readonly mimeType: 'image/jpeg',
     public readonly blob: Blob,
-    public readonly createdAt: TemporalType.Instant,
+    public readonly createdAt: Temporal.Instant,
     public readonly width: number,
     public readonly height: number
   ) {}

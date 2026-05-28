@@ -4,7 +4,6 @@ import { MatMiniFabButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { SessionList } from '../session-list/session-list';
 import { DateHelper } from '../../../common/helper/date.helper';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { SessionStore } from '../../../store/session/session.store';
 
 @Component({
@@ -15,7 +14,7 @@ import { SessionStore } from '../../../store/session/session.store';
   styleUrl: './session-page.css',
 })
 export default class SessionPage {
-  public date = input.required<TemporalType.ZonedDateTime, string>({
+  public date = input.required<Temporal.ZonedDateTime, string>({
     transform: DateHelper.toLocal,
   });
 

@@ -4,7 +4,6 @@ import { GenericRepository } from './generic.repository';
 import { StoreName } from './store-name.enum';
 import { SessionDto, SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
-import type { Temporal as TemporalType } from '@js-temporal/polyfill';
 import { IndexName } from './index-name.enum';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
@@ -14,6 +13,11 @@ import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
 export class SessionRepository extends GenericRepository<SessionDto> {
   constructor() {
     super();
+  }
+
+  public async getAllSessions(): Promise<Session[]> {
+    const sessions = await super.findAll(StoreName.SESSIONS);
+    return sessions.map(SessionMapper.INSTANCE.toDomain);
   }
 
   public async getCountsByMonthAndYear(
@@ -53,7 +57,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     });
   }
 
-  public async findAllByDate(date: TemporalType.ZonedDateTime): Promise<Session[]> {
+  public async findAllByDate(date: Temporal.ZonedDateTime): Promise<Session[]> {
     const results = await super.findAllBy<SessionDto>(
       StoreName.SESSIONS,
       (store: IDBObjectStore) => {
