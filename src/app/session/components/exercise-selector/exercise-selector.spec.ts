@@ -22,7 +22,7 @@ describe('ExerciseSelector', () => {
     Promise.all(options.map((option) => option.getFullText()));
 
   beforeEach(async () => {
-    const results = await TestBedUtils.configure({
+    const results = await TestBedUtils.configureForDialog({
       providers: [
         {
           provide: ExerciseStore,

@@ -1,22 +1,32 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EntryDetails } from './entry-details';
+import { TestBedUtils } from '../../../../test/test-bed.utils';
+import { ExerciseLog } from '../../../domain/model/session.model';
+import { MediaRepository } from '../../../persistence/repository/media.repository';
+import { Mock } from 'vitest';
+import { BottomSheetTestHost } from '../../../../test/hosts/bottom-sheet-test-host';
 
 describe('EntryDetails', () => {
-  let component: EntryDetails;
-  let fixture: ComponentFixture<EntryDetails>;
+  let fixture: ComponentFixture<BottomSheetTestHost>;
+  let openSheet: (data: { exerciseLog: ExerciseLog }) => void;
+  let mediaRepositoryMock: { findMedia: Mock };
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [EntryDetails],
-    }).compileComponents();
+    mediaRepositoryMock = { findMedia: vi.fn() };
+    const result = await TestBedUtils.configureForBottomSheet({
+      targetComponent: EntryDetails,
+      providers: [{ provide: MediaRepository, useValue: mediaRepositoryMock }],
+    });
 
-    fixture = TestBed.createComponent(EntryDetails);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture = result.fixture;
+    openSheet = (data) => result.openSheet(data);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should render no media when none is available', () => {
+    openSheet({ exerciseLog: new ExerciseLog('any id') });
+
+    const images = fixture.debugElement.nativeElement.querySelectorAll('img');
+    expect(images.length).toBe(0);
   });
 });

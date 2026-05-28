@@ -15,7 +15,7 @@ describe('EditTime', () => {
   const instant = Temporal.Instant.from('1994-07-07T10:15:00Z');
 
   beforeEach(async () => {
-    const result = await TestBedUtils.configure({
+    const result = await TestBedUtils.configureForDialog({
       targetComponent: EditTime,
     });
 

@@ -8,7 +8,7 @@ describe('EditNote', () => {
   let openDialog: (note: string) => OpenDialogFnResult;
 
   beforeEach(async () => {
-    const result = await TestBedUtils.configure({
+    const result = await TestBedUtils.configureForDialog({
       targetComponent: EditNote,
     });
 
