@@ -4,3 +4,9 @@
 @if (loading()) {
   <app-loader />
 }
+
+@if (error(); as error) {
+  <div class="error-message">
+    {{ error }}
+  </div>
+}

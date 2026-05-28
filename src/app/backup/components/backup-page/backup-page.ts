@@ -13,15 +13,17 @@ import { ImportDataService } from '../../services/import-data.service';
 })
 export default class BackupPage {
   protected readonly loading = signal(false);
+  protected readonly error = signal<unknown>(null);
   private readonly exportDataService = inject(ExportDataService);
   private readonly importDataService = inject(ImportDataService);
 
   protected async exportData(): Promise<void> {
     this.loading.set(true);
+    this.error.set(null);
     try {
       await this.exportDataService.exportData();
     } catch (error) {
-      alert(error);
+      this.error.set(error);
     } finally {
       this.loading.set(false);
     }
@@ -29,10 +31,11 @@ export default class BackupPage {
 
   protected async importData(): Promise<void> {
     this.loading.set(true);
+    this.error.set(null);
     try {
       await this.importDataService.importData();
     } catch (error) {
-      alert(error);
+      this.error.set(error);
     } finally {
       this.loading.set(false);
     }

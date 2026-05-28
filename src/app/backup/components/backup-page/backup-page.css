@@ -6,3 +6,10 @@
   gap: var(--space-6);
   margin: var(--space-4);
 }
+
+.error-message {
+  color: var(--mat-sys-on-error-container);
+  background-color: var(--mat-sys-error-container);
+  padding: var(--space-4);
+  border-radius: var(--mat-sys-corner-medium);
+}
