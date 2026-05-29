@@ -8,7 +8,7 @@ export function databaseFactory(): Observable<IDBDatabase> {
   const databaseSubject = new ReplaySubject<IDBDatabase>(1);
 
   db.onupgradeneeded = (event: IDBVersionChangeEvent): void => {
-    const { result: db } = (event.target as IDBRequest);
+    const { result: db, transaction: tx } = (event.target as IDBRequest);
 
     console.log(`Upgrading to version ${db.version}`);
 
@@ -34,6 +34,11 @@ export function databaseFactory(): Observable<IDBDatabase> {
       const store: IDBObjectStore = db.createObjectStore(StoreName.EXERCISE_LOGS, { keyPath: 'id' });
       store.createIndex(IndexName.ExerciseLogsBySession, 'sessionId', { unique: false });
       store.createIndex(IndexName.ExerciseLogsByExercise, 'exerciseId', { unique: false });
+    }
+
+    const setStore = tx!.objectStore(StoreName.SETS);
+    if (!setStore.indexNames.contains(IndexName.SetBySessionAndExercise)) {
+      setStore.createIndex(IndexName.SetBySessionAndExercise, ['sessionId', 'exerciseId'], { unique: false });
     }
   };
 

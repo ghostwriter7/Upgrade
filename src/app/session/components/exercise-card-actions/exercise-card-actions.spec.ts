@@ -25,7 +25,7 @@ describe('ExerciseCardActions', () => {
   let commandBusMock: { dispatch: Mock };
   let dialogServiceMock: { open: Mock };
 
-  const exercise = new ExerciseLog('any-id');
+  const exercise = new ExerciseLog('sessionId', 'any-id');
 
   beforeEach(async () => {
     commandBusMock = { dispatch: vi.fn() };

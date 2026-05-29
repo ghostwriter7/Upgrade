@@ -8,6 +8,8 @@ import { IndexName } from './index-name.enum';
 import { DateHelper } from '../../common/helper/date.helper';
 import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
 import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
+import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema';
+import { ExerciseLogMapper } from '../mapper/exercise-entry/exercise-log.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class SessionRepository extends GenericRepository<SessionDto> {
@@ -81,6 +83,16 @@ export class SessionRepository extends GenericRepository<SessionDto> {
 
     const sessionIds = results.map((dto) => dto.uuid);
 
+    const exerciseLogDTOs: ExerciseLogDto[][] = await Promise.all(
+      sessionIds.map((sessionId) =>
+        super
+          .findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
+            store.index(IndexName.ExerciseLogsBySession).getAll(sessionId),
+          )
+          .then((data) => data.map((entry) => ExerciseLogSchema.parse(entry))),
+      ),
+    );
+
     const setDTOs: ExerciseSetDto[][] = await Promise.all(
       sessionIds.map((sessionId) =>
         super
@@ -95,6 +107,8 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     const sessions = sessionDTOs.map(SessionMapper.INSTANCE.toDomain);
 
     return sessions.map((session, index) => {
+      const exerciseLogs = exerciseLogDTOs[index];
+      session.exercises = exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDomain);
       const sets = setDTOs[index];
       const setByExerciseId = Object.groupBy(sets, (set) => set.exerciseId);
       for (const exerciseId of Object.keys(setByExerciseId)) {

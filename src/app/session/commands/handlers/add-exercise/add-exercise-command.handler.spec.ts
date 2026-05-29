@@ -5,6 +5,7 @@ import { AddExerciseCommandHandler } from './add-exercise-command.handler';
 import { EventBus } from '../../../routers/event-bus';
 import { AddExerciseCommand } from '../../add-exercise.command';
 import { Session } from '../../../../domain/model/session.model';
+import { ExerciseLogCreatedEvent } from '../../../events/exercise-log-created.event';
 
 describe('AddExerciseCommandHandler', () => {
   let eventBus: { dispatch: Mock };
@@ -28,22 +29,30 @@ describe('AddExerciseCommandHandler', () => {
 
   test('should add exercises to the empty session', () => {
     const command = new AddExerciseCommand(['chin-ups', 'pull-ups', 'deadlifts']);
-    sessionStateHolder.session.mockReturnValueOnce(Session.createEmpty());
+    const session = Session.createEmpty();
+    sessionStateHolder.session.mockReturnValueOnce(session);
 
     handler.handle(command);
 
-    const sessionMatcher = expect.objectContaining({
-      exercises: expect.arrayContaining([
-        expect.objectContaining({ exerciseId: 'chin-ups' }),
-        expect.objectContaining({ exerciseId: 'pull-ups' }),
-        expect.objectContaining({ exerciseId: 'deadlifts' }),
-      ]),
-    });
-    expect(sessionStateHolder.set).toHaveBeenCalledWith(sessionMatcher);
-    expect(eventBus.dispatch).toHaveBeenCalledWith(
+    expect(sessionStateHolder.set).toHaveBeenCalledWith(
       expect.objectContaining({
-        session: sessionMatcher,
+        exercises: expect.arrayContaining([
+          expect.objectContaining({ exerciseId: 'chin-ups' }),
+          expect.objectContaining({ exerciseId: 'pull-ups' }),
+          expect.objectContaining({ exerciseId: 'deadlifts' }),
+        ]),
       }),
     );
+    expect(eventBus.dispatch).toHaveBeenCalledTimes(3);
+    const matcher = (exerciseId: string) => new ExerciseLogCreatedEvent(
+      expect.objectContaining({
+        sessionId: session.uuid,
+        exerciseId,
+        id: expect.any(String),
+      })
+    );
+    expect(eventBus.dispatch).toHaveBeenNthCalledWith(1, matcher('chin-ups'));
+    expect(eventBus.dispatch).toHaveBeenNthCalledWith(2, matcher('pull-ups'));
+    expect(eventBus.dispatch).toHaveBeenNthCalledWith(3, matcher('deadlifts'));
   });
 });

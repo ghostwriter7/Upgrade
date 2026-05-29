@@ -7,7 +7,11 @@ export class ExerciseLog {
   public notes: string | null = null;
   public mediaIds: string[] = [];
 
-  constructor(public readonly exerciseId: string) {}
+  constructor(
+    public readonly sessionId: string,
+    public readonly exerciseId: string,
+    public readonly id: string = createUuid(),
+  ) {}
 
   public get isEmpty(): boolean {
     return this.sets.length === 0;
@@ -18,7 +22,7 @@ export class ExerciseLog {
   }
 
   public clone(): ExerciseLog {
-    const log = new ExerciseLog(this.exerciseId);
+    const log = new ExerciseLog(this.sessionId, this.exerciseId, this.id);
     log.sets = this.sets;
     log.notes = this.notes;
     log.mediaIds = this.mediaIds;
@@ -31,8 +35,7 @@ export class ExerciseLog {
       throw new Error(`Set at index ${index} does not exist`);
     }
 
-   return set.clone()
-      .withIndex(this.sets.length);
+    return set.clone().withIndex(this.sets.length);
   }
 
   public withMedia(mediaId: string): ExerciseLog {
@@ -47,7 +50,7 @@ export class ExerciseLog {
 
   public removeSetAt(index: number): ExerciseLog {
     this.checkIndex(index);
-    for (let i = index + 1; i < this.sets.length ; i++) {
+    for (let i = index + 1; i < this.sets.length; i++) {
       this.sets[i].index--;
     }
     this.sets = this.sets.toSpliced(index, 1);
@@ -112,7 +115,7 @@ export class Session {
 
   public addExercise(exerciseId: string): Session {
     if (this.exercises.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return this;
-    this.exercises = [...this.exercises, new ExerciseLog(exerciseId)];
+    this.exercises = [...this.exercises, new ExerciseLog(this.uuid, exerciseId)];
     return this.clone();
   }
 

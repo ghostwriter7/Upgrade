@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { StoreName } from './store-name.enum';
 import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
 import { ExerciseSetDto } from '../schema/set.schema';
+import { IndexName } from './index-name.enum';
 
 @Injectable({ providedIn: 'root' })
 export class SetRepository extends GenericRepository<ExerciseSetDto> {
@@ -13,6 +14,30 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
 
   public deleteAllSets(): Promise<void> {
     return super.deleteAll(StoreName.SETS);
+  }
+
+  public async deleteBySessionAndExercise(sessionId: string, exerciseId: string): Promise<boolean> {
+    const tx = await super.createWriteTransaction([StoreName.SETS]);
+    return new Promise((resolve, reject) => {
+      tx.oncomplete = (): void => resolve(true);
+      tx.onerror = (): void => reject(tx.error);
+      tx.onabort = (): void => reject(tx.error);
+
+      const store = tx.objectStore(StoreName.SETS);
+      const setBySessionAndExercise = store.index(IndexName.SetBySessionAndExercise);
+
+      const cursorRequest = setBySessionAndExercise.openCursor(
+        IDBKeyRange.only([sessionId, exerciseId])
+      );
+      cursorRequest.onsuccess = () => {
+        const cursor = cursorRequest.result;
+
+        if (!cursor) return;
+
+        cursor.delete();
+        cursor.continue();
+      };
+    });
   }
 
   public async getAllSets(): Promise<ExerciseSet[]> {

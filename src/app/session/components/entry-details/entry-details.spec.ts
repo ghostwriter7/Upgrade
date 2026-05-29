@@ -24,7 +24,7 @@ describe('EntryDetails', () => {
   });
 
   it('should render no media when none is available', () => {
-    openSheet({ exerciseLog: new ExerciseLog('any id') });
+    openSheet({ exerciseLog: new ExerciseLog('sessionId','any id') });
 
     const images = fixture.debugElement.nativeElement.querySelectorAll('img');
     expect(images.length).toBe(0);

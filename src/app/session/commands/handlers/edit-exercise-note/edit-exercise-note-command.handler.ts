@@ -3,7 +3,7 @@ import { CommandConstructor, CommandHandler } from '../command-handler.interface
 import { EditExerciseNoteCommand } from '../../edit-exercise-note.command';
 import { SessionStateHolder } from '../../../store/session-state-holder.store';
 import { EventBus } from '../../../routers/event-bus';
-import { SessionUpdatedEvent } from '../../../events/session-updated.event';
+import { ExerciseLogUpdatedEvent } from '../../../events/exercise-log-updated.event';
 
 @Injectable()
 export class EditExerciseNoteCommandHandler implements CommandHandler<EditExerciseNoteCommand> {
@@ -20,7 +20,8 @@ export class EditExerciseNoteCommandHandler implements CommandHandler<EditExerci
     if (!session) throw new Error('Session not found');
 
     const updatedSession = session.setExerciseNotes(exerciseId, notes);
+    const updatedExerciseLog = updatedSession.getExerciseById(exerciseId);
     this.sessionStateHolder.set(updatedSession);
-    this.eventBus.dispatch(new SessionUpdatedEvent(updatedSession));
+    this.eventBus.dispatch(new ExerciseLogUpdatedEvent(updatedExerciseLog));
   }
 }

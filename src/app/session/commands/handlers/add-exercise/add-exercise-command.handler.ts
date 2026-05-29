@@ -3,7 +3,7 @@ import { CommandConstructor, CommandHandler } from '../command-handler.interface
 import { AddExerciseCommand } from '../../add-exercise.command';
 import { EventBus } from '../../../routers/event-bus';
 import { SessionStateHolder } from '../../../store/session-state-holder.store';
-import { SessionUpdatedEvent } from '../../../events/session-updated.event';
+import { ExerciseLogCreatedEvent } from '../../../events/exercise-log-created.event';
 
 @Injectable()
 export class AddExerciseCommandHandler implements CommandHandler<AddExerciseCommand> {
@@ -22,7 +22,11 @@ export class AddExerciseCommandHandler implements CommandHandler<AddExerciseComm
 
       const updatedSession = exerciseIds.reduce((session, id) => session.addExercise(id), session);
       this.sessionStateHolder.set(updatedSession);
-      this.eventBus.dispatch(new SessionUpdatedEvent(updatedSession));
+
+      const createdExerciseLogs = updatedSession.exercises.filter((exerciseLog) => exerciseIds.includes(exerciseLog.exerciseId));
+      createdExerciseLogs.forEach((exerciseLog) =>
+        this.eventBus.dispatch(new ExerciseLogCreatedEvent(exerciseLog)),
+      );
     }
   }
 }

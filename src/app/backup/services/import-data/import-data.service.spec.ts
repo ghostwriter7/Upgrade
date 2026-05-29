@@ -3,15 +3,18 @@ import { SessionRepository } from '../../../persistence/repository/session.repos
 import { SetRepository } from '../../../persistence/repository/set.repository';
 import { Mock } from 'vitest';
 import { ImportDataService } from './import-data.service';
-import { Session } from '../../../domain/model/session.model';
+import { ExerciseLog, Session } from '../../../domain/model/session.model';
 import { BodyweightSet } from '../../../domain/model/exercise-set.model';
 import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
 import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
 import { createUuid } from '../../../common/function/create-uuid.function';
+import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
+import { ExerciseLogMapper } from '../../../persistence/mapper/exercise-entry/exercise-log.mapper';
 
 describe('ImportDataService', () => {
   let sessionRepositoryMock: { save: Mock; deleteAllSessions: Mock };
   let setRepositoryMock: { upsertSet: Mock; deleteAllSets: Mock };
+  let exerciseLogRepositoryMock: { saveLog: Mock; deleteAllLogs: Mock };
   let importDataService: ImportDataService;
 
   beforeEach(async () => {
@@ -25,10 +28,16 @@ describe('ImportDataService', () => {
       deleteAllSets: vi.fn(),
     };
 
+    exerciseLogRepositoryMock = {
+      saveLog: vi.fn(),
+      deleteAllLogs: vi.fn(),
+    };
+
     TestBed.configureTestingModule({
       providers: [
         { provide: SessionRepository, useValue: sessionRepositoryMock },
         { provide: SetRepository, useValue: setRepositoryMock },
+        { provide: ExerciseLogRepository, useValue: exerciseLogRepositoryMock },
         ImportDataService,
       ],
     });
@@ -36,7 +45,7 @@ describe('ImportDataService', () => {
     importDataService = TestBed.inject(ImportDataService);
   });
 
-  const createSetMatcher = (set: BodyweightSet) =>
+  const setMatcher = (set: BodyweightSet) =>
     expect.objectContaining({
       id: set.id,
       exerciseId: set.exerciseId,
@@ -45,22 +54,25 @@ describe('ImportDataService', () => {
       reps: set.reps,
     });
 
-  const createSessionMatcher = (session: Session) =>
+  const sessionMatcher = (session: Session) =>
     expect.objectContaining({
       uuid: session.uuid,
-      exercises: expect.arrayContaining([
-        expect.objectContaining({
-          exerciseId: session.exercises[0].exerciseId,
-        }),
-      ]),
+    });
+
+  const exerciseLogMatcher = (exerciseLog: ExerciseLog) =>
+    expect.objectContaining({
+      sessionId: exerciseLog.sessionId,
+      exerciseId: exerciseLog.exerciseId,
+      id: exerciseLog.id,
     });
 
   it('should import data from a file', async () => {
     const chinUpsId = createUuid();
     const pullUpsId = createUuid();
-    const sessions = [
-      Session.createEmpty().addExercise(chinUpsId),
-      Session.createEmpty().addExercise(pullUpsId),
+    const sessions = [Session.createEmpty(), Session.createEmpty()];
+    const exerciseLogs = [
+      new ExerciseLog(sessions[0].uuid, chinUpsId),
+      new ExerciseLog(sessions[0].uuid, pullUpsId),
     ];
     const sets = [
       new BodyweightSet(sessions[0].uuid, chinUpsId, 0, 5),
@@ -72,6 +84,7 @@ describe('ImportDataService', () => {
     const json = JSON.stringify({
       sessions: sessions.map(SessionMapper.INSTANCE.toDto),
       sets: sets.map(ExerciseSetMapper.INSTANCE.toDto),
+      exerciseLogs: exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDto),
     });
     vi.spyOn(window, 'showOpenFilePicker').mockResolvedValueOnce([
       {
@@ -84,13 +97,26 @@ describe('ImportDataService', () => {
 
     expect(setRepositoryMock.deleteAllSets).toHaveBeenCalledTimes(1);
     expect(sessionRepositoryMock.deleteAllSessions).toHaveBeenCalledTimes(1);
+    expect(exerciseLogRepositoryMock.deleteAllLogs).toHaveBeenCalledTimes(1);
+
     expect(setRepositoryMock.upsertSet).toHaveBeenCalledTimes(4);
-    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(1, createSetMatcher(sets[0]));
-    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(2, createSetMatcher(sets[1]));
-    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(3, createSetMatcher(sets[2]));
-    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(4, createSetMatcher(sets[3]));
+    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(1, setMatcher(sets[0]));
+    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(2, setMatcher(sets[1]));
+    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(3, setMatcher(sets[2]));
+    expect(setRepositoryMock.upsertSet).toHaveBeenNthCalledWith(4, setMatcher(sets[3]));
+
     expect(sessionRepositoryMock.save).toHaveBeenCalledTimes(2);
-    expect(sessionRepositoryMock.save).toHaveBeenNthCalledWith(1, createSessionMatcher(sessions[0]));
-    expect(sessionRepositoryMock.save).toHaveBeenNthCalledWith(2, createSessionMatcher(sessions[1]));
+    expect(sessionRepositoryMock.save).toHaveBeenNthCalledWith(1, sessionMatcher(sessions[0]));
+    expect(sessionRepositoryMock.save).toHaveBeenNthCalledWith(2, sessionMatcher(sessions[1]));
+
+    expect(exerciseLogRepositoryMock.saveLog).toHaveBeenCalledTimes(2);
+    expect(exerciseLogRepositoryMock.saveLog).toHaveBeenNthCalledWith(
+      1,
+      exerciseLogMatcher(exerciseLogs[0]),
+    );
+    expect(exerciseLogRepositoryMock.saveLog).toHaveBeenNthCalledWith(
+      2,
+      exerciseLogMatcher(exerciseLogs[1]),
+    );
   });
 });

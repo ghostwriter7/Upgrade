@@ -49,7 +49,7 @@ describe('ExerciseCard', () => {
   let eventServiceMock: { listen: Mock };
   let eventSubject = new Subject<ElementClickedEvent>();
 
-  const exercise = new ExerciseLog('exerciseId').withSet(
+  const exercise = new ExerciseLog('sessionId', 'exerciseId').withSet(
     new BodyweightSet('sessionId', 'exerciseId', 0, 5),
   );
 

@@ -6,5 +6,6 @@ export enum IndexName {
   MediaBySessionAndExercise = 'mediaBySessionAndExercise',
   SetBySession = 'setBySession',
   SetByExercise = 'setByExercise',
+  SetBySessionAndExercise = 'setBySessionAndExercise',
 }
 
