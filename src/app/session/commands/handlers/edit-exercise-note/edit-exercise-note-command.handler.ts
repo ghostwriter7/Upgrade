@@ -20,8 +20,9 @@ export class EditExerciseNoteCommandHandler implements CommandHandler<EditExerci
     if (!session) throw new Error('Session not found');
 
     const updatedSession = session.setExerciseNotes(exerciseId, notes);
-    const updatedExerciseLog = updatedSession.getExerciseById(exerciseId);
     this.sessionStateHolder.set(updatedSession);
+
+    const updatedExerciseLog = updatedSession.getExerciseById(exerciseId);
     this.eventBus.dispatch(new ExerciseLogUpdatedEvent(updatedExerciseLog));
   }
 }
