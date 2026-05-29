@@ -1,0 +1,12 @@
+<video playsinline muted #video></video>
+
+<div class="edit-actions">
+  <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
+    <input [formField]="form.frameAt" matSliderThumb>
+  </mat-slider>
+  <div class="buttons">
+    <button matFab extended (click)="captureFrame()">
+      Capture
+    </button>
+  </div>
+</div>

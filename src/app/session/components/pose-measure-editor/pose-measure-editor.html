@@ -1,0 +1,16 @@
+@let details = data();
+<svg #svg [attr.viewBox]="'0 0 ' + details.width + ' ' + details.height"
+     (pointerdown)="handleClick($event)">
+  <image [attr.href]="href()" [attr.width]="details.width" [attr.height]="details.height" />
+  @for (point of points(); track point) {
+    <circle [attr.cx]="point.x" [attr.cy]="point.y" r="6" class="point" />
+  }
+  @for (line of lines(); track line) {
+    <line [attr.x1]="line[0].x" [attr.y1]="line[0].y" [attr.x2]="line[1].x" [attr.y2]="line[1].y" class="line"
+          stroke="black" />
+  }
+</svg>
+
+@if (angle(); as angle) {
+  {{ angle }} degrees
+}

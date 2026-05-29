@@ -14,6 +14,7 @@ import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note.comma
 import { EditNote } from '../edit-note/edit-note';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { DeleteExerciseCommand } from '../../commands/delete-exercise.command';
+import { MeasureProgress } from '../measure-progress/measure-progress';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -78,7 +79,7 @@ export class ExerciseCardActions {
   protected async activateVideoCapture(event: Event, exerciseId: string): Promise<void> {
     event.stopPropagation();
     this.dialogService.open(
-      Recorder,
+      MeasureProgress,
       ({ image, width, height }: { image: Blob; width: number; height: number }) =>
         this.commandBus.dispatch(new CaptureRecordingCommand(image, width, height, exerciseId)),
       {

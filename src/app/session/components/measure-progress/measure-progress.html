@@ -1,0 +1,11 @@
+@switch (this.activeStep()) {
+  @case ('record') {
+    <app-recorder (videoCapture)="onVideoCapture($event)" />
+  }
+  @case ('pick-frame') {
+    <app-frame-picker [data]="videoData!" (framePick)="onFramePick($event)" />
+  }
+  @case ('measure') {
+    <app-pose-measure-editor [data]="frameData!" />
+  }
+}
