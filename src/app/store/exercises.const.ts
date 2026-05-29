@@ -110,12 +110,12 @@ export const exercises = [
     name: 'Pike Good Morning Standing',
   },
   {
-    uuid: '90804954-45bf-4b83-94aa-b507a6d44a18',
-    name: 'Push Ups',
-  },
-  {
     uuid: '1832e4ec-fd4a-46eb-9e54-73a0e27eda96',
     name: 'Pull-Ups',
+  },
+  {
+    uuid: '90804954-45bf-4b83-94aa-b507a6d44a18',
+    name: 'Push Ups',
   },
   {
     uuid: '4b2415a0-486a-4a27-9056-5c07006e1454',
