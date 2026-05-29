@@ -2,15 +2,13 @@ import { DatabaseVersion } from './database-version.const';
 import { Observable, ReplaySubject } from 'rxjs';
 import { StoreName } from './store-name.enum';
 import { IndexName } from './index-name.enum';
-import { SessionSchema } from '../schema/session.schema';
-import { createUuid } from '../../common/function/create-uuid.function';
 
 export function databaseFactory(): Observable<IDBDatabase> {
   const db = indexedDB.open('upgrade', DatabaseVersion);
   const databaseSubject = new ReplaySubject<IDBDatabase>(1);
 
   db.onupgradeneeded = (event: IDBVersionChangeEvent): void => {
-    const { result: db, transaction: tx } = (event.target as IDBRequest);
+    const { result: db } = (event.target as IDBRequest);
 
     console.log(`Upgrading to version ${db.version}`);
 
@@ -36,19 +34,6 @@ export function databaseFactory(): Observable<IDBDatabase> {
       const store: IDBObjectStore = db.createObjectStore(StoreName.EXERCISE_LOGS, { keyPath: 'id' });
       store.createIndex(IndexName.ExerciseLogsBySession, 'sessionId', { unique: false });
       store.createIndex(IndexName.ExerciseLogsByExercise, 'exerciseId', { unique: false });
-
-
-      const sessionsStore = tx!.objectStore(StoreName.SESSIONS);
-      const request = sessionsStore.getAll();
-      request.onsuccess = (e) => {
-        debugger
-        const sessions = request.result.map((entry) => SessionSchema.parse(entry));
-        const exerciseLogs = sessions.flatMap((session) => session.exerciseEntries
-          .map((entry) => ({ ...entry, sessionId: session.uuid, id: createUuid() })))
-
-        exerciseLogs.forEach((log) => store.put(log));
-        alert(`Saved ${exerciseLogs.length} exercise logs`);
-      }
     }
   };
 
