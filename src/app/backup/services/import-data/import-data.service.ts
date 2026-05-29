@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { SessionRepository } from '../../persistence/repository/session.repository';
-import { SetRepository } from '../../persistence/repository/set.repository';
-import { Session } from '../../domain/model/session.model';
-import { SessionSchema } from '../../persistence/schema/session.schema';
-import { SessionMapper } from '../../persistence/mapper/session/session.mapper';
-import { ExerciseSet } from '../../domain/model/exercise-set.model';
-import { ExerciseSetMapper } from '../../persistence/mapper/exercise-set/exercise-set.mapper';
-import { ExerciseSetSchema } from '../../persistence/schema/set.schema';
+import { SessionRepository } from '../../../persistence/repository/session.repository';
+import { SetRepository } from '../../../persistence/repository/set.repository';
+import { Session } from '../../../domain/model/session.model';
+import { SessionSchema } from '../../../persistence/schema/session.schema';
+import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
+import { ExerciseSet } from '../../../domain/model/exercise-set.model';
+import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
+import { ExerciseSetSchema } from '../../../persistence/schema/set.schema';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {

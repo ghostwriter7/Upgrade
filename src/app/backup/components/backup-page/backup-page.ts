@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { ExportDataService } from '../../services/export-data.service';
+import { ExportDataService } from '../../services/export-data/export-data.service';
 import { Loader } from '../../../ui/loader/loader';
-import { ImportDataService } from '../../services/import-data.service';
+import { ImportDataService } from '../../services/import-data/import-data.service';
 
 @Component({
   selector: 'app-backup-page',

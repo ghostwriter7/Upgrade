@@ -1,12 +1,10 @@
-<button class="info" matButton [disabled]="loading()" (click)="exportData()">Export Data</button>
-<button class="info" matButton [disabled]="loading()" (click)="importData()">Import Data</button>
+<button data-testid="backup-export-data-btn"  class="info" matButton [disabled]="loading()" (click)="exportData()">Export Data</button>
+<button data-testid="backup-import-data-btn" class="info" matButton [disabled]="loading()" (click)="importData()">Import Data</button>
 
 @if (loading()) {
-  <app-loader />
-}
-
-@if (error(); as error) {
-  <div class="error-message">
+  <app-loader data-testid="backup-loader" />
+} @else if (error(); as error) {
+  <div data-testid="backup-error-message" class="error-message">
     {{ error }}
   </div>
 }

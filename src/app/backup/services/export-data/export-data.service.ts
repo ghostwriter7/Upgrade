@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { SessionRepository } from '../../persistence/repository/session.repository';
-import { SetRepository } from '../../persistence/repository/set.repository';
-import { SessionMapper } from '../../persistence/mapper/session/session.mapper';
-import { ExerciseSetMapper } from '../../persistence/mapper/exercise-set/exercise-set.mapper';
+import { SessionRepository } from '../../../persistence/repository/session.repository';
+import { SetRepository } from '../../../persistence/repository/set.repository';
+import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
+import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class ExportDataService {
