@@ -37,7 +37,7 @@ test('should create a session with one exercise set', async ({ page }) => {
   await test.step('Verify session appears on calendar', async () => {
     await sessionPage.clickHomeLink();
     await expect(page).toHaveURL('/');
-    await expect(homePage.todayCell).toContainClass('calendar__cell--has-session');
+    await expect(homePage.calendar.todayCell).toContainClass('highlight');
   });
 });
 

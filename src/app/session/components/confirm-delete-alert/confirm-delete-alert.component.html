@@ -3,6 +3,6 @@
   <p>Are you sure?</p>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="danger" matButton [mat-dialog-close]="true">Yes</button>
-  <button class="info" matButton [mat-dialog-close]="false">No</button>
+  <button data-testid="confirm-delete-alert-yes-button" class="danger" matButton [mat-dialog-close]="true">Yes</button>
+  <button data-testid="confirm-delete-alert-no-button" class="info" matButton [mat-dialog-close]="false">No</button>
 </mat-dialog-actions>

@@ -1,41 +1,47 @@
 <header>
-  @let testId = testIds();
   <div class="row">
     <button
-      [attr.data-testid]="testId.startedAt" matFab extended
+      [attr.data-testid]="testIds.startedAt" matFab extended
       (click)="editStartedAt()">
       <mat-icon>access_time</mat-icon>
-      <span [attr.data-testid]="testId.startedAtValue">{{ startedAt() }}</span>
+      <span [attr.data-testid]="testIds.startedAtValue">{{ startedAt() }}</span>
     </button>
     @if (finishedAt(); as finishedAt) {
       <button
-        [attr.data-testid]="testId.finishedAt"
+        [attr.data-testid]="testIds.finishedAt"
         matFab extended (click)="editFinishedAt()">
         <mat-icon>access_time_filled</mat-icon>
-        <span [attr.data-testid]="testId.finishedAtValue">{{ finishedAt }}</span>
+        <span [attr.data-testid]="testIds.finishedAtValue">{{ finishedAt }}</span>
       </button>
     }
     @if (duration(); as duration) {
       <span
         class="metadata">
         <mat-icon>hourglass_empty</mat-icon>
-        <span [attr.data-testid]="testId.duration">{{ duration }}</span>
+        <span [attr.data-testid]="testIds.duration">{{ duration }}</span>
       </span>
     }
 
     <button
-      [attr.data-testid]="testId.menu"
-      class="ml-auto info" matMiniFab aria-label="Show session context menu" [matMenuTriggerFor]="menu">
+      [attr.data-testid]="testIds.menu"
+      class="ml-auto info"
+      matMiniFab
+      aria-label="Show session context menu"
+      [matMenuTriggerFor]="menu">
       <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
       @if (showEdit()) {
-        <button mat-menu-item (click)="triggerEdit()">
+        <button
+          [attr.data-testid]="testIds.editMenuOption"
+          mat-menu-item (click)="triggerEdit()">
           <mat-icon>edit</mat-icon>
           Edit
         </button>
       }
-      <button mat-menu-item class="danger" (click)="deleteSession()">
+      <button
+        [attr.data-testid]="testIds.deleteMenuOption"
+        mat-menu-item class="danger" (click)="deleteSession()">
         <mat-icon>delete_forever</mat-icon>
         Delete
       </button>

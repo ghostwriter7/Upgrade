@@ -26,18 +26,16 @@ export class SessionHeader {
   public session = input.required<Session>();
 
   protected readonly showEdit = linkedSignal(() => !this.isNew());
-  protected readonly testIds = computed(() => {
-    const { uuid } = this.session();
-
-    return {
-      startedAt: `session-header-started-at-${uuid}`,
-      startedAtValue: `session-header-started-at-value-${uuid}`,
-      finishedAt: `session-header-finished-at-${uuid}`,
-      finishedAtValue: `session-header-finished-at-value-${uuid}`,
-      duration: `session-header-duration-${uuid}`,
-      menu: `session-header-menu-${uuid}`,
-    };
-  });
+  protected readonly testIds = {
+    editMenuOption: 'session-header-edit-menu-option',
+    deleteMenuOption: 'session-header-delete-menu-option',
+    startedAt: 'session-header-started-at',
+    startedAtValue: 'session-header-started-at-value',
+    finishedAt: 'session-header-finished-at',
+    finishedAtValue: 'session-header-finished-at-value',
+    duration: 'session-header-duration',
+    menu: 'session-header-menu',
+  };
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
   );
@@ -66,8 +64,9 @@ export class SessionHeader {
   private readonly commandBus = inject(CommandBus);
 
   protected deleteSession(): void {
-    this.dialog.open(ConfirmDeleteAlert,
-      () => this.commandBus.dispatch(new DeleteSessionCommand(this.session())));
+    this.dialog.open(ConfirmDeleteAlert, () =>
+      this.commandBus.dispatch(new DeleteSessionCommand(this.session())),
+    );
   }
 
   protected editStartedAt(): void {
@@ -83,8 +82,7 @@ export class SessionHeader {
   protected editFinishedAt(): void {
     this.dialog.open(
       EditTime,
-      (result: Temporal.Instant) =>
-        this.commandBus.dispatch(new PatchFinishedAtCommand(result)),
+      (result: Temporal.Instant) => this.commandBus.dispatch(new PatchFinishedAtCommand(result)),
       {
         data: { instant: this.session().finishedAt, label: 'Edit Finished At' },
       },

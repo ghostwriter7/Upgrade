@@ -40,7 +40,10 @@ export default class SessionEditor implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.sessionStore.updateCache(this.sessionStateHolder.session()!);
-    if (!this.isNew()) this.sessionStateHolder.set(null);
+    const session = this.sessionStateHolder.session();
+    if (session) {
+      this.sessionStore.updateCache(session);
+      if (!this.isNew()) this.sessionStateHolder.set(null);
+    }
   }
 }

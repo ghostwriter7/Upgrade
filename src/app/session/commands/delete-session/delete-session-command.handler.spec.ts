@@ -6,20 +6,24 @@ import { DeleteSessionCommand } from './delete-session-command';
 import { DeleteSessionCommandHandler } from './delete-session-command.handler';
 import { SessionStore } from '../../../store/session/session.store';
 import { SessionDeletedEvent } from '../../events/delete-session/session-deleted.event';
+import { SessionStateHolder } from '../../store/session-state-holder.store';
 
 describe('DeleteSessionCommandHandler', () => {
   let eventBus: { dispatch: Mock };
   let sessionStore: { delete: Mock };
+  let sessionStateHolder: { set: Mock };
   let handler: DeleteSessionCommandHandler;
 
   beforeEach(() => {
     eventBus = { dispatch: vi.fn() };
     sessionStore = { delete: vi.fn() };
+    sessionStateHolder = { set: vi.fn() };
 
     TestBed.configureTestingModule({
       providers: [
         { provide: EventBus, useValue: eventBus },
         { provide: SessionStore, useValue: sessionStore },
+        { provide: SessionStateHolder, useValue: sessionStateHolder },
         DeleteSessionCommandHandler,
       ],
     });
@@ -39,5 +43,6 @@ describe('DeleteSessionCommandHandler', () => {
     expect(eventBus.dispatch).toHaveBeenCalledExactlyOnceWith(
       new SessionDeletedEvent(command.session.uuid),
     );
+    expect(sessionStateHolder.set).toHaveBeenCalledExactlyOnceWith(null);
   });
 });

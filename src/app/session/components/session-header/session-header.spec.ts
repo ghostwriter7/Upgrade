@@ -79,11 +79,11 @@ describe('SessionHeader', () => {
 
   const getMenu = async (): Promise<MatMenuHarness> => loader.getHarness(MatMenuHarness);
 
-  const getStartedAtButton = () => queryByTestId(`session-header-started-at-${session.uuid}`);
-  const getFinishedAtButton = () => queryByTestId(`session-header-finished-at-${session.uuid}`);
+  const getStartedAtButton = () => queryByTestId(`session-header-started-at`);
+  const getFinishedAtButton = () => queryByTestId(`session-header-finished-at`);
   const getFinishedAtValue = () =>
-    queryByTestId(`session-header-finished-at-value-${session.uuid}`);
-  const getDuration = () => queryByTestId(`session-header-duration-${session.uuid}`);
+    queryByTestId(`session-header-finished-at-value`);
+  const getDuration = () => queryByTestId(`session-header-duration`);
 
   beforeEach(() => {
     sessionStore = {
@@ -128,7 +128,7 @@ describe('SessionHeader', () => {
       session: createSession(false),
     });
 
-    expect(queryByTestId(`session-header-started-at-value-${session.uuid}`)?.textContent).toEqual(
+    expect(queryByTestId(`session-header-started-at-value`)?.textContent).toEqual(
       '12:00',
     );
   });

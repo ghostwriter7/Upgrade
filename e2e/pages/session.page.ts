@@ -1,10 +1,14 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { getExerciseUuid } from '../support/exercise.utils';
 import { BasePage } from './base.page';
 
 export class SessionPage extends BasePage {
   constructor(page: Page) {
     super(page);
+  }
+
+  public get sessionMenu(): Locator {
+    return this.page.getByTestId('session-header-menu');
   }
 
   public get completeButton(): Locator {
@@ -40,7 +44,9 @@ export class SessionPage extends BasePage {
 
   public async showAddSetFormForExercise(name: string): Promise<void> {
     await this.showActionsForExercise(name);
-    await this.page.getByTestId(`exercise-card-actions-show-set-form-btn-${getExerciseUuid(name)}`).click();
+    await this.page
+      .getByTestId(`exercise-card-actions-show-set-form-btn-${getExerciseUuid(name)}`)
+      .click();
   }
 
   public closeAddSetForm(): Promise<void> {
@@ -73,5 +79,12 @@ export class SessionPage extends BasePage {
 
   public clickSaveSet(): Promise<void> {
     return this.page.getByTestId('upsert-set-save-btn').click();
+  }
+
+  public async deleteSession(): Promise<void> {
+    await this.sessionMenu.click();
+    await this.page.getByTestId('session-header-delete-menu-option').click();
+    await this.page.getByTestId('confirm-delete-alert-yes-button').click();
+    await expect(this.page.getByTestId('session-list-empty-message')).toBeVisible();
   }
 }

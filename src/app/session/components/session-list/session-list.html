@@ -4,7 +4,7 @@
   @for (session of sessions(); track session.uuid) {
     <app-session-view [session]="session" />
   } @empty {
-    <output class="empty-sessions" aria-live="polite">
+    <output data-testid="session-list-empty-message" class="empty-sessions" aria-live="polite">
       <mat-icon class="empty-sessions__icon" aria-hidden="true">
         event_busy
       </mat-icon>

@@ -10,24 +10,24 @@
   </button>
 </div>
 <div class="calendar">
-  <div class="calendar__weekday">Mon</div>
-  <div class="calendar__weekday">Tue</div>
-  <div class="calendar__weekday">Wed</div>
-  <div class="calendar__weekday">Thu</div>
-  <div class="calendar__weekday">Fri</div>
-  <div class="calendar__weekday">Sat</div>
-  <div class="calendar__weekday">Sun</div>
+  <div class="weekday">Mon</div>
+  <div class="weekday">Tue</div>
+  <div class="weekday">Wed</div>
+  <div class="weekday">Thu</div>
+  <div class="weekday">Fri</div>
+  <div class="weekday">Sat</div>
+  <div class="weekday">Sun</div>
 
   @for (cell of calendarCells(); track $index) {
     <div
-      class="calendar__cell"
+      class="cell"
       [attr.data-testid]="cell.testId"
-      [class.calendar__cell--has-session]="cell.hasSessions"
-      [class.calendar__cell--empty]="cell.day === null"
+      [class.highlight]="cell.hasSessions"
+      [class.empty]="cell.day === null"
       [routerLink]="['/session', cell.date]"
     >
       @if (cell.day !== null) {
-        <span class="calendar__day">{{ cell.day }}</span>
+        <span class="day">{{ cell.day }}</span>
       }
     </div>
   }
