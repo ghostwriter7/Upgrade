@@ -110,23 +110,23 @@ export const SessionStore = signalStore(
   }),
   withHooks((store, sessionRepository = inject(SessionRepository)) => ({
     onInit: () => {
-      effect(async () => {
+      effect(() => {
         const date = store.activeDate();
 
         if (date) {
-          const cachedSessions = untracked(store.sessionsByDate);
+          untracked(async () => {
+            const cachedSessions = store.sessionsByDate();
 
-          if (!cachedSessions[date]) {
-            const zonedDate = DateHelper.toLocal(date);
+            if (!cachedSessions[date]) {
+              const zonedDate = DateHelper.toLocal(date);
+              const sessions = await sessionRepository.findAllByDate(zonedDate);
 
-            const sessionsByDate = { ...cachedSessions };
-            sessionsByDate[date] = await sessionRepository.findAllByDate(zonedDate);
-
-            patchState(store, (state) => ({
-              ...state,
-              sessionsByDate,
-            }));
-          }
+              patchState(store, (state) => ({
+                ...state,
+                sessionsByDate: { ...state.sessionsByDate, [date]: sessions },
+              }));
+            }
+          });
         }
       });
     },
