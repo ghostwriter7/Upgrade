@@ -9,12 +9,12 @@ import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { SetData } from '../set-form/set-data.interface';
 import { CreateSetCommand } from '../../commands/create-set/create-set.command';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note/edit-exercise-note.command';
 import { EditNote } from '../edit-note/edit-note';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { DeleteExerciseCommand } from '../../commands/delete-exercise/delete-exercise.command';
 import { MeasureProgress } from '../measure-progress/measure-progress';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 @Component({
   selector: 'app-exercise-card-actions',

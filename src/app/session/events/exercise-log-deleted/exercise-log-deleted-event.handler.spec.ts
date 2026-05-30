@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
 import { Mock } from 'vitest';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { ExerciseLogDeletedEventHandler } from './exercise-log-deleted-event.handler';
 import { ExerciseLogDeletedEvent } from './exercise-log-deleted.event';
 import { SetRepository } from '../../../persistence/repository/set.repository';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 describe('ExerciseLogDeletedEventHandler', () => {
   let exerciseLogRepositoryMock: { deleteLog: Mock };

@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
-import { ExerciseLog } from '../../app/domain/model/session.model';
+
+import { ExerciseLog } from '../../app/domain/model/exercise-log.model';
 
 @Component({
   selector: 'app-exercise-card',

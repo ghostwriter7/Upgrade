@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
 import { ExerciseLogDto } from '../schema/exercise-log.schema';
 import { StoreName } from './store-name.enum';
-import { ExerciseLog } from '../../domain/model/session.model';
 import { ExerciseLogMapper } from '../mapper/exercise-entry/exercise-log.mapper';
 import { IndexName } from './index-name.enum';
+import { ExerciseLog } from '../../domain/model/exercise-log.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { SessionRepository } from '../../../persistence/repository/session.repository';
 import { SetRepository } from '../../../persistence/repository/set.repository';
-import { ExerciseLog, Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session.model';
 import { SessionSchema } from '../../../persistence/schema/session.schema';
 import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
 import { ExerciseSet } from '../../../domain/model/exercise-set.model';
@@ -10,6 +10,7 @@ import { ExerciseSetSchema } from '../../../persistence/schema/set.schema';
 import { ExerciseLogSchema } from '../../../persistence/schema/exercise-log.schema';
 import { ExerciseLogMapper } from '../../../persistence/mapper/exercise-entry/exercise-log.mapper';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {

@@ -1,6 +1,6 @@
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { Mapper } from '../mapper.interface';
 import { ExerciseLogDto } from '../../schema/exercise-log.schema';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
   public static readonly INSTANCE = new ExerciseLogMapper();

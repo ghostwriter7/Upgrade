@@ -4,7 +4,6 @@ import { ExerciseCardActions } from './exercise-card-actions';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { getButtonByTestId } from '../../../../test/harness.utils';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { CommandBus } from '../../routers/command-bus';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { Mock } from 'vitest';
@@ -17,6 +16,7 @@ import { CreateSetCommand } from '../../commands/create-set/create-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { Recorder } from '../recorder/recorder';
 import { CaptureRecordingCommand } from '../../commands/capture-recording/capture-recording.command';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 describe('ExerciseCardActions', () => {
   let component: ExerciseCardActions;

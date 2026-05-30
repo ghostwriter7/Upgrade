@@ -2,10 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { EntryDetails } from './entry-details';
 import { TestBedUtils } from '../../../../test/test-bed.utils';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { MediaRepository } from '../../../persistence/repository/media.repository';
 import { Mock } from 'vitest';
 import { BottomSheetTestHost } from '../../../../test/hosts/bottom-sheet-test-host';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 describe('EntryDetails', () => {
   let fixture: ComponentFixture<BottomSheetTestHost>;

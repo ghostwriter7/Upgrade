@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { MediaRepository } from '../../../persistence/repository/media.repository';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 @Component({
   selector: 'app-entry-details',

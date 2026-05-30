@@ -15,13 +15,13 @@ import { MatIcon } from '@angular/material/icon';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatMiniFabButton } from '@angular/material/button';
 import { SetView } from '../set-view/set-view';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { EventService } from '../../../common/service/event/event.service';
 import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EntryDetails } from '../entry-details/entry-details';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

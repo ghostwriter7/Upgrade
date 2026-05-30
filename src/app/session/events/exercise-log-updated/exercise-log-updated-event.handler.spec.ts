@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
 import { Mock } from 'vitest';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { ExerciseLogUpdatedEventHandler } from './exercise-log-updated-event.handler';
 import { ExerciseLogUpdatedEvent } from './exercise-log-updated.event';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 describe('ExerciseLogUpdatedEventHandler', () => {
   let exerciseLogRepositoryMock: { saveLog: Mock };

@@ -3,7 +3,8 @@ import { ExerciseLogRepository } from '../../../persistence/repository/exercise-
 import { ExerciseLogCreatedEvent } from './exercise-log-created.event';
 import { Mock } from 'vitest';
 import { ExerciseLogCreatedEventHandler } from './exercise-log-created-event.handler';
-import { ExerciseLog } from '../../../domain/model/session.model';
+
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 describe('ExerciseLogCreatedEventHandler', () => {
   let exerciseLogRepositoryMock: { saveLog: Mock };

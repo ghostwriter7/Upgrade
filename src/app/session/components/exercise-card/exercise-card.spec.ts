@@ -5,7 +5,6 @@ import { Component, input, Pipe } from '@angular/core';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
 import { SetView } from '../set-view/set-view';
 import { ExerciseNamePipe } from '../../../ui/pipes/exercise-name-pipe';
-import { ExerciseLog } from '../../../domain/model/session.model';
 import { BodyweightSet, ExerciseSet } from '../../../domain/model/exercise-set.model';
 import { By } from '@angular/platform-browser';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -14,6 +13,7 @@ import { EntryDetails } from '../entry-details/entry-details';
 import { EventService } from '../../../common/service/event/event.service';
 import { EMPTY, of, Subject } from 'rxjs';
 import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
+import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 @Component({
   selector: 'app-exercise-card-actions',
