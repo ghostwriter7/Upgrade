@@ -1,6 +1,6 @@
 export const exercises = [
   {
-    uuid: 'arching-standing-/-kneeling',
+    uuid: 'arching-standing-kneeling',
     name: 'Arching (Standing / Kneeling)',
   },
   {
