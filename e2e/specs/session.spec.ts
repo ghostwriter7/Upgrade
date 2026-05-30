@@ -55,7 +55,6 @@ test('should keep the Complete button disabled as long as there is no exercise s
 
   await test.step('Add Skill', async () => {
     await sessionPage.addSkill('Chin Ups');
-
     await expect(sessionPage.completeButton).toBeDisabled();
   });
 

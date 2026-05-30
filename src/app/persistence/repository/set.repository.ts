@@ -49,24 +49,6 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     return sets.map(ExerciseSetMapper.INSTANCE.toDomain);
   }
 
-  public async getLatestSetId(): Promise<number> {
-    const tx = await super.createReadTransaction(StoreName.SETS);
-    const request = tx.objectStore(StoreName.SETS).openKeyCursor(null, 'prev');
-
-    return new Promise((resolve, reject) => {
-      request.onsuccess = () => {
-        const cursor = request.result;
-
-        if (cursor) {
-          resolve(Number(cursor.key));
-        } else {
-          resolve(0);
-        }
-      };
-      request.onerror = () => reject(request.error);
-    });
-  }
-
   public deleteSet(setId: string): Promise<void> {
     return super.delete(StoreName.SETS, setId);
   }

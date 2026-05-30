@@ -99,7 +99,9 @@ export class SessionRepository extends GenericRepository<SessionDto> {
           .findAllBy<ExerciseSetDto>(StoreName.SETS, (store: IDBObjectStore) =>
             store.index(IndexName.SetBySessionId).getAll(sessionId),
           )
-          .then((data) => data.map((entry) => ExerciseSetSchema.parse(entry))),
+          .then((data) =>
+            data.map((entry) => ExerciseSetSchema.parse(entry))
+              .sort((a, b) => a.index - b.index)),
       ),
     );
 
@@ -109,8 +111,10 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     return sessions.map((session, index) => {
       const exerciseLogs = exerciseLogDTOs[index];
       session.exercises = exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDomain);
+
       const sets = setDTOs[index];
       const setByExerciseId = Object.groupBy(sets, (set) => set.exerciseId);
+
       for (const exerciseId of Object.keys(setByExerciseId)) {
         for (const set of setByExerciseId[exerciseId]!) {
           session = session.addSet(ExerciseSetMapper.INSTANCE.toDomain(set));
