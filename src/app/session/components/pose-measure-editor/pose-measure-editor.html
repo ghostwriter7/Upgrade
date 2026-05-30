@@ -1,16 +1,40 @@
 @let details = data();
-<svg #svg [attr.viewBox]="'0 0 ' + details.width + ' ' + details.height"
-     (pointerdown)="handleClick($event)">
-  <image [attr.href]="href()" [attr.width]="details.width" [attr.height]="details.height" />
-  @for (point of points(); track point) {
-    <circle [attr.cx]="point.x" [attr.cy]="point.y" r="6" class="point" />
+
+<div class="buttons">
+  <button class="info" matMiniFab (click)="undo()">
+    <mat-icon>undo</mat-icon>
+  </button>
+  <button class="info" matMiniFab (click)="clearAll()">
+    <mat-icon>clear_all</mat-icon>
+  </button>
+  <button matMiniFab (click)="save()">
+    <mat-icon>save</mat-icon>
+  </button>
+
+  @if (angle(); as angle) {
+    <span class="angle">
+      {{ angle }}°
+    </span>
   }
+</div>
+
+<svg #svg [attr.viewBox]="viewBox()" [class.no-events]="allPointsCaptured()" (pointerdown)="handleClick($event)">
+  <image [attr.href]="href()" [attr.width]="details.width" [attr.height]="details.height" />
+
+  @for (point of points(); track point) {
+    <circle
+      [attr.cx]="point.x"
+      [attr.cy]="point.y"
+      r="6"
+    />
+  }
+
   @for (line of lines(); track line) {
-    <line [attr.x1]="line[0].x" [attr.y1]="line[0].y" [attr.x2]="line[1].x" [attr.y2]="line[1].y" class="line"
-          stroke="black" />
+    <line
+      [attr.x1]="line[0].x"
+      [attr.y1]="line[0].y"
+      [attr.x2]="line[1].x"
+      [attr.y2]="line[1].y"
+      stroke="black" />
   }
 </svg>
-
-@if (angle(); as angle) {
-  {{ angle }} degrees
-}

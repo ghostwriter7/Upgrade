@@ -56,3 +56,7 @@ body {
 .green {
   background-color: var(--green) !important;
 }
+
+.no-events {
+  pointer-events: none;
+}

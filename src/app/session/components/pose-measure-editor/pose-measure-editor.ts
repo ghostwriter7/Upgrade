@@ -4,10 +4,12 @@ import {
   computed,
   ElementRef,
   input,
-  OnInit,
   signal,
   viewChild,
 } from '@angular/core';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+
 function calculateAngle(a: DOMPoint, b: DOMPoint, c: DOMPoint): number {
   const ab = {
     x: a.x - b.x,
@@ -26,17 +28,17 @@ function calculateAngle(a: DOMPoint, b: DOMPoint, c: DOMPoint): number {
 
   const angle = Math.acos(dot / (magAB * magCB));
 
-  return (angle * 180) / Math.PI;
+  return Math.round((angle * 180) / Math.PI);
 }
 
 @Component({
   selector: 'app-pose-measure-editor',
-  imports: [],
+  imports: [MatMiniFabButton, MatIcon],
   templateUrl: './pose-measure-editor.html',
   styleUrl: './pose-measure-editor.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PoseMeasureEditor  {
+export class PoseMeasureEditor {
   public data = input.required<{ image: Blob; width: number; height: number }>();
 
   private readonly svgEl = viewChild.required<ElementRef<SVGSVGElement>>('svg');
@@ -54,7 +56,8 @@ export class PoseMeasureEditor  {
       [midPoint, endPoint],
     ];
   });
-  protected readonly href = computed(() => URL.createObjectURL(this.data().image))
+  protected readonly href = computed(() => URL.createObjectURL(this.data().image));
+  protected readonly viewBox = computed(() => `0 0 ${this.data().width} ${this.data().height}`);
 
   protected readonly angle = computed(() => {
     const points = this.points();
@@ -65,6 +68,7 @@ export class PoseMeasureEditor  {
 
     return null;
   });
+  protected readonly allPointsCaptured = computed(() => this.points().length === 3);
 
   protected handleClick(event: PointerEvent): void {
     const svg = this.svgEl().nativeElement;
@@ -75,5 +79,17 @@ export class PoseMeasureEditor  {
 
     const transformed = point.matrixTransform(svg.getScreenCTM()?.inverse());
     this.points.update((points) => [...points, transformed]);
+  }
+
+  protected undo(): void {
+    this.points.update((points) => points.slice(0, -1));
+  }
+
+  protected clearAll(): void {
+    this.points.set([]);
+  }
+
+  protected save(): void {
+    // TODO: Implement saving logic
   }
 }

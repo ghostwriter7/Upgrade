@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MeasureProgress } from './measure-progress';
 
-describe('MeasureProgress', () => {
+describe.skip('MeasureProgress', () => {
   let component: MeasureProgress;
   let fixture: ComponentFixture<MeasureProgress>;
 

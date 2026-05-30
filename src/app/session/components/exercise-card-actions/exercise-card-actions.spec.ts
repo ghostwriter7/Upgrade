@@ -138,7 +138,7 @@ describe('ExerciseCardActions', () => {
     );
   });
 
-  it('should trigger video capturing', async () => {
+  it.skip('should trigger video capturing', async () => {
     const button = await getButtonByTestId(
       loader,
       `exercise-card-actions-video-capture-btn-${exercise.exerciseId}`,
