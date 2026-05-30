@@ -1,11 +1,12 @@
 import * as z from 'zod';
+import { IdSchema } from './id.schema';
 
 export const ExerciseLogSchema = z.object({
-  id: z.uuid(),
-  sessionId: z.uuid(),
-  exerciseId: z.uuid(),
+  id: IdSchema,
+  sessionId: IdSchema,
+  exerciseId: IdSchema,
   notes: z.string().nullable(),
-  mediaIds: z.array(z.uuid()).optional().default([]),
+  mediaIds: z.array(IdSchema).optional().default([]),
 });
 
 export type ExerciseLogDto = z.infer<typeof ExerciseLogSchema>;

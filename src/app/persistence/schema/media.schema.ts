@@ -1,9 +1,10 @@
 import * as z from 'zod';
+import { IdSchema } from './id.schema';
 
 export const ExerciseMediaSchema = z.object({
-  uuid: z.uuidv4(),
-  exerciseId: z.uuidv4(),
-  sessionId: z.uuidv4(),
+  uuid: IdSchema,
+  exerciseId: IdSchema,
+  sessionId: IdSchema,
   mimeType: z.enum(['image/jpeg']),
   blob: z.instanceof(Blob),
   createdAt: z.iso.datetime(),

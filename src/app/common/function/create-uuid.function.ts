@@ -1,3 +1,3 @@
-import { v4 as uuid } from 'uuid';
+import { nanoid } from 'nanoid';
 
-export const createUuid = (): string => uuid();
+export const createUuid = (): string => nanoid();
