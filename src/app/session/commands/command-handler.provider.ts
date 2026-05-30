@@ -12,6 +12,8 @@ import { AddExerciseCommandHandler } from './add-exercise/add-exercise-command.h
 import { EditExerciseNoteCommandHandler } from './edit-exercise-note/edit-exercise-note-command.handler';
 import { CaptureRecordingCommandHandler } from './capture-recording/capture-recording-command.handler';
 import { DeleteSessionCommandHandler } from './delete-session/delete-session-command.handler';
+import { CreateSessionCommand } from './create-session/create-session-command';
+import { CreateSessionCommandHandler } from './create-session/create-session-command.handler';
 
 export class CommandHandlerProvider {
   public static forRoot(): Provider[] {
@@ -55,6 +57,11 @@ export class CommandHandlerProvider {
         provide: COMMAND_HANDLERS,
         multi: true,
         useClass: DeleteSessionCommandHandler,
+      },
+      {
+        provide: COMMAND_HANDLERS,
+        multi: true,
+        useClass: CreateSessionCommandHandler,
       },
       {
         provide: COMMAND_HANDLERS,

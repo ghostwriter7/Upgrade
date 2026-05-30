@@ -12,8 +12,9 @@ import { SessionHeader } from '../session-header/session-header';
 import { Timer } from '../timer/timer';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { SessionStore } from '../../../store/session/session.store';
-import { Session } from '../../../domain/model/session.model';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { CommandBus } from '../../routers/command-bus';
+import { CreateSessionCommand } from '../../commands/create-session/create-session-command';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,12 +29,13 @@ export default class SessionEditor implements OnInit, OnDestroy {
 
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly sessionStore = inject(SessionStore);
+  private readonly commandBus = inject(CommandBus);
 
   protected readonly session = this.sessionStateHolder.session;
 
   public ngOnInit(): void {
     if (this.isNew()) {
-      this.sessionStateHolder.set(Session.createEmpty());
+      this.commandBus.dispatch(new CreateSessionCommand());
     }
   }
 
