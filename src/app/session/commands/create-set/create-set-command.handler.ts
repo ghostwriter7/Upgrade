@@ -6,6 +6,7 @@ import { SetDataMapper } from '../../components/set-form/mapper/set-data.mapper'
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
 import { SetCreatedEvent } from '../../events/set-created/set-created.event';
+import { createUuid } from '../../../common/function/create-uuid.function';
 
 @Injectable()
 export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand> {
@@ -24,7 +25,7 @@ export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand>
 
     const exercise = session.getExerciseById(exerciseId);
     const set = SetDataMapper.toDomain(setData, exerciseId, session.uuid, exercise.sets.length);
-    set.id = this.setIdProvider.nextSetId();
+    set.id = createUuid();
 
     this.sessionStateHolder.set(session.addSet(set));
     this.eventBus.dispatch(new SetCreatedEvent(set));

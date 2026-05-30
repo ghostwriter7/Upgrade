@@ -2,7 +2,7 @@ import * as z from 'zod';
 import { IdSchema } from './id.schema';
 
 const BaseFlexibilitySetSchema = z.object({
-  id: z.number().optional(),
+  id: z.nanoid().optional(),
   sessionId: IdSchema,
   exerciseId: IdSchema,
   index: z.number(),

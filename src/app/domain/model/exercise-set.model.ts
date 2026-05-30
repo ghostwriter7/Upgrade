@@ -2,7 +2,7 @@ export const ExerciseSetTypes = ['bodyweight', 'weight', 'iso'] as const;
 export type ExerciseSetType = (typeof ExerciseSetTypes)[number];
 
 export abstract class ExerciseSet {
-  public id?: number;
+  public id?: string;
 
   protected constructor(
     public readonly sessionId: string,
@@ -83,7 +83,7 @@ export class IsoSet extends ExerciseSet {
 export abstract class ExerciseSetBuilder {
   protected sessionId?: string;
   protected exerciseId?: string;
-  protected id?: number;
+  protected id?: string;
   protected index?: number;
 
   protected constructor(protected readonly type: ExerciseSetType) {}
@@ -100,7 +100,7 @@ export abstract class ExerciseSetBuilder {
     return this;
   }
 
-  public withId(id?: number): this {
+  public withId(id?: string): this {
     this.id = id;
     return this;
   }

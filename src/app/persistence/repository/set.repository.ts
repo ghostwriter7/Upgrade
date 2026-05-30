@@ -67,7 +67,7 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     });
   }
 
-  public deleteSet(setId: number): Promise<void> {
+  public deleteSet(setId: string): Promise<void> {
     return super.delete(StoreName.SETS, setId);
   }
 
