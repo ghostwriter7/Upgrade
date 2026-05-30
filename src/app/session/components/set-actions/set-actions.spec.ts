@@ -15,6 +15,7 @@ import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
 import { getButtonByTestId } from '../../../../test/harness.utils';
+import { createUuid } from '../../../common/function/create-uuid.function';
 
 describe('SetActions', () => {
   let component: SetActions;
@@ -24,7 +25,7 @@ describe('SetActions', () => {
   let commandBusMock: { dispatch: Mock };
 
   const set = new BodyweightSet('sessionId', 'exerciseId', 0, 10);
-  set.id = 10000;
+  set.id = createUuid();
 
   beforeEach(async () => {
     dialogServiceMock = { open: vi.fn() };

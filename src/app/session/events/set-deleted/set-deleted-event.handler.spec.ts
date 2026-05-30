@@ -3,6 +3,7 @@ import { Mock } from 'vitest';
 import { SetDeletedEvent } from './set-deleted.event';
 import { SetDeletedEventHandler } from './set-deleted-event.handler';
 import { SetRepository } from '../../../persistence/repository/set.repository';
+import { createUuid } from '../../../common/function/create-uuid.function';
 
 describe('SetDeletedEventHandler', () => {
   let setRepositoryMock: { deleteSet: Mock };
@@ -24,7 +25,7 @@ describe('SetDeletedEventHandler', () => {
     expect(handler.appliesTo()).toEqual(SetDeletedEvent));
 
   it('should delete a set', () => {
-    const event = new SetDeletedEvent(5);
+    const event = new SetDeletedEvent(createUuid());
 
     handler.handle(event);
 

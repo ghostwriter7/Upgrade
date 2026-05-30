@@ -11,6 +11,7 @@ import {
   WeightedSet,
   WeightSetBuilder,
 } from '../../../domain/model/exercise-set.model';
+import { createUuid } from '../../../common/function/create-uuid.function';
 
 describe('ExerciseSetMapper', () => {
   const mapper = ExerciseSetMapper.INSTANCE;
@@ -20,7 +21,7 @@ describe('ExerciseSetMapper', () => {
       const dto: ExerciseSetDto = {
         sessionId: 'any-session-id',
         exerciseId: 'any-exercise-id',
-        id: 5,
+        id: createUuid(),
         reps: 10,
         type: 'bodyweight',
         index: 4,
@@ -43,7 +44,7 @@ describe('ExerciseSetMapper', () => {
       const dto: ExerciseSetDto = {
         sessionId: 'any-session-id',
         exerciseId: 'any-exercise-id',
-        id: 5,
+        id: createUuid(),
         reps: 10,
         weight: 20,
         type: 'weight',
@@ -68,7 +69,7 @@ describe('ExerciseSetMapper', () => {
       const dto: ExerciseSetDto = {
         sessionId: 'any-session-id',
         exerciseId: 'any-exercise-id',
-        id: 5,
+        id: createUuid(),
         duration: 30,
         weight: 20,
         type: 'iso',
@@ -93,7 +94,7 @@ describe('ExerciseSetMapper', () => {
   describe('toDto', () => {
     test('should map BodyweightSet to a bodyweight DTO', () => {
       const set = new BodyweightSetBuilder()
-        .withId(10)
+        .withId(createUuid())
         .withSessionId('any-session-id')
         .withExerciseId('any-exercise-id')
         .withIndex(4)
@@ -113,7 +114,7 @@ describe('ExerciseSetMapper', () => {
 
     test('should map WeightedSet to a weight DTO', () => {
       const set = new WeightSetBuilder()
-        .withId(10)
+        .withId(createUuid())
         .withSessionId('any-session-id')
         .withExerciseId('any-exercise-id')
         .withIndex(4)
@@ -135,7 +136,7 @@ describe('ExerciseSetMapper', () => {
 
     test('should map IsoSet to an iso DTO', () => {
       const set = new IsoSetBuilder()
-        .withId(10)
+        .withId(createUuid())
         .withSessionId('any-session-id')
         .withExerciseId('any-exercise-id')
         .withIndex(4)
@@ -158,7 +159,7 @@ describe('ExerciseSetMapper', () => {
 
     test('should include id in DTO if present in domain model', () => {
       const set = new BodyweightSetBuilder()
-        .withId(10)
+        .withId(createUuid())
         .withSessionId('any-session-id')
         .withExerciseId('any-exercise-id')
         .withIndex(4)
