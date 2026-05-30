@@ -1,7 +1,7 @@
 <div class="session-editor">
   <app-session-header [isNew]="isNew()" [session]="session()!" />
 
-  @for (entry of session()!.exercises; track entry.exerciseId) {
+  @for (entry of session()?.exercises; track entry.exerciseId) {
     <app-exercise-card
       [entry]="entry"
       [isNonDeletable]="$count === 1"
