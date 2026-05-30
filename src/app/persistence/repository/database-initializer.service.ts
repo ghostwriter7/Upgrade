@@ -2,7 +2,6 @@ import { DatabaseVersion } from './database-version.const';
 import { Observable, ReplaySubject } from 'rxjs';
 import { StoreName } from './store-name.enum';
 import { IndexName } from './index-name.enum';
-import { createUuid } from '../../common/function/create-uuid.function';
 
 export function databaseFactory(): Observable<IDBDatabase> {
   const db = indexedDB.open('upgrade', DatabaseVersion);
@@ -52,18 +51,6 @@ export function databaseFactory(): Observable<IDBDatabase> {
     if (!mediaStore.indexNames.contains(IndexName.MediaBySessionId)) {
       mediaStore.createIndex(IndexName.MediaBySessionId, 'sessionId', { unique: false });
     }
-
-    const request = setStore.getAll();
-    request.onsuccess = () => {
-      const sets = request.result;
-      const deleteRequest = setStore.clear();
-      deleteRequest.onsuccess = ( ) => {
-        sets.map((set) => ({
-          ...set,
-          id: createUuid()
-        })).forEach((set) => setStore.put(set));
-      }
-    };
   };
 
   db.onsuccess = (event: Event): void => databaseSubject.next(db.result);

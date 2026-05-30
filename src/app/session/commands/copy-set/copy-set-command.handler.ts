@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { CommandConstructor, CommandHandler } from '../command-handler.interface';
 import { CopySetCommand } from './copy-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { SetIdProvider } from '../../services/set-id-provider/set-id-provider.service';
 import { EventBus } from '../../routers/event-bus';
 import { SetCreatedEvent } from '../../events/set-created/set-created.event';
 import { createUuid } from '../../../common/function/create-uuid.function';
@@ -11,7 +10,6 @@ import { createUuid } from '../../../common/function/create-uuid.function';
 export class CopySetCommandHandler implements CommandHandler<CopySetCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
-  private readonly setIdProvider = inject(SetIdProvider);
 
   public appliesTo(): CommandConstructor<CopySetCommand> {
     return CopySetCommand;

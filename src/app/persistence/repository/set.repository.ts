@@ -71,14 +71,8 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     return super.delete(StoreName.SETS, setId);
   }
 
-  public async upsertSet(set: ExerciseSet): Promise<number> {
+  public async upsertSet(set: ExerciseSet): Promise<IDBValidKey> {
     const dto = ExerciseSetMapper.INSTANCE.toDto(set);
-    const key = await super.put(StoreName.SETS, dto);
-
-    if (typeof key === 'number') {
-      return key;
-    }
-
-    throw new Error('Invalid key type');
+    return await super.put(StoreName.SETS, dto);
   }
 }
