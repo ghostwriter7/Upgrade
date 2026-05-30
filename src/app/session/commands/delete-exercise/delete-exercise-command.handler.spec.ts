@@ -2,9 +2,7 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
-import { AddExerciseCommand } from '../add-exercise/add-exercise.command';
 import { Session } from '../../../domain/model/session.model';
-import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';
 import { DeleteExerciseCommand } from './delete-exercise.command';
 import { DeleteExerciseCommandHandler } from './delete-exercise-command.handler';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
@@ -28,6 +26,10 @@ describe('DeleteExerciseCommandHandler', () => {
 
     handler = TestBed.inject(DeleteExerciseCommandHandler);
   });
+
+  it('should return a correct type it can handle', () =>
+    expect(handler.appliesTo()).toEqual(DeleteExerciseCommand));
+
 
   test('should delete an exercise log', () => {
     const command = new DeleteExerciseCommand('exerciseId');

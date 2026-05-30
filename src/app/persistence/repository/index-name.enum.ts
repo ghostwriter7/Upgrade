@@ -1,11 +1,12 @@
 export enum IndexName {
-  ExerciseLogsBySession = 'exerciseLogsBySession',
-  ExerciseLogsByExercise = 'exerciseLogsByExercise',
-  StartedAt = 'startedAtIndex',
+  ExerciseLogsBySessionId = 'exerciseLogsBySession',
+  ExerciseLogsByExerciseId = 'exerciseLogsByExercise',
+  SessionByStartedAt = 'startedAtIndex',
+  MediaBySessionId = 'mediaBySessionId',
   MediaByExerciseId = 'mediaByExerciseId',
-  MediaBySessionAndExercise = 'mediaBySessionAndExercise',
-  SetBySession = 'setBySession',
-  SetByExercise = 'setByExercise',
-  SetBySessionAndExercise = 'setBySessionAndExercise',
+  MediaBySessionIdAndExerciseId = 'mediaBySessionAndExercise',
+  SetBySessionId = 'setBySession',
+  SetByExerciseId = 'setByExercise',
+  SetBySessionIdAndExerciseId = 'setBySessionAndExercise',
 }
 

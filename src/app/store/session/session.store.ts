@@ -105,7 +105,6 @@ export const SessionStore = signalStore(
           sessionsByDate,
           countsByMonthAndYear: computeCounts(session, -1),
         }));
-        sessionRepository.delete(session.uuid);
       },
     };
   }),

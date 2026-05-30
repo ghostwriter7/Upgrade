@@ -4,6 +4,7 @@ import { ExerciseMediaDto } from '../schema/media.schema';
 import { ExerciseMedia } from '../../domain/model/exercise-media.model';
 import { StoreName } from './store-name.enum';
 import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
+import { IndexName } from './index-name.enum';
 
 @Injectable({ providedIn: 'root' })
 export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
@@ -20,7 +21,11 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
     return this.put(StoreName.MEDIA, ExerciseMediaMapper.INSTANCE.toDto(media));
   }
 
-  public deleteMedia(mediaId: string): Promise<boolean> {
+  public deleteMedia(mediaId: string): Promise<void> {
     return super.delete(StoreName.MEDIA, mediaId);
+  }
+
+  public async deleteAllBySessionId(sessionId: string): Promise<void> {
+    return super.deleteAllByIndex(StoreName.MEDIA, IndexName.MediaBySessionId, sessionId);
   }
 }

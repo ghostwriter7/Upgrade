@@ -6,7 +6,7 @@ import { DateHelper } from '../../common/helper/date.helper';
 import { Session } from '../../domain/model/session.model';
 
 type SessionRepositoryMock = Mocked<
-  Pick<SessionRepository, 'findAllByDate' | 'getCountsByMonthAndYear' | 'save' | 'delete'>
+  Pick<SessionRepository, 'findAllByDate' | 'getCountsByMonthAndYear' | 'save'>
 >;
 
 const createSessionAt = (iso: string): Session => {
@@ -50,7 +50,6 @@ describe('SessionStore', () => {
     getCountsByMonthAndYear: vi.fn(),
     findAllByDate: vi.fn(),
     save: vi.fn(),
-    delete: vi.fn(),
   });
 
   let sessionRepositoryMock: SessionRepositoryMock;
@@ -215,7 +214,6 @@ describe('SessionStore', () => {
 
       store.delete(sessionOne);
 
-      expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
       expectSessionsByDate({ [sessionOne.isoDate]: [] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0 } });
     });
@@ -227,7 +225,6 @@ describe('SessionStore', () => {
 
       store.delete(sessionOne);
 
-      expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
       expectSessionsByDate({ [sessionTwo.isoDate]: [sessionTwo] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionTwo.dayOfMonth]: 1 } });
     });
@@ -239,7 +236,6 @@ describe('SessionStore', () => {
 
       store.delete(sessionOne);
 
-      expect(sessionRepositoryMock.delete).toHaveBeenCalledExactlyOnceWith(sessionOne.uuid);
       expectSessionsByDate({ [sessionOne.isoDate]: [], [sessionThree.isoDate]: [sessionThree] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0, [sessionThree.dayOfMonth]: 1 } });
     });

@@ -30,7 +30,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     month: number,
     year: number,
   ): Promise<Record<number, number>> {
-    const request = await super.openKeyCursor(StoreName.SESSIONS, IndexName.StartedAt, () => {
+    const request = await super.openKeyCursor(StoreName.SESSIONS, IndexName.SessionByStartedAt, () => {
       const startDate = new Temporal.PlainDate(year, month, 1);
       const endDate = startDate.add({ months: 1 });
 
@@ -77,7 +77,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
           true,
         );
 
-        return store.index(IndexName.StartedAt).getAll(range);
+        return store.index(IndexName.SessionByStartedAt).getAll(range);
       },
     );
 
@@ -87,7 +87,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
       sessionIds.map((sessionId) =>
         super
           .findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
-            store.index(IndexName.ExerciseLogsBySession).getAll(sessionId),
+            store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId),
           )
           .then((data) => data.map((entry) => ExerciseLogSchema.parse(entry))),
       ),
@@ -97,7 +97,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
       sessionIds.map((sessionId) =>
         super
           .findAllBy<ExerciseSetDto>(StoreName.SETS, (store: IDBObjectStore) =>
-            store.index(IndexName.SetBySession).getAll(sessionId),
+            store.index(IndexName.SetBySessionId).getAll(sessionId),
           )
           .then((data) => data.map((entry) => ExerciseSetSchema.parse(entry))),
       ),
@@ -125,27 +125,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     return super.put(StoreName.SESSIONS, dto);
   }
 
-  public override async delete(sessionId: string): Promise<boolean> {
-    const transaction = await super.createWriteTransaction([StoreName.SESSIONS, StoreName.SETS]);
-    return new Promise((resolve, reject) => {
-      transaction.oncomplete = (): void => resolve(true);
-      transaction.onerror = (): void => reject(transaction.error);
-      transaction.onabort = (): void => reject(transaction.error);
-
-      transaction.objectStore(StoreName.SESSIONS).delete(sessionId);
-
-      const setStore = transaction.objectStore(StoreName.SETS);
-      const setBySessionIndex = setStore.index(IndexName.SetBySession);
-
-      const cursorRequest = setBySessionIndex.openCursor(sessionId);
-      cursorRequest.onsuccess = () => {
-        const cursor = cursorRequest.result;
-
-        if (!cursor) return;
-
-        cursor.delete();
-        cursor.continue();
-      };
-    });
+  public async deleteById(sessionId: string): Promise<void> {
+    return super.delete(StoreName.SESSIONS, sessionId);
   }
 }

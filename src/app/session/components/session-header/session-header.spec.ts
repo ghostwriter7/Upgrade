@@ -15,6 +15,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '../../routers/command-bus';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
+import { DeleteSessionCommand } from '../../commands/delete-session/delete-session-command';
 
 describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;
@@ -283,26 +284,10 @@ describe('SessionHeader', () => {
     expect(dialogService.open).toHaveBeenCalledWith(ConfirmDeleteAlert, expect.any(Function));
   });
 
-  it('should navigate home after confirming delete for a new session', async () => {
+  it('should dispatch a DeleteSessionCommand after confirming delete', async () => {
+    const session = createSession(false);
     createComponent({
       isNew: true,
-      session: createSession(false),
-    });
-
-    await clickMenuItemByText('Delete');
-
-    const [, callback] = dialogService.open.mock.calls.at(-1)!;
-    callback();
-
-    expect(router.navigate).toHaveBeenCalledWith(['/']);
-    expect(sessionStore.delete).not.toHaveBeenCalled();
-  });
-
-  it('should delete session after confirming delete for an existing session', async () => {
-    const session = createSession(false);
-
-    createComponent({
-      isNew: false,
       session,
     });
 
@@ -311,7 +296,6 @@ describe('SessionHeader', () => {
     const [, callback] = dialogService.open.mock.calls.at(-1)!;
     callback();
 
-    expect(sessionStore.delete).toHaveBeenCalledWith(session);
-    expect(router.navigate).not.toHaveBeenCalled();
+    expect(commandBus.dispatch).toHaveBeenCalledExactlyOnceWith(new DeleteSessionCommand(session))
   });
 });

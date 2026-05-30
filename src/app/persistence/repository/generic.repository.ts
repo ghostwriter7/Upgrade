@@ -11,9 +11,11 @@ export abstract class GenericRepository<T> {
     return firstValueFrom(this.db);
   }
 
-  protected async openKeyCursor(storeName: StoreName,
-                                index: IndexName,
-                                createRange: () => IDBKeyRange): Promise<IDBRequest<IDBCursor | null>> {
+  protected async openKeyCursor(
+    storeName: StoreName,
+    index: IndexName,
+    createRange: () => IDBKeyRange,
+  ): Promise<IDBRequest<IDBCursor | null>> {
     const transaction = await this.createReadTransaction(storeName);
     const store = transaction.objectStore(storeName);
     return store.index(index).openKeyCursor(createRange());
@@ -57,13 +59,13 @@ export abstract class GenericRepository<T> {
     });
   }
 
-  protected async delete(storeName: StoreName, entityId: string | number): Promise<boolean> {
+  protected async delete(storeName: StoreName, entityId: string | number): Promise<void> {
     const transaction = await this.createWriteTransaction(storeName);
     const store = transaction.objectStore(storeName);
     const request = store.delete(entityId);
 
     return new Promise((resolve, reject) => {
-      request.onsuccess = () => resolve(true);
+      request.onsuccess = () => resolve();
       request.onerror = () => reject(request.error!);
     });
   }
@@ -84,9 +86,43 @@ export abstract class GenericRepository<T> {
     return db.transaction(storeName, 'readonly');
   }
 
-  protected async createWriteTransaction(storeName: StoreName | Iterable<StoreName>): Promise<IDBTransaction> {
+  protected async createWriteTransaction(
+    storeName: StoreName | Iterable<StoreName>,
+  ): Promise<IDBTransaction> {
     const db = await this.getDb();
     return db.transaction(storeName, 'readwrite');
+  }
+
+  protected async deleteAllByIndex(
+    storeName: StoreName,
+    indexName: IndexName,
+    key: IDBValidKey,
+  ): Promise<void> {
+    const tx = await this.createWriteTransaction([storeName]);
+
+    return new Promise((resolve, reject) => {
+      tx.oncomplete = (): void => resolve();
+      tx.onerror = (): void => reject(tx.error);
+      tx.onabort = (): void => reject(tx.error);
+
+      const store = tx.objectStore(storeName);
+      const index = store.index(indexName);
+
+      const cursorRequest = index.openCursor(IDBKeyRange.only(key));
+
+      cursorRequest.onsuccess = (): void => {
+        const cursor = cursorRequest.result;
+
+        if (!cursor) {
+          return;
+        }
+
+        cursor.delete();
+        cursor.continue();
+      };
+
+      cursorRequest.onerror = (): void => reject(cursorRequest.error);
+    });
   }
 
   private responseFromRequest<T>(request: IDBRequest): Promise<T> {

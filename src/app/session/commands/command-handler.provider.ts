@@ -11,6 +11,7 @@ import { DeleteExerciseCommandHandler } from './delete-exercise/delete-exercise-
 import { AddExerciseCommandHandler } from './add-exercise/add-exercise-command.handler';
 import { EditExerciseNoteCommandHandler } from './edit-exercise-note/edit-exercise-note-command.handler';
 import { CaptureRecordingCommandHandler } from './capture-recording/capture-recording-command.handler';
+import { DeleteSessionCommandHandler } from './delete-session/delete-session-command.handler';
 
 export class CommandHandlerProvider {
   public static forRoot(): Provider[] {
@@ -53,6 +54,11 @@ export class CommandHandlerProvider {
       {
         provide: COMMAND_HANDLERS,
         multi: true,
+        useClass: DeleteSessionCommandHandler,
+      },
+      {
+        provide: COMMAND_HANDLERS,
+        multi: true,
         useClass: DeleteExerciseCommandHandler,
       },
       {
@@ -68,8 +74,8 @@ export class CommandHandlerProvider {
       {
         provide: COMMAND_HANDLERS,
         multi: true,
-        useClass: CaptureRecordingCommandHandler
-      }
+        useClass: CaptureRecordingCommandHandler,
+      },
     ];
   }
 }

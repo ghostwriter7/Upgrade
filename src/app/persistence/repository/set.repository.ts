@@ -24,10 +24,10 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
       tx.onabort = (): void => reject(tx.error);
 
       const store = tx.objectStore(StoreName.SETS);
-      const setBySessionAndExercise = store.index(IndexName.SetBySessionAndExercise);
+      const setBySessionAndExercise = store.index(IndexName.SetBySessionIdAndExerciseId);
 
       const cursorRequest = setBySessionAndExercise.openCursor(
-        IDBKeyRange.only([sessionId, exerciseId])
+        IDBKeyRange.only([sessionId, exerciseId]),
       );
       cursorRequest.onsuccess = () => {
         const cursor = cursorRequest.result;
@@ -38,6 +38,10 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
         cursor.continue();
       };
     });
+  }
+
+  public async deleteAllBySessionId(sessionId: string): Promise<void> {
+    return super.deleteAllByIndex(StoreName.SETS, IndexName.SetBySessionId, sessionId);
   }
 
   public async getAllSets(): Promise<ExerciseSet[]> {
@@ -63,7 +67,7 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     });
   }
 
-  public deleteSet(setId: number): Promise<boolean> {
+  public deleteSet(setId: number): Promise<void> {
     return super.delete(StoreName.SETS, setId);
   }
 

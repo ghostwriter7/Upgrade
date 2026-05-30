@@ -5,7 +5,6 @@ import { Session } from '../../../domain/model/session.model';
 import { Router } from '@angular/router';
 import { DateHelper } from '../../../common/helper/date.helper';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
-import { SessionStore } from '../../../store/session/session.store';
 import { EditTime } from '../edit-time/edit-time';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
@@ -13,6 +12,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
 import { CommandBus } from '../../routers/command-bus';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
+import { DeleteSessionCommand } from '../../commands/delete-session/delete-session-command';
 
 @Component({
   selector: 'app-session-header',
@@ -60,21 +60,14 @@ export class SessionHeader {
     return `${minutes}m`;
   });
 
-  private readonly sessionStore = inject(SessionStore);
   private readonly router = inject(Router);
   private readonly dialog = inject(DialogService);
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly commandBus = inject(CommandBus);
 
   protected deleteSession(): void {
-    this.dialog.open(ConfirmDeleteAlert, () => {
-      // TODO Revisit this logic
-      if (this.isNew()) {
-        this.router.navigate(['/']);
-      } else {
-        this.sessionStore.delete(this.session());
-      }
-    });
+    this.dialog.open(ConfirmDeleteAlert,
+      () => this.commandBus.dispatch(new DeleteSessionCommand(this.session())));
   }
 
   protected editStartedAt(): void {

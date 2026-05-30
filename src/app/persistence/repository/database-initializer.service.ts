@@ -15,30 +15,35 @@ export function databaseFactory(): Observable<IDBDatabase> {
     const existingObjectStores = db.objectStoreNames;
     if (!existingObjectStores.contains(StoreName.SESSIONS)) {
       const store = db.createObjectStore(StoreName.SESSIONS, { keyPath: 'uuid' });
-      store.createIndex(IndexName.StartedAt, 'startedAt', { unique: false });
+      store.createIndex(IndexName.SessionByStartedAt, 'startedAt', { unique: false });
     }
 
     if (!existingObjectStores.contains(StoreName.MEDIA)) {
       const store = db.createObjectStore(StoreName.MEDIA, { keyPath: 'uuid'});
       store.createIndex(IndexName.MediaByExerciseId, 'exerciseId', { unique: false });
-      store.createIndex(IndexName.MediaBySessionAndExercise, ['sessionId', 'exerciseId'], { unique: false });
+      store.createIndex(IndexName.MediaBySessionIdAndExerciseId, ['sessionId', 'exerciseId'], { unique: false });
     }
 
     if (!existingObjectStores.contains(StoreName.SETS)) {
       const store = db.createObjectStore(StoreName.SETS, { keyPath: 'id' });
-      store.createIndex(IndexName.SetBySession, 'sessionId', { unique: false });
-      store.createIndex(IndexName.SetByExercise, 'exerciseId', { unique: false });
+      store.createIndex(IndexName.SetBySessionId, 'sessionId', { unique: false });
+      store.createIndex(IndexName.SetByExerciseId, 'exerciseId', { unique: false });
     }
 
     if (!existingObjectStores.contains(StoreName.EXERCISE_LOGS)) {
       const store: IDBObjectStore = db.createObjectStore(StoreName.EXERCISE_LOGS, { keyPath: 'id' });
-      store.createIndex(IndexName.ExerciseLogsBySession, 'sessionId', { unique: false });
-      store.createIndex(IndexName.ExerciseLogsByExercise, 'exerciseId', { unique: false });
+      store.createIndex(IndexName.ExerciseLogsBySessionId, 'sessionId', { unique: false });
+      store.createIndex(IndexName.ExerciseLogsByExerciseId, 'exerciseId', { unique: false });
     }
 
     const setStore = tx!.objectStore(StoreName.SETS);
-    if (!setStore.indexNames.contains(IndexName.SetBySessionAndExercise)) {
-      setStore.createIndex(IndexName.SetBySessionAndExercise, ['sessionId', 'exerciseId'], { unique: false });
+    if (!setStore.indexNames.contains(IndexName.SetBySessionIdAndExerciseId)) {
+      setStore.createIndex(IndexName.SetBySessionIdAndExerciseId, ['sessionId', 'exerciseId'], { unique: false });
+    }
+
+    const mediaStore = tx!.objectStore(StoreName.MEDIA);
+    if (!mediaStore.indexNames.contains(IndexName.MediaBySessionId)) {
+      mediaStore.createIndex(IndexName.MediaBySessionId, 'sessionId', { unique: false });
     }
   };
 

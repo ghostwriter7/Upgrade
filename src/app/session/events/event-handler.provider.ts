@@ -9,6 +9,7 @@ import { MediaCapturedEventHandler } from './media-captured/media-captured-event
 import { ExerciseLogCreatedEventHandler } from './exercise-log-created/exercise-log-created-event.handler';
 import { ExerciseLogDeletedEventHandler } from './exercise-log-deleted/exercise-log-deleted-event.handler';
 import { ExerciseLogUpdatedEventHandler } from './exercise-log-updated/exercise-log-updated-event.handler';
+import { SessionDeletedEventHandler } from './delete-session/session-deleted-event.handler';
 
 export class EventHandlerProvider {
   public static forRoot(): Provider[] {
@@ -36,6 +37,11 @@ export class EventHandlerProvider {
       {
         provide: EVENT_HANDLERS,
         multi: true,
+        useClass: SessionDeletedEventHandler,
+      },
+      {
+        provide: EVENT_HANDLERS,
+        multi: true,
         useClass: MediaDeletedEventHandler,
       },
       {
@@ -57,7 +63,7 @@ export class EventHandlerProvider {
         provide: EVENT_HANDLERS,
         multi: true,
         useClass: ExerciseLogUpdatedEventHandler,
-      }
+      },
     ];
   }
 }
