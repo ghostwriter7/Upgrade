@@ -13,8 +13,8 @@ import { SessionStore } from '../../../store/session/session.store';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '../../routers/command-bus';
-import { PatchStartedAtCommand } from '../../commands/patch-started-at.command';
-import { PatchFinishedAtCommand } from '../../commands/patch-finished-at.command';
+import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
+import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 
 describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;

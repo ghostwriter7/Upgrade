@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Session } from '../../../domain/model/session.model';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '../../routers/command-bus';
-import { CompleteSessionCommand } from '../../commands/complete-session.command';
+import { CompleteSessionCommand } from '../../commands/complete-session/complete-session.command';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 
 describe('SessionActions', () => {

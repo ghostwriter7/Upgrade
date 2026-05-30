@@ -5,8 +5,8 @@ import { routes } from './app.routes';
 import { DATABASE_TOKEN } from './persistence/repository/database.token';
 import { databaseFactory } from './persistence/repository/database-initializer.service';
 import { provideServiceWorker } from '@angular/service-worker';
-import { CommandHandlerProvider } from './session/commands/handlers/command-handler.provider';
-import { EventHandlerProvider } from './session/events/handlers/event-handler.provider';
+import { CommandHandlerProvider } from './session/commands/command-handler.provider';
+import { EventHandlerProvider } from './session/events/event-handler.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Command } from '../commands/command';
-import { COMMAND_HANDLERS } from '../commands/handlers/command-handlers.token';
-import { CommandConstructor, CommandHandler } from '../commands/handlers/command-handler.interface';
+import { COMMAND_HANDLERS } from '../commands/command-handlers.token';
+import { CommandConstructor, CommandHandler } from '../commands/command-handler.interface';
 
 @Injectable({ providedIn: 'root' })
 export class CommandBus {

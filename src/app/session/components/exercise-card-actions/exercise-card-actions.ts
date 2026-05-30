@@ -2,18 +2,18 @@ import { Component, computed, inject, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { Recorder } from '../recorder/recorder';
-import { CaptureRecordingCommand } from '../../commands/capture-recording.command';
+import { CaptureRecordingCommand } from '../../commands/capture-recording/capture-recording.command';
 import { CommandBus } from '../../routers/command-bus';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { SetData } from '../set-form/set-data.interface';
-import { CreateSetCommand } from '../../commands/create-set.command';
+import { CreateSetCommand } from '../../commands/create-set/create-set.command';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { ExerciseLog } from '../../../domain/model/session.model';
-import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note.command';
+import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note/edit-exercise-note.command';
 import { EditNote } from '../edit-note/edit-note';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
-import { DeleteExerciseCommand } from '../../commands/delete-exercise.command';
+import { DeleteExerciseCommand } from '../../commands/delete-exercise/delete-exercise.command';
 import { MeasureProgress } from '../measure-progress/measure-progress';
 
 @Component({

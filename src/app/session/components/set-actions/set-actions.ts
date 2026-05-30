@@ -6,10 +6,10 @@ import { CommandBus } from '../../routers/command-bus';
 import { SetData } from '../set-form/set-data.interface';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { SetDataMapper } from '../set-form/mapper/set-data.mapper';
-import { UpdateSetCommand } from '../../commands/update-set.command';
+import { UpdateSetCommand } from '../../commands/update-set/update-set.command';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
-import { DeleteSetCommand } from '../../commands/delete-set.command';
-import { CopySetCommand } from '../../commands/copy-set.command';
+import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
+import { CopySetCommand } from '../../commands/copy-set/copy-set.command';
 import { ExerciseSet } from '../../../domain/model/exercise-set.model';
 
 @Component({

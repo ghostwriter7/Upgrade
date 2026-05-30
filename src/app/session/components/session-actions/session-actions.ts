@@ -4,10 +4,10 @@ import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '../../routers/command-bus';
-import { CompleteSessionCommand } from '../../commands/complete-session.command';
+import { CompleteSessionCommand } from '../../commands/complete-session/complete-session.command';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
-import { AddExerciseCommand } from '../../commands/add-exercise.command';
+import { AddExerciseCommand } from '../../commands/add-exercise/add-exercise.command';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

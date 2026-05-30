@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { EVENT_HANDLERS } from '../events/handlers/event-handlers.token';
-import { EventConstructor, EventHandler } from '../events/handlers/event-handler.interface';
+import { EVENT_HANDLERS } from '../events/event-handlers.token';
+import { EventConstructor, EventHandler } from '../events/event-handler.interface';
 import { DomainEvent } from '../events/domain-event';
 
 @Injectable({ providedIn: 'root' })

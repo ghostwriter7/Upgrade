@@ -10,9 +10,9 @@ import { EditTime } from '../edit-time/edit-time';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { PatchStartedAtCommand } from '../../commands/patch-started-at.command';
+import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
 import { CommandBus } from '../../routers/command-bus';
-import { PatchFinishedAtCommand } from '../../commands/patch-finished-at.command';
+import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 
 @Component({
   selector: 'app-session-header',

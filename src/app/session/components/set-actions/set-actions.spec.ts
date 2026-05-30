@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UpdateSetCommand } from '../../commands/update-set.command';
+import { UpdateSetCommand } from '../../commands/update-set/update-set.command';
 import { SetData } from '../set-form/set-data.interface';
 
 import { SetActions } from './set-actions';
@@ -10,10 +10,10 @@ import { BodyweightSet } from '../../../domain/model/exercise-set.model';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatButtonHarness } from '@angular/material/button/testing';
-import { CopySetCommand } from '../../commands/copy-set.command';
+import { CopySetCommand } from '../../commands/copy-set/copy-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
-import { DeleteSetCommand } from '../../commands/delete-set.command';
+import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
 import { getButtonByTestId } from '../../../../test/harness.utils';
 
 describe('SetActions', () => {
