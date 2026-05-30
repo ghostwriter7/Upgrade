@@ -27,6 +27,9 @@ describe('AddExerciseCommandHandler', () => {
     handler = TestBed.inject(AddExerciseCommandHandler);
   });
 
+  test('should return a correct command type it can handle', () =>
+    expect(handler.appliesTo()).toEqual(AddExerciseCommand));
+
   test('should add exercises to the empty session', () => {
     const command = new AddExerciseCommand(['chin-ups', 'pull-ups', 'deadlifts']);
     const session = Session.createEmpty();
@@ -44,13 +47,14 @@ describe('AddExerciseCommandHandler', () => {
       }),
     );
     expect(eventBus.dispatch).toHaveBeenCalledTimes(3);
-    const matcher = (exerciseId: string) => new ExerciseLogCreatedEvent(
-      expect.objectContaining({
-        sessionId: session.uuid,
-        exerciseId,
-        id: expect.any(String),
-      })
-    );
+    const matcher = (exerciseId: string) =>
+      new ExerciseLogCreatedEvent(
+        expect.objectContaining({
+          sessionId: session.uuid,
+          exerciseId,
+          id: expect.any(String),
+        }),
+      );
     expect(eventBus.dispatch).toHaveBeenNthCalledWith(1, matcher('chin-ups'));
     expect(eventBus.dispatch).toHaveBeenNthCalledWith(2, matcher('pull-ups'));
     expect(eventBus.dispatch).toHaveBeenNthCalledWith(3, matcher('deadlifts'));

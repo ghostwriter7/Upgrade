@@ -109,7 +109,7 @@ export class Session {
     const session = new Session(this.uuid, this.createdAt);
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
-    session.exercises = [...this.exercises];
+    session.exercises = [...this.exercises.map((exercise) => exercise.clone())];
     return session;
   }
 
