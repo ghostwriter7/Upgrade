@@ -25,6 +25,6 @@ export class PatchStartedAtCommandHandler implements CommandHandler<PatchStarted
 
     this.sessionStateHolder.set(updatedSession);
 
-    this.eventBus.dispatch(new SessionUpdatedEvent(updatedSession));
+    this.eventBus.publish(new SessionUpdatedEvent(updatedSession));
   }
 }

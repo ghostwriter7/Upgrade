@@ -25,6 +25,6 @@ export class PatchFinishedAtCommandHandler implements CommandHandler<PatchFinish
 
     this.sessionStateHolder.set(updatedSession);
 
-    this.eventBus.dispatch(new SessionUpdatedEvent(updatedSession));
+    this.eventBus.publish(new SessionUpdatedEvent(updatedSession));
   }
 }

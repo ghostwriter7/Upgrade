@@ -27,6 +27,6 @@ export class CaptureRecordingCommandHandler implements CommandHandler<CaptureRec
 
     const updatedSession = session.addMediaToExercise(exerciseId, media.uuid);
     this.sessionStateHolder.set(updatedSession);
-    this.eventBus.dispatch(new MediaCapturedEvent(media));
+    this.eventBus.publish(new MediaCapturedEvent(media));
   }
 }

@@ -27,6 +27,6 @@ export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand>
     set.id = createUuid();
 
     this.sessionStateHolder.set(session.addSet(set));
-    this.eventBus.dispatch(new SetCreatedEvent(set));
+    this.eventBus.publish(new SetCreatedEvent(set));
   }
 }

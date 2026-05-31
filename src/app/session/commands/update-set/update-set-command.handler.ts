@@ -21,6 +21,6 @@ export class UpdateSetCommandHandler implements CommandHandler<UpdateSetCommand>
     if (session === null) throw new Error('Session is null');
 
     this.sessionStateHolder.set(session.updateSet(command.set));
-    this.eventBus.dispatch(new SetUpdatedEvent(command.set));
+    this.eventBus.publish(new SetUpdatedEvent(command.set));
   }
 }

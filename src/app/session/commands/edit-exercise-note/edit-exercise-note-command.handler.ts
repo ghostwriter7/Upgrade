@@ -24,6 +24,6 @@ export class EditExerciseNoteCommandHandler implements CommandHandler<EditExerci
     this.sessionStateHolder.set(updatedSession);
 
     const updatedExerciseLog = updatedSession.getExerciseById(exerciseId);
-    this.eventBus.dispatch(new ExerciseLogUpdatedEvent(updatedExerciseLog));
+    this.eventBus.publish(new ExerciseLogUpdatedEvent(updatedExerciseLog));
   }
 }

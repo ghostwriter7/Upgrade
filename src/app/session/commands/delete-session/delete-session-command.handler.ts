@@ -20,6 +20,6 @@ export class DeleteSessionCommandHandler implements CommandHandler<DeleteSession
   public handle({ session }: DeleteSessionCommand): void {
     this.sessionStore.delete(session);
     this.sessionStateHolder.set(null);
-    this.eventBus.dispatch(new SessionDeletedEvent(session.uuid));
+    this.eventBus.publish(new SessionDeletedEvent(session.uuid));
   }
 }

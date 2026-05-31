@@ -25,7 +25,7 @@ export class AddExerciseCommandHandler implements CommandHandler<AddExerciseComm
       this.sessionStateHolder.set(updatedSession);
 
       addedLogs.forEach((exerciseLog) =>
-        this.eventBus.dispatch(new ExerciseLogCreatedEvent(exerciseLog)),
+        this.eventBus.publish(new ExerciseLogCreatedEvent(exerciseLog)),
       );
     }
   }

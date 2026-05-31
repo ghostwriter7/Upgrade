@@ -30,12 +30,12 @@ export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerci
 
     if (removedLog.hasMedia) {
       removedLog.mediaIds.forEach((mediaId) =>
-        this.eventBus.dispatch(new MediaDeletedEvent(mediaId)),
+        this.eventBus.publish(new MediaDeletedEvent(mediaId)),
       );
     }
 
     this.sessionStateHolder.set(updatedSession);
-    this.eventBus.dispatch(new ExerciseLogDeletedEvent(removedLog));
-    reIndexedLogs.forEach((log) => this.eventBus.dispatch(new ExerciseLogUpdatedEvent(log)))
+    this.eventBus.publish(new ExerciseLogDeletedEvent(removedLog));
+    reIndexedLogs.forEach((log) => this.eventBus.publish(new ExerciseLogUpdatedEvent(log)))
   }
 }

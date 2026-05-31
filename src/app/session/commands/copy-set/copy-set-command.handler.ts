@@ -25,7 +25,7 @@ export class CopySetCommandHandler implements CommandHandler<CopySetCommand> {
     const copiedSet = exercise.cloneSetAtIndex(set.index);
     copiedSet.id = createUuid();
 
-    this.eventBus.dispatch(new SetCreatedEvent(copiedSet));
+    this.eventBus.publish(new SetCreatedEvent(copiedSet));
 
     this.sessionStateHolder.set(session.addSet(copiedSet));
   }

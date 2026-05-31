@@ -23,12 +23,12 @@ export class DeleteSetCommandHandler implements CommandHandler<DeleteSetCommand>
 
     const id = set.id;
     if (id) {
-      this.eventBus.dispatch(new SetDeletedEvent(id));
+      this.eventBus.publish(new SetDeletedEvent(id));
     }
 
     const affectedSets = updatedSession.getExerciseById(set.exerciseId).sets.slice(set.index);
     if (affectedSets.length) {
-      affectedSets.forEach(set => this.eventBus.dispatch(new SetUpdatedEvent(set)));
+      affectedSets.forEach(set => this.eventBus.publish(new SetUpdatedEvent(set)));
     }
 
     this.sessionStateHolder.set(updatedSession);
