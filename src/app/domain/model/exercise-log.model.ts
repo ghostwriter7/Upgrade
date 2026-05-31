@@ -5,6 +5,7 @@ export class ExerciseLog {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
   public mediaIds: string[] = [];
+  public index: number = 0;
 
   constructor(
     public readonly sessionId: string,
@@ -25,6 +26,7 @@ export class ExerciseLog {
     log.sets = this.sets;
     log.notes = this.notes;
     log.mediaIds = this.mediaIds;
+    log.index = this.index;
     return log;
   }
 
@@ -35,6 +37,12 @@ export class ExerciseLog {
     }
 
     return set.clone().withIndex(this.sets.length);
+  }
+
+  public withIndex(index: number): ExerciseLog {
+    const clone = this.clone();
+    clone.index = index;
+    return clone;
   }
 
   public withMedia(mediaId: string): ExerciseLog {

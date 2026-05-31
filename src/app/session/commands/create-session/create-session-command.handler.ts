@@ -4,7 +4,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';
 import { CreateSessionCommand } from './create-session-command';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 
 @Injectable()
 export class CreateSessionCommandHandler implements CommandHandler<CreateSessionCommand> {

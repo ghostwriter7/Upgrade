@@ -1,5 +1,5 @@
 import { SessionDto } from '../../schema/session.schema';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { DateHelper } from '../../../common/helper/date.helper';
 import { Mapper } from '../mapper.interface';
 

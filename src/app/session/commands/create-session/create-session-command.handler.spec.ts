@@ -2,7 +2,7 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { CreateSessionCommand } from './create-session-command';
 import { CreateSessionCommandHandler } from './create-session-command.handler';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';

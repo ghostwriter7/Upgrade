@@ -10,7 +10,7 @@ import { SessionActions } from '../session-actions/session-actions';
 import { TimerMock } from '../../../home/home-page/home-page.spec';
 import { Timer } from '../timer/timer';
 import { Mock } from 'vitest';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { SessionStore } from '../../../store/session/session.store';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '../../routers/command-bus';
@@ -69,7 +69,7 @@ describe('SessionEditor', () => {
 
   it('should not create a new session when running in an edit mode', () => {
     fixture.componentRef.setInput('isNew', false);
-    sessionStateHolderMock.session.set(Session.createEmpty().addExercise('any exercise'));
+    sessionStateHolderMock.session.set(Session.createEmpty().addExerciseLog('any exercise').session);
     fixture.detectChanges();
 
     expect(commandBus.dispatch).not.toHaveBeenCalled();

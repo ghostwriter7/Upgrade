@@ -6,14 +6,15 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
   public static readonly INSTANCE = new ExerciseLogMapper();
 
   public toDomain(exerciseLogDto: ExerciseLogDto): ExerciseLog {
-    const exerciseEntry = new ExerciseLog(
+    const exerciseLog = new ExerciseLog(
       exerciseLogDto.sessionId,
       exerciseLogDto.exerciseId,
       exerciseLogDto.id,
     );
-    exerciseEntry.notes = exerciseLogDto.notes;
-    exerciseEntry.mediaIds = exerciseLogDto.mediaIds;
-    return exerciseEntry;
+    exerciseLog.notes = exerciseLogDto.notes;
+    exerciseLog.mediaIds = exerciseLogDto.mediaIds;
+    exerciseLog.index = exerciseLogDto.index;
+    return exerciseLog;
   }
 
   public toDto(exerciseLog: ExerciseLog): ExerciseLogDto {
@@ -22,6 +23,7 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       sessionId: exerciseLog.sessionId,
       exerciseId: exerciseLog.exerciseId,
       notes: exerciseLog.notes,
+      index: exerciseLog.index,
       mediaIds: exerciseLog.mediaIds,
     };
   }

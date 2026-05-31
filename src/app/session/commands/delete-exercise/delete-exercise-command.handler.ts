@@ -5,6 +5,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
 import { MediaDeletedEvent } from '../../events/media-deleted/media-deleted.event';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
+import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
 
 @Injectable()
 export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerciseCommand> {
@@ -20,15 +21,20 @@ export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerci
 
     if (!session) throw new Error('Session not found');
 
-    const exerciseLog = session.getExerciseById(exerciseId);
-    if (exerciseLog.hasMedia) {
-      exerciseLog.mediaIds.forEach((mediaId) =>
+    const {
+      session: updatedSession,
+      reIndexedLogs,
+      removedLog,
+    } = session.removeExerciseLog(exerciseId);
+
+    if (removedLog.hasMedia) {
+      removedLog.mediaIds.forEach((mediaId) =>
         this.eventBus.dispatch(new MediaDeletedEvent(mediaId)),
       );
     }
 
-    const updatedSession = session.removeExercise(exerciseId);
     this.sessionStateHolder.set(updatedSession);
-    this.eventBus.dispatch(new ExerciseLogDeletedEvent(exerciseLog));
+    this.eventBus.dispatch(new ExerciseLogDeletedEvent(removedLog));
+    reIndexedLogs.forEach((log) => this.eventBus.dispatch(new ExerciseLogUpdatedEvent(log)))
   }
 }

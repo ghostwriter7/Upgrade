@@ -14,6 +14,7 @@ describe('ExerciseSetMapper', () => {
         id: 'any-id',
         notes: 'any notes',
         mediaIds: [],
+        index: 1,
       };
 
       const domain = mapper.toDomain(dto);
@@ -25,13 +26,16 @@ describe('ExerciseSetMapper', () => {
         id: dto.id,
         notes: dto.notes,
         mediaIds: dto.mediaIds,
+        index: dto.index,
       });
     });
   });
 
   describe('toDto', () => {
     test('should map ExerciseLog to an exercise entry DTO', () => {
-      const log = new ExerciseLog('sessionId', 'any-exercise-id').withNotes('any notes');
+      const log = new ExerciseLog('sessionId', 'any-exercise-id')
+        .withNotes('any notes')
+        .withIndex(5);
 
       const dto = mapper.toDto(log);
 
@@ -41,6 +45,7 @@ describe('ExerciseSetMapper', () => {
         sessionId: log.sessionId,
         notes: log.notes,
         mediaIds: log.mediaIds,
+        index: log.index,
       });
     });
   });

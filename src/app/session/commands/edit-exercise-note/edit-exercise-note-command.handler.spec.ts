@@ -2,7 +2,7 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { EditExerciseNoteCommandHandler } from './edit-exercise-note-command.handler';
 import { EditExerciseNoteCommand } from './edit-exercise-note.command';
 import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
@@ -29,7 +29,7 @@ describe('EditExerciseNoteCommandHandler', () => {
 
   test('should edit a note for an exercise log', () => {
     const command = new EditExerciseNoteCommand('note', 'exerciseId');
-    const session = Session.createEmpty().addExercise('exerciseId');
+    const { session } = Session.createEmpty().addExerciseLog('exerciseId');
     const expectedSession = session.clone();
     expectedSession.setExerciseNotes('exerciseId', 'note');
     const exerciseLog = expectedSession.exercises[0];

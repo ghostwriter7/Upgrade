@@ -3,18 +3,17 @@ import { describe, it, expect } from 'vitest';
 import { ExerciseSelector } from './exercise-selector';
 import { Exercise } from '../../../domain/model/exercise.model';
 import { ExerciseStore } from '../../../store/exercises.store';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { MatListOptionHarness, MatSelectionListHarness } from '@angular/material/list/testing';
 import { OpenDialogFn, TestBedUtils } from '../../../../test/test-bed.utils';
 import { getButton } from '../../../../test/harness.utils';
 
-const chinUpId = 'aaa';
-const squatsId = 'bbb';
-const frontSplitId = 'ccc';
+const chinUpId = 'chin-ups';
+const squatsId = 'back-squats';
+const frontSplitId = 'front-splits';
 
 describe('ExerciseSelector', () => {
-
-  const session = Session.createEmpty().addExercise(chinUpId);
+  const { session } = Session.createEmpty().addExerciseLog(chinUpId);
 
   let openDialog: OpenDialogFn;
 

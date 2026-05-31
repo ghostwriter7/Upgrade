@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Session } from '../../domain/model/session.model';
+import { Session } from '../../domain/model/session/session.model';
 import { GenericRepository } from './generic.repository';
 import { StoreName } from './store-name.enum';
 import { SessionDto, SessionSchema } from '../schema/session.schema';
@@ -30,12 +30,16 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     month: number,
     year: number,
   ): Promise<Record<number, number>> {
-    const request = await super.openKeyCursor(StoreName.SESSIONS, IndexName.SessionByStartedAt, () => {
-      const startDate = new Temporal.PlainDate(year, month, 1);
-      const endDate = startDate.add({ months: 1 });
+    const request = await super.openKeyCursor(
+      StoreName.SESSIONS,
+      IndexName.SessionByStartedAt,
+      () => {
+        const startDate = new Temporal.PlainDate(year, month, 1);
+        const endDate = startDate.add({ months: 1 });
 
-      return IDBKeyRange.bound(startDate.toString(), endDate.toString(), false, true);
-    });
+        return IDBKeyRange.bound(startDate.toString(), endDate.toString(), false, true);
+      },
+    );
 
     return new Promise((resolve, reject) => {
       const counts: Record<number, number> = {};
@@ -89,7 +93,9 @@ export class SessionRepository extends GenericRepository<SessionDto> {
           .findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
             store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId),
           )
-          .then((data) => data.map((entry) => ExerciseLogSchema.parse(entry))),
+          .then((data) =>
+            data.map((entry) => ExerciseLogSchema.parse(entry)).sort((a, b) => a.index - b.index),
+          ),
       ),
     );
 
@@ -100,8 +106,8 @@ export class SessionRepository extends GenericRepository<SessionDto> {
             store.index(IndexName.SetBySessionId).getAll(sessionId),
           )
           .then((data) =>
-            data.map((entry) => ExerciseSetSchema.parse(entry))
-              .sort((a, b) => a.index - b.index)),
+            data.map((entry) => ExerciseSetSchema.parse(entry)).sort((a, b) => a.index - b.index),
+          ),
       ),
     );
 

@@ -2,10 +2,11 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '../../routers/event-bus';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { DeleteExerciseCommand } from './delete-exercise.command';
 import { DeleteExerciseCommandHandler } from './delete-exercise-command.handler';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
+import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
 
 describe('DeleteExerciseCommandHandler', () => {
   let eventBus: { dispatch: Mock };
@@ -30,10 +31,9 @@ describe('DeleteExerciseCommandHandler', () => {
   it('should return a correct type it can handle', () =>
     expect(handler.appliesTo()).toEqual(DeleteExerciseCommand));
 
-
   test('should delete an exercise log', () => {
     const command = new DeleteExerciseCommand('exerciseId');
-    const session = Session.createEmpty().addExercise('exerciseId');
+    const { session } = Session.createEmpty().addExerciseLog('exerciseId');
     const exerciseLog = session.exercises[0];
     sessionStateHolder.session.mockReturnValueOnce(session);
 
@@ -44,6 +44,33 @@ describe('DeleteExerciseCommandHandler', () => {
     expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
     expect(eventBus.dispatch).toHaveBeenCalledExactlyOnceWith(
       new ExerciseLogDeletedEvent(exerciseLog),
+    );
+    expect(eventBus.dispatch).toHaveBeenCalledTimes(1);
+  });
+
+  test('should dispatch ExerciseLogUpdatedEvents for re-indexed logs', () => {
+    const command = new DeleteExerciseCommand('chin-ups');
+    const { session } = Session.createEmpty().addExerciseLogs('chin-ups', 'pull-ups', 'l-sit');
+    const exerciseLog = session.exercises[0];
+    sessionStateHolder.session.mockReturnValueOnce(session);
+    const expectedSession = session.clone();
+    expectedSession.exercises = [
+      session.exercises[1].withIndex(0),
+      session.exercises[2].withIndex(1),
+    ];
+
+    handler.handle(command);
+
+    expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
+    expect(eventBus.dispatch).toHaveBeenCalledTimes(3);
+    expect(eventBus.dispatch).toHaveBeenNthCalledWith(1, new ExerciseLogDeletedEvent(exerciseLog));
+    expect(eventBus.dispatch).toHaveBeenNthCalledWith(
+      2,
+      new ExerciseLogUpdatedEvent(expectedSession.exercises[0]),
+    );
+    expect(eventBus.dispatch).toHaveBeenNthCalledWith(
+      3,
+      new ExerciseLogUpdatedEvent(expectedSession.exercises[1]),
     );
   });
 });

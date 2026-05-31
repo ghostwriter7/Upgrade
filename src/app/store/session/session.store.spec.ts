@@ -3,7 +3,7 @@ import { SessionStore } from './session.store';
 import { TestBed } from '@angular/core/testing';
 import { SessionRepository } from '../../persistence/repository/session.repository';
 import { DateHelper } from '../../common/helper/date.helper';
-import { Session } from '../../domain/model/session.model';
+import { Session } from '../../domain/model/session/session.model';
 
 type SessionRepositoryMock = Mocked<
   Pick<SessionRepository, 'findAllByDate' | 'getCountsByMonthAndYear' | 'save'>
@@ -198,7 +198,7 @@ describe('SessionStore', () => {
       const { sessionOne, yearMonthId } = createSessionFixture();
       store.updateCache(sessionOne);
       sessionRepositoryMock.save.mockClear();
-      const updatedSession = sessionOne.addExercise('anyExerciseId');
+      const updatedSession = sessionOne.addExerciseLog('anyExerciseId').session;
 
       store.updateCache(updatedSession)
 

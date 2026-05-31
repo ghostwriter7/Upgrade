@@ -3,7 +3,7 @@ import { Mock } from 'vitest';
 import { SessionUpdatedEvent } from './session-updated.event';
 import { SessionUpdatedEventHandler } from './session-updated-event.handler';
 import { SessionRepository } from '../../../persistence/repository/session.repository';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 
 describe('SessionUpdatedEventHandler', () => {
   let sessionRepositoryMock: { save: Mock };

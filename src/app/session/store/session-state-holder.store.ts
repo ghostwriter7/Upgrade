@@ -1,4 +1,4 @@
-import { Session } from '../../domain/model/session.model';
+import { Session } from '../../domain/model/session/session.model';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { computed } from '@angular/core';
 

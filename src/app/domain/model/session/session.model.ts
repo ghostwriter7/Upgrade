@@ -1,7 +1,23 @@
-import { ExerciseSet } from './exercise-set.model';
-import { createUuid } from '../../common/function/create-uuid.function';
-import { DateHelper } from '../../common/helper/date.helper';
-import { ExerciseLog } from './exercise-log.model';
+import { ExerciseSet } from '../exercise-set.model';
+import { createUuid } from '../../../common/function/create-uuid.function';
+import { DateHelper } from '../../../common/helper/date.helper';
+import { ExerciseLog } from '../exercise-log.model';
+
+interface RemoveExerciseLogResult {
+  session: Session;
+  removedLog: ExerciseLog;
+  reIndexedLogs: ExerciseLog[];
+}
+
+interface AddExerciseLogResult {
+  session: Session;
+  addedLog: ExerciseLog;
+}
+
+interface AddExerciseLogsResult {
+  session: Session;
+  addedLogs: ExerciseLog[];
+}
 
 export class Session {
   public exercises: ExerciseLog[] = [];
@@ -41,10 +57,43 @@ export class Session {
     return session;
   }
 
-  public addExercise(exerciseId: string): Session {
-    if (this.exercises.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) return this;
-    this.exercises = [...this.exercises, new ExerciseLog(this.uuid, exerciseId)];
-    return this.clone();
+  public addExerciseLog(exerciseId: string): AddExerciseLogResult {
+    if (this.exercises.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) {
+      throw new Error(`Exercise with ID '${exerciseId}' already exists in session.`);
+    }
+
+    const clone = this.clone();
+
+    const log = new ExerciseLog(clone.uuid, exerciseId).withIndex(clone.exercises.length);
+    clone.exercises = [...clone.exercises, log];
+    return {
+      session: clone,
+      addedLog: log,
+    };
+  }
+
+  public addExerciseLogs(...exerciseIds: string[]): AddExerciseLogsResult {
+    if (exerciseIds.length === 0) {
+      throw new Error('At least one exercise ID must be provided to add exercise logs.');
+    }
+
+    if (this.exercises.some((exercise) => exerciseIds.includes(exercise.exerciseId))) {
+      throw new Error('One or more exercise IDs already exist in the session.');
+    }
+
+    const clone = this.clone();
+    let index = clone.exercises.length;
+    const addedLogs: ExerciseLog[] = exerciseIds.reduce(
+      (logs, exerciseId) => [...logs, new ExerciseLog(clone.uuid, exerciseId).withIndex(index++)],
+      [] as ExerciseLog[],
+    );
+
+    clone.exercises = [...clone.exercises, ...addedLogs];
+
+    return {
+      session: clone,
+      addedLogs,
+    };
   }
 
   public addMediaToExercise(exerciseId: string, mediaId: string): Session {
@@ -54,11 +103,24 @@ export class Session {
     return this.clone();
   }
 
-  public removeExercise(exerciseId: string): Session {
-    this.exercises = this.exercises.filter(
-      (exerciseEntry) => exerciseEntry.exerciseId !== exerciseId,
-    );
-    return this.clone();
+  public removeExerciseLog(exerciseId: string): RemoveExerciseLogResult {
+    const index = this.getExerciseIndex(exerciseId);
+    const cloned = this.clone();
+
+    const reIndexedLogs: ExerciseLog[] = [];
+    for (let i = index + 1; i < cloned.exercises.length; i++) {
+      const log = cloned.exercises[i];
+      log.index--;
+      reIndexedLogs.push(log);
+    }
+
+    const removedLog = cloned.exercises[index];
+    cloned.exercises = cloned.exercises.toSpliced(index, 1);
+    return {
+      session: cloned,
+      removedLog,
+      reIndexedLogs: reIndexedLogs,
+    };
   }
 
   public setExerciseNotes(exerciseId: string, notes: string | null): Session {

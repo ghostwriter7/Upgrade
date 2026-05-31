@@ -29,16 +29,9 @@ export class AngleMeasurement extends Measurement {
   }
 }
 
-export class Point {
-  constructor(
-    public readonly x: number,
-    public readonly y: number,
-  ) {}
-}
-
 export class BodyLandmark {
   constructor(
-    public readonly point: Point,
+    public readonly point: { x: number, y: number },
     public readonly bodyPart: BodyPart,
   ) {}
 }

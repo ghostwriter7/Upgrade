@@ -1,7 +1,7 @@
 import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { Router } from '@angular/router';
 import { DateHelper } from '../../../common/helper/date.helper';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';

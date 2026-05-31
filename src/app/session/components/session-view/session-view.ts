@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SessionHeader } from '../session-header/session-header';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { ExerciseCard } from '../exercise-card/exercise-card';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

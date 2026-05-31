@@ -3,7 +3,7 @@ import { SessionRepository } from '../../../persistence/repository/session.repos
 import { SetRepository } from '../../../persistence/repository/set.repository';
 import { Mock } from 'vitest';
 import { ExportDataService } from './export-data.service';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { BodyweightSet } from '../../../domain/model/exercise-set.model';
 import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
 import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';

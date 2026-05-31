@@ -20,11 +20,10 @@ export class AddExerciseCommandHandler implements CommandHandler<AddExerciseComm
 
       if (!session) throw new Error('Session not found');
 
-      const updatedSession = exerciseIds.reduce((session, id) => session.addExercise(id), session);
+      const { session: updatedSession, addedLogs } = session.addExerciseLogs(...exerciseIds);
       this.sessionStateHolder.set(updatedSession);
 
-      const createdExerciseLogs = updatedSession.exercises.filter((exerciseLog) => exerciseIds.includes(exerciseLog.exerciseId));
-      createdExerciseLogs.forEach((exerciseLog) =>
+      addedLogs.forEach((exerciseLog) =>
         this.eventBus.dispatch(new ExerciseLogCreatedEvent(exerciseLog)),
       );
     }

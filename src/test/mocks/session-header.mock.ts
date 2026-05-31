@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { Session } from '../../app/domain/model/session.model';
+import { Session } from '../../app/domain/model/session/session.model';
 
 @Component({
   selector: 'app-session-header',

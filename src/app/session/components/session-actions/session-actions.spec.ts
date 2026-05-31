@@ -4,7 +4,7 @@ import { SessionActions } from './session-actions';
 import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import { Mock } from 'vitest';
 import { Router } from '@angular/router';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '../../routers/command-bus';
 import { CompleteSessionCommand } from '../../commands/complete-session/complete-session.command';

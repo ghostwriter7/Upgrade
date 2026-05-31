@@ -8,7 +8,7 @@ import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatMenuHarness } from '@angular/material/menu/testing';
 import { DateHelper } from '../../../common/helper/date.helper';
-import { Session } from '../../../domain/model/session.model';
+import { Session } from '../../../domain/model/session/session.model';
 import { SessionStore } from '../../../store/session/session.store';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
