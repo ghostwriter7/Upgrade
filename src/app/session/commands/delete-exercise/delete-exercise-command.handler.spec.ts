@@ -2,19 +2,19 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { DeleteExerciseCommand } from './delete-exercise.command';
 import { DeleteExerciseCommandHandler } from './delete-exercise-command.handler';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
 import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
 
 describe('DeleteExerciseCommandHandler', () => {
-  let eventBus: { dispatch: Mock };
+  let eventBus: { publish: Mock };
   let sessionStateHolder: { session: Mock; set: Mock };
   let handler: DeleteExerciseCommandHandler;
 
   beforeEach(() => {
-    eventBus = { dispatch: vi.fn() };
+    eventBus = { publish: vi.fn() };
     sessionStateHolder = { session: vi.fn(), set: vi.fn() };
 
     TestBed.configureTestingModule({
@@ -42,10 +42,10 @@ describe('DeleteExerciseCommandHandler', () => {
     const expectedSession = session.clone();
     expectedSession.exercises = [];
     expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
-    expect(eventBus.dispatch).toHaveBeenCalledExactlyOnceWith(
+    expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
       new ExerciseLogDeletedEvent(exerciseLog),
     );
-    expect(eventBus.dispatch).toHaveBeenCalledTimes(1);
+    expect(eventBus.publish).toHaveBeenCalledTimes(1);
   });
 
   test('should dispatch ExerciseLogUpdatedEvents for re-indexed logs', () => {
@@ -62,13 +62,13 @@ describe('DeleteExerciseCommandHandler', () => {
     handler.handle(command);
 
     expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
-    expect(eventBus.dispatch).toHaveBeenCalledTimes(3);
-    expect(eventBus.dispatch).toHaveBeenNthCalledWith(1, new ExerciseLogDeletedEvent(exerciseLog));
-    expect(eventBus.dispatch).toHaveBeenNthCalledWith(
+    expect(eventBus.publish).toHaveBeenCalledTimes(3);
+    expect(eventBus.publish).toHaveBeenNthCalledWith(1, new ExerciseLogDeletedEvent(exerciseLog));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(
       2,
       new ExerciseLogUpdatedEvent(expectedSession.exercises[0]),
     );
-    expect(eventBus.dispatch).toHaveBeenNthCalledWith(
+    expect(eventBus.publish).toHaveBeenNthCalledWith(
       3,
       new ExerciseLogUpdatedEvent(expectedSession.exercises[1]),
     );

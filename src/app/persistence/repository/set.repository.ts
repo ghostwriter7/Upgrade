@@ -3,13 +3,23 @@ import { ExerciseSet } from '@domain/model/exercise-set.model';
 import { Injectable } from '@angular/core';
 import { StoreName } from './store-name.enum';
 import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
-import { ExerciseSetDto } from '../schema/set.schema';
+import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
 import { IndexName } from './index-name.enum';
 
 @Injectable({ providedIn: 'root' })
 export class SetRepository extends GenericRepository<ExerciseSetDto> {
   constructor() {
     super();
+  }
+
+  public async getAllBySessionId(sessionId: string): Promise<ExerciseSet[]> {
+    const sets = await super.findAllBy(StoreName.SETS, (store: IDBObjectStore) =>
+      store.index(IndexName.SetBySessionId).getAll(sessionId)
+    );
+    return Iterator.from(sets)
+      .map((set) => ExerciseSetSchema.parse(set))
+      .map(ExerciseSetMapper.INSTANCE.toDomain)
+      .toArray();
   }
 
   public deleteAllSets(): Promise<void> {

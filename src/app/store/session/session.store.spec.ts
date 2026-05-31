@@ -1,12 +1,14 @@
-import { beforeEach, describe, expect, it, Mocked } from 'vitest';
+import { beforeEach, describe, expect, it, Mock, Mocked } from 'vitest';
 import { SessionStore } from './session.store';
 import { TestBed } from '@angular/core/testing';
-import { SessionRepository } from '../../persistence/repository/session.repository';
-import { DateHelper } from '../../common/helper/date.helper';
-import { Session } from '../../domain/model/session/session.model';
+import { SessionRepository } from '@persistence/repository/session.repository';
+import { DateHelper } from '@common/helper/date.helper';
+import { Session } from '@domain/model/session/session.model';
+import { QueryBus } from '@common/routers/query/query-bus';
+import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/find-sessions-by-date.query';
 
 type SessionRepositoryMock = Mocked<
-  Pick<SessionRepository, 'findAllByDate' | 'getCountsByMonthAndYear' | 'save'>
+  Pick<SessionRepository, 'getCountsByMonthAndYear' | 'save'>
 >;
 
 const createSessionAt = (iso: string): Session => {
@@ -48,18 +50,22 @@ describe('SessionStore', () => {
 
   const sessionRepositoryMockFactory = () => ({
     getCountsByMonthAndYear: vi.fn(),
-    findAllByDate: vi.fn(),
     save: vi.fn(),
   });
 
   let sessionRepositoryMock: SessionRepositoryMock;
+  let queryBus: { execute: Mock };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    queryBus = { execute: vi.fn() };
 
     sessionRepositoryMock = sessionRepositoryMockFactory();
     TestBed.configureTestingModule({
-      providers: [{ provide: SessionRepository, useValue: sessionRepositoryMock }],
+      providers: [
+        { provide: QueryBus, useValue: queryBus },
+        { provide: SessionRepository, useValue: sessionRepositoryMock },
+      ],
     });
     store = TestBed.inject(SessionStore);
   });
@@ -77,21 +83,21 @@ describe('SessionStore', () => {
     const yesterdayStr = yesterday.toPlainDate().toString();
 
     it('should fetch sessions for the current date (today) initially', async () => {
-      sessionRepositoryMock.findAllByDate.mockResolvedValueOnce([]);
+      queryBus.execute.mockResolvedValueOnce([]);
 
       await flushEffectsAndPromises();
 
-      expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(now);
+      expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(new FindSessionsByDateQuery(now));
       expect(store.activeSessions()).toEqual([]);
     });
 
     it('should fetch sessions for the target date from the repository when not available in the cache', async () => {
-      sessionRepositoryMock.findAllByDate.mockResolvedValueOnce([]);
+      queryBus.execute.mockResolvedValueOnce([]);
       store.setActiveDate(yesterdayStr);
 
       await flushEffectsAndPromises();
 
-      expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(yesterday);
+      expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(new FindSessionsByDateQuery(yesterday));
       expect(store.activeSessions()).toEqual([]);
     });
 
@@ -99,35 +105,35 @@ describe('SessionStore', () => {
       const todaySessions = [Session.createEmpty()];
       const yesterdaySessions: Session[] = [];
 
-      sessionRepositoryMock.findAllByDate
+      queryBus.execute
         .mockResolvedValueOnce(todaySessions)
         .mockResolvedValueOnce(yesterdaySessions);
 
       await flushEffectsAndPromises(); // Fetch today's data
 
-      expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(now);
+      expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(new FindSessionsByDateQuery(now));
       expect(store.activeSessions()).toEqual(todaySessions);
 
       store.setActiveDate(yesterdayStr);
 
       await flushEffectsAndPromises(); // Fetch yesterday's data
 
-      expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledTimes(2);
+      expect(queryBus.execute).toHaveBeenCalledTimes(2);
 
-      sessionRepositoryMock.findAllByDate.mockClear();
+      queryBus.execute.mockClear();
 
       store.setActiveDate(nowStr);
 
       TestBed.tick(); // Trigger effect
 
-      expect(sessionRepositoryMock.findAllByDate).not.toHaveBeenCalled();
+      expect(queryBus.execute).not.toHaveBeenCalled();
       expect(store.activeSessions()).toEqual(todaySessions);
     });
   });
 
   describe('Counts by a month and a year', () => {
     beforeEach(async () => {
-      sessionRepositoryMock.findAllByDate.mockResolvedValueOnce([]);
+      queryBus.execute.mockResolvedValueOnce([]);
       await flushEffectsAndPromises();
     });
 
@@ -200,7 +206,7 @@ describe('SessionStore', () => {
       sessionRepositoryMock.save.mockClear();
       const updatedSession = sessionOne.addExerciseLog('anyExerciseId').session;
 
-      store.updateCache(updatedSession)
+      store.updateCache(updatedSession);
 
       expectSessionsByDate({ [updatedSession.isoDate]: [updatedSession] });
       expectCountsByMonthAndYear({ [yearMonthId]: { [updatedSession.dayOfMonth]: 1 } });
@@ -237,7 +243,9 @@ describe('SessionStore', () => {
       store.delete(sessionOne);
 
       expectSessionsByDate({ [sessionOne.isoDate]: [], [sessionThree.isoDate]: [sessionThree] });
-      expectCountsByMonthAndYear({ [yearMonthId]: { [sessionOne.dayOfMonth]: 0, [sessionThree.dayOfMonth]: 1 } });
+      expectCountsByMonthAndYear({
+        [yearMonthId]: { [sessionOne.dayOfMonth]: 0, [sessionThree.dayOfMonth]: 1 },
+      });
     });
   });
 });

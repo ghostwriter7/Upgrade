@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
-import { ExerciseLogDto } from '../schema/exercise-log.schema';
+import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema';
 import { StoreName } from './store-name.enum';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { IndexName } from './index-name.enum';
@@ -10,6 +10,16 @@ import { ExerciseLog } from '@domain/model/exercise-log.model';
 export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   constructor() {
     super();
+  }
+
+  public async getAllLogsBySessionId(sessionId: string): Promise<ExerciseLog[]> {
+    const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
+      store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId)
+    );
+    return Iterator.from(logs)
+      .map((log) => ExerciseLogSchema.parse(log))
+      .map(ExerciseLogMapper.INSTANCE.toDomain)
+      .toArray();
   }
 
   public async getAllLogs(): Promise<ExerciseLog[]> {
@@ -22,7 +32,11 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async deleteAllBySessionId(sessionId: string): Promise<void> {
-    return super.deleteAllByIndex(StoreName.EXERCISE_LOGS, IndexName.ExerciseLogsBySessionId, sessionId);
+    return super.deleteAllByIndex(
+      StoreName.EXERCISE_LOGS,
+      IndexName.ExerciseLogsBySessionId,
+      sessionId,
+    );
   }
 
   public async saveLog(entity: ExerciseLog): Promise<IDBValidKey> {

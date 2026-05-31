@@ -4,16 +4,16 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { AddExerciseCommandHandler } from './add-exercise-command.handler';
 import { EventBus } from '@common/routers/event/event-bus';
 import { AddExerciseCommand } from './add-exercise.command';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';
 
 describe('AddExerciseCommandHandler', () => {
-  let eventBus: { dispatch: Mock };
+  let eventBus: { publish: Mock };
   let sessionStateHolder: { session: Mock; set: Mock };
   let handler: AddExerciseCommandHandler;
 
   beforeEach(() => {
-    eventBus = { dispatch: vi.fn() };
+    eventBus = { publish: vi.fn() };
     sessionStateHolder = { session: vi.fn(), set: vi.fn() };
 
     TestBed.configureTestingModule({
@@ -46,7 +46,7 @@ describe('AddExerciseCommandHandler', () => {
         ]),
       }),
     );
-    expect(eventBus.dispatch).toHaveBeenCalledTimes(3);
+    expect(eventBus.publish).toHaveBeenCalledTimes(3);
     const matcher = (exerciseId: string) =>
       new ExerciseLogCreatedEvent(
         expect.objectContaining({
@@ -55,8 +55,8 @@ describe('AddExerciseCommandHandler', () => {
           id: expect.any(String),
         }),
       );
-    expect(eventBus.dispatch).toHaveBeenNthCalledWith(1, matcher('chin-ups'));
-    expect(eventBus.dispatch).toHaveBeenNthCalledWith(2, matcher('pull-ups'));
-    expect(eventBus.dispatch).toHaveBeenNthCalledWith(3, matcher('deadlifts'));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(1, matcher('chin-ups'));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(2, matcher('pull-ups'));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(3, matcher('deadlifts'));
   });
 });

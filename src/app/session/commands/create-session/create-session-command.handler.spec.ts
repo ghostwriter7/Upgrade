@@ -2,18 +2,18 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { CreateSessionCommand } from './create-session-command';
 import { CreateSessionCommandHandler } from './create-session-command.handler';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';
 
 describe('CreateSessionCommandHandler', () => {
-  let eventBus: { dispatch: Mock };
+  let eventBus: { publish: Mock };
   let sessionStateHolder: { set: Mock };
   let handler: CreateSessionCommandHandler;
 
   beforeEach(() => {
-    eventBus = { dispatch: vi.fn() };
+    eventBus = { publish: vi.fn() };
     sessionStateHolder = { set: vi.fn() };
 
     TestBed.configureTestingModule({
@@ -39,6 +39,6 @@ describe('CreateSessionCommandHandler', () => {
     expect(sessionStateHolder.set).toHaveBeenCalledExactlyOnceWith(
       expect.toSatisfy((value) => value instanceof Session && value.exercises.length === 0),
     );
-    expect(eventBus.dispatch).toHaveBeenCalledExactlyOnceWith(new SessionUpdatedEvent(session));
+    expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(new SessionUpdatedEvent(session));
   });
 });

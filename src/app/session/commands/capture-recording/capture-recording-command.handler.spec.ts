@@ -4,16 +4,16 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CaptureRecordingCommandHandler } from './capture-recording-command.handler';
 import { EventBus } from '@common/routers/event/event-bus';
 import { CaptureRecordingCommand } from './capture-recording.command';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { MediaCapturedEvent } from '../../events/media-captured/media-captured.event';
 
 describe('CaptureRecordingCommandHandler', () => {
-  let eventBus: { dispatch: Mock };
+  let eventBus: { publish: Mock };
   let sessionStateHolder: { session: Mock; set: Mock };
   let handler: CaptureRecordingCommandHandler;
 
   beforeEach(() => {
-    eventBus = { dispatch: vi.fn() };
+    eventBus = { publish: vi.fn() };
     sessionStateHolder = { session: vi.fn(), set: vi.fn() };
 
     TestBed.configureTestingModule({
@@ -51,7 +51,7 @@ describe('CaptureRecordingCommandHandler', () => {
         }),
       ]),
     }));
-    expect(eventBus.dispatch).toHaveBeenCalledExactlyOnceWith(
+    expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
       new MediaCapturedEvent(
         expect.objectContaining({
           exerciseId: 'exerciseId',

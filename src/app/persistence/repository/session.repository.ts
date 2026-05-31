@@ -6,10 +6,6 @@ import { SessionDto, SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
 import { IndexName } from './index-name.enum';
 import { DateHelper } from '@common/helper/date.helper';
-import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
-import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
-import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema';
-import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class SessionRepository extends GenericRepository<SessionDto> {
@@ -68,7 +64,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
   }
 
   public async findAllByDate(date: Temporal.ZonedDateTime): Promise<Session[]> {
-    const results = await super.findAllBy<SessionDto>(
+    const sessionDTOs = await super.findAllBy<SessionDto>(
       StoreName.SESSIONS,
       (store: IDBObjectStore) => {
         const startOfDay = date.startOfDay();
@@ -84,50 +80,10 @@ export class SessionRepository extends GenericRepository<SessionDto> {
         return store.index(IndexName.SessionByStartedAt).getAll(range);
       },
     );
-
-    const sessionIds = results.map((dto) => dto.uuid);
-
-    const exerciseLogDTOs: ExerciseLogDto[][] = await Promise.all(
-      sessionIds.map((sessionId) =>
-        super
-          .findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
-            store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId),
-          )
-          .then((data) =>
-            data.map((entry) => ExerciseLogSchema.parse(entry)).sort((a, b) => a.index - b.index),
-          ),
-      ),
-    );
-
-    const setDTOs: ExerciseSetDto[][] = await Promise.all(
-      sessionIds.map((sessionId) =>
-        super
-          .findAllBy<ExerciseSetDto>(StoreName.SETS, (store: IDBObjectStore) =>
-            store.index(IndexName.SetBySessionId).getAll(sessionId),
-          )
-          .then((data) =>
-            data.map((entry) => ExerciseSetSchema.parse(entry)).sort((a, b) => a.index - b.index),
-          ),
-      ),
-    );
-
-    const sessionDTOs: SessionDto[] = results.map((data) => SessionSchema.parse(data));
-    const sessions = sessionDTOs.map(SessionMapper.INSTANCE.toDomain);
-
-    return sessions.map((session, index) => {
-      const exerciseLogs = exerciseLogDTOs[index];
-      session.exercises = exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDomain);
-
-      const sets = setDTOs[index];
-      const setByExerciseId = Object.groupBy(sets, (set) => set.exerciseId);
-
-      for (const exerciseId of Object.keys(setByExerciseId)) {
-        for (const set of setByExerciseId[exerciseId]!) {
-          session = session.addSet(ExerciseSetMapper.INSTANCE.toDomain(set));
-        }
-      }
-      return session;
-    });
+    return Iterator.from(sessionDTOs)
+      .map((sessionDTO) => SessionSchema.parse(sessionDTO))
+      .map(SessionMapper.INSTANCE.toDomain)
+      .toArray();
   }
 
   public async save(session: Session): Promise<IDBValidKey> {
