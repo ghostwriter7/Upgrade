@@ -4,7 +4,7 @@ import { SetData } from '../set-form/set-data.interface';
 
 import { SetActions } from './set-actions';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { Mock } from 'vitest';
 import { BodyweightSet } from '../../../domain/model/exercise-set.model';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';

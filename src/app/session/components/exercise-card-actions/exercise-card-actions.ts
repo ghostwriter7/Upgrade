@@ -3,7 +3,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { Recorder } from '../recorder/recorder';
 import { CaptureRecordingCommand } from '../../commands/capture-recording/capture-recording.command';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { SetData } from '../set-form/set-data.interface';

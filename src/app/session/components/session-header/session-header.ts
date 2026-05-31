@@ -10,7 +10,7 @@ import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 import { DeleteSessionCommand } from '../../commands/delete-session/delete-session-command';
 

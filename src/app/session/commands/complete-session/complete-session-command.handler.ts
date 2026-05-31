@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { CompleteSessionCommand } from './complete-session.command';
 import { DateHelper } from '../../../common/helper/date.helper';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class CompleteSessionCommandHandler implements CommandHandler<CompleteSessionCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<CompleteSessionCommand> {
+  public appliesTo(): Constructor<CompleteSessionCommand> {
     return CompleteSessionCommand;
   }
 

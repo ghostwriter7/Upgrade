@@ -2,7 +2,7 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CaptureRecordingCommandHandler } from './capture-recording-command.handler';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { CaptureRecordingCommand } from './capture-recording.command';
 import { Session } from '../../../domain/model/session/session.model';
 import { MediaCapturedEvent } from '../../events/media-captured/media-captured.event';

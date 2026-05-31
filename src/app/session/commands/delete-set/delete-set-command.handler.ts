@@ -1,17 +1,18 @@
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { inject, Injectable } from '@angular/core';
 import { DeleteSetCommand } from './delete-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { SetUpdatedEvent } from '../../events/set-updated/set-updated.event';
 import { SetDeletedEvent } from '../../events/set-deleted/set-deleted.event';
+import { Constructor } from '@angular/cdk/schematics';
 
 @Injectable()
 export class DeleteSetCommandHandler implements CommandHandler<DeleteSetCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<DeleteSetCommand> {
+  public appliesTo(): Constructor<DeleteSetCommand> {
     return DeleteSetCommand;
   }
 

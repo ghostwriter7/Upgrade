@@ -13,7 +13,7 @@ import { Mock } from 'vitest';
 import { Session } from '../../../domain/model/session/session.model';
 import { SessionStore } from '../../../store/session/session.store';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { CreateSessionCommand } from '../../commands/create-session/create-session-command';
 
 @Component({

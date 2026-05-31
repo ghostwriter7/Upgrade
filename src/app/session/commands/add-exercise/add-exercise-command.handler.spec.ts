@@ -2,7 +2,7 @@ import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { AddExerciseCommandHandler } from './add-exercise-command.handler';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { AddExerciseCommand } from './add-exercise.command';
 import { Session } from '../../../domain/model/session/session.model';
 import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';

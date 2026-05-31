@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { EventConstructor, EventHandler } from '../event-handler.interface';
+import { EventHandler } from '../event-handler.interface';
 import { SessionDeletedEvent } from './session-deleted.event';
 import { SessionRepository } from '../../../persistence/repository/session.repository';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
 import { MediaRepository } from '../../../persistence/repository/media.repository';
 import { SetRepository } from '../../../persistence/repository/set.repository';
 import { Router } from '@angular/router';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class SessionDeletedEventHandler implements EventHandler<SessionDeletedEvent> {
@@ -15,7 +16,7 @@ export class SessionDeletedEventHandler implements EventHandler<SessionDeletedEv
   private readonly mediaRepository = inject(MediaRepository);
   private readonly router = inject(Router);
 
-  public appliesTo(): EventConstructor<SessionDeletedEvent> {
+  public appliesTo(): Constructor<SessionDeletedEvent> {
     return SessionDeletedEvent;
   }
 

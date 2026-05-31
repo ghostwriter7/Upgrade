@@ -1,6 +1,6 @@
 import { describe, test, vi, Mock } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { Session } from '../../../domain/model/session/session.model';
 import { DeleteSessionCommand } from './delete-session-command';
 import { DeleteSessionCommandHandler } from './delete-session-command.handler';

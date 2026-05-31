@@ -4,7 +4,7 @@ import { ExerciseCardActions } from './exercise-card-actions';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { getButtonByTestId } from '../../../../test/harness.utils';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { Mock } from 'vitest';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';

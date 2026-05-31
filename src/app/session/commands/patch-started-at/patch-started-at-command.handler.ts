@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { PatchStartedAtCommand } from './patch-started-at.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class PatchStartedAtCommandHandler implements CommandHandler<PatchStartedAtCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<PatchStartedAtCommand> {
+  public appliesTo(): Constructor<PatchStartedAtCommand> {
     return PatchStartedAtCommand;
   }
 

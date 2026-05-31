@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { AddExerciseCommand } from './add-exercise.command';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';
+import { Constructor } from '@angular/cdk/schematics';
 
 @Injectable()
 export class AddExerciseCommandHandler implements CommandHandler<AddExerciseCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<AddExerciseCommand> {
+  public appliesTo(): Constructor<AddExerciseCommand> {
     return AddExerciseCommand;
   }
 

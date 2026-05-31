@@ -12,7 +12,7 @@ import { Session } from '../../../domain/model/session/session.model';
 import { SessionStore } from '../../../store/session/session.store';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 import { DeleteSessionCommand } from '../../commands/delete-session/delete-session-command';

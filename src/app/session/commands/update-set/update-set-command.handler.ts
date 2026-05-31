@@ -1,16 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { UpdateSetCommand } from './update-set.command';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
-import { EventBus } from '../../routers/event-bus';
+import { CommandHandler } from '../command-handler.interface';
+import { EventBus } from '@common/routers/event/event-bus';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { SetUpdatedEvent } from '../../events/set-updated/set-updated.event';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class UpdateSetCommandHandler implements CommandHandler<UpdateSetCommand> {
   private readonly eventBus = inject(EventBus);
   private readonly sessionStateHolder = inject(SessionStateHolder);
 
-  public appliesTo(): CommandConstructor<UpdateSetCommand> {
+  public appliesTo(): Constructor<UpdateSetCommand> {
     return UpdateSetCommand;
   }
 

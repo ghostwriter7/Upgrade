@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { SetData } from '../set-form/set-data.interface';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { SetDataMapper } from '../set-form/mapper/set-data.mapper';

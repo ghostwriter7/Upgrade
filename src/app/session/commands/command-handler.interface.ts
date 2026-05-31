@@ -1,9 +1,8 @@
 import { Command } from './command';
-
-export type CommandConstructor<T extends Command = Command> = new (...args: any[]) => T;
+import { Constructor } from '@common/types/constructor.type';
 
 export interface CommandHandler<T extends Command = Command> {
-  appliesTo(): CommandConstructor<T>;
+  appliesTo(): Constructor<T>;
 
   handle(command: T): void;
 }

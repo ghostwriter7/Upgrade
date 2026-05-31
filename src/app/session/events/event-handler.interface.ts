@@ -1,9 +1,8 @@
 import { DomainEvent } from './domain-event';
-
-export type EventConstructor<T extends DomainEvent> = new (...args: any[]) => T;
+import { Constructor } from '@common/types/constructor.type';
 
 export interface EventHandler<T extends DomainEvent = DomainEvent> {
-  appliesTo(): EventConstructor<T>;
+  appliesTo(): Constructor<T>;
 
   handle(event: T): void;
 }

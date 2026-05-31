@@ -1,17 +1,18 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { CaptureRecordingCommand } from './capture-recording.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { ExerciseMedia } from '../../../domain/model/exercise-media.model';
 import { MediaCapturedEvent } from '../../events/media-captured/media-captured.event';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class CaptureRecordingCommandHandler implements CommandHandler<CaptureRecordingCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<CaptureRecordingCommand> {
+  public appliesTo(): Constructor<CaptureRecordingCommand> {
     return CaptureRecordingCommand;
   }
 

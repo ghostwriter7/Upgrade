@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { EventConstructor, EventHandler } from '../event-handler.interface';
+import { EventHandler } from '../event-handler.interface';
 import { MediaDeletedEvent } from './media-deleted.event';
 import { MediaRepository } from '../../../persistence/repository/media.repository';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class MediaDeletedEventHandler implements EventHandler<MediaDeletedEvent> {
   private readonly mediaRepository = inject(MediaRepository);
 
-  public appliesTo(): EventConstructor<MediaDeletedEvent> {
+  public appliesTo(): Constructor<MediaDeletedEvent> {
     return MediaDeletedEvent;
   }
 

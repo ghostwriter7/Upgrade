@@ -3,6 +3,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "rootDir": ".",
     "lib": ["ESNext", "DOM", "DOM.AsyncIterable", "DOM.Iterable"],
     "strict": true,
     "noImplicitOverride": true,

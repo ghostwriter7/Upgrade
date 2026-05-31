@@ -1,18 +1,19 @@
 import { inject, Injectable } from '@angular/core';
 import { CreateSetCommand } from './create-set.command';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { SetDataMapper } from '../../components/set-form/mapper/set-data.mapper';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { SetCreatedEvent } from '../../events/set-created/set-created.event';
 import { createUuid } from '../../../common/function/create-uuid.function';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<CreateSetCommand> {
+  public appliesTo(): Constructor<CreateSetCommand> {
     return CreateSetCommand;
   }
 

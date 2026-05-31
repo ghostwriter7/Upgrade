@@ -1,18 +1,19 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandConstructor, CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '../command-handler.interface';
 import { DeleteExerciseCommand } from './delete-exercise.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '../../routers/event-bus';
+import { EventBus } from '@common/routers/event/event-bus';
 import { MediaDeletedEvent } from '../../events/media-deleted/media-deleted.event';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
 import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerciseCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly eventBus = inject(EventBus);
 
-  public appliesTo(): CommandConstructor<DeleteExerciseCommand> {
+  public appliesTo(): Constructor<DeleteExerciseCommand> {
     return DeleteExerciseCommand;
   }
 

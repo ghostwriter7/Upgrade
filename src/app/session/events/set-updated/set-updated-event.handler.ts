@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
-import { EventConstructor, EventHandler } from '../event-handler.interface';
+import { EventHandler } from '../event-handler.interface';
 import { SetUpdatedEvent } from './set-updated.event';
 import { SetRepository } from '../../../persistence/repository/set.repository';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class SetUpdatedEventHandler implements EventHandler<SetUpdatedEvent> {
   private readonly setRepository = inject(SetRepository);
 
-  public appliesTo(): EventConstructor<SetUpdatedEvent> {
+  public appliesTo(): Constructor<SetUpdatedEvent> {
     return SetUpdatedEvent;
   }
 

@@ -13,7 +13,7 @@ import { Timer } from '../timer/timer';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { SessionStore } from '../../../store/session/session.store';
 import { DialogService } from '../../../common/service/dialog/dialog.service';
-import { CommandBus } from '../../routers/command-bus';
+import { CommandBus } from '@common/routers/command/command-bus';
 import { CreateSessionCommand } from '../../commands/create-session/create-session-command';
 
 @Component({
