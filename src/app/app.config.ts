@@ -7,6 +7,7 @@ import { databaseFactory } from './persistence/repository/database-initializer.s
 import { provideServiceWorker } from '@angular/service-worker';
 import { CommandHandlerProvider } from './session/commands/command-handler.provider';
 import { EventHandlerProvider } from './session/events/event-handler.provider';
+import { QueryHandlerProvider } from '@session/queries/query-handler.provider';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -19,5 +20,6 @@ export const appConfig: ApplicationConfig = {
     }),
     ...CommandHandlerProvider.forRoot(),
     ...EventHandlerProvider.forRoot(),
+    ...QueryHandlerProvider.forRoot()
   ],
 };

@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { EVENT_HANDLERS } from './event-handlers.token';
+import { EVENT_HANDLERS } from '@common/routers/event/event-handlers.token';
 import { SetUpdatedEventHandler } from './set-updated/set-updated-event.handler';
 import { SetDeletedEventHandler } from './set-deleted/set-deleted-event.handler';
 import { SetCreatedEventHandler } from './set-created/set-created-event.handler';

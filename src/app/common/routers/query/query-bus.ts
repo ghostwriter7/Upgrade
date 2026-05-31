@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { QUERY_HANDLERS } from '@common/tokens/query-handlers.token';
-import { QueryHandler, QueryResult } from '@common/interfaces/query-handler.interface';
+import { QUERY_HANDLERS } from '@common/routers/query/query-handlers.token';
+import { QueryHandler, QueryResult } from '@common/routers/query/query-handler.interface';
 import { Constructor } from '@common/types/constructor.type';
-import { Query } from '@domain/model/query.model';
+import { Query } from '@common/routers/query/query.model';
 
 type MayBeQueryHandler<T extends Query> = QueryHandler<T> | undefined;
 

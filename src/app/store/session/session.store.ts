@@ -1,4 +1,4 @@
-import { Session } from '../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import {
   patchState,
   signalStore,
@@ -8,8 +8,10 @@ import {
   withState,
 } from '@ngrx/signals';
 import { computed, effect, inject, untracked } from '@angular/core';
-import { SessionRepository } from '../../persistence/repository/session.repository';
-import { DateHelper } from '../../common/helper/date.helper';
+import { SessionRepository } from '@persistence/repository/session.repository';
+import { DateHelper } from '@common/helper/date.helper';
+import { QueryBus } from '@common/routers/query/query-bus';
+import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/find-sessions-by-date.query';
 
 interface State {
   activeDate: string;
@@ -108,7 +110,7 @@ export const SessionStore = signalStore(
       },
     };
   }),
-  withHooks((store, sessionRepository = inject(SessionRepository)) => ({
+  withHooks((store, queryBus = inject(QueryBus)) => ({
     onInit: () => {
       effect(() => {
         const date = store.activeDate();
@@ -119,7 +121,7 @@ export const SessionStore = signalStore(
 
             if (!cachedSessions[date]) {
               const zonedDate = DateHelper.toLocal(date);
-              const sessions = await sessionRepository.findAllByDate(zonedDate);
+              const sessions = await queryBus.execute(new FindSessionsByDateQuery(zonedDate));
 
               patchState(store, (state) => ({
                 ...state,

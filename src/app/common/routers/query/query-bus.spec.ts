@@ -1,9 +1,9 @@
-import { Query } from '@domain/model/query.model';
-import { QueryHandler, QueryResult } from '@common/interfaces/query-handler.interface';
+import { Query } from '@common/routers/query/query.model';
+import { QueryHandler, QueryResult } from '@common/routers/query/query-handler.interface';
 import { Constructor } from '@common/types/constructor.type';
 import { QueryBus } from '@common/routers/query/query-bus';
 import { TestBed } from '@angular/core/testing';
-import { QUERY_HANDLERS } from '@common/tokens/query-handlers.token';
+import { QUERY_HANDLERS } from '@common/routers/query/query-handlers.token';
 
 class QueryA extends Query<string[]> {}
 class QueryB extends Query<number> {}

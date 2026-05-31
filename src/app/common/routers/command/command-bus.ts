@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { Command } from '@session/commands/command';
-import { COMMAND_HANDLERS } from '@session/commands/command-handlers.token';
-import { CommandHandler } from '@session/commands/command-handler.interface';
+import { Command } from '@common/routers/command/command';
+import { COMMAND_HANDLERS } from '@common/routers/command/command-handlers.token';
+import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable({ providedIn: 'root' })

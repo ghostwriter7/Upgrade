@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { Session } from '@domain/model/session/session.model';
 import { BodyweightSet } from '@domain/model/exercise-set.model';
-import { DomainEvent } from '@session/events/domain-event';
+import { DomainEvent } from '@common/routers/event/domain-event';
 import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 import { SessionDeletedEvent } from '@session/events/delete-session/session-deleted.event';
 import { SetUpdatedEvent } from '@session/events/set-updated/set-updated.event';
 import { EventBus } from '@common/routers/event/event-bus';
-import { EVENT_HANDLERS } from '@session/events/event-handlers.token';
-import { EventHandler } from '@session/events/event-handler.interface';
+import { EVENT_HANDLERS } from '@common/routers/event/event-handlers.token';
+import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { Constructor } from '@common/types/constructor.type';
 
 class UnknownEvent extends DomainEvent {

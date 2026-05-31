@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { EVENT_HANDLERS } from '@session/events/event-handlers.token';
-import { EventHandler } from '@session/events/event-handler.interface';
-import { DomainEvent } from '@session/events/domain-event';
+import { EVENT_HANDLERS } from '@common/routers/event/event-handlers.token';
+import { EventHandler } from '@common/routers/event/event-handler.interface';
+import { DomainEvent } from '@common/routers/event/domain-event';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable({ providedIn: 'root' })

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';

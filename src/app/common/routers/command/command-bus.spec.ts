@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { CommandBus } from '@common/routers/command/command-bus';
-import { COMMAND_HANDLERS } from '@session/commands/command-handlers.token';
+import { COMMAND_HANDLERS } from '@common/routers/command/command-handlers.token';
 import { CreateSessionCommand } from '@session/commands/create-session/create-session-command';
 import { DeleteSessionCommand } from '@session/commands/delete-session/delete-session-command';
 import { Session } from '@domain/model/session/session.model';
 import { UpdateSetCommand } from '@session/commands/update-set/update-set.command';
 import { BodyweightSet } from '@domain/model/exercise-set.model';
-import { Command } from '@session/commands/command';
+import { Command } from '@common/routers/command/command';
 
 class UnknownCommand extends Command {
   constructor() {

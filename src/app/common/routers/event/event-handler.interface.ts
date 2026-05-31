@@ -1,4 +1,4 @@
-import { DomainEvent } from './domain-event';
+import { DomainEvent } from '@common/routers/event/domain-event';
 import { Constructor } from '@common/types/constructor.type';
 
 export interface EventHandler<T extends DomainEvent = DomainEvent> {

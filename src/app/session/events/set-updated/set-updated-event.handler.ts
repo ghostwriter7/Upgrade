@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EventHandler } from '../event-handler.interface';
+import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { SetUpdatedEvent } from './set-updated.event';
 import { SetRepository } from '../../../persistence/repository/set.repository';
 import { Constructor } from '@common/types/constructor.type';

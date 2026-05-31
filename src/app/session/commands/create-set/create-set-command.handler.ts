@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { CreateSetCommand } from './create-set.command';
-import { CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { SetDataMapper } from '../../components/set-form/mapper/set-data.mapper';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';

@@ -1,4 +1,4 @@
-import { CommandHandler } from '../command-handler.interface';
+import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { inject, Injectable } from '@angular/core';
 import { DeleteSetCommand } from './delete-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';

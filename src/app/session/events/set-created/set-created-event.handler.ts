@@ -1,4 +1,4 @@
-import { EventHandler } from '../event-handler.interface';
+import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { inject, Injectable } from '@angular/core';
 import { SetCreatedEvent } from './set-created.event';
 import { SetRepository } from '../../../persistence/repository/set.repository';

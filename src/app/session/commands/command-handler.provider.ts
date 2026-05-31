@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { COMMAND_HANDLERS } from './command-handlers.token';
+import { COMMAND_HANDLERS } from '@common/routers/command/command-handlers.token';
 import { DeleteSetCommandHandler } from './delete-set/delete-set-command.handler';
 import { CopySetCommandHandler } from './copy-set/copy-set-command.handler';
 import { UpdateSetCommandHandler } from './update-set/update-set-command.handler';

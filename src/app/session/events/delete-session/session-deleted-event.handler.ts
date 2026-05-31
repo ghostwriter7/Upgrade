@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EventHandler } from '../event-handler.interface';
+import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { SessionDeletedEvent } from './session-deleted.event';
 import { SessionRepository } from '../../../persistence/repository/session.repository';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';

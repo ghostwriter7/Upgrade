@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EventHandler } from '../event-handler.interface';
+import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { ExerciseLogCreatedEvent } from './exercise-log-created.event';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
 import { Constructor } from '@common/types/constructor.type';

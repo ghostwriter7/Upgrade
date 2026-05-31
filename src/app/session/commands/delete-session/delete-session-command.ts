@@ -1,4 +1,4 @@
-import { Command } from '../command';
+import { Command } from '@common/routers/command/command';
 import { Session } from '../../../domain/model/session/session.model';
 
 export class DeleteSessionCommand extends Command {
