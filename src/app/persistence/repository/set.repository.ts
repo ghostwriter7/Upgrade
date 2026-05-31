@@ -1,5 +1,5 @@
 import { GenericRepository } from './generic.repository';
-import { ExerciseSet } from '../../domain/model/exercise-set.model';
+import { ExerciseSet } from '@domain/model/exercise-set.model';
 import { Injectable } from '@angular/core';
 import { StoreName } from './store-name.enum';
 import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';

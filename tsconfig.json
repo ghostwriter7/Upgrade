@@ -14,7 +14,17 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ESNext",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "@session/*": ["./src/app/session/*"],
+      "@home/*": ["./src/app/home/*"],
+      "@persistence/*": ["./src/app/persistence/*"],
+      "@domain/*": ["./src/app/domain/*"],
+      "@common/*": ["./src/app/common/*"],
+      "@backup/*": ["./src/app/backup/*"],
+      "@store/*": ["./src/app/store/*"],
+      "@ui/*": ["./src/app/ui/*"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -3,7 +3,7 @@ import { MatButton } from '@angular/material/button';
 import { MatDivider } from '@angular/material/list';
 import { RouterLink } from '@angular/router';
 import { SessionCalendar } from '../session-calendar/session-calendar';
-import { Timer } from '../../session/components/timer/timer';
+import { Timer } from '@session/components/timer/timer';
 
 @Component({
   selector: 'app-home-page',

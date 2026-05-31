@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Session } from '../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { GenericRepository } from './generic.repository';
 import { StoreName } from './store-name.enum';
 import { SessionDto, SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
 import { IndexName } from './index-name.enum';
-import { DateHelper } from '../../common/helper/date.helper';
+import { DateHelper } from '@common/helper/date.helper';
 import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
 import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
 import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema';
-import { ExerciseLogMapper } from '../mapper/exercise-entry/exercise-log.mapper';
+import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class SessionRepository extends GenericRepository<SessionDto> {

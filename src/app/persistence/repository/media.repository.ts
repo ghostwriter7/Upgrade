@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
 import { ExerciseMediaDto } from '../schema/media.schema';
-import { ExerciseMedia } from '../../domain/model/exercise-media.model';
+import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { StoreName } from './store-name.enum';
 import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
 import { IndexName } from './index-name.enum';

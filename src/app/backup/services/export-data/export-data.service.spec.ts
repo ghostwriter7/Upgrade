@@ -8,7 +8,7 @@ import { BodyweightSet } from '../../../domain/model/exercise-set.model';
 import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
 import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
-import { ExerciseLogMapper } from '../../../persistence/mapper/exercise-entry/exercise-log.mapper';
+import { ExerciseLogMapper } from '../../../persistence/mapper/exercise-log/exercise-log.mapper';
 import { ExerciseLog } from '../../../domain/model/exercise-log.model';
 
 describe('ExportDataService', () => {

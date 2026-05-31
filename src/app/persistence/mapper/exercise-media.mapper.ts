@@ -1,7 +1,7 @@
 import { Mapper } from './mapper.interface';
-import { ExerciseMedia } from '../../domain/model/exercise-media.model';
+import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { ExerciseMediaDto } from '../schema/media.schema';
-import { DateHelper } from '../../common/helper/date.helper';
+import { DateHelper } from '@common/helper/date.helper';
 
 export class ExerciseMediaMapper implements Mapper<ExerciseMedia, ExerciseMediaDto> {
   public static readonly INSTANCE = new ExerciseMediaMapper();

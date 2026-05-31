@@ -1,8 +1,8 @@
 import { computed, DestroyRef, effect, inject, Injectable, signal, untracked } from '@angular/core';
-import { SessionStore } from '../../store/session/session.store';
+import { SessionStore } from '@store/session/session.store';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { from, switchMap, tap } from 'rxjs';
-import { pad } from '../../common/function/pad-time.function';
+import { pad } from '@common/function/pad-time.function';
 import { CalendarCell } from './session-calendar.model';
 
 @Injectable({ providedIn: 'root' })

@@ -4,7 +4,7 @@ import { SetRepository } from '../../../persistence/repository/set.repository';
 import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
 import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
 import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
-import { ExerciseLogMapper } from '../../../persistence/mapper/exercise-entry/exercise-log.mapper';
+import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class ExportDataService {
