@@ -21,6 +21,13 @@ video {
   &.active {
     background-color: var(--red);
     color: var(--yellow);
-    border: 1px solid var(--yellow);  }
+    border: 1px solid var(--yellow);
+  }
 }
 
+.timer {
+  top: var(--space-4);
+  left: var(--space-4);
+  bottom: unset;
+  right: unset;
+}

@@ -1,18 +1,21 @@
 <mat-card class="card">
   <mat-card-content class="content">
-    <span class="display-value">{{ displayValue() }}</span>
-    <div class="actions">
-      <button class="success" matMiniFab (click)="start()">
-        <mat-icon>play_arrow</mat-icon>
-      </button>
+    <span data-testid="timer-display" class="display-value">{{ displayValue() }}</span>
 
-      <button class="info" matMiniFab (click)="pause()">
-        <mat-icon>pause</mat-icon>
-      </button>
+    @if (showControls()) {
+      <div data-testid="timer-actions" class="actions">
+        <button data-testid="timer-start" class="success" matMiniFab (click)="start()">
+          <mat-icon>play_arrow</mat-icon>
+        </button>
 
-      <button class="danger" matMiniFab (click)="reset()">
-        <mat-icon>clear</mat-icon>
-      </button>
-    </div>
+        <button data-testid="timer-pause" class="info" matMiniFab (click)="pause()">
+          <mat-icon>pause</mat-icon>
+        </button>
+
+        <button data-testid="timer-clear" class="danger" matMiniFab (click)="reset()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </div>
+    }
   </mat-card-content>
 </mat-card>

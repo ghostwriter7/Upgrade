@@ -1,4 +1,6 @@
+<app-timer class="timer" [showControls]="false" [autoPlay]="true" />
+
 <video playsinline muted #video></video>
-<button matMiniFab class="record-button" [class.active]="isRecording()" (click)="toggleRecording()">
+<button matFab class="record-button" [class.active]="isRecording()" (click)="toggleRecording()">
   <mat-icon>circle</mat-icon>
 </button>

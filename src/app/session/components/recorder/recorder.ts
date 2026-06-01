@@ -1,24 +1,24 @@
 import { Component, ElementRef, OnInit, output, signal, viewChild } from '@angular/core';
-import { MatMiniFabButton } from '@angular/material/button';
+import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { Timer } from '@session/components/timer/timer';
 
 @Component({
   selector: 'app-recorder',
-  imports: [MatIcon, MatMiniFabButton],
+  imports: [MatIcon, MatFabButton, Timer],
   templateUrl: './recorder.html',
   styleUrl: './recorder.css',
 })
 export class Recorder implements OnInit {
-  public videoCapture = output<{ video: Blob, width: number; height: number }>();
+  public videoCapture = output<{ video: Blob; width: number; height: number }>();
 
   private readonly video = viewChild.required<ElementRef<HTMLVideoElement>>('video');
   private readonly mediaRecorder = signal<MediaRecorder | null>(null);
 
-
   protected readonly isRecording = signal(false);
 
   public ngOnInit(): void {
-    this.setupRecorder()
+    this.setupRecorder();
   }
 
   protected toggleRecording(): void {

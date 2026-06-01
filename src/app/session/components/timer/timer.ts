@@ -1,7 +1,7 @@
-import { Component, computed, DestroyRef, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, input, linkedSignal, signal } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { pad } from '../../../common/function/pad-time.function';
+import { pad } from '@common/function/pad-time.function';
 import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
@@ -11,6 +11,9 @@ import { MatCard, MatCardContent } from '@angular/material/card';
   styleUrl: './timer.css',
 })
 export class Timer {
+  public showControls = input(true);
+  public autoPlay = input(false);
+
   private readonly timer = signal(0);
 
   protected readonly displayValue = computed(() => {
@@ -20,8 +23,7 @@ export class Timer {
     });
     return [hours, minutes, seconds].map((part) => pad(part)).join(':');
   });
-  private readonly isRunning = signal(false);
-  private readonly destroyRef = inject(DestroyRef);
+  private readonly isRunning = linkedSignal(this.autoPlay);
 
   constructor() {
     effect((onCleanup) => {
