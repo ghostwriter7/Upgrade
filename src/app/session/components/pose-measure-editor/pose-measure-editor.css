@@ -21,3 +21,12 @@
   padding: var(--space-2);
   border-radius: var(--mat-sys-corner-medium);
 }
+
+.line {
+  stroke: var(--mat-sys-primary-container);
+  stroke-width: 6px;
+}
+
+.point {
+  fill: var(--mat-sys-on-primary-container);
+}
