@@ -1,9 +1,9 @@
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { Exercise } from '../domain/model/exercise.model';
+import { signalStore, withMethods, withState } from '@ngrx/signals';
+import { Exercise } from '@domain/model/exercise.model';
 import { exercises } from './exercises.const';
 
 const DefaultExercises: Exercise[] = exercises.map(
-  ({ uuid, name, description }) => new Exercise(uuid, name, description),
+  ({ id, name, description }) => new Exercise(id, name, description),
 );
 
 interface State {
@@ -18,6 +18,6 @@ export const ExerciseStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => ({
-    getExerciseById: (uuid: string) => store.exercises().find((exercise) => exercise.uuid === uuid),
+    getExerciseById: (uuid: string) => store.exercises().find((exercise) => exercise.id === uuid),
   })),
 );

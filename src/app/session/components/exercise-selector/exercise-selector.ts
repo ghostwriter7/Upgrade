@@ -38,7 +38,7 @@ export class ExerciseSelector {
     this.data.session.exercises.map(({ exerciseId }) => exerciseId),
   );
   protected readonly availableExercises = computed(() =>
-    this.exerciseStore.exercises().filter(({ uuid }) => !this.activeExerciseIds.has(uuid)),
+    this.exerciseStore.exercises().filter(({ id }) => !this.activeExerciseIds.has(id)),
   );
 
   protected handleSelectionChange(selectionListChange: MatSelectionListChange): void {
