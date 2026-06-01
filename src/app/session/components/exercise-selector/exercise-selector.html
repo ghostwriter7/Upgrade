@@ -1,8 +1,8 @@
 <h2 mat-dialog-title>Exercises</h2>
 <mat-dialog-content>
   <mat-selection-list (selectionChange)="handleSelectionChange($event)">
-    @for (exercise of availableExercises(); track exercise.uuid) {
-      <mat-list-option togglePosition="after" [value]="exercise.uuid">
+    @for (exercise of availableExercises(); track exercise.id) {
+      <mat-list-option togglePosition="after" [value]="exercise.id">
         <span matListItemTitle>{{ exercise.name }}</span>
       </mat-list-option>
     }
