@@ -1,6 +1,6 @@
 import { ExerciseSet } from '../exercise-set.model';
-import { createUuid } from '../../../common/function/create-uuid.function';
-import { DateHelper } from '../../../common/helper/date.helper';
+import { createNanoId } from '@common/function/create-uuid.function';
+import { DateHelper } from '@common/helper/date.helper';
 import { ExerciseLog } from '../exercise-log.model';
 
 interface RemoveExerciseLogResult {
@@ -43,7 +43,7 @@ export class Session {
   }
 
   public static createEmpty(): Session {
-    return new Session(createUuid(), DateHelper.now());
+    return new Session(createNanoId(), DateHelper.now());
   }
 
   /**

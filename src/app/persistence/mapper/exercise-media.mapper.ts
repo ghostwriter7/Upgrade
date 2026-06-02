@@ -21,7 +21,7 @@ export class ExerciseMediaMapper implements Mapper<ExerciseMedia, ExerciseMediaD
 
   toDto(entity: ExerciseMedia): ExerciseMediaDto {
     return {
-      uuid: entity.uuid,
+      uuid: entity.id,
       sessionId: entity.sessionId,
       exerciseId: entity.exerciseId,
       createdAt: entity.createdAt.toString({ smallestUnit: 'second' }),

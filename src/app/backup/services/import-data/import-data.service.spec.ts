@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { SessionRepository } from '../../../persistence/repository/session.repository';
-import { SetRepository } from '../../../persistence/repository/set.repository';
+import { SessionRepository } from '@persistence/repository/session.repository';
+import { SetRepository } from '@persistence/repository/set.repository';
 import { Mock } from 'vitest';
 import { ImportDataService } from './import-data.service';
-import { Session } from '../../../domain/model/session/session.model';
-import { BodyweightSet } from '../../../domain/model/exercise-set.model';
-import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
-import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
-import { createUuid } from '../../../common/function/create-uuid.function';
-import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
-import { ExerciseLogMapper } from '../../../persistence/mapper/exercise-log/exercise-log.mapper';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { Session } from '@domain/model/session/session.model';
+import { BodyweightSet } from '@domain/model/exercise-set.model';
+import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
+import { SessionMapper } from '@persistence/mapper/session/session.mapper';
+import { createNanoId } from '@common/function/create-uuid.function';
+import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
+import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
 
 describe('ImportDataService', () => {
   let sessionRepositoryMock: { save: Mock; deleteAllSessions: Mock };
@@ -68,8 +68,8 @@ describe('ImportDataService', () => {
     });
 
   it('should import data from a file', async () => {
-    const chinUpsId = createUuid();
-    const pullUpsId = createUuid();
+    const chinUpsId = createNanoId();
+    const pullUpsId = createNanoId();
     const sessions = [Session.createEmpty(), Session.createEmpty()];
     const exerciseLogs = [
       new ExerciseLog(sessions[0].uuid, chinUpsId),

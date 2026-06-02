@@ -3,19 +3,18 @@ import { UpdateSetCommand } from '../../commands/update-set/update-set.command';
 import { SetData } from '../set-form/set-data.interface';
 
 import { SetActions } from './set-actions';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { Mock } from 'vitest';
-import { BodyweightSet } from '../../../domain/model/exercise-set.model';
+import { BodyweightSet } from '@domain/model/exercise-set.model';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { MatButtonHarness } from '@angular/material/button/testing';
 import { CopySetCommand } from '../../commands/copy-set/copy-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
 import { getButtonByTestId } from '../../../../test/harness.utils';
-import { createUuid } from '../../../common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-uuid.function';
 
 describe('SetActions', () => {
   let component: SetActions;
@@ -25,7 +24,7 @@ describe('SetActions', () => {
   let commandBusMock: { dispatch: Mock };
 
   const set = new BodyweightSet('sessionId', 'exerciseId', 0, 10);
-  set.id = createUuid();
+  set.id = createNanoId();
 
   beforeEach(async () => {
     dialogServiceMock = { open: vi.fn() };

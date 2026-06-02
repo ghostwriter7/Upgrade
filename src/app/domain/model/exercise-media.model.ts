@@ -1,9 +1,9 @@
-import { createUuid } from '../../common/function/create-uuid.function';
-import { DateHelper } from '../../common/helper/date.helper';
+import { createNanoId } from '@common/function/create-uuid.function';
+import { DateHelper } from '@common/helper/date.helper';
 
 export class ExerciseMedia {
   constructor(
-    public readonly uuid: string,
+    public readonly id: string,
     public readonly exerciseId: string,
     public readonly sessionId: string,
     public readonly mimeType: 'image/jpeg',
@@ -15,7 +15,7 @@ export class ExerciseMedia {
 
   public static newImage(exerciseId: string, sessionId: string, blob: Blob, width: number, height: number): ExerciseMedia {
     return new ExerciseMedia(
-      createUuid(),
+      createNanoId(),
       exerciseId,
       sessionId,
       'image/jpeg',

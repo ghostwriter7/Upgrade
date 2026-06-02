@@ -3,7 +3,7 @@ import { CommandHandler } from '@common/routers/command/command-handler.interfac
 import { CaptureRecordingCommand } from './capture-recording.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
-import { ExerciseMedia } from '../../../domain/model/exercise-media.model';
+import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { MediaCapturedEvent } from '../../events/media-captured/media-captured.event';
 import { Constructor } from '@common/types/constructor.type';
 
@@ -25,7 +25,7 @@ export class CaptureRecordingCommandHandler implements CommandHandler<CaptureRec
 
     const media = ExerciseMedia.newImage(exerciseId, sessionId, image, width, height);
 
-    const updatedSession = session.addMediaToExercise(exerciseId, media.uuid);
+    const updatedSession = session.addMediaToExercise(exerciseId, media.id);
     this.sessionStateHolder.set(updatedSession);
     this.eventBus.publish(new MediaCapturedEvent(media));
   }

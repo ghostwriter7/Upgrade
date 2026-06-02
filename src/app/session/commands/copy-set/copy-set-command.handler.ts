@@ -4,7 +4,7 @@ import { CopySetCommand } from './copy-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
 import { SetCreatedEvent } from '../../events/set-created/set-created.event';
-import { createUuid } from '../../../common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-uuid.function';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class CopySetCommandHandler implements CommandHandler<CopySetCommand> {
 
     const exercise = session.getExerciseById(set.exerciseId);
     const copiedSet = exercise.cloneSetAtIndex(set.index);
-    copiedSet.id = createUuid();
+    copiedSet.id = createNanoId();
 
     this.eventBus.publish(new SetCreatedEvent(copiedSet));
 

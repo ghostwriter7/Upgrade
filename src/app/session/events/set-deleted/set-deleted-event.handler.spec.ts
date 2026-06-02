@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { Mock } from 'vitest';
 import { SetDeletedEvent } from './set-deleted.event';
 import { SetDeletedEventHandler } from './set-deleted-event.handler';
-import { SetRepository } from '../../../persistence/repository/set.repository';
-import { createUuid } from '../../../common/function/create-uuid.function';
+import { SetRepository } from '@persistence/repository/set.repository';
+import { createNanoId } from '@common/function/create-uuid.function';
 
 describe('SetDeletedEventHandler', () => {
   let setRepositoryMock: { deleteSet: Mock };
@@ -25,7 +25,7 @@ describe('SetDeletedEventHandler', () => {
     expect(handler.appliesTo()).toEqual(SetDeletedEvent));
 
   it('should delete a set', () => {
-    const event = new SetDeletedEvent(createUuid());
+    const event = new SetDeletedEvent(createNanoId());
 
     handler.handle(event);
 

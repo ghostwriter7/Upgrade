@@ -1,6 +1,5 @@
 import { Injectable, Type } from '@angular/core';
 import { filter, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

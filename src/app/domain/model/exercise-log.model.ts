@@ -1,5 +1,5 @@
 import { ExerciseSet } from './exercise-set.model';
-import { createUuid } from '../../common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-uuid.function';
 
 export class ExerciseLog {
   public sets: ExerciseSet[] = [];
@@ -10,7 +10,7 @@ export class ExerciseLog {
   constructor(
     public readonly sessionId: string,
     public readonly exerciseId: string,
-    public readonly id: string = createUuid(),
+    public readonly id: string = createNanoId(),
   ) {}
 
   public get isEmpty(): boolean {
