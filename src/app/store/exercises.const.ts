@@ -1,4 +1,13 @@
-export const exercises = [
+import { BodyPart } from '@domain/enum/body-part.enum';
+import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
+
+export const exercises: {
+  id: string;
+  name: string;
+  description?: string;
+  muscles?: string[];
+  measurementDefinition?: AngleMeasurementDefinition;
+}[] = [
   {
     id: 'arching-standing-kneeling',
     name: 'Arching (Standing / Kneeling)',
@@ -165,6 +174,9 @@ export const exercises = [
     description:
       'Sit against a wall. Keep upright posture. Pull feet in, heels touching. Test your unloaded range of motion. Select a dumbbell/kettlebell with just enough weight to increase your range slightly. Use weight in range of 4-10kg, the goal is to use little weight as possible. Sit on the blocks or objects if your knees can touch the floor. Focus on the bottom of the rep. Remember to teach your adductors how to relax in the bottom of the position.',
     muscles: ['adductors'],
+    measurementDefinition: {
+      landmarks: [BodyPart.RightKnee, BodyPart.PelvisCenter, BodyPart.LeftKnee],
+    },
   },
   {
     id: 'tailor-pose-straight-arm-lifts',

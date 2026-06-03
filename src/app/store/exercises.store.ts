@@ -2,16 +2,16 @@ import { signalStore, withMethods, withState } from '@ngrx/signals';
 import { Exercise } from '@domain/model/exercise.model';
 import { exercises } from './exercises.const';
 
-const DefaultExercises: Exercise[] = exercises.map(
-  ({ id, name, description }) => new Exercise(id, name, description),
-);
-
 interface State {
   exercises: Exercise[];
 }
 
 const initialState: State = {
-  exercises: [...DefaultExercises],
+  exercises: exercises.map(({ id, name, description, measurementDefinition }) => {
+    const exercise = new Exercise(id, name, description);
+    exercise.measurementDefinition = measurementDefinition;
+    return exercise;
+  }),
 };
 
 export const ExerciseStore = signalStore(

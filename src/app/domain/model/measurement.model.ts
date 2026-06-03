@@ -1,37 +1,28 @@
-type MeasurementType = 'angle';
+import { BodyPart } from '@domain/enum/body-part.enum';
 
-enum BodyPart {
-  LeftKnee = 'leftKnee',
-  PelvisCenter = 'pelvisCenter',
-  RightKnee = 'rightKnee',
-}
-
-export class Measurement {
+export class AngleMeasurement {
   constructor(
     public readonly id: string,
     public readonly mediaId: string,
     public readonly exerciseId: string,
-    public readonly setId: number,
-    public readonly type: MeasurementType,
-  ) {}
-}
-
-export class AngleMeasurement extends Measurement {
-  constructor(
-    id: string,
-    mediaId: string,
-    exerciseId: string,
-    setId: number,
+    public readonly exerciseLogId: string,
     public readonly degrees: number,
-    public readonly landmarks: BodyLandmark[],
+    public readonly landmarks: Landmark[],
+    public readonly createdAt: Temporal.Instant = Temporal.Now.instant(),
   ) {
-    super(id, mediaId, exerciseId, setId, 'angle');
   }
 }
 
-export class BodyLandmark {
+export class Landmark {
   constructor(
-    public readonly point: { x: number, y: number },
+    public readonly point: Point,
     public readonly bodyPart: BodyPart,
+  ) {}
+}
+
+export class Point {
+  constructor(
+    public readonly x: number,
+    public readonly y: number,
   ) {}
 }
