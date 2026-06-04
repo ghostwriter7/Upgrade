@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { EventBus } from '@common/routers/event/event-bus';
 import { DeleteSessionCommand } from './delete-session-command';
 import { SessionDeletedEvent } from '../../events/delete-session/session-deleted.event';
-import { SessionStore } from '../../../store/session/session.store';
+import { SessionStore } from '@store/session/session.store';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { Constructor } from '@common/types/constructor.type';
 
@@ -20,6 +20,11 @@ export class DeleteSessionCommandHandler implements CommandHandler<DeleteSession
   public handle({ session }: DeleteSessionCommand): void {
     this.sessionStore.delete(session);
     this.sessionStateHolder.set(null);
-    this.eventBus.publish(new SessionDeletedEvent(session.uuid));
+    this.eventBus.publish(
+      new SessionDeletedEvent(
+        session.uuid,
+        session.exercises.map(({ id }) => id),
+      ),
+    );
   }
 }

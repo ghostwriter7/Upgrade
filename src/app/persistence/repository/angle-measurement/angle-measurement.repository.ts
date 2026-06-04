@@ -7,6 +7,7 @@ import {
 import { AngleMeasurement } from '@domain/model/measurement.model';
 import { StoreName } from '@persistence/repository/store-name.enum';
 import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
+import { IndexName } from '@persistence/repository/index-name.enum';
 
 @Injectable({ providedIn: 'root' })
 export class AngleMeasurementRepository extends GenericRepository<AngleMeasurementDto> {
@@ -14,6 +15,14 @@ export class AngleMeasurementRepository extends GenericRepository<AngleMeasureme
     return this.put(
       StoreName.ANGLE_MEASUREMENTS,
       AngleMeasurementMapper.INSTANCE.toDto(measurement),
+    );
+  }
+
+  public deleteAllByExerciseLogId(exerciseLogId: string): Promise<void> {
+    return super.deleteAllByIndex(
+      StoreName.ANGLE_MEASUREMENTS,
+      IndexName.AngleMeasurementsByExerciseLogId,
+      exerciseLogId,
     );
   }
 

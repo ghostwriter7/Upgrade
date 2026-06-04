@@ -3,7 +3,6 @@ import { CommandHandler } from '@common/routers/command/command-handler.interfac
 import { DeleteExerciseCommand } from './delete-exercise.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
-import { MediaDeletedEvent } from '../../events/media-deleted/media-deleted.event';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
 import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
 import { Constructor } from '@common/types/constructor.type';
@@ -28,14 +27,8 @@ export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerci
       removedLog,
     } = session.removeExerciseLog(exerciseId);
 
-    if (removedLog.hasMedia) {
-      removedLog.mediaIds.forEach((mediaId) =>
-        this.eventBus.publish(new MediaDeletedEvent(mediaId)),
-      );
-    }
-
     this.sessionStateHolder.set(updatedSession);
     this.eventBus.publish(new ExerciseLogDeletedEvent(removedLog));
-    reIndexedLogs.forEach((log) => this.eventBus.publish(new ExerciseLogUpdatedEvent(log)))
+    reIndexedLogs.forEach((log) => this.eventBus.publish(new ExerciseLogUpdatedEvent(log)));
   }
 }

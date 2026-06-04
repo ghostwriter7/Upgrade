@@ -35,13 +35,15 @@ describe('DeleteSessionCommandHandler', () => {
     expect(handler.appliesTo()).toEqual(DeleteSessionCommand));
 
   test('should delete a session', () => {
-    const command = new DeleteSessionCommand(Session.createEmpty());
+    const command = new DeleteSessionCommand(
+      Session.createEmpty().addExerciseLogs('chin-ups', 'pull-ups').session,
+    );
 
     handler.handle(command);
 
     expect(sessionStore.delete).toHaveBeenCalledExactlyOnceWith(command.session);
     expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
-      new SessionDeletedEvent(command.session.uuid),
+      new SessionDeletedEvent(command.session.uuid, command.session.exercises.map((log) => log.id)),
     );
     expect(sessionStateHolder.set).toHaveBeenCalledExactlyOnceWith(null);
   });
