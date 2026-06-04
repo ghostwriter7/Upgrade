@@ -10,6 +10,9 @@ import { ExerciseLogCreatedEventHandler } from './exercise-log-created/exercise-
 import { ExerciseLogDeletedEventHandler } from './exercise-log-deleted/exercise-log-deleted-event.handler';
 import { ExerciseLogUpdatedEventHandler } from './exercise-log-updated/exercise-log-updated-event.handler';
 import { SessionDeletedEventHandler } from './delete-session/session-deleted-event.handler';
+import {
+  AngleMeasurementCapturedEventHandler
+} from '@session/events/angle-measurement-captured/angle-measurement-captured-event.handler';
 
 export class EventHandlerProvider {
   public static forRoot(): Provider[] {
@@ -64,6 +67,11 @@ export class EventHandlerProvider {
         multi: true,
         useClass: ExerciseLogUpdatedEventHandler,
       },
+      {
+        provide: EVENT_HANDLERS,
+        multi: true,
+        useClass: AngleMeasurementCapturedEventHandler
+      }
     ];
   }
 }
