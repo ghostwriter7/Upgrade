@@ -96,13 +96,6 @@ export class Session {
     };
   }
 
-  public addMediaToExercise(exerciseId: string, mediaId: string): Session {
-    const exerciseIndex = this.getExerciseIndex(exerciseId);
-    const exerciseLog = this.exercises[exerciseIndex];
-    this.exercises = this.exercises.with(exerciseIndex, exerciseLog.withMedia(mediaId));
-    return this.clone();
-  }
-
   public removeExerciseLog(exerciseId: string): RemoveExerciseLogResult {
     const index = this.getExerciseIndex(exerciseId);
     const cloned = this.clone();
