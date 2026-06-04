@@ -10,9 +10,8 @@ import { CompleteSessionCommandHandler } from './complete-session/complete-sessi
 import { DeleteExerciseCommandHandler } from './delete-exercise/delete-exercise-command.handler';
 import { AddExerciseCommandHandler } from './add-exercise/add-exercise-command.handler';
 import { EditExerciseNoteCommandHandler } from './edit-exercise-note/edit-exercise-note-command.handler';
-import { CaptureRecordingCommandHandler } from './capture-recording/capture-recording-command.handler';
+import { CaptureProgressCommandHandler } from '@session/commands/capture-progress/capture-progress-command.handler';
 import { DeleteSessionCommandHandler } from './delete-session/delete-session-command.handler';
-import { CreateSessionCommand } from './create-session/create-session-command';
 import { CreateSessionCommandHandler } from './create-session/create-session-command.handler';
 
 export class CommandHandlerProvider {
@@ -81,7 +80,7 @@ export class CommandHandlerProvider {
       {
         provide: COMMAND_HANDLERS,
         multi: true,
-        useClass: CaptureRecordingCommandHandler,
+        useClass: CaptureProgressCommandHandler,
       },
     ];
   }
