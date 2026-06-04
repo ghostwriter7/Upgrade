@@ -3,6 +3,9 @@ import { QUERY_HANDLERS } from '@common/routers/query/query-handlers.token';
 import {
   FindSessionsByDateQueryHandler
 } from '@session/queries/find-sessions-by-date/find-sessions-by-date-query.handler';
+import {
+  FindMediaAndMeasurementsByExerciseLogIdQueryHandler
+} from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id-query.handler';
 
 export class QueryHandlerProvider {
   public static forRoot(): Provider[] {
@@ -10,8 +13,13 @@ export class QueryHandlerProvider {
       {
         provide: QUERY_HANDLERS,
         multi: true,
-        useClass: FindSessionsByDateQueryHandler
-      }
+        useClass: FindSessionsByDateQueryHandler,
+      },
+      {
+        provide: QUERY_HANDLERS,
+        multi: true,
+        useClass: FindMediaAndMeasurementsByExerciseLogIdQueryHandler,
+      },
     ];
   }
 }

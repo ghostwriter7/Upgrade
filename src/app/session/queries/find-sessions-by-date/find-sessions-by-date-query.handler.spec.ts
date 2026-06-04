@@ -39,13 +39,6 @@ describe('FindSessionsByDateQueryHandler', () => {
   const set = (sessionId: string, exerciseId: string, index: number) =>
     new BodyweightSet(sessionId, exerciseId, index, index + 1);
 
-  const logMatcher = (sessionId: string, exerciseId: string, index: number) =>
-    expect.objectContaining({
-      sessionId,
-      exerciseId,
-      index,
-    });
-
   const assertSessionId = (actual: Session, expected: string) => expect(actual.uuid).toBe(expected);
 
   const assertExerciseLogs = (
