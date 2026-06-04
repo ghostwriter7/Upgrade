@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MediaCapturedEvent } from './media-captured.event';
 import { EventHandler } from '@common/routers/event/event-handler.interface';
-import { MediaRepository } from '../../../persistence/repository/media.repository';
+import { MediaRepository } from '@persistence/repository/media.repository';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()

@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { Mock } from 'vitest';
 import { MediaCapturedEvent } from './media-captured.event';
-import { MediaRepository } from '../../../persistence/repository/media.repository';
-import { ExerciseMedia } from '../../../domain/model/exercise-media.model';
+import { MediaRepository } from '@persistence/repository/media.repository';
+import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { MediaCapturedEventHandler } from './media-captured-event.handler';
 
 describe('MediaCapturedEventHandler', () => {
@@ -29,7 +29,7 @@ describe('MediaCapturedEventHandler', () => {
 
   it('should persist captured exercise media', () => {
     const event = new MediaCapturedEvent(
-      ExerciseMedia.newImage('exerciseId', 'sessionId', new Blob(), 100, 100),
+      ExerciseMedia.newImage('exerciseId', 'exerciseLogId', new Blob(), 100, 100),
     );
 
     handler.handle(event);
