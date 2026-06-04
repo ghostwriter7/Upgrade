@@ -4,7 +4,6 @@ import { createNanoId } from '@common/function/create-uuid.function';
 export class ExerciseLog {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
-  public mediaIds: string[] = [];
   public index: number = 0;
 
   constructor(
@@ -17,15 +16,10 @@ export class ExerciseLog {
     return this.sets.length === 0;
   }
 
-  public get hasMedia(): boolean {
-    return this.mediaIds.length > 0;
-  }
-
   public clone(): ExerciseLog {
     const log = new ExerciseLog(this.sessionId, this.exerciseId, this.id);
     log.sets = this.sets;
     log.notes = this.notes;
-    log.mediaIds = this.mediaIds;
     log.index = this.index;
     return log;
   }
@@ -43,11 +37,6 @@ export class ExerciseLog {
     const clone = this.clone();
     clone.index = index;
     return clone;
-  }
-
-  public withMedia(mediaId: string): ExerciseLog {
-    this.mediaIds = [...this.mediaIds, mediaId];
-    return this.clone();
   }
 
   public withSet(set: ExerciseSet): ExerciseLog {

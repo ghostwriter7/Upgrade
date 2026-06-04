@@ -6,7 +6,6 @@ export const ExerciseLogSchema = z.object({
   sessionId: IdSchema,
   exerciseId: z.string(),
   notes: z.string().nullable(),
-  mediaIds: z.array(IdSchema).optional().default([]),
   index: z.number().optional().default(0),
 });
 

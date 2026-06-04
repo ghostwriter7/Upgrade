@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { ExerciseLogMapper } from './exercise-log.mapper';
 import { ExerciseLogDto } from '../../schema/exercise-log.schema';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
 
 describe('ExerciseSetMapper', () => {
   const mapper = ExerciseLogMapper.INSTANCE;
@@ -13,7 +13,6 @@ describe('ExerciseSetMapper', () => {
         sessionId: 'any-session-id',
         id: 'any-id',
         notes: 'any notes',
-        mediaIds: [],
         index: 1,
       };
 
@@ -25,7 +24,6 @@ describe('ExerciseSetMapper', () => {
         sessionId: dto.sessionId,
         id: dto.id,
         notes: dto.notes,
-        mediaIds: dto.mediaIds,
         index: dto.index,
       });
     });
@@ -44,7 +42,6 @@ describe('ExerciseSetMapper', () => {
         exerciseId: log.exerciseId,
         sessionId: log.sessionId,
         notes: log.notes,
-        mediaIds: log.mediaIds,
         index: log.index,
       });
     });

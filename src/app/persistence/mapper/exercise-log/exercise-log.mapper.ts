@@ -12,7 +12,6 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       exerciseLogDto.id,
     );
     exerciseLog.notes = exerciseLogDto.notes;
-    exerciseLog.mediaIds = exerciseLogDto.mediaIds;
     exerciseLog.index = exerciseLogDto.index;
     return exerciseLog;
   }
@@ -24,7 +23,6 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       exerciseId: exerciseLog.exerciseId,
       notes: exerciseLog.notes,
       index: exerciseLog.index,
-      mediaIds: exerciseLog.mediaIds,
     };
   }
 }
