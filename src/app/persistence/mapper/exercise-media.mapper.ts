@@ -1,5 +1,5 @@
 import { Mapper } from './mapper.interface';
-import { ExerciseMedia } from '@domain/model/exercise-media.model';
+import { ExerciseMedia, Size } from '@domain/model/exercise-media.model';
 import { ExerciseMediaDto } from '../schema/media.schema';
 import { DateHelper } from '@common/helper/date.helper';
 
@@ -10,25 +10,24 @@ export class ExerciseMediaMapper implements Mapper<ExerciseMedia, ExerciseMediaD
     return new ExerciseMedia(
       dto.uuid,
       dto.exerciseId,
-      dto.sessionId,
-      'image/jpeg',
+      dto.exerciseLogId,
       dto.blob,
+      new Size(dto.width, dto.height),
+      'image/jpeg',
       DateHelper.from(dto.createdAt),
-      dto.width,
-      dto.height
     );
   }
 
   toDto(entity: ExerciseMedia): ExerciseMediaDto {
     return {
       uuid: entity.id,
-      sessionId: entity.sessionId,
+      exerciseLogId: entity.exerciseLogId,
       exerciseId: entity.exerciseId,
       createdAt: entity.createdAt.toString({ smallestUnit: 'second' }),
       mimeType: entity.mimeType,
       blob: entity.blob,
-      width: entity.width,
-      height: entity.height
+      width: entity.size.width,
+      height: entity.size.height
     };
   }
 }

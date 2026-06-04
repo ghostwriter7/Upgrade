@@ -18,6 +18,6 @@ export const ExerciseStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods((store) => ({
-    getExerciseById: (uuid: string) => store.exercises().find((exercise) => exercise.id === uuid),
+    getExerciseById: (id: string) => store.exercises().find((exercise) => exercise.id === id),
   })),
 );

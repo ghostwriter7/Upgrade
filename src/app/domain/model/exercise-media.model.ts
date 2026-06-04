@@ -5,24 +5,30 @@ export class ExerciseMedia {
   constructor(
     public readonly id: string,
     public readonly exerciseId: string,
-    public readonly sessionId: string,
-    public readonly mimeType: 'image/jpeg',
+    public readonly exerciseLogId: string,
     public readonly blob: Blob,
-    public readonly createdAt: Temporal.Instant,
-    public readonly width: number,
-    public readonly height: number
+    public readonly size: Size,
+    public readonly mimeType: 'image/jpeg' = 'image/jpeg',
+    public readonly createdAt: Temporal.Instant = Temporal.Now.instant()
   ) {}
 
-  public static newImage(exerciseId: string, sessionId: string, blob: Blob, width: number, height: number): ExerciseMedia {
+  public static newImage(exerciseId: string, exerciseLogId: string, blob: Blob, width: number, height: number): ExerciseMedia {
     return new ExerciseMedia(
       createNanoId(),
       exerciseId,
-      sessionId,
-      'image/jpeg',
+      exerciseLogId,
       blob,
+      new Size(width, height),
+      'image/jpeg',
       DateHelper.now(),
-      width,
-      height
     );
+  }
+}
+
+export class Size {
+  constructor(
+    public readonly width: number,
+    public readonly height: number
+  ) {
   }
 }
