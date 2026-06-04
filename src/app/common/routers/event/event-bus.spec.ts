@@ -54,7 +54,7 @@ describe('EventBus', () => {
       command: new SessionUpdatedEvent(Session.createEmpty()),
       expectedHandlers: [handlerA, handlerD],
     },
-    { command: new SessionDeletedEvent('anyId'), expectedHandlers: [handlerB] },
+    { command: new SessionDeletedEvent('anyId', ['anyLogId']), expectedHandlers: [handlerB] },
     {
       command: new SetUpdatedEvent(new BodyweightSet('sessionId', 'exerciseId', 0, 1)),
       expectedHandlers: [handlerC],
