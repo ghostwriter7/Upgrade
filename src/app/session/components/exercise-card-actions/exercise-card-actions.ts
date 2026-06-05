@@ -1,10 +1,9 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
-import { Recorder } from '../recorder/recorder';
-import { CaptureRecordingCommand } from '../../commands/capture-recording/capture-recording.command';
+import { CaptureProgressCommand } from '@session/commands/capture-progress/capture-progress.command';
 import { CommandBus } from '@common/routers/command/command-bus';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { SetData } from '../set-form/set-data.interface';
 import { CreateSetCommand } from '../../commands/create-set/create-set.command';
@@ -14,7 +13,8 @@ import { EditNote } from '../edit-note/edit-note';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { DeleteExerciseCommand } from '../../commands/delete-exercise/delete-exercise.command';
 import { MeasureProgress } from '../measure-progress/measure-progress';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -80,8 +80,8 @@ export class ExerciseCardActions {
     event.stopPropagation();
     this.dialogService.open(
       MeasureProgress,
-      ({ image, width, height }: { image: Blob; width: number; height: number }) =>
-        this.commandBus.dispatch(new CaptureRecordingCommand(image, width, height, exerciseId)),
+      ({ image, width, height, angle, points }: MeasureProgressOutput) =>
+        this.commandBus.dispatch(new CaptureProgressCommand(image, width, height, angle, points, exerciseId)),
       {
         width: '90svw',
         height: '90svh',

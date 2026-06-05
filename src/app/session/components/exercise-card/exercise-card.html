@@ -3,23 +3,19 @@
   <mat-card-header
     [attr.data-testid]="ids.exerciseCardHeader" class="exercise-header"
     (click)="activateActions()">
-    <mat-card-title>{{ entry().exerciseId | exerciseName }}
-
-      @if (hasMedia()) {
-        <button [attr.data-testid]="ids.showMediaButton" matMiniFab (click)="showMedia()">
-          <mat-icon>perm_media</mat-icon>
-        </button>
-      }
-    </mat-card-title>
+    <mat-card-title>{{ entry().exerciseId | exerciseName }}</mat-card-title>
 
     @if (displayActions()) {
-      <app-exercise-card-actions [entry]="entry()" [isNonDeletable]="isNonDeletable()"/>
+      <app-exercise-card-actions [entry]="entry()" [isNonDeletable]="isNonDeletable()" />
     }
   </mat-card-header>
   <mat-card-content>
     @if (entry().notes) {
       <p>{{ entry().notes }}</p>
     }
+
+    <app-progress-gallery [exerciseLogId]="entry().id" />
+
     <mat-list role="list">
       @for (set of entry().sets; track $index) {
         <mat-list-item role="listitem">

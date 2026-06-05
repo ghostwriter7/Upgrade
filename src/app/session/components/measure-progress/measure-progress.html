@@ -6,6 +6,6 @@
     <app-frame-picker [data]="videoData!" (framePick)="onFramePick($event)" />
   }
   @case ('measure') {
-    <app-pose-measure-editor [data]="frameData!" />
+    <app-pose-measure-editor [data]="frameData!" (angleConfirm)="onAngleConfirm($event)" />
   }
 }

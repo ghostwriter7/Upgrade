@@ -9,19 +9,16 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ExerciseNamePipe } from '../../../ui/pipes/exercise-name-pipe';
+import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
 import { MatList, MatListItem } from '@angular/material/list';
-import { MatMiniFabButton } from '@angular/material/button';
 import { SetView } from '../set-view/set-view';
-import { EventService } from '../../../common/service/event/event.service';
-import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
+import { EventService } from '@common/service/event/event.service';
+import { ElementClickedEvent } from '@common/events/element-clicked.event';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { EntryDetails } from '../entry-details/entry-details';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,12 +29,11 @@ import { ExerciseLog } from '../../../domain/model/exercise-log.model';
     MatCardContent,
     MatCardHeader,
     MatCardTitle,
-    MatIcon,
     MatList,
     MatListItem,
-    MatMiniFabButton,
     SetView,
     ExerciseCardActions,
+    ProgressGallery,
   ],
   templateUrl: './exercise-card.html',
   styleUrl: './exercise-card.css',
@@ -51,7 +47,7 @@ export class ExerciseCard {
     const uuid = this.entry().exerciseId;
     return {
       exerciseCardHeader: `exercise-card-header-${uuid}`,
-      showMediaButton: `exercise-card-show-media-button-${uuid}`
+      showMediaButton: `exercise-card-show-media-button-${uuid}`,
     };
   });
 
@@ -59,9 +55,6 @@ export class ExerciseCard {
   private readonly header = viewChild.required(MatCardHeader, { read: ElementRef });
   private readonly eventService = inject(EventService);
   private readonly destroyRef = inject(DestroyRef);
-  protected readonly hasMedia = computed(() => this.entry().mediaIds.length);
-
-  private readonly bottomSheetService = inject(MatBottomSheet);
 
   constructor() {
     this.eventService
@@ -78,12 +71,5 @@ export class ExerciseCard {
     if (this.isEditable()) {
       this.displayActions.set(true);
     }
-  }
-
-  protected showMedia(): void {
-    this.bottomSheetService.open(EntryDetails, {
-      data: { exerciseLog: this.entry() },
-      height: '80svh',
-    });
   }
 }

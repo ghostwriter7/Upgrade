@@ -8,7 +8,7 @@ export class ExerciseMediaMapper implements Mapper<ExerciseMedia, ExerciseMediaD
 
   public toDomain(dto: ExerciseMediaDto): ExerciseMedia {
     return new ExerciseMedia(
-      dto.uuid,
+      dto.id,
       dto.exerciseId,
       dto.exerciseLogId,
       dto.blob,
@@ -20,7 +20,7 @@ export class ExerciseMediaMapper implements Mapper<ExerciseMedia, ExerciseMediaD
 
   toDto(entity: ExerciseMedia): ExerciseMediaDto {
     return {
-      uuid: entity.id,
+      id: entity.id,
       exerciseLogId: entity.exerciseLogId,
       exerciseId: entity.exerciseId,
       createdAt: entity.createdAt.toString({ smallestUnit: 'second' }),

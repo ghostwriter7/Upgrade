@@ -18,14 +18,6 @@ export function databaseFactory(): Observable<IDBDatabase> {
       store.createIndex(IndexName.SessionByStartedAt, 'startedAt', { unique: false });
     }
 
-    if (!existingObjectStores.contains(StoreName.MEDIA)) {
-      const store = db.createObjectStore(StoreName.MEDIA, { keyPath: 'uuid' });
-      store.createIndex(IndexName.MediaByExerciseId, 'exerciseId', { unique: false });
-      store.createIndex(IndexName.MediaBySessionIdAndExerciseId, ['sessionId', 'exerciseId'], {
-        unique: false,
-      });
-    }
-
     if (!existingObjectStores.contains(StoreName.SETS)) {
       const store = db.createObjectStore(StoreName.SETS, { keyPath: 'id' });
       store.createIndex(IndexName.SetBySessionId, 'sessionId', { unique: false });
@@ -47,9 +39,28 @@ export function databaseFactory(): Observable<IDBDatabase> {
       });
     }
 
-    const mediaStore = tx!.objectStore(StoreName.MEDIA);
-    if (!mediaStore.indexNames.contains(IndexName.MediaBySessionId)) {
-      mediaStore.createIndex(IndexName.MediaBySessionId, 'sessionId', { unique: false });
+    if (existingObjectStores.contains(StoreName.MEDIA)) {
+      const mediaStore = tx!.objectStore(StoreName.MEDIA);
+      if (mediaStore?.keyPath === 'uuid') {
+        db.deleteObjectStore(StoreName.MEDIA);
+        const store = db.createObjectStore(StoreName.MEDIA, { keyPath: 'id' });
+        store.createIndex(IndexName.MediaByExerciseId, 'exerciseId', { unique: false });
+        store.createIndex(IndexName.MediaByExerciseLogId, 'exerciseLogId', {
+          unique: false,
+        });
+      }
+    } else {
+      const store = db.createObjectStore(StoreName.MEDIA, { keyPath: 'id' });
+      store.createIndex(IndexName.MediaByExerciseId, 'exerciseId', { unique: false });
+      store.createIndex(IndexName.MediaByExerciseLogId, 'exerciseLogId', {
+        unique: false,
+      });
+    }
+
+    if (!existingObjectStores.contains(StoreName.ANGLE_MEASUREMENTS)) {
+      const store = db.createObjectStore(StoreName.ANGLE_MEASUREMENTS, { keyPath: 'id' });
+      store.createIndex(IndexName.AngleMeasurementsByExerciseLogId, 'exerciseLogId', { unique: false });
+      store.createIndex(IndexName.AngleMeasurementsByExerciseId, 'exerciseId', { unique: false });
     }
   };
 

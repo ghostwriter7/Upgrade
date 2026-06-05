@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
-import { ExerciseMediaDto } from '../schema/media.schema';
+import { ExerciseMediaDto, ExerciseMediaSchema } from '../schema/media.schema';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { StoreName } from './store-name.enum';
 import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
@@ -12,9 +12,17 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
     super();
   }
 
-  public async findMedia(id: string): Promise<ExerciseMedia | null> {
-    const result = await super.findById(StoreName.MEDIA, id);
-    return result ? ExerciseMediaMapper.INSTANCE.toDomain(result) : null;
+  public async findAllByExerciseLogId(exerciseLogId: string): Promise<ExerciseMedia[]> {
+    return super
+      .findAllBy(StoreName.MEDIA, (store: IDBObjectStore) =>
+        store.index(IndexName.MediaByExerciseLogId).getAll(exerciseLogId),
+      )
+      .then((media) =>
+        Iterator.from(media)
+          .map((entry) => ExerciseMediaSchema.parse(entry))
+          .map(ExerciseMediaMapper.INSTANCE.toDomain)
+          .toArray(),
+      );
   }
 
   public save(media: ExerciseMedia): Promise<IDBValidKey> {
@@ -25,7 +33,7 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
     return super.delete(StoreName.MEDIA, mediaId);
   }
 
-  public async deleteAllBySessionId(sessionId: string): Promise<void> {
-    return super.deleteAllByIndex(StoreName.MEDIA, IndexName.MediaBySessionId, sessionId);
+  public deleteAllByExerciseLogId(exerciseLogId: string): Promise<void> {
+    return super.deleteAllByIndex(StoreName.MEDIA, IndexName.MediaByExerciseLogId, exerciseLogId);
   }
 }

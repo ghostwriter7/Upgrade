@@ -2,8 +2,8 @@ import * as z from 'zod';
 import { IdSchema } from './id.schema';
 
 export const ExerciseMediaSchema = z.object({
-  uuid: IdSchema,
-  exerciseId: IdSchema,
+  id: IdSchema,
+  exerciseId: z.string(),
   exerciseLogId: IdSchema,
   mimeType: z.enum(['image/jpeg']),
   blob: z.instanceof(Blob),

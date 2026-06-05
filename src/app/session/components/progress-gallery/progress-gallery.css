@@ -1,0 +1,47 @@
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 16px;
+  scrollbar-width: none;
+  padding-top: var(--space-3);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:empty {
+    display: none;
+  }
+}
+
+.slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+
+  height: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: var(--mat-sys-corner-medium);
+  overflow: hidden;
+  box-shadow: var(--mat-sys-level5);
+}
+
+.line {
+  stroke: var(--mat-sys-primary-container);
+  stroke-width: 6px;
+}
+
+.point {
+  fill: var(--mat-sys-on-primary-container);
+}
+
+.angle-lozenge {
+  display: unset !important;
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+}

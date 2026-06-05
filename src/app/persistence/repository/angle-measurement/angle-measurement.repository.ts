@@ -29,7 +29,8 @@ export class AngleMeasurementRepository extends GenericRepository<AngleMeasureme
   public async findAllByExerciseLogId(exerciseLogId: string): Promise<AngleMeasurement[]> {
     const measurements = await super.findAllBy(
       StoreName.ANGLE_MEASUREMENTS,
-      (store: IDBObjectStore) => store.get(exerciseLogId),
+      (store: IDBObjectStore) =>
+        store.index(IndexName.AngleMeasurementsByExerciseLogId).getAll(exerciseLogId),
     );
     return Iterator.from(measurements)
       .map((entry) => AngleMeasurementSchema.parse(entry))

@@ -15,13 +15,6 @@
   gap: var(--space-4);
 }
 
-.angle {
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
-  padding: var(--space-2);
-  border-radius: var(--mat-sys-corner-medium);
-}
-
 .line {
   stroke: var(--mat-sys-primary-container);
   stroke-width: 6px;

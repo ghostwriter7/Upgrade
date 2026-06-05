@@ -4,16 +4,14 @@ import { ExerciseCard } from './exercise-card';
 import { Component, input, Pipe } from '@angular/core';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
 import { SetView } from '../set-view/set-view';
-import { ExerciseNamePipe } from '../../../ui/pipes/exercise-name-pipe';
-import { BodyweightSet, ExerciseSet } from '../../../domain/model/exercise-set.model';
+import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
+import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set.model';
 import { By } from '@angular/platform-browser';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Mock } from 'vitest';
-import { EntryDetails } from '../entry-details/entry-details';
-import { EventService } from '../../../common/service/event/event.service';
-import { EMPTY, of, Subject } from 'rxjs';
-import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { EventService } from '@common/service/event/event.service';
+import { Subject } from 'rxjs';
+import { ElementClickedEvent } from '@common/events/element-clicked.event';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -45,7 +43,6 @@ export class ExerciseNamePipeMock {
 describe('ExerciseCard', () => {
   let component: ExerciseCard;
   let fixture: ComponentFixture<ExerciseCard>;
-  let matBottomSheetMock: { open: Mock };
   let eventServiceMock: { listen: Mock };
   let eventSubject = new Subject<ElementClickedEvent>();
 
@@ -54,11 +51,9 @@ describe('ExerciseCard', () => {
   );
 
   beforeEach(async () => {
-    matBottomSheetMock = { open: vi.fn() };
     eventServiceMock = { listen: vi.fn().mockReturnValue(eventSubject) };
     await TestBed.configureTestingModule({
       providers: [
-        { provide: MatBottomSheet, useValue: matBottomSheetMock },
         { provide: EventService, useValue: eventServiceMock },
       ],
       imports: [ExerciseCard],
@@ -115,20 +110,6 @@ describe('ExerciseCard', () => {
 
   it('should not display the Show Media button when the exercise log has no associated media', () =>
     expect(getShowMediaButton()).toBeUndefined());
-
-  it('should open the exercise details sheet upon clicking on the Show Media button', () => {
-    const exerciseWithMedia = exercise.withMedia('media-id');
-    fixture.componentRef.setInput('entry', exerciseWithMedia);
-    fixture.detectChanges();
-
-    getShowMediaButton()?.click();
-    fixture.detectChanges();
-
-    expect(matBottomSheetMock.open).toHaveBeenCalledExactlyOnceWith(EntryDetails, {
-      data: { exerciseLog: exerciseWithMedia },
-      height: '80svh',
-    });
-  });
 
   it('should listen for ElementClickedEvent', () =>
     expect(eventServiceMock.listen).toHaveBeenCalledExactlyOnceWith(ElementClickedEvent));

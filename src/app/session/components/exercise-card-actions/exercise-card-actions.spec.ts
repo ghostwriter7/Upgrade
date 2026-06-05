@@ -5,7 +5,7 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { getButtonByTestId } from '../../../../test/harness.utils';
 import { CommandBus } from '@common/routers/command/command-bus';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { Mock } from 'vitest';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { DeleteExerciseCommand } from '../../commands/delete-exercise/delete-exercise.command';
@@ -15,8 +15,8 @@ import { SetData } from '../set-form/set-data.interface';
 import { CreateSetCommand } from '../../commands/create-set/create-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { Recorder } from '../recorder/recorder';
-import { CaptureRecordingCommand } from '../../commands/capture-recording/capture-recording.command';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { CaptureProgressCommand } from '@session/commands/capture-progress/capture-progress.command';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
 
 describe('ExerciseCardActions', () => {
   let component: ExerciseCardActions;
@@ -149,7 +149,14 @@ describe('ExerciseCardActions', () => {
 
     callCallback(result);
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
-      new CaptureRecordingCommand(result.image, result.width, result.height, exercise.exerciseId),
+      new CaptureProgressCommand(
+        result.image,
+        result.width,
+        result.height,
+        120,
+        [],
+        exercise.exerciseId,
+      ),
     );
     expect(dialogServiceMock.open).toHaveBeenCalledExactlyOnceWith(Recorder, expect.any(Function), {
       width: '90svw',

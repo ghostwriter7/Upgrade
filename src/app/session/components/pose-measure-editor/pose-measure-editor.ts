@@ -4,11 +4,14 @@ import {
   computed,
   ElementRef,
   input,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { Point } from '@domain/model/measurement.model';
+import { Lozenge } from '@ui/lozenge/lozenge';
 
 function calculateAngle(a: DOMPoint, b: DOMPoint, c: DOMPoint): number {
   const ab = {
@@ -33,13 +36,17 @@ function calculateAngle(a: DOMPoint, b: DOMPoint, c: DOMPoint): number {
 
 @Component({
   selector: 'app-pose-measure-editor',
-  imports: [MatMiniFabButton, MatIcon],
+  imports: [MatMiniFabButton, MatIcon, Lozenge],
   templateUrl: './pose-measure-editor.html',
   styleUrl: './pose-measure-editor.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PoseMeasureEditor {
   public data = input.required<{ image: Blob; width: number; height: number }>();
+  public angleConfirm = output<{
+    points: Point[];
+    angle: number;
+  }>();
 
   private readonly svgEl = viewChild.required<ElementRef<SVGSVGElement>>('svg');
   protected readonly points = signal<DOMPoint[]>([]);
@@ -90,6 +97,14 @@ export class PoseMeasureEditor {
   }
 
   protected save(): void {
-    // TODO: Implement saving logic
+    const points = this.points();
+    const angle = this.angle();
+
+    if (points.length !== 3 || angle === null) return;
+
+    const { width, height } = this.data();
+    const normalize = (point: DOMPoint) => new Point(point.x, point.y).normalized(width, height);
+
+    this.angleConfirm.emit({ points: points.map(normalize), angle });
   }
 }

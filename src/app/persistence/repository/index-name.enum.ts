@@ -1,10 +1,11 @@
 export enum IndexName {
+  AngleMeasurementsByExerciseId = 'angleMeasurementsByExercise',
+  AngleMeasurementsByExerciseLogId = 'angleMeasurementsByExerciseLog',
   ExerciseLogsBySessionId = 'exerciseLogsBySession',
   ExerciseLogsByExerciseId = 'exerciseLogsByExercise',
   SessionByStartedAt = 'startedAtIndex',
-  MediaBySessionId = 'mediaBySessionId',
   MediaByExerciseId = 'mediaByExerciseId',
-  MediaBySessionIdAndExerciseId = 'mediaBySessionAndExercise',
+  MediaByExerciseLogId = 'mediaByExerciseLogId',
   SetBySessionId = 'setBySession',
   SetByExerciseId = 'setByExercise',
   SetBySessionIdAndExerciseId = 'setBySessionAndExercise',

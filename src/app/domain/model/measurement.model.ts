@@ -1,4 +1,5 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
+import { createNanoId } from '@common/function/create-uuid.function';
 
 export class AngleMeasurement {
   constructor(
@@ -6,10 +7,26 @@ export class AngleMeasurement {
     public readonly mediaId: string,
     public readonly exerciseId: string,
     public readonly exerciseLogId: string,
-    public readonly degrees: number,
+    public readonly angle: number,
     public readonly landmarks: Landmark[],
     public readonly createdAt: Temporal.Instant = Temporal.Now.instant(),
-  ) {
+  ) {}
+
+  public static new(
+    mediaId: string,
+    exerciseId: string,
+    exerciseLogId: string,
+    degrees: number,
+    landmarks: Landmark[],
+  ): AngleMeasurement {
+    return new AngleMeasurement(
+      createNanoId(),
+      mediaId,
+      exerciseId,
+      exerciseLogId,
+      degrees,
+      landmarks,
+    );
   }
 }
 
@@ -25,4 +42,12 @@ export class Point {
     public readonly x: number,
     public readonly y: number,
   ) {}
+
+  public normalized(width: number, height: number): Point {
+    return new Point(this.x / width, this.y / height);
+  }
+
+  public denormalized(width: number, height: number): Point {
+    return new Point(this.x * width, this.y * height);
+  }
 }
