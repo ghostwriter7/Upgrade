@@ -12,6 +12,7 @@ import { EventService } from '@common/service/event/event.service';
 import { Subject } from 'rxjs';
 import { ElementClickedEvent } from '@common/events/element-clicked.event';
 import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -20,6 +21,14 @@ import { ExerciseLog } from '@domain/model/exercise-log.model';
 export class ExerciseCardActionsMock {
   public entry = input<ExerciseLog | null>(null);
   public isNonDeletable = input<boolean>(false);
+}
+
+@Component({
+  selector: 'app-progress-gallery',
+  template: '<div>Progress Gallery</div>',
+})
+export class ProgressGalleryMock {
+  public exerciseLogId = input.required<string>();
 }
 
 @Component({
@@ -60,10 +69,10 @@ describe('ExerciseCard', () => {
     })
       .overrideComponent(ExerciseCard, {
         add: {
-          imports: [ExerciseCardActionsMock, SetViewMock, ExerciseNamePipeMock],
+          imports: [ExerciseCardActionsMock, SetViewMock, ExerciseNamePipeMock, ProgressGalleryMock],
         },
         remove: {
-          imports: [ExerciseCardActions, SetView, ExerciseNamePipe],
+          imports: [ExerciseCardActions, SetView, ExerciseNamePipe, ProgressGallery],
         },
       })
       .compileComponents();
