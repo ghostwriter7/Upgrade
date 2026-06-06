@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ExerciseCardActions } from './exercise-card-actions';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { getButtonByTestId } from '../../../../test/harness.utils';
+import { getButtonByTestId } from '@test/harness.utils';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { DialogService } from '@common/service/dialog/dialog.service';
 import { Mock } from 'vitest';
@@ -14,9 +14,11 @@ import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note/edit-
 import { SetData } from '../set-form/set-data.interface';
 import { CreateSetCommand } from '../../commands/create-set/create-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
-import { Recorder } from '../recorder/recorder';
 import { CaptureProgressCommand } from '@session/commands/capture-progress/capture-progress.command';
 import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { MeasureProgress } from '@session/components/measure-progress/measure-progress';
+import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
+import { Point } from '@domain/model/measurement.model';
 
 describe('ExerciseCardActions', () => {
   let component: ExerciseCardActions;
@@ -138,12 +140,18 @@ describe('ExerciseCardActions', () => {
     );
   });
 
-  it.skip('should trigger video capturing', async () => {
+  it('should trigger video capturing', async () => {
     const button = await getButtonByTestId(
       loader,
       `exercise-card-actions-video-capture-btn-${exercise.exerciseId}`,
     );
-    const result = { image: new Blob(), width: 100, height: 100 };
+    const result: MeasureProgressOutput = {
+      image: new Blob(),
+      width: 100,
+      height: 100,
+      points: [new Point(0, 0), new Point(1, 1)],
+      angle: 120,
+    };
 
     await button.click();
 
@@ -153,14 +161,18 @@ describe('ExerciseCardActions', () => {
         result.image,
         result.width,
         result.height,
-        120,
-        [],
+        result.angle,
+        result.points,
         exercise.exerciseId,
       ),
     );
-    expect(dialogServiceMock.open).toHaveBeenCalledExactlyOnceWith(Recorder, expect.any(Function), {
-      width: '90svw',
-      height: '90svh',
-    });
+    expect(dialogServiceMock.open).toHaveBeenCalledExactlyOnceWith(
+      MeasureProgress,
+      expect.any(Function),
+      {
+        width: '90svw',
+        height: '90svh',
+      },
+    );
   });
 });
