@@ -23,5 +23,21 @@ describe('BlobHelper', () => {
     const base64 = await BlobHelper.toBase64(blob);
 
     expect(base64).toEqual('aGVsbG8=');
-  })
+  });
+
+  it('should handle large blobs without stack overflow', async () => {
+    // Create a large binary payload (e.g. 1–5MB safe stress range)
+    const size = 2_000_000; // 2MB
+
+    const bytes = new Uint8Array(size);
+    for (let i = 0; i < size; i++) {
+      bytes[i] = i % 256;
+    }
+
+    const blob = new Blob([bytes], { type: 'application/octet-stream' });
+
+    const result = await BlobHelper.toBase64(blob);
+
+    expect(result).toBeDefined();
+  });
 });

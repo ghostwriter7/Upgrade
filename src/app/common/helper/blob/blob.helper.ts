@@ -2,7 +2,12 @@ export class BlobHelper {
   public static async toBase64(blob: Blob): Promise<string> {
     const buffer = await blob.arrayBuffer();
     const bytes = new Uint8Array(buffer);
-    const binary = String.fromCodePoint(...bytes);
+
+    let binary = '';
+    for (const element of bytes) {
+      binary += String.fromCharCode(element);
+    }
+
     return btoa(binary);
   }
 
