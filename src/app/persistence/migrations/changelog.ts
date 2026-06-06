@@ -1,9 +1,9 @@
 import { Migrations } from '@persistence/migrations/migration.interface';
-import { CreateMediaAndMeasurementsMigration } from '@persistence/migrations/create-media-and-measurements';
-import { CreateBaseStoresMigration } from '@persistence/migrations/create-base-stores';
+import { CreateMediaAndMeasurementsMigration } from '@persistence/migrations/create-media-and-measurements/create-media-and-measurements';
+import { CreateBaseStoresMigration } from '@persistence/migrations/create-base-stores/create-base-stores';
 import {
   CreateSetBySessionIdAndExerciseIdIndexMigration
-} from '@persistence/migrations/create-set-by-session-id-and-exercise-id-index';
+} from '@persistence/migrations/create-set-by-session-id-and-exercise-id-index/create-set-by-session-id-and-exercise-id-index';
 import { InjectionToken } from '@angular/core';
 
 export const CHANGELOG: Migrations = {

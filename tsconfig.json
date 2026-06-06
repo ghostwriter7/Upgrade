@@ -24,7 +24,8 @@
       "@common/*": ["./src/app/common/*"],
       "@backup/*": ["./src/app/backup/*"],
       "@store/*": ["./src/app/store/*"],
-      "@ui/*": ["./src/app/ui/*"]
+      "@ui/*": ["./src/app/ui/*"],
+      "@test/*": ["./src/test/*"]
     }
   },
   "angularCompilerOptions": {
