@@ -1,22 +1,32 @@
 import { inject, Injectable } from '@angular/core';
-import { SessionRepository } from '../../../persistence/repository/session.repository';
-import { SetRepository } from '../../../persistence/repository/set.repository';
-import { Session } from '../../../domain/model/session/session.model';
-import { SessionSchema } from '../../../persistence/schema/session.schema';
-import { SessionMapper } from '../../../persistence/mapper/session/session.mapper';
-import { ExerciseSet } from '../../../domain/model/exercise-set.model';
-import { ExerciseSetMapper } from '../../../persistence/mapper/exercise-set/exercise-set.mapper';
-import { ExerciseSetSchema } from '../../../persistence/schema/set.schema';
-import { ExerciseLogSchema } from '../../../persistence/schema/exercise-log.schema';
+import { SessionRepository } from '@persistence/repository/session.repository';
+import { SetRepository } from '@persistence/repository/set.repository';
+import { Session } from '@domain/model/session/session.model';
+import { SessionSchema } from '@persistence/schema/session.schema';
+import { SessionMapper } from '@persistence/mapper/session/session.mapper';
+import { ExerciseSet } from '@domain/model/exercise-set.model';
+import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
+import { ExerciseSetSchema } from '@persistence/schema/set.schema';
+import { ExerciseLogSchema } from '@persistence/schema/exercise-log.schema';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
-import { ExerciseLogRepository } from '../../../persistence/repository/exercise-log.repository';
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
+import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { MediaRepository } from '@persistence/repository/media.repository';
+import { AngleMeasurement } from '@domain/model/measurement.model';
+import { AngleMeasurementSchema } from '@persistence/schema/angle-measurement.schema';
+import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
+import { ExerciseMedia } from '@domain/model/exercise-media.model';
+import { JsonSerializedMediaSchema } from '@persistence/schema/media.schema';
+import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {
   private readonly sessionRepository = inject(SessionRepository);
   private readonly setRepository = inject(SetRepository);
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
+  private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
+  private readonly mediaRepository = inject(MediaRepository);
 
   public async importData(): Promise<void> {
     const [handle] = await window.showOpenFilePicker({
@@ -37,17 +47,23 @@ export class ImportDataService {
     const sessions = this.getSessions(data);
     const sets = this.getSets(data);
     const exerciseLogs = this.getExerciseLogs(data);
+    const angleMeasurements = this.getAngleMeasurements(data);
+    const media = this.getMedia(data);
 
     await Promise.all([
       this.sessionRepository.deleteAllSessions(),
       this.setRepository.deleteAllSets(),
       this.exerciseLogRepository.deleteAllLogs(),
+      this.angleMeasurementRepository.deleteAllMeasurements(),
+      this.mediaRepository.deleteAllMedia()
     ]);
 
     await Promise.all([
       ...sessions.map((session) => this.sessionRepository.save(session)),
       ...sets.map((set) => this.setRepository.upsertSet(set)),
       ...exerciseLogs.map((exerciseLog) => this.exerciseLogRepository.saveLog(exerciseLog)),
+      ...angleMeasurements.map((angleMeasurement) => this.angleMeasurementRepository.saveMeasurement(angleMeasurement)),
+      ...media.map((media) => this.mediaRepository.save(media)),
     ]);
   }
 
@@ -76,5 +92,13 @@ export class ImportDataService {
 
   private getExerciseLogs(data: Record<string, unknown>): ExerciseLog[] {
     return this.read(data, 'exerciseLogs', ExerciseLogSchema, ExerciseLogMapper.INSTANCE.toDomain);
+  }
+
+  private getAngleMeasurements(data: Record<string, unknown>): AngleMeasurement[] {
+    return this.read(data, 'angleMeasurements', AngleMeasurementSchema, AngleMeasurementMapper.INSTANCE.toDomain);
+  }
+
+  private getMedia(data: Record<string, unknown>): ExerciseMedia[] {
+    return this.read(data, 'media', JsonSerializedMediaSchema, ExerciseMediaMapper.INSTANCE.fromJson);
   }
 }

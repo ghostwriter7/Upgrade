@@ -36,4 +36,13 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
   public deleteAllByExerciseLogId(exerciseLogId: string): Promise<void> {
     return super.deleteAllByIndex(StoreName.MEDIA, IndexName.MediaByExerciseLogId, exerciseLogId);
   }
+
+  public async getAllMedia(): Promise<ExerciseMedia[]> {
+    const media = await super.findAll(StoreName.MEDIA);
+    return media.map(ExerciseMediaMapper.INSTANCE.toDomain);
+  }
+
+  public deleteAllMedia(): Promise<void> {
+    return super.deleteAll(StoreName.MEDIA);
+  }
 }

@@ -37,4 +37,13 @@ export class AngleMeasurementRepository extends GenericRepository<AngleMeasureme
       .map(AngleMeasurementMapper.INSTANCE.toDomain)
       .toArray();
   }
+
+  public async getAllMeasurements(): Promise<AngleMeasurement[]> {
+    const measurements = await super.findAll(StoreName.ANGLE_MEASUREMENTS);
+    return measurements.map(AngleMeasurementMapper.INSTANCE.toDomain);
+  }
+
+  public deleteAllMeasurements(): Promise<void> {
+    return super.deleteAll(StoreName.ANGLE_MEASUREMENTS);
+  }
 }

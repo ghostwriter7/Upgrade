@@ -1,5 +1,6 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
 import { createNanoId } from '@common/function/create-uuid.function';
+import { DateHelper } from '@common/helper/date.helper';
 
 export class AngleMeasurement {
   constructor(
@@ -9,7 +10,7 @@ export class AngleMeasurement {
     public readonly exerciseLogId: string,
     public readonly angle: number,
     public readonly landmarks: Landmark[],
-    public readonly createdAt: Temporal.Instant = Temporal.Now.instant(),
+    public readonly createdAt: Temporal.Instant = DateHelper.now(),
   ) {}
 
   public static new(

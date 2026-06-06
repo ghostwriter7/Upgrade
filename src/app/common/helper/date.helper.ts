@@ -4,11 +4,11 @@ export class DateHelper {
   public static readonly WARSAW_TIMEZONE = 'Europe/Warsaw';
 
   public static now(): Temporal.Instant {
-    return Temporal.Now.instant();
+    return Temporal.Now.instant().round({ smallestUnit: 'seconds' });
   }
 
   public static from(date: string): Temporal.Instant {
-    return Temporal.Instant.from(date);
+    return Temporal.Instant.from(date).round({ smallestUnit: 'seconds' });
   }
 
   public static toLocal(
