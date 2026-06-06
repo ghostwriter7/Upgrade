@@ -19,6 +19,7 @@ import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/an
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { JsonSerializedMediaSchema } from '@persistence/schema/media.schema';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
+import { BackupSummary } from '@backup/interfaces/summary.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {
@@ -28,7 +29,7 @@ export class ImportDataService {
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
   private readonly mediaRepository = inject(MediaRepository);
 
-  public async importData(): Promise<void> {
+  public async importData(): Promise<BackupSummary> {
     const [handle] = await window.showOpenFilePicker({
       types: [
         {
@@ -55,19 +56,34 @@ export class ImportDataService {
       this.setRepository.deleteAllSets(),
       this.exerciseLogRepository.deleteAllLogs(),
       this.angleMeasurementRepository.deleteAllMeasurements(),
-      this.mediaRepository.deleteAllMedia()
+      this.mediaRepository.deleteAllMedia(),
     ]);
 
     await Promise.all([
       ...sessions.map((session) => this.sessionRepository.save(session)),
       ...sets.map((set) => this.setRepository.upsertSet(set)),
       ...exerciseLogs.map((exerciseLog) => this.exerciseLogRepository.saveLog(exerciseLog)),
-      ...angleMeasurements.map((angleMeasurement) => this.angleMeasurementRepository.saveMeasurement(angleMeasurement)),
+      ...angleMeasurements.map((angleMeasurement) =>
+        this.angleMeasurementRepository.saveMeasurement(angleMeasurement),
+      ),
       ...media.map((media) => this.mediaRepository.save(media)),
     ]);
+
+    return {
+      totalSessions: sessions.length,
+      totalSets: sets.length,
+      totalExerciseLogs: exerciseLogs.length,
+      totalAngleMeasurements: angleMeasurements.length,
+      totalMedia: media.length,
+    };
   }
 
-  private read<DTO, T>(data: Record<string, unknown>, key: string, parser: { parse: (data: unknown) => DTO }, mapper: (data: DTO) => T): T[] {
+  private read<DTO, T>(
+    data: Record<string, unknown>,
+    key: string,
+    parser: { parse: (data: unknown) => DTO },
+    mapper: (data: DTO) => T,
+  ): T[] {
     if (typeof data === 'object' && data !== null && key in data) {
       const dtos = data[key];
 
@@ -95,10 +111,20 @@ export class ImportDataService {
   }
 
   private getAngleMeasurements(data: Record<string, unknown>): AngleMeasurement[] {
-    return this.read(data, 'angleMeasurements', AngleMeasurementSchema, AngleMeasurementMapper.INSTANCE.toDomain);
+    return this.read(
+      data,
+      'angleMeasurements',
+      AngleMeasurementSchema,
+      AngleMeasurementMapper.INSTANCE.toDomain,
+    );
   }
 
   private getMedia(data: Record<string, unknown>): ExerciseMedia[] {
-    return this.read(data, 'media', JsonSerializedMediaSchema, ExerciseMediaMapper.INSTANCE.fromJson);
+    return this.read(
+      data,
+      'media',
+      JsonSerializedMediaSchema,
+      ExerciseMediaMapper.INSTANCE.fromJson,
+    );
   }
 }

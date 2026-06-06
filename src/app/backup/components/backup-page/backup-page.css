@@ -13,3 +13,14 @@
   padding: var(--space-4);
   border-radius: var(--mat-sys-corner-medium);
 }
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+
+  span {
+    font: var(--mat-sys-body-large);
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, effect, ElementRef, OnInit, output, signal, viewChild } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Timer } from '@session/components/timer/timer';
@@ -17,16 +17,26 @@ export class Recorder implements OnInit {
 
   protected readonly isRecording = signal(false);
 
+  constructor() {
+    effect(() => {
+      const isRecording = this.isRecording();
+      const mediaRecorder = this.mediaRecorder();
+
+      if (mediaRecorder) {
+        if (isRecording) {
+          mediaRecorder.start();
+        } else {
+          mediaRecorder.stop();
+        }
+      }
+    });
+  }
+
   public ngOnInit(): void {
     this.setupRecorder();
   }
 
   protected toggleRecording(): void {
-    if (this.isRecording()) {
-      this.mediaRecorder()?.stop();
-    } else {
-      this.mediaRecorder()?.start();
-    }
     this.isRecording.update((value) => !value);
   }
 

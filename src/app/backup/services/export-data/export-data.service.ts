@@ -14,6 +14,7 @@ import { ExerciseSetDto } from '@persistence/schema/set.schema';
 import { ExerciseLogDto } from '@persistence/schema/exercise-log.schema';
 import { AngleMeasurementDto } from '@persistence/schema/angle-measurement.schema';
 import { JsonSerializedMediaDto } from '@persistence/schema/media.schema';
+import { BackupSummary } from '@backup/interfaces/summary.interface';
 
 interface ExportData {
   sessions: SessionDto[];
@@ -31,7 +32,7 @@ export class ExportDataService {
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
   private readonly mediaRepository = inject(MediaRepository);
 
-  public async exportData(): Promise<void> {
+  public async exportData(): Promise<BackupSummary> {
     const [sessions, sets, exerciseLogs, angleMeasurements, media] = await Promise.all([
       this.sessionRepository.getAllSessions(),
       this.setRepository.getAllSets(),
@@ -47,7 +48,7 @@ export class ExportDataService {
       angleMeasurements: angleMeasurements.map(AngleMeasurementMapper.INSTANCE.toDto),
     };
 
-    if (media) {
+    if (media.length) {
       data.media = await Promise.all(media.map(ExerciseMediaMapper.INSTANCE.toJson));
     }
 
@@ -68,5 +69,13 @@ export class ExportDataService {
 
     await writableStream.write(json);
     await writableStream.close();
+
+    return {
+      totalSessions: sessions.length,
+      totalSets: sets.length,
+      totalExerciseLogs: exerciseLogs.length,
+      totalAngleMeasurements: angleMeasurements.length,
+      totalMedia: media.length,
+    };
   }
 }
