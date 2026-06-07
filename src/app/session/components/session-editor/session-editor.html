@@ -3,7 +3,7 @@
 
   @for (entry of session()?.exercises; track entry.exerciseId) {
     <app-exercise-card
-      [entry]="entry"
+      [exerciseLog]="entry"
       [isNonDeletable]="$count === 1"
       [isEditable]="true"
     />

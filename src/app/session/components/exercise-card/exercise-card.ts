@@ -19,6 +19,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
 import { ExerciseLog } from '@domain/model/exercise-log.model';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
+import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,20 +35,21 @@ import { ProgressGallery } from '@session/components/progress-gallery/progress-g
     SetView,
     ExerciseCardActions,
     ProgressGallery,
+    ExerciseLogSummary,
   ],
   templateUrl: './exercise-card.html',
   styleUrl: './exercise-card.css',
 })
 export class ExerciseCard {
   public isEditable = input(false);
-  public entry = input.required<ExerciseLog>();
+  public exerciseLog = input.required<ExerciseLog>();
   public isNonDeletable = input.required<boolean>();
 
   protected readonly testIds = computed(() => {
-    const uuid = this.entry().exerciseId;
+    const { exerciseId } = this.exerciseLog();
     return {
-      exerciseCardHeader: `exercise-card-header-${uuid}`,
-      showMediaButton: `exercise-card-show-media-button-${uuid}`,
+      exerciseCardHeader: `exercise-card-header-${exerciseId}`,
+      showMediaButton: `exercise-card-show-media-button-${exerciseId}`,
     };
   });
 

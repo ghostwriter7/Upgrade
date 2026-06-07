@@ -3,25 +3,29 @@
   <mat-card-header
     [attr.data-testid]="ids.exerciseCardHeader" class="exercise-header"
     (click)="activateActions()">
-    <mat-card-title>{{ entry().exerciseId | exerciseName }}</mat-card-title>
+    <mat-card-title>{{ exerciseLog().exerciseId | exerciseName }}</mat-card-title>
 
     @if (displayActions()) {
-      <app-exercise-card-actions [entry]="entry()" [isNonDeletable]="isNonDeletable()" />
+      <app-exercise-card-actions [entry]="exerciseLog()" [isNonDeletable]="isNonDeletable()" />
     }
   </mat-card-header>
   <mat-card-content>
-    @if (entry().notes) {
-      <p>{{ entry().notes }}</p>
+    @if (exerciseLog().notes) {
+      <p>{{ exerciseLog().notes }}</p>
     }
 
-    <app-progress-gallery [exerciseLogId]="entry().id" />
+    <app-progress-gallery [exerciseLogId]="exerciseLog().id" />
 
-    <mat-list role="list">
-      @for (set of entry().sets; track $index) {
-        <mat-list-item role="listitem">
-          <app-set-view [set]="set" [isEditable]="isEditable()" />
-        </mat-list-item>
-      }
-    </mat-list>
+    @if (isEditable()) {
+      <mat-list role="list">
+        @for (set of exerciseLog().sets; track $index) {
+          <mat-list-item role="listitem">
+            <app-set-view [set]="set" [isEditable]="isEditable()" />
+          </mat-list-item>
+        }
+      </mat-list>
+    } @else {
+      <app-exercise-log-summary [exerciseLog]="exerciseLog()" />
+    }
   </mat-card-content>
 </mat-card>

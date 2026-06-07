@@ -1,0 +1,6 @@
+.exercise-log-summary {
+  display: flex;
+  flex-wrap: wrap;
+  padding-block: var(--space-3);
+  gap: var(--space-3);
+}

@@ -19,6 +19,10 @@ export abstract class ExerciseSet {
     this.index = index;
     return this.clone();
   }
+
+  public abstract isEqual(other: ExerciseSet): boolean;
+
+  public abstract print(): string;
 }
 
 export class BodyweightSet extends ExerciseSet {
@@ -37,6 +41,14 @@ export class BodyweightSet extends ExerciseSet {
 
   public clone(): ExerciseSet {
     return new BodyweightSet(this.sessionId, this.exerciseId, this.index, this.reps);
+  }
+
+  public override isEqual(other: ExerciseSet): boolean {
+    return other instanceof BodyweightSet && other.reps === this.reps;
+  }
+
+  public override print(): string {
+    return `${this.reps}`;
   }
 }
 
@@ -58,6 +70,14 @@ export class WeightedSet extends ExerciseSet {
   public clone(): ExerciseSet {
     return new WeightedSet(this.sessionId, this.exerciseId, this.index, this.reps, this.weight);
   }
+
+  public override isEqual(other: ExerciseSet) {
+    return other instanceof WeightedSet && other.reps === this.reps && other.weight === this.weight;
+  }
+
+  public override print(): string {
+    return `${this.reps}+${this.weight}kg`;
+  }
 }
 
 export class IsoSet extends ExerciseSet {
@@ -77,6 +97,17 @@ export class IsoSet extends ExerciseSet {
 
   public clone(): ExerciseSet {
     return new IsoSet(this.sessionId, this.exerciseId, this.index, this.duration, this.weight);
+  }
+
+  public override isEqual(other: ExerciseSet): boolean {
+    return (
+      other instanceof IsoSet && other.weight === this.weight && other.duration === this.duration
+    );
+  }
+
+  public override print(): string {
+    if (!this.weight) return `${this.duration}s`;
+    return `${this.duration}s+${this.weight}kg`;
   }
 }
 

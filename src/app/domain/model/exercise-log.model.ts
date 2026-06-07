@@ -16,6 +16,27 @@ export class ExerciseLog {
     return this.sets.length === 0;
   }
 
+  public hasAllEqualSet(): boolean {
+    if (this.sets.length === 0 || this.sets.length === 1) return true;
+
+    for (let i = 0; i < this.sets.length - 1; i++) {
+      const currentSet = this.sets[i];
+      const nextSet = this.sets[i + 1];
+
+      if (!currentSet.isEqual(nextSet)) return false;
+    }
+
+    return true;
+  }
+
+  public computeSetSummary(): string[] {
+    if (this.isEmpty) return [];
+
+    if (this.hasAllEqualSet()) return [`${this.sets.length} x ${this.sets[0].print()}`];
+
+    return this.sets.map((set) => set.print());
+  }
+
   public clone(): ExerciseLog {
     const log = new ExerciseLog(this.sessionId, this.exerciseId, this.id);
     log.sets = this.sets;
