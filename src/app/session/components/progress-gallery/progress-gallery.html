@@ -7,32 +7,13 @@
         </app-lozenge>
       }
 
-
-      <svg [attr.viewBox]="entry.viewBox">
-        <image [attr.href]="entry.srcUrl" [attr.width]="entry.width" [attr.height]="entry.height" />
-
-        @if (entry.points && entry.lines) {
-          @for (line of entry.lines; track line) {
-            <line
-              class="line"
-              [attr.x1]="line.x1"
-              [attr.y1]="line.y1"
-              [attr.x2]="line.x2"
-              [attr.y2]="line.y2"
-            />
-          }
-
-          @for (point of entry.points; track point) {
-            <circle
-              class="point"
-              [attr.cx]="point.x"
-              [attr.cy]="point.y"
-              r="6"
-            />
-          }
-        }
-
-      </svg>
+      <app-image-renderer
+        [width]="entry.width"
+        [height]="entry.height"
+        [image]="entry.image"
+        [lines]="entry.lines"
+        [points]="entry.points"
+      />
 
     </div>
   }

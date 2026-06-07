@@ -18,26 +18,13 @@
   }
 </div>
 
-<svg #svg [attr.viewBox]="viewBox()" [class.no-events]="allPointsCaptured()" (pointerdown)="handleClick($event)">
-  <image [attr.href]="href()" [attr.width]="details.width" [attr.height]="details.height" />
-
-  @for (line of lines(); track line) {
-    <line
-      class="line"
-      [attr.x1]="line[0].x"
-      [attr.y1]="line[0].y"
-      [attr.x2]="line[1].x"
-      [attr.y2]="line[1].y"
-      />
-  }
-
-  @for (point of points(); track point) {
-    <circle
-      class="point"
-      [attr.cx]="point.x"
-      [attr.cy]="point.y"
-      r="6"
-    />
-  }
-
-</svg>
+<app-image-renderer
+  [lines]="lines()"
+  [points]="points()"
+  [image]="details.image"
+  [height]="details.height"
+  [width]="details.width"
+  [class.no-events]="allPointsCaptured()"
+  (pointerdown)="handleClick($event)"
+  #imageRenderer
+/>

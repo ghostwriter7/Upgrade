@@ -14,12 +14,3 @@
   align-items: center;
   gap: var(--space-4);
 }
-
-.line {
-  stroke: var(--mat-sys-primary-container);
-  stroke-width: 6px;
-}
-
-.point {
-  fill: var(--mat-sys-on-primary-container);
-}

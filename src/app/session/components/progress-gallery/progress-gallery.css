@@ -30,15 +30,6 @@
   box-shadow: var(--mat-sys-level5);
 }
 
-.line {
-  stroke: var(--mat-sys-primary-container);
-  stroke-width: 6px;
-}
-
-.point {
-  fill: var(--mat-sys-on-primary-container);
-}
-
 .angle-lozenge {
   display: unset !important;
   position: absolute;

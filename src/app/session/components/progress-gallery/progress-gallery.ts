@@ -9,10 +9,12 @@ import {
 import { QueryBus } from '@common/routers/query/query-bus';
 import { FindMediaAndMeasurementsByExerciseLogIdQuery } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id.query';
 import { Lozenge } from '@ui/lozenge/lozenge';
+import { ImageRenderer } from '@session/components/image-renderer/image-renderer';
+import { Line } from '@domain/model/line.model';
 
 @Component({
   selector: 'app-progress-gallery',
-  imports: [Lozenge],
+  imports: [Lozenge, ImageRenderer],
   templateUrl: './progress-gallery.html',
   styleUrl: './progress-gallery.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,27 +39,22 @@ export class ProgressGallery {
 
           const points = Iterator.from(landmarks || [])
             .map(({ point }) => point.denormalized(width, height))
-            .map((point) => ({ x: point.x, y: point.y }))
             .toArray();
 
-          const lines = points?.reduce(
-            (lines, point, index, points) => {
-              const nextPoint = points[index + 1];
-              if (!nextPoint) return lines;
-              lines.push({ x1: point.x, y1: point.y, x2: nextPoint.x, y2: nextPoint.y });
-              return lines;
-            },
-            [] as { x1: number; y1: number; x2: number; y2: number }[],
-          );
+          const lines = points?.reduce((lines, point, index, points) => {
+            const nextPoint = points[index + 1];
+            if (!nextPoint) return lines;
+            lines.push(new Line(point, nextPoint));
+            return lines;
+          }, [] as Line[]);
 
           return {
-            srcUrl: URL.createObjectURL(blob),
+            image: blob,
             width,
             height,
-            viewBox: `0 0 ${width} ${height}`,
             points,
             lines,
-            angle
+            angle,
           };
         });
     }

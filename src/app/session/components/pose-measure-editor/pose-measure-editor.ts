@@ -12,8 +12,10 @@ import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Point } from '@domain/model/measurement.model';
 import { Lozenge } from '@ui/lozenge/lozenge';
+import { ImageRenderer } from '@session/components/image-renderer/image-renderer';
+import { Line } from '@domain/model/line.model';
 
-function calculateAngle(a: DOMPoint, b: DOMPoint, c: DOMPoint): number {
+function calculateAngle(a: Point, b: Point, c: Point): number {
   const ab = {
     x: a.x - b.x,
     y: a.y - b.y,
@@ -36,7 +38,7 @@ function calculateAngle(a: DOMPoint, b: DOMPoint, c: DOMPoint): number {
 
 @Component({
   selector: 'app-pose-measure-editor',
-  imports: [MatMiniFabButton, MatIcon, Lozenge],
+  imports: [MatMiniFabButton, MatIcon, Lozenge, ImageRenderer],
   templateUrl: './pose-measure-editor.html',
   styleUrl: './pose-measure-editor.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,19 +50,20 @@ export class PoseMeasureEditor {
     angle: number;
   }>();
 
-  private readonly svgEl = viewChild.required<ElementRef<SVGSVGElement>>('svg');
-  protected readonly points = signal<DOMPoint[]>([]);
+  private readonly imageRenderer = viewChild.required<ImageRenderer>('imageRenderer');
+  private readonly svgEl = computed(() => this.imageRenderer().svgEl());
+  protected readonly points = signal<Point[]>([]);
   protected readonly lines = computed(() => {
     const points = this.points();
     if (points.length < 2) return [];
 
     const [startPoint, midPoint, endPoint] = points;
 
-    if (!endPoint) return [[startPoint, midPoint]];
+    if (!endPoint) return [new Line(startPoint, midPoint)];
 
     return [
-      [startPoint, midPoint],
-      [midPoint, endPoint],
+      new Line(startPoint, midPoint),
+      new Line(midPoint, endPoint),
     ];
   });
   protected readonly href = computed(() => URL.createObjectURL(this.data().image));
@@ -85,7 +88,8 @@ export class PoseMeasureEditor {
     point.y = event.clientY;
 
     const transformed = point.matrixTransform(svg.getScreenCTM()?.inverse());
-    this.points.update((points) => [...points, transformed]);
+    const model = new Point(transformed.x, transformed.y);
+    this.points.update((points) => [...points, model]);
   }
 
   protected undo(): void {
@@ -103,8 +107,7 @@ export class PoseMeasureEditor {
     if (points.length !== 3 || angle === null) return;
 
     const { width, height } = this.data();
-    const normalize = (point: DOMPoint) => new Point(point.x, point.y).normalized(width, height);
 
-    this.angleConfirm.emit({ points: points.map(normalize), angle });
+    this.angleConfirm.emit({ points: points.map((p) => p.normalized(width, height)), angle });
   }
 }
