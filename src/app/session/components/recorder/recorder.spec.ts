@@ -1,6 +1,6 @@
 
 import { Recorder } from './recorder';
-import { OpenDialogFnResult, TestBedUtils } from '../../../../test/test-bed.utils';
+import { OpenDialogFnResult, TestBedUtils } from '@test/test-bed.utils';
 
 describe.skip('Recorder', () => {
   let openDialog: (data: unknown) => OpenDialogFnResult;

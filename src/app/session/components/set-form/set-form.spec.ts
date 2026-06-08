@@ -177,7 +177,7 @@ describe('SetForm', () => {
     expect(component.value().reps).toBe(2);
   });
 
-  it('should set weight using a quick option', () => {
+  it('should increment weight using a quick option', () => {
     setValue({
       ...initialValue,
       type: 'weight',
@@ -187,7 +187,7 @@ describe('SetForm', () => {
     queryByTestId<HTMLButtonElement>('set-form-weight-10')?.click();
     fixture.detectChanges();
 
-    expect(component.value().weight).toBe(10);
+    expect(component.value().weight).toBe(11);
   });
 
   it('should increment duration when isometric controls are visible', () => {
@@ -229,7 +229,7 @@ describe('SetForm', () => {
     expect(component.value().duration).toBe(1);
   });
 
-  it('should set duration using a quick option', () => {
+  it('should increment duration using a quick option', () => {
     setValue({
       ...initialValue,
       type: 'iso',
@@ -239,7 +239,7 @@ describe('SetForm', () => {
     queryByTestId<HTMLButtonElement>('set-form-duration-30')?.click();
     fixture.detectChanges();
 
-    expect(component.value().duration).toBe(30);
+    expect(component.value().duration).toBe(35);
   });
 
   test.each([

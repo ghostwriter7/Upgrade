@@ -47,9 +47,21 @@ export class SetForm implements FormValueControl<SetData> {
     hidden(schemaPath.duration, ({ valueOf }) => valueOf(schemaPath.type) !== 'iso');
   });
   protected readonly setTypeOptions = setTypeOptions;
-  protected readonly durations = durationOptions;
+  protected readonly durations = computed(() => {
+    const { duration } = this.value();
+    return durationOptions.map((option) => ({
+      ...option,
+      disabled: duration + option.value <= 0,
+    }));
+  });
   protected readonly reps = repOptions;
-  protected readonly weights = weightOptions;
+  protected readonly weights = computed(() => {
+    const { weight } = this.value();
+    return weightOptions.map((option) => ({
+      ...option,
+      disabled: weight + option.value < 0,
+    }));
+  });
 
   protected decrementReps(): void {
     this.value.update((model) => ({ ...model, reps: Math.max(model.reps - 1, 1) }));
@@ -75,16 +87,16 @@ export class SetForm implements FormValueControl<SetData> {
     this.value.update((model) => ({ ...model, duration: model.duration + 1 }));
   }
 
-  protected setWeight(weight: number): void {
-    this.update(({ weight }));
+  protected updateWeight(weight: number): void {
+    this.value.update((model) => ({ ...model, weight: model.weight + weight }));
   }
 
   protected setReps(reps: number): void {
-    this.update({ reps });
+    this.value.update((model) => ({ ...model, reps }));
   }
 
-  protected setDuration(duration: number): void {
-    this.update({ duration });
+  protected updateDuration(duration: number): void {
+    this.value.update((model) => ({ ...model, duration: model.duration + duration }));
   }
 
   private update(value: Partial<SetData>) {
