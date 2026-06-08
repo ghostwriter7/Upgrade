@@ -1,4 +1,4 @@
-import { ExerciseSet } from '../exercise-set.model';
+import { ExerciseSet } from '../exercise-set/exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { DateHelper } from '@common/helper/date.helper';
 import { ExerciseLog } from '../exercise-log/exercise-log.model';

@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SetForm } from './set-form';
 import { SetData } from './set-data.interface';
-import { ExerciseSetType } from '../../../domain/model/exercise-set.model';
+import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';

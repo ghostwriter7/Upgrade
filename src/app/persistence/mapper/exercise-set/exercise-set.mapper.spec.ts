@@ -10,7 +10,7 @@ import {
   IsoSetBuilder,
   WeightedSet,
   WeightSetBuilder,
-} from '@domain/model/exercise-set.model';
+} from '@domain/model/exercise-set/exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
 
 describe('ExerciseSetMapper', () => {

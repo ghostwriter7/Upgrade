@@ -4,7 +4,7 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { Session } from '@domain/model/session/session.model';
 import { SessionSchema } from '@persistence/schema/session.schema';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
-import { ExerciseSet } from '@domain/model/exercise-set.model';
+import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
 import { ExerciseSetSchema } from '@persistence/schema/set.schema';
 import { ExerciseLogSchema } from '@persistence/schema/exercise-log.schema';

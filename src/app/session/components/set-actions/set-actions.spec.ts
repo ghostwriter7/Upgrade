@@ -6,14 +6,14 @@ import { SetActions } from './set-actions';
 import { DialogService } from '@common/service/dialog/dialog.service';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { Mock } from 'vitest';
-import { BodyweightSet } from '@domain/model/exercise-set.model';
+import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { CopySetCommand } from '../../commands/copy-set/copy-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
-import { getButtonByTestId } from '../../../../test/harness.utils';
+import { getButtonByTestId } from '@test/harness.utils';
 import { createNanoId } from '@common/function/create-uuid.function';
 
 describe('SetActions', () => {

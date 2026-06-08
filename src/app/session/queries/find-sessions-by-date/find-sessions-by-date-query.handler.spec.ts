@@ -7,7 +7,7 @@ import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repo
 import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/find-sessions-by-date.query';
 import { Session } from '@domain/model/session/session.model';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
-import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set.model';
+import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 
 describe('FindSessionsByDateQueryHandler', () => {
   let sessionRepositoryMock: { findAllByDate: Mock };

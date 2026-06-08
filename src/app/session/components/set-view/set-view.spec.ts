@@ -7,12 +7,12 @@ import {
   ExerciseSet,
   IsoSet,
   WeightedSet,
-} from '../../../domain/model/exercise-set.model';
+} from '@domain/model/exercise-set/exercise-set.model';
 import { SetActions } from '../set-actions/set-actions';
 import { Mock } from 'vitest';
-import { EventService } from '../../../common/service/event/event.service';
+import { EventService } from '@common/service/event/event.service';
 import { Subject } from 'rxjs';
-import { ElementClickedEvent } from '../../../common/events/element-clicked.event';
+import { ElementClickedEvent } from '@common/events/element-clicked.event';
 import { By } from '@angular/platform-browser';
 
 @Component({

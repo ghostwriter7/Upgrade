@@ -4,7 +4,7 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { Mock } from 'vitest';
 import { ExportDataService } from './export-data.service';
 import { Session } from '@domain/model/session/session.model';
-import { BodyweightSet } from '@domain/model/exercise-set.model';
+import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';

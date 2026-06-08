@@ -9,7 +9,7 @@ import {
   IsoSetBuilder,
   WeightedSet,
   WeightSetBuilder,
-} from '@domain/model/exercise-set.model';
+} from '@domain/model/exercise-set/exercise-set.model';
 import { Mapper } from '../mapper.interface';
 
 export class ExerciseSetMapper implements Mapper<ExerciseSet, ExerciseSetDto> {

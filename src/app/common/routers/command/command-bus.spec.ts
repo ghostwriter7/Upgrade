@@ -5,7 +5,7 @@ import { CreateSessionCommand } from '@session/commands/create-session/create-se
 import { DeleteSessionCommand } from '@session/commands/delete-session/delete-session-command';
 import { Session } from '@domain/model/session/session.model';
 import { UpdateSetCommand } from '@session/commands/update-set/update-set.command';
-import { BodyweightSet } from '@domain/model/exercise-set.model';
+import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Command } from '@common/routers/command/command';
 
 class UnknownCommand extends Command {

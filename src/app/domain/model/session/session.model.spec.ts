@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { DateHelper } from '../../../common/helper/date.helper';
+import { DateHelper } from '@common/helper/date.helper';
 import { Session } from './session.model';
-import { BodyweightSet } from '../exercise-set.model';
+import { BodyweightSet } from '../exercise-set/exercise-set.model';
 
 describe('Session', () => {
   const sessionWithExercises = (...exerciseNames: string[]) =>

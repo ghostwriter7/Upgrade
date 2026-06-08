@@ -1,4 +1,4 @@
-import { ExerciseSet } from '../../../domain/model/exercise-set.model';
+import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Command } from '@common/routers/command/command';
 
 export class DeleteSetCommand extends Command {

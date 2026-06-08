@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { Mock } from 'vitest';
 import { SetUpdatedEvent } from './set-updated.event';
 import { SetUpdatedEventHandler } from './set-updated-event.handler';
-import { SetRepository } from '../../../persistence/repository/set.repository';
-import { BodyweightSet } from '../../../domain/model/exercise-set.model';
+import { SetRepository } from '@persistence/repository/set.repository';
+import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 
 describe('SetUpdatedEventHandler', () => {
   let setRepositoryMock: { upsertSet: Mock };

@@ -1,4 +1,4 @@
-import { ExerciseSetType } from '../../../domain/model/exercise-set.model';
+import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 
 export const  setTypeOptions: {
   label: string;

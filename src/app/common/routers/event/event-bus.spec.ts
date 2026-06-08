@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { Session } from '@domain/model/session/session.model';
-import { BodyweightSet } from '@domain/model/exercise-set.model';
+import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { DomainEvent } from '@common/routers/event/domain-event';
 import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 import { SessionDeletedEvent } from '@session/events/delete-session/session-deleted.event';

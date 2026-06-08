@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { SetData } from '../set-form/set-data.interface';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
@@ -10,7 +10,7 @@ import { UpdateSetCommand } from '../../commands/update-set/update-set.command';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
 import { CopySetCommand } from '../../commands/copy-set/copy-set.command';
-import { ExerciseSet } from '../../../domain/model/exercise-set.model';
+import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,

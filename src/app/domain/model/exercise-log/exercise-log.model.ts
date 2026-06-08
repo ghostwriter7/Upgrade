@@ -1,4 +1,4 @@
-import { ExerciseSet } from '../exercise-set.model';
+import { ExerciseSet } from '../exercise-set/exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
 
 export class ExerciseLog {

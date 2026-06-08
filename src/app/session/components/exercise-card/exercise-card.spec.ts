@@ -5,7 +5,7 @@ import { Component, input, Pipe } from '@angular/core';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
 import { SetView } from '../set-view/set-view';
 import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
-import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set.model';
+import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { By } from '@angular/platform-browser';
 import { Mock } from 'vitest';
 import { EventService } from '@common/service/event/event.service';
