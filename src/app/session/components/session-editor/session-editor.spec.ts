@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import SessionEditor from './session-editor';
-import { SessionHeaderMock } from '../../../../test/mocks/session-header.mock';
-import { ExerciseCardMock } from '../../../../test/mocks/exercise-card.mock';
+import { SessionHeaderMock } from '@test/mocks/session-header.mock';
+import { ExerciseCardMock } from '@test/mocks/exercise-card.mock';
 import { SessionHeader } from '../session-header/session-header';
 import { ExerciseCard } from '../exercise-card/exercise-card';
 import { Component, signal, WritableSignal } from '@angular/core';
 import { SessionActions } from '../session-actions/session-actions';
-import { TimerMock } from '../../../home/home-page/home-page.spec';
+import { TimerMock } from '@home/home-page/home-page.spec';
 import { Timer } from '../timer/timer';
 import { Mock } from 'vitest';
-import { Session } from '../../../domain/model/session/session.model';
-import { SessionStore } from '../../../store/session/session.store';
+import { Session } from '@domain/model/session/session.model';
+import { SessionStore } from '@store/session/session.store';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { CreateSessionCommand } from '../../commands/create-session/create-session-command';

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { Lozenge } from '@ui/lozenge/lozenge';
 
 @Component({

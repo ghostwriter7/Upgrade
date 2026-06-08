@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { ExerciseLogMapper } from './exercise-log.mapper';
 import { ExerciseLogDto } from '../../schema/exercise-log.schema';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
 describe('ExerciseSetMapper', () => {
   const mapper = ExerciseLogMapper.INSTANCE;

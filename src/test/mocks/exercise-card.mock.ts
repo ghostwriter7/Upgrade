@@ -1,13 +1,13 @@
 import { Component, input } from '@angular/core';
 
-import { ExerciseLog } from '../../app/domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
 @Component({
   selector: 'app-exercise-card',
   template: '<div>Exercise Card</div>',
 })
 export class ExerciseCardMock {
-  public entry = input<ExerciseLog>();
+  public exerciseLog = input<ExerciseLog>();
   public isEditable = input(false);
   public isNonDeletable = input(false);
 }

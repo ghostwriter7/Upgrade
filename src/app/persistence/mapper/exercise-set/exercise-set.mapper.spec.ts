@@ -197,6 +197,14 @@ describe('ExerciseSetMapper', () => {
         get quantity(): number {
           return 0;
         }
+
+        isEqual(other: ExerciseSet): boolean {
+          return false;
+        }
+
+        print(): string {
+          return '';
+        }
       }
       const unsupportedSet = new UnsupportedSet('any-session-id', 'any-exercise-id', 1);
 

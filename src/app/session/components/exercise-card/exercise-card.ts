@@ -17,7 +17,7 @@ import { EventService } from '@common/service/event/event.service';
 import { ElementClickedEvent } from '@common/events/element-clicked.event';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
 import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
 

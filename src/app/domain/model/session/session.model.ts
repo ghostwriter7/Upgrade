@@ -1,7 +1,7 @@
 import { ExerciseSet } from '../exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { DateHelper } from '@common/helper/date.helper';
-import { ExerciseLog } from '../exercise-log.model';
+import { ExerciseLog } from '../exercise-log/exercise-log.model';
 
 interface RemoveExerciseLogResult {
   session: Session;

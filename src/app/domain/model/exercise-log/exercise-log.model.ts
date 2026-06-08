@@ -1,4 +1,4 @@
-import { ExerciseSet } from './exercise-set.model';
+import { ExerciseSet } from '../exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
 
 export class ExerciseLog {
@@ -16,7 +16,7 @@ export class ExerciseLog {
     return this.sets.length === 0;
   }
 
-  public hasAllEqualSet(): boolean {
+  public hasAllEqualSets(): boolean {
     if (this.sets.length === 0 || this.sets.length === 1) return true;
 
     for (let i = 0; i < this.sets.length - 1; i++) {
@@ -32,7 +32,7 @@ export class ExerciseLog {
   public computeSetSummary(): string[] {
     if (this.isEmpty) return [];
 
-    if (this.hasAllEqualSet()) return [`${this.sets.length} x ${this.sets[0].print()}`];
+    if (this.hasAllEqualSets()) return [`${this.sets.length} x ${this.sets[0].print()}`];
 
     return this.sets.map((set) => set.print());
   }
@@ -62,6 +62,11 @@ export class ExerciseLog {
 
   public withSet(set: ExerciseSet): ExerciseLog {
     this.sets = [...this.sets, set];
+    return this.clone();
+  }
+
+  public withSets(sets: ExerciseSet[]): ExerciseLog {
+    this.sets = [...this.sets, ...sets];
     return this.clone();
   }
 

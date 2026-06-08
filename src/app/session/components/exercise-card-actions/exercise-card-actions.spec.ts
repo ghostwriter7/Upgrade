@@ -15,7 +15,7 @@ import { SetData } from '../set-form/set-data.interface';
 import { CreateSetCommand } from '../../commands/create-set/create-set.command';
 import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { CaptureProgressCommand } from '@session/commands/capture-progress/capture-progress.command';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { MeasureProgress } from '@session/components/measure-progress/measure-progress';
 import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
 import { Point } from '@domain/model/measurement.model';

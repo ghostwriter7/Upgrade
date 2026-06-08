@@ -6,7 +6,7 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/find-sessions-by-date.query';
 import { Session } from '@domain/model/session/session.model';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set.model';
 
 describe('FindSessionsByDateQueryHandler', () => {

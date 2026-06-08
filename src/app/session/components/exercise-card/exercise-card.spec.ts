@@ -11,8 +11,9 @@ import { Mock } from 'vitest';
 import { EventService } from '@common/service/event/event.service';
 import { Subject } from 'rxjs';
 import { ElementClickedEvent } from '@common/events/element-clicked.event';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
+import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -49,13 +50,21 @@ export class ExerciseNamePipeMock {
   }
 }
 
+@Component({
+  selector: 'app-exercise-log-summary',
+  template: '<div>Exercise Log Summary</div>',
+})
+export class ExerciseLogSummaryMock {
+  public exerciseLog = input.required<ExerciseLog>();
+}
+
 describe('ExerciseCard', () => {
   let component: ExerciseCard;
   let fixture: ComponentFixture<ExerciseCard>;
   let eventServiceMock: { listen: Mock };
   let eventSubject = new Subject<ElementClickedEvent>();
 
-  const exercise = new ExerciseLog('sessionId', 'exerciseId').withSet(
+  const exerciseLog = new ExerciseLog('sessionId', 'exerciseId').withSet(
     new BodyweightSet('sessionId', 'exerciseId', 0, 5),
   );
 
@@ -69,17 +78,17 @@ describe('ExerciseCard', () => {
     })
       .overrideComponent(ExerciseCard, {
         add: {
-          imports: [ExerciseCardActionsMock, SetViewMock, ExerciseNamePipeMock, ProgressGalleryMock],
+          imports: [ExerciseCardActionsMock, SetViewMock, ExerciseNamePipeMock, ProgressGalleryMock, ExerciseLogSummaryMock],
         },
         remove: {
-          imports: [ExerciseCardActions, SetView, ExerciseNamePipe, ProgressGallery],
+          imports: [ExerciseCardActions, SetView, ExerciseNamePipe, ProgressGallery, ExerciseLogSummary],
         },
       })
       .compileComponents();
 
     fixture = TestBed.createComponent(ExerciseCard);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('entry', exercise);
+    fixture.componentRef.setInput('exerciseLog', exerciseLog);
     fixture.componentRef.setInput('isNonDeletable', false);
     await fixture.whenStable();
   });
@@ -92,11 +101,11 @@ describe('ExerciseCard', () => {
 
   const getActions = () => fixture.debugElement.query(By.css('app-exercise-card-actions'));
   const getHeader = () =>
-    fixture.debugElement.query(By.css(`[data-testid=exercise-card-header-${exercise.exerciseId}]`))
+    fixture.debugElement.query(By.css(`[data-testid=exercise-card-header-${exerciseLog.exerciseId}]`))
       .nativeElement as HTMLDivElement;
   const getShowMediaButton = () =>
     fixture.debugElement.query(
-      By.css(`[data-testid=exercise-card-show-media-button-${exercise.exerciseId}]`),
+      By.css(`[data-testid=exercise-card-show-media-button-${exerciseLog.exerciseId}]`),
     )?.nativeElement as HTMLButtonElement | undefined;
 
   it('should display action buttons upon clicking on the header', () => {

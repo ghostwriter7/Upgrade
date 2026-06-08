@@ -4,7 +4,7 @@ import { ExerciseLogCreatedEvent } from './exercise-log-created.event';
 import { Mock } from 'vitest';
 import { ExerciseLogCreatedEventHandler } from './exercise-log-created-event.handler';
 
-import { ExerciseLog } from '../../../domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
 describe('ExerciseLogCreatedEventHandler', () => {
   let exerciseLogRepositoryMock: { saveLog: Mock };

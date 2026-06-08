@@ -4,7 +4,7 @@ import { Mock } from 'vitest';
 import { ExerciseLogDeletedEventHandler } from './exercise-log-deleted-event.handler';
 import { ExerciseLogDeletedEvent } from './exercise-log-deleted.event';
 import { SetRepository } from '@persistence/repository/set.repository';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { MediaRepository } from '@persistence/repository/media.repository';
 import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
 

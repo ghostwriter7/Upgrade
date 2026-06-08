@@ -4,7 +4,7 @@ import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema
 import { StoreName } from './store-name.enum';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { IndexName } from './index-name.enum';
-import { ExerciseLog } from '@domain/model/exercise-log.model';
+import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
 @Injectable({ providedIn: 'root' })
 export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
