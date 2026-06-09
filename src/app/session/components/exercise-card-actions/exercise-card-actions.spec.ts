@@ -19,6 +19,7 @@ import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { MeasureProgress } from '@session/components/measure-progress/measure-progress';
 import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
 import { Point } from '@domain/model/measurement.model';
+import { QueryBus } from '@common/routers/query/query-bus';
 
 describe('ExerciseCardActions', () => {
   let component: ExerciseCardActions;
@@ -26,17 +27,20 @@ describe('ExerciseCardActions', () => {
   let loader: HarnessLoader;
   let commandBusMock: { dispatch: Mock };
   let dialogServiceMock: { open: Mock };
+  let queryBus: { execute: Mock };
 
   const exercise = new ExerciseLog('sessionId', 'any-id');
 
   beforeEach(async () => {
     commandBusMock = { dispatch: vi.fn() };
     dialogServiceMock = { open: vi.fn() };
+    queryBus = { execute: vi.fn() };
 
     await TestBed.configureTestingModule({
       providers: [
         { provide: CommandBus, useValue: commandBusMock },
         { provide: DialogService, useValue: dialogServiceMock },
+        { provide: QueryBus, useValue: queryBus },
       ],
       imports: [ExerciseCardActions],
     }).compileComponents();

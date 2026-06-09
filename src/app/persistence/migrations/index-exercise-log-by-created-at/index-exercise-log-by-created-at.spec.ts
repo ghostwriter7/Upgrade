@@ -16,13 +16,9 @@ describe('IndexExerciseLogByCreatedAtMigration', () => {
     expect.assertions(2);
   });
 
-  it('should create an index and apply a data fix', () => {
+  it('should create an index', () => {
     const storeHandle = mockStore();
-    const exerciseLogStore = mockStore();
     const tx = mockTx(storeHandle.store);
-    tx.objectStore
-      .mockReturnValueOnce(storeHandle)
-      .mockReturnValueOnce(exerciseLogStore);
 
     new IndexExerciseLogByCreatedAtMigration().apply(
       {} as unknown as IDBDatabase,
