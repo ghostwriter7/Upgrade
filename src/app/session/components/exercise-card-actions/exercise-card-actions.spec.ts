@@ -20,6 +20,7 @@ import { MeasureProgress } from '@session/components/measure-progress/measure-pr
 import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
 import { Point } from '@domain/model/measurement.model';
 import { QueryBus } from '@common/routers/query/query-bus';
+import { GetInitialSetForExerciseIdQuery } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id.query';
 
 describe('ExerciseCardActions', () => {
   let component: ExerciseCardActions;
@@ -124,10 +125,14 @@ describe('ExerciseCardActions', () => {
       duration: 0,
       type: 'bodyweight',
     };
+    queryBus.execute.mockResolvedValue(setData);
 
     await button.click();
 
     callCallback(setData);
+    expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(
+      new GetInitialSetForExerciseIdQuery(exercise.exerciseId),
+    );
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
       new CreateSetCommand(setData, exercise.exerciseId),
     );

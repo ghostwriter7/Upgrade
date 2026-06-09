@@ -7,8 +7,8 @@ import {
   FindMediaAndMeasurementsByExerciseLogIdQueryHandler
 } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id-query.handler';
 import {
-  FindLastSetForExerciseIdQueryHandler
-} from '@session/queries/find-last-set-for-exercise-id/find-last-set-for-exercise-id-query.handler';
+  GetInitialSetForExerciseIdQueryHandler
+} from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id-query.handler';
 
 export class QueryHandlerProvider {
   public static forRoot(): Provider[] {
@@ -26,7 +26,7 @@ export class QueryHandlerProvider {
       {
         provide: QUERY_HANDLERS,
         multi: true,
-        useClass: FindLastSetForExerciseIdQueryHandler,
+        useClass: GetInitialSetForExerciseIdQueryHandler,
       }
     ];
   }

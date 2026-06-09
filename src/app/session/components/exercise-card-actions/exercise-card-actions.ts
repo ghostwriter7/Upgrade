@@ -16,7 +16,7 @@ import { MeasureProgress } from '../measure-progress/measure-progress';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
 import { QueryBus } from '@common/routers/query/query-bus';
-import { FindLastSetForExerciseIdQuery } from '@session/queries/find-last-set-for-exercise-id/find-last-set-for-exercise-id.query';
+import { GetInitialSetForExerciseIdQuery } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id.query';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -44,23 +44,13 @@ export class ExerciseCardActions {
 
   protected async showSetForm(event: Event, exerciseId: string): Promise<void> {
     event.stopPropagation();
-    const lastSet = await this.queryBus.execute(new FindLastSetForExerciseIdQuery(exerciseId));
-
-    const initialSet = lastSet
-      ? {
-          type: lastSet.type,
-          reps: lastSet.quantity,
-          weight: 'weight' in lastSet ? lastSet.weight : 0,
-          duration: 'duration' in lastSet ? lastSet.duration : 0,
-        }
-      : { type: 'bodyweight', reps: 1, weight: 0, duration: 0 };
-
+    const set = await this.queryBus.execute(new GetInitialSetForExerciseIdQuery(exerciseId));
     this.dialogService.open(
       UpsertSet,
       (setData: SetData) => this.commandBus.dispatch(new CreateSetCommand(setData, exerciseId)),
       {
         data: {
-          set: initialSet,
+          set,
           label: 'Add Set',
           button: 'Save',
         } as UpsertSetDialogData,
