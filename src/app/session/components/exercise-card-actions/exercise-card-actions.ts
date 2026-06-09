@@ -15,6 +15,8 @@ import { DeleteExerciseCommand } from '../../commands/delete-exercise/delete-exe
 import { MeasureProgress } from '../measure-progress/measure-progress';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
+import { QueryBus } from '@common/routers/query/query-bus';
+import { FindLastSetForExerciseIdQuery } from '@session/queries/find-last-set-for-exercise-id/find-last-set-for-exercise-id.query';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -28,6 +30,7 @@ export class ExerciseCardActions {
 
   private readonly commandBus = inject(CommandBus);
   private readonly dialogService = inject(DialogService);
+  private readonly queryBus = inject(QueryBus);
 
   protected readonly testIds = computed(() => {
     const uuid = this.entry().exerciseId;
@@ -39,14 +42,25 @@ export class ExerciseCardActions {
     };
   });
 
-  protected showSetForm(event: Event, exerciseId: string): void {
+  protected async showSetForm(event: Event, exerciseId: string): Promise<void> {
     event.stopPropagation();
+    const lastSet = await this.queryBus.execute(new FindLastSetForExerciseIdQuery(exerciseId));
+
+    const initialSet = lastSet
+      ? {
+          type: lastSet.type,
+          reps: lastSet.quantity,
+          weight: 'weight' in lastSet ? lastSet.weight : 0,
+          duration: 'duration' in lastSet ? lastSet.duration : 0,
+        }
+      : { type: 'bodyweight', reps: 1, weight: 0, duration: 0 };
+
     this.dialogService.open(
       UpsertSet,
       (setData: SetData) => this.commandBus.dispatch(new CreateSetCommand(setData, exerciseId)),
       {
         data: {
-          set: { type: 'bodyweight', reps: 1, weight: 0, duration: 0 },
+          set: initialSet,
           label: 'Add Set',
           button: 'Save',
         } as UpsertSetDialogData,
@@ -81,7 +95,9 @@ export class ExerciseCardActions {
     this.dialogService.open(
       MeasureProgress,
       ({ image, width, height, angle, points }: MeasureProgressOutput) =>
-        this.commandBus.dispatch(new CaptureProgressCommand(image, width, height, angle, points, exerciseId)),
+        this.commandBus.dispatch(
+          new CaptureProgressCommand(image, width, height, angle, points, exerciseId),
+        ),
       {
         width: '90svw',
         height: '90svh',

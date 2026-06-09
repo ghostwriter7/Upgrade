@@ -9,7 +9,15 @@ export const mockDatabase = (config: { storeExists: boolean }) => ({
 });
 
 export const mockStore = (params: { existingIndexes?: IndexName[] } = {}) => {
-  const store = { indexNames: { contains: vi.fn().mockImplementation((indexName: IndexName) => params.existingIndexes?.includes(indexName)) }, createIndex: vi.fn() };
+  const store = {
+    getAll: vi.fn(),
+    indexNames: {
+      contains: vi
+        .fn()
+        .mockImplementation((indexName: IndexName) => params.existingIndexes?.includes(indexName)),
+    },
+    createIndex: vi.fn(),
+  };
 
   return {
     store,
@@ -25,7 +33,6 @@ export const mockStore = (params: { existingIndexes?: IndexName[] } = {}) => {
   };
 };
 
-export const mockTx = (storeMock: ReturnType<typeof mockStore>['store']) =>
-  ({
-    objectStore: vi.fn().mockReturnValueOnce(storeMock),
-  });
+export const mockTx = (storeMock: ReturnType<typeof mockStore>['store']) => ({
+  objectStore: vi.fn().mockReturnValueOnce(storeMock),
+});

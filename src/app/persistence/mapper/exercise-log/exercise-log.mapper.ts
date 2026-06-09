@@ -1,6 +1,7 @@
 import { Mapper } from '../mapper.interface';
 import { ExerciseLogDto } from '../../schema/exercise-log.schema';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
+import { DateHelper } from '@common/helper/date.helper';
 
 export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
   public static readonly INSTANCE = new ExerciseLogMapper();
@@ -10,6 +11,7 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       exerciseLogDto.sessionId,
       exerciseLogDto.exerciseId,
       exerciseLogDto.id,
+      exerciseLogDto.createdAt ? DateHelper.from(exerciseLogDto.createdAt) : undefined
     );
     exerciseLog.notes = exerciseLogDto.notes;
     exerciseLog.index = exerciseLogDto.index;
@@ -23,6 +25,7 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       exerciseId: exerciseLog.exerciseId,
       notes: exerciseLog.notes,
       index: exerciseLog.index,
+      createdAt: exerciseLog.createdAt.toString({ smallestUnit: 'seconds' })
     };
   }
 }

@@ -1,6 +1,7 @@
 export enum IndexName {
   AngleMeasurementsByExerciseId = 'angleMeasurementsByExercise',
   AngleMeasurementsByExerciseLogId = 'angleMeasurementsByExerciseLog',
+  ExerciseLogsByExerciseIdAndCreatedAt = 'exerciseLogsByExerciseIdAndCreatedAt',
   ExerciseLogsBySessionId = 'exerciseLogsBySession',
   ExerciseLogsByExerciseId = 'exerciseLogsByExercise',
   SessionByStartedAt = 'startedAtIndex',

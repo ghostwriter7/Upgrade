@@ -12,9 +12,45 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
     super();
   }
 
+  public async findLatestExerciseLogsByExerciseId(
+    exerciseId: string,
+    limit = 1,
+  ): Promise<ExerciseLog[]> {
+    const tx = await this.createReadTransaction(StoreName.EXERCISE_LOGS);
+    const index = tx
+      .objectStore(StoreName.EXERCISE_LOGS)
+      .index(IndexName.ExerciseLogsByExerciseIdAndCreatedAt);
+
+    const request = index.openCursor(
+      IDBKeyRange.bound([exerciseId, ''], [exerciseId, '\uffff']),
+      'prev',
+    );
+
+    return new Promise((resolve, reject) => {
+      const results: ExerciseLog[] = [];
+
+      request.onsuccess = () => {
+        const cursor = request.result;
+
+        if (cursor) {
+          results.push(ExerciseLogMapper.INSTANCE.toDomain(ExerciseLogSchema.parse(cursor.value)));
+
+          if (results.length === limit) {
+            resolve(results);
+          } else {
+            cursor.continue();
+          }
+        } else {
+          resolve(results);
+        }
+      };
+      request.onerror = () => reject(request.error);
+    });
+  }
+
   public async getAllLogsBySessionId(sessionId: string): Promise<ExerciseLog[]> {
     const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
-      store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId)
+      store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId),
     );
     return Iterator.from(logs)
       .map((log) => ExerciseLogSchema.parse(log))

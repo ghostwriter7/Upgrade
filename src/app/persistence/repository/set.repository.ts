@@ -12,9 +12,25 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     super();
   }
 
+  public async getAllBySessionIdAndExerciseId(
+    sessionId: string,
+    exerciseId: string,
+  ): Promise<ExerciseSet[]> {
+    const sets = await super.findAllBy(StoreName.SETS, (store: IDBObjectStore) =>
+      store
+        .index(IndexName.SetBySessionIdAndExerciseId)
+        .getAll(IDBKeyRange.only([sessionId, exerciseId])),
+    );
+    return Iterator.from(sets)
+      .map((set) => ExerciseSetSchema.parse(set))
+      .map(ExerciseSetMapper.INSTANCE.toDomain)
+      .toArray()
+      .sort((a, b) => a.index - b.index);
+  }
+
   public async getAllBySessionId(sessionId: string): Promise<ExerciseSet[]> {
     const sets = await super.findAllBy(StoreName.SETS, (store: IDBObjectStore) =>
-      store.index(IndexName.SetBySessionId).getAll(sessionId)
+      store.index(IndexName.SetBySessionId).getAll(sessionId),
     );
     return Iterator.from(sets)
       .map((set) => ExerciseSetSchema.parse(set))

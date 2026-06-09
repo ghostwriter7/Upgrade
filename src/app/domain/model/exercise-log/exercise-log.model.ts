@@ -1,5 +1,6 @@
 import { ExerciseSet } from '../exercise-set/exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
+import { DateHelper } from '@common/helper/date.helper';
 
 export class ExerciseLog {
   public sets: ExerciseSet[] = [];
@@ -10,6 +11,7 @@ export class ExerciseLog {
     public readonly sessionId: string,
     public readonly exerciseId: string,
     public readonly id: string = createNanoId(),
+    public readonly createdAt = DateHelper.now(),
   ) {}
 
   public get isEmpty(): boolean {
