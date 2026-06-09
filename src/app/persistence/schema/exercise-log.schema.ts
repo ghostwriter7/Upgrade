@@ -7,7 +7,7 @@ export const ExerciseLogSchema = z.object({
   exerciseId: z.string(),
   notes: z.string().nullable(),
   index: z.number().optional().default(0),
-  createdAt: z.iso.datetime().optional()
+  createdAt: z.iso.datetime()
 });
 
 export type ExerciseLogDto = z.infer<typeof ExerciseLogSchema>;

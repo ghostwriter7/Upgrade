@@ -2,18 +2,21 @@ import { describe, expect, test } from 'vitest';
 import { ExerciseLogMapper } from './exercise-log.mapper';
 import { ExerciseLogDto } from '../../schema/exercise-log.schema';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
+import { DateHelper } from '@common/helper/date.helper';
 
-describe('ExerciseSetMapper', () => {
+describe('ExerciseLogMapper', () => {
   const mapper = ExerciseLogMapper.INSTANCE;
 
   describe('toDomain', () => {
     test('should map an exercise entry DTO to ExerciseLog', () => {
+      const createdAt = DateHelper.now().toString({ smallestUnit: 'seconds' });
       const dto: ExerciseLogDto = {
         exerciseId: 'any-exercise-id',
         sessionId: 'any-session-id',
         id: 'any-id',
         notes: 'any notes',
         index: 1,
+        createdAt,
       };
 
       const domain = mapper.toDomain(dto);
@@ -25,6 +28,7 @@ describe('ExerciseSetMapper', () => {
         id: dto.id,
         notes: dto.notes,
         index: dto.index,
+        createdAt: DateHelper.from(createdAt),
       });
     });
   });
@@ -43,6 +47,7 @@ describe('ExerciseSetMapper', () => {
         sessionId: log.sessionId,
         notes: log.notes,
         index: log.index,
+        createdAt: log.createdAt.toString({ smallestUnit: 'seconds' }),
       });
     });
   });

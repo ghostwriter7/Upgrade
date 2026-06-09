@@ -11,7 +11,7 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       exerciseLogDto.sessionId,
       exerciseLogDto.exerciseId,
       exerciseLogDto.id,
-      exerciseLogDto.createdAt ? DateHelper.from(exerciseLogDto.createdAt) : undefined
+      DateHelper.from(exerciseLogDto.createdAt),
     );
     exerciseLog.notes = exerciseLogDto.notes;
     exerciseLog.index = exerciseLogDto.index;
@@ -25,7 +25,7 @@ export class ExerciseLogMapper implements Mapper<ExerciseLog, ExerciseLogDto> {
       exerciseId: exerciseLog.exerciseId,
       notes: exerciseLog.notes,
       index: exerciseLog.index,
-      createdAt: exerciseLog.createdAt.toString({ smallestUnit: 'seconds' })
+      createdAt: exerciseLog.createdAt.toString({ smallestUnit: 'seconds' }),
     };
   }
 }
