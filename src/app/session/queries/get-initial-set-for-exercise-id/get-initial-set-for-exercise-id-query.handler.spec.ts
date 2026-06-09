@@ -6,6 +6,7 @@ import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repo
 import { GetInitialSetForExerciseIdQuery } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id.query';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { weightSet } from '@test/fixtures/exercise-set.fixtures';
+import { DEFAULT_SET_DATA } from '@session/queries/get-initial-set-for-exercise-id/default-set-data.const';
 
 describe('GetInitialSetForExerciseIdQueryHandler', () => {
   let setRepositoryMock: { getAllBySessionIdAndExerciseId: Mock };
@@ -38,7 +39,7 @@ describe('GetInitialSetForExerciseIdQueryHandler', () => {
       exerciseLogRepositoryMock.findLatestExerciseLogsByExerciseId,
     ).toHaveBeenCalledExactlyOnceWith(exerciseId, 5);
     expect(setRepositoryMock.getAllBySessionIdAndExerciseId).not.toHaveBeenCalled();
-    expect(result).toEqual({ reps: 1, weight: 0, duration: 0, type: 'bodyweight' });
+    expect(result).toEqual(DEFAULT_SET_DATA);
   });
 
   const log = (sessionId: string) => new ExerciseLog(sessionId, exerciseId);
@@ -65,7 +66,7 @@ describe('GetInitialSetForExerciseIdQueryHandler', () => {
       3,
       logs[2].sessionId, exerciseId
     );
-    expect(result).toEqual({ reps: 1, weight: 0, duration: 0, type: 'bodyweight' });
+    expect(result).toEqual(DEFAULT_SET_DATA);
   });
 
   it('should return the last performed set when one exists', async () => {
