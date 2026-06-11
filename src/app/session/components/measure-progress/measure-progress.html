@@ -3,7 +3,16 @@
     <app-recorder (videoCapture)="onVideoCapture($event)" />
   }
   @case ('pick-frame') {
-    <app-frame-picker [data]="videoData!" (framePick)="onFramePick($event)" />
+    <app-frame-picker [data]="videoData!" (framePick)="onFramePick($event)" #framePicker>
+      <button matFab extended (click)="saveImage()">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+
+      <button matFab extended (click)="measureAngles()">
+        Measure
+      </button>
+    </app-frame-picker>
   }
   @case ('measure') {
     <app-pose-measure-editor [data]="frameData!" (angleConfirm)="onAngleConfirm($event)" />

@@ -38,16 +38,11 @@ describe('CaptureProgressCommandHandler', () => {
   test('should return a correct command type it can handle', () =>
     expect(handler.appliesTo()).toEqual(CaptureProgressCommand));
 
-  test('should capture progress', () => {
-    const exerciseId = 'chin-ups';
-    const command = new CaptureProgressCommand(
-      new Blob(),
-      100,
-      100,
-      120,
-      [new Point(0, 0), new Point(10, 10), new Point(20, 20)],
-      exerciseId,
-    );
+  const exerciseId = 'chin-ups';
+
+  test('should capture progress with measurements', () => {
+    const points = [new Point(0, 0), new Point(10, 10), new Point(20, 20)];
+    const command = new CaptureProgressCommand(exerciseId, new Blob(), 100, 100, 120, points);
     const { session } = Session.createEmpty()
       .addExerciseLog(exerciseId)
       .session.addExerciseLog('anotherExerciseId');
@@ -84,10 +79,36 @@ describe('CaptureProgressCommandHandler', () => {
           exerciseLogId,
           angle: command.angle,
           landmarks: [
-            new Landmark(command.points[0], BodyPart.RightAnkle),
-            new Landmark(command.points[1], BodyPart.PelvisCenter),
-            new Landmark(command.points[2], BodyPart.LeftAnkle),
+            new Landmark(points[0], BodyPart.RightAnkle),
+            new Landmark(points[1], BodyPart.PelvisCenter),
+            new Landmark(points[2], BodyPart.LeftAnkle),
           ],
+        }),
+      ),
+    );
+  });
+
+  test('should capture progress without measurements', () => {
+    const command = new CaptureProgressCommand(exerciseId, new Blob(), 100, 100);
+    const { session } = Session.createEmpty()
+      .addExerciseLog(exerciseId)
+      .session.addExerciseLog('anotherExerciseId');
+    sessionStateHolder.session.mockReturnValueOnce(session);
+    const exerciseLogId = session.getExerciseById(exerciseId).id;
+
+    handler.handle(command);
+
+    expect(exerciseStore.getExerciseById).not.toHaveBeenCalled();
+    expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
+      new MediaCapturedEvent(
+        expect.objectContaining({
+          exerciseId,
+          exerciseLogId,
+          blob: command.image,
+          size: {
+            width: command.width,
+            height: command.height,
+          },
         }),
       ),
     );

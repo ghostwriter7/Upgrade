@@ -49,10 +49,10 @@ describe('QueryBus', () => {
   test.each([
     { query: new QueryA(), expected: ['a', 'b', 'c'] },
     { query: new QueryB(), expected: 42 },
-  ])('should execute a query with query type %s', ({ query, expected }) => {
+  ])('should execute a query with query type %s', async ({ query, expected }) => {
     const result = queryBus.execute(query);
 
-    expect(result).resolves.toEqual(expected);
+    await expect(result).resolves.toEqual(expected);
   });
 
   it('should throw an exception when there is no query handler for a query', () => {

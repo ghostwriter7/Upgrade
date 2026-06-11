@@ -4,9 +4,12 @@ export enum BodyPart {
 
   LeftKnee = 'leftKnee',
   RightKnee = 'rightKnee',
+  Knee = 'knee',
 
   LeftAnkle = 'leftAnkle',
   RightAnkle = 'rightAnkle',
+
+  Chest = 'chest',
 
   LeftShoulder = 'leftShoulder',
   RightShoulder = 'rightShoulder',

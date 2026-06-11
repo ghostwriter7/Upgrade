@@ -9,14 +9,13 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { MatFabButton } from '@angular/material/button';
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { form, FormField } from '@angular/forms/signals';
-import { VideoFrameCapturer } from '../recorder/video-frame-capturer';
+import { FrameData, VideoFrameCapturer } from './video-frame-capturer';
 
 @Component({
   selector: 'app-frame-picker',
-  imports: [MatSlider, MatFabButton, FormField, MatSliderThumb],
+  imports: [MatSlider, FormField, MatSliderThumb],
   templateUrl: './frame-picker.html',
   styleUrl: './frame-picker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,9 +51,7 @@ export class FramePicker implements OnInit {
     });
   }
 
-  protected async captureFrame(): Promise<void> {
-    const capturer = new VideoFrameCapturer(this.video().nativeElement);
-    const { blob, width, height } = await capturer.captureCurrentFrame();
-    this.framePick.emit({ image: blob, width, height });
+  public captureFrame(): Promise<FrameData> {
+    return new VideoFrameCapturer(this.video().nativeElement).captureCurrentFrame();
   }
 }

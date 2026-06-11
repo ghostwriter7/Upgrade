@@ -167,12 +167,12 @@ describe('ExerciseCardActions', () => {
     callCallback(result);
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
       new CaptureProgressCommand(
+        exercise.exerciseId,
         result.image,
         result.width,
         result.height,
         result.angle,
         result.points,
-        exercise.exerciseId,
       ),
     );
     expect(dialogServiceMock.open).toHaveBeenCalledExactlyOnceWith(

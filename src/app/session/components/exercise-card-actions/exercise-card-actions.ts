@@ -86,7 +86,7 @@ export class ExerciseCardActions {
       MeasureProgress,
       ({ image, width, height, angle, points }: MeasureProgressOutput) =>
         this.commandBus.dispatch(
-          new CaptureProgressCommand(image, width, height, angle, points, exerciseId),
+          new CaptureProgressCommand(exerciseId, image, width, height, angle, points),
         ),
       {
         width: '90svw',

@@ -109,6 +109,9 @@ export const exercises: {
   {
     id: 'pancake-good-morning',
     name: 'Pancake Good Morning',
+    measurementDefinition: {
+      landmarks: [BodyPart.Knee, BodyPart.PelvisCenter, BodyPart.Chest],
+    },
   },
   {
     id: 'pike-good-morning-b-stance',

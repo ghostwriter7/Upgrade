@@ -5,8 +5,6 @@
     <input [formField]="form.frameAt" matSliderThumb>
   </mat-slider>
   <div class="buttons">
-    <button matFab extended (click)="captureFrame()">
-      Capture
-    </button>
+    <ng-content />
   </div>
 </div>

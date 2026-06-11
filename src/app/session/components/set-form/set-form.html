@@ -30,7 +30,7 @@
         </button>
       </div>
       <div class="quick-options">
-        @for (option of durations(); track option) {
+        @for (option of durations(); track option.value) {
           <button
             [attr.data-testid]="option.testId"
             matButton="filled"
@@ -58,7 +58,7 @@
         </button>
       </div>
       <div class="quick-options">
-        @for (option of reps; track option) {
+        @for (option of reps; track option.value) {
           <button [attr.data-testid]="option.testId" matButton="filled"
                   (click)="setReps(option.value)">{{ option.value }}
           </button>

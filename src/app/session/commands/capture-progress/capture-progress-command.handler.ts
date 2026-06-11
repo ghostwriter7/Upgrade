@@ -23,25 +23,28 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
 
   public handle({ image, width, height, exerciseId, points, angle }: CaptureProgressCommand): void {
     const exerciseLogId = this.findExerciseLogId(exerciseId);
-    const measurementDefinition = this.findMeasurementDefinition(exerciseId);
-
-    if (points.length !== measurementDefinition.landmarks.length)
-      throw new Error('Invalid number of points provided');
 
     const media = ExerciseMedia.newImage(exerciseId, exerciseLogId, image, width, height);
-
-    const angleMeasurement = AngleMeasurement.new(
-      media.id,
-      exerciseId,
-      exerciseLogId,
-      angle,
-      measurementDefinition.landmarks.map(
-        (landmark, index) => new Landmark(points[index], landmark),
-      ),
-    );
-
     this.eventBus.publish(new MediaCapturedEvent(media));
-    this.eventBus.publish(new AngleMeasurementCapturedEvent(angleMeasurement));
+
+    if (points && angle) {
+      const measurementDefinition = this.findMeasurementDefinition(exerciseId);
+
+      if (points.length !== measurementDefinition.landmarks.length)
+        throw new Error('Invalid number of points provided');
+
+      const angleMeasurement = AngleMeasurement.new(
+        media.id,
+        exerciseId,
+        exerciseLogId,
+        angle,
+        measurementDefinition.landmarks.map(
+          (landmark, index) => new Landmark(points[index], landmark),
+        ),
+      );
+
+      this.eventBus.publish(new AngleMeasurementCapturedEvent(angleMeasurement));
+    }
   }
 
   private findExerciseLogId(exerciseId: string): string {
