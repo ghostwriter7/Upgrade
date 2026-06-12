@@ -1,5 +1,6 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
+import { SkillTag } from '@domain/enum/skill-tag.enum';
 
 export const exercises: {
   id: string;
@@ -7,10 +8,12 @@ export const exercises: {
   description?: string;
   muscles?: string[];
   measurementDefinition?: AngleMeasurementDefinition;
+  skillTags?: SkillTag[];
 }[] = [
   {
     id: 'arching-standing-kneeling',
     name: 'Arching (Standing / Kneeling)',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'back-squats',
@@ -19,24 +22,29 @@ export const exercises: {
   {
     id: 'bridge-heel-lifts',
     name: 'Bridge Heel Lifts',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'chin-ups',
     name: 'Chin Ups',
+    skillTags: [SkillTag.OneArmChinUp],
   },
   {
     id: 'cobra-thoracic-&-lumbar',
     name: 'Cobra (Thoracic & Lumbar)',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'couch-stretch-high',
     name: 'Couch Stretch - High',
     description: 'Hips in high position. It targets quads.',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'couch-stretch-low',
     name: 'Couch Stretch - Low',
     description: 'Hips in low position. It targets hip flexors.',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'dips',
@@ -49,50 +57,62 @@ export const exercises: {
   {
     id: 'drop-stance-squats',
     name: 'Drop Stance Squats',
+    skillTags: [SkillTag.SideSplit],
   },
   {
     id: 'front-split-slides',
     name: 'Front Split Slides',
+    skillTags: [SkillTag.FrontSplit],
   },
   {
     id: 'hip-external-rotation-good-mornings',
     name: 'Hip External Rotation Good Mornings',
+    skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
   },
   {
     id: 'handstand',
     name: 'Handstand',
+    skillTags: [SkillTag.Handstand],
   },
   {
     id: 'horse-stance-squats',
     name: 'Horse Stance Squats',
+    skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
   },
   {
     id: 'inlocates-&-dislocates',
     name: 'Inlocates & Dislocates',
+    skillTags: [SkillTag.ShoulderMobility, SkillTag.Bridge],
   },
   {
     id: 'isometric-bridge',
     name: 'Isometric Bridge',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'isometric-front-split',
     name: 'Isometric Front Split',
+    skillTags: [SkillTag.FrontSplit],
   },
   {
     id: 'isometric-side-split',
     name: 'Isometric Side Split',
+    skillTags: [SkillTag.SideSplit],
   },
   {
     id: 'kneeling-needle',
     name: 'Kneeling Needle',
+    skillTags: [SkillTag.FrontSplit],
   },
   {
     id: 'kneeling-tilt',
     name: 'Kneeling Tilt',
+    skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
   },
   {
     id: 'leg-elevated-pike-lift',
     name: 'Leg Elevated Pike Lift',
+    skillTags: [SkillTag.FrontSplit, SkillTag.Pike],
   },
   {
     id: 'l-sit',
@@ -105,6 +125,7 @@ export const exercises: {
   {
     id: 'pancake-active-lifts',
     name: 'Pancake Active Lifts',
+    skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
   },
   {
     id: 'pancake-good-morning',
@@ -112,22 +133,27 @@ export const exercises: {
     measurementDefinition: {
       landmarks: [BodyPart.Knee, BodyPart.PelvisCenter, BodyPart.Chest],
     },
+    skillTags: [SkillTag.Pancake],
   },
   {
     id: 'pike-good-morning-b-stance',
     name: 'Pike Good Morning - B-Stance',
+    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
   },
   {
     id: 'pike-good-morning-leg-elevated',
     name: 'Pike Good Morning - Leg Elevated',
+    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
   },
   {
     id: 'pike-good-morning-standing',
     name: 'Pike Good Morning Standing',
+    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
   },
   {
     id: 'pull-ups',
     name: 'Pull-Ups',
+    skillTags: [SkillTag.OneArmChinUp],
   },
   {
     id: 'push-ups',
@@ -136,26 +162,32 @@ export const exercises: {
   {
     id: 'reverse-nordic-curls',
     name: 'Reverse Nordic Curls',
+    skillTags: [SkillTag.Bridge, SkillTag.FrontSplit],
   },
   {
     id: 'seated-pike-active-lifts',
     name: 'Seated Pike Active Lifts',
+    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
   },
   {
     id: 'shoulder-external-rotation-stretch',
     name: 'Shoulder External Rotation Stretch',
+    skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
   },
   {
     id: 'single-leg-glute-bridge',
     name: 'Single Leg Glute Bridge',
+    skillTags: [SkillTag.Bridge],
   },
   {
     id: 'split-squats',
     name: 'Split Squats',
+    skillTags: [SkillTag.FrontSplit],
   },
   {
     id: 'standing-calf-stretch',
     name: 'Standing Calf Stretch',
+    skillTags: [SkillTag.Pancake],
   },
   {
     id: 'standing-pancake-hang',
@@ -163,6 +195,7 @@ export const exercises: {
     muscles: ['hip-flexors'],
     description:
       'Stand on two solid objects (e.g. chairs). Straddle the legs with a slight turnout of the feet. Use Contract-Relax. Hang passively, then contract hip flexors hard for 5 seconds, followed by 5 seconds of relaxing (simply hanging). Repeat for 3-5 reps. Hang longer on the last rep.',
+    skillTags: [SkillTag.Pancake],
   },
   {
     id: 'straddle-jefferson-curl',
@@ -170,6 +203,7 @@ export const exercises: {
     description:
       'Stand on the elevated surface. Straddle the legs with a slight feet turnout. Start tall, looking forward. Tuck the chin. Articulate spine vertebrae by vertebrae. Allow the arms to naturally come out. At the bottom, contract the hip flexors. Reverse the motion.',
     muscles: ['hip-flexors', 'spine'],
+    skillTags: [SkillTag.Pancake],
   },
   {
     id: 'tailors-pose',
@@ -180,6 +214,7 @@ export const exercises: {
     measurementDefinition: {
       landmarks: [BodyPart.RightKnee, BodyPart.PelvisCenter, BodyPart.LeftKnee],
     },
+    skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
   },
   {
     id: 'tailor-pose-straight-arm-lifts',
@@ -187,5 +222,6 @@ export const exercises: {
     description:
       'Sit on the floor with the feet together. No need for a wall. Grab a light weight - 2-5kg. Lean forwards reaching your arms straight out. If you cannot create enough pelvic tilt to lean forward, you can elevate your hips slightly (sit on a block). Drill best suited for someone with a head-to-floor pancake. Use an object as a marker to reach for. Press down with the feed whilst pulling the knees apart. Contract-Relax (5 seconds) works well.',
     muscles: ['adductors'],
+    skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
   },
 ];

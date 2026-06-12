@@ -24,6 +24,7 @@ export class Session {
   public notes: string | null = null;
   public startedAt: Temporal.Instant = DateHelper.now();
   public finishedAt: Temporal.Instant | null = null;
+  public exerciseIds: string[] = [];
 
   constructor(
     public readonly uuid: string,
@@ -54,11 +55,12 @@ export class Session {
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
     session.exercises = [...this.exercises.map((exercise) => exercise.clone())];
+    session.exerciseIds = [...this.exerciseIds];
     return session;
   }
 
   public addExerciseLog(exerciseId: string): AddExerciseLogResult {
-    if (this.exercises.some((exerciseSet) => exerciseSet.exerciseId === exerciseId)) {
+    if (this.exerciseIds.includes(exerciseId)) {
       throw new Error(`Exercise with ID '${exerciseId}' already exists in session.`);
     }
 
@@ -66,18 +68,20 @@ export class Session {
 
     const log = new ExerciseLog(clone.uuid, exerciseId).withIndex(clone.exercises.length);
     clone.exercises = [...clone.exercises, log];
+    clone.exerciseIds = [...clone.exerciseIds, exerciseId];
+
     return {
       session: clone,
       addedLog: log,
     };
   }
 
-  public addExerciseLogs(...exerciseIds: string[]): AddExerciseLogsResult {
+  public addExerciseLogs(exerciseIds: string[]): AddExerciseLogsResult {
     if (exerciseIds.length === 0) {
       throw new Error('At least one exercise ID must be provided to add exercise logs.');
     }
 
-    if (this.exercises.some((exercise) => exerciseIds.includes(exercise.exerciseId))) {
+    if (this.exerciseIds.some((exerciseId) => exerciseIds.includes(exerciseId))) {
       throw new Error('One or more exercise IDs already exist in the session.');
     }
 
@@ -89,6 +93,7 @@ export class Session {
     );
 
     clone.exercises = [...clone.exercises, ...addedLogs];
+    clone.exerciseIds = [...clone.exerciseIds, ...exerciseIds];
 
     return {
       session: clone,
@@ -109,6 +114,7 @@ export class Session {
 
     const removedLog = cloned.exercises[index];
     cloned.exercises = cloned.exercises.toSpliced(index, 1);
+    cloned.exerciseIds = cloned.exerciseIds.filter((id) => id !== exerciseId);
     return {
       session: cloned,
       removedLog,

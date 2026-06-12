@@ -6,6 +6,7 @@ import { EventBus } from '@common/routers/event/event-bus';
 import { AddExerciseCommand } from './add-exercise.command';
 import { Session } from '@domain/model/session/session.model';
 import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';
+import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 
 describe('AddExerciseCommandHandler', () => {
   let eventBus: { publish: Mock };
@@ -37,16 +38,16 @@ describe('AddExerciseCommandHandler', () => {
 
     handler.handle(command);
 
-    expect(sessionStateHolder.set).toHaveBeenCalledWith(
-      expect.objectContaining({
-        exercises: expect.arrayContaining([
-          expect.objectContaining({ exerciseId: 'chin-ups' }),
-          expect.objectContaining({ exerciseId: 'pull-ups' }),
-          expect.objectContaining({ exerciseId: 'deadlifts' }),
-        ]),
-      }),
-    );
-    expect(eventBus.publish).toHaveBeenCalledTimes(3);
+    const sessionMatcher = expect.objectContaining({
+      exercises: expect.arrayContaining([
+        expect.objectContaining({ exerciseId: 'chin-ups' }),
+        expect.objectContaining({ exerciseId: 'pull-ups' }),
+        expect.objectContaining({ exerciseId: 'deadlifts' }),
+      ]),
+    });
+    expect(sessionStateHolder.set).toHaveBeenCalledWith(sessionMatcher);
+    expect(eventBus.publish).toHaveBeenCalledTimes(4);
+    expect(eventBus.publish).toHaveBeenNthCalledWith(1, new SessionUpdatedEvent(sessionMatcher));
     const matcher = (exerciseId: string) =>
       new ExerciseLogCreatedEvent(
         expect.objectContaining({
@@ -55,8 +56,8 @@ describe('AddExerciseCommandHandler', () => {
           id: expect.any(String),
         }),
       );
-    expect(eventBus.publish).toHaveBeenNthCalledWith(1, matcher('chin-ups'));
-    expect(eventBus.publish).toHaveBeenNthCalledWith(2, matcher('pull-ups'));
-    expect(eventBus.publish).toHaveBeenNthCalledWith(3, matcher('deadlifts'));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(2, matcher('chin-ups'));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(3, matcher('pull-ups'));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(4, matcher('deadlifts'));
   });
 });

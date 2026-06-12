@@ -7,6 +7,7 @@ export const SessionSchema = z.object({
   startedAt: z.iso.datetime(),
   finishedAt: z.iso.datetime().nullable(),
   notes: z.string().nullable(),
+  exerciseIds: z.array(z.string()).default([]),
 });
 
 export type SessionDto = z.infer<typeof SessionSchema>;

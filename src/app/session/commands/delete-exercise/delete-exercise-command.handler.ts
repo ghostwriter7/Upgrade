@@ -6,6 +6,7 @@ import { EventBus } from '@common/routers/event/event-bus';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
 import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
 import { Constructor } from '@common/types/constructor.type';
+import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 
 @Injectable()
 export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerciseCommand> {
@@ -28,6 +29,7 @@ export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerci
     } = session.removeExerciseLog(exerciseId);
 
     this.sessionStateHolder.set(updatedSession);
+    this.eventBus.publish(new SessionUpdatedEvent(updatedSession));
     this.eventBus.publish(new ExerciseLogDeletedEvent(removedLog));
     reIndexedLogs.forEach((log) => this.eventBus.publish(new ExerciseLogUpdatedEvent(log)));
   }

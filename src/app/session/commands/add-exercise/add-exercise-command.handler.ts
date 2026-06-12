@@ -5,6 +5,7 @@ import { EventBus } from '@common/routers/event/event-bus';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';
 import { Constructor } from '@angular/cdk/schematics';
+import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 
 @Injectable()
 export class AddExerciseCommandHandler implements CommandHandler<AddExerciseCommand> {
@@ -21,9 +22,10 @@ export class AddExerciseCommandHandler implements CommandHandler<AddExerciseComm
 
       if (!session) throw new Error('Session not found');
 
-      const { session: updatedSession, addedLogs } = session.addExerciseLogs(...exerciseIds);
+      const { session: updatedSession, addedLogs } = session.addExerciseLogs(exerciseIds);
       this.sessionStateHolder.set(updatedSession);
 
+      this.eventBus.publish(new SessionUpdatedEvent(updatedSession));
       addedLogs.forEach((exerciseLog) =>
         this.eventBus.publish(new ExerciseLogCreatedEvent(exerciseLog)),
       );

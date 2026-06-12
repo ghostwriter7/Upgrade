@@ -7,6 +7,7 @@ import { DeleteExerciseCommand } from './delete-exercise.command';
 import { DeleteExerciseCommandHandler } from './delete-exercise-command.handler';
 import { ExerciseLogDeletedEvent } from '../../events/exercise-log-deleted/exercise-log-deleted.event';
 import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
+import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 
 describe('DeleteExerciseCommandHandler', () => {
   let eventBus: { publish: Mock };
@@ -36,40 +37,36 @@ describe('DeleteExerciseCommandHandler', () => {
     const { session } = Session.createEmpty().addExerciseLog('exerciseId');
     const exerciseLog = session.exercises[0];
     sessionStateHolder.session.mockReturnValueOnce(session);
+    const expectedSession = session.removeExerciseLog('exerciseId').session;
 
     handler.handle(command);
 
-    const expectedSession = session.clone();
     expectedSession.exercises = [];
     expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
-    expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
-      new ExerciseLogDeletedEvent(exerciseLog),
-    );
-    expect(eventBus.publish).toHaveBeenCalledTimes(1);
+    expect(eventBus.publish).toHaveBeenNthCalledWith(1, new SessionUpdatedEvent(expectedSession));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(2, new ExerciseLogDeletedEvent(exerciseLog));
+    expect(eventBus.publish).toHaveBeenCalledTimes(2);
   });
 
   test('should dispatch ExerciseLogUpdatedEvents for re-indexed logs', () => {
     const command = new DeleteExerciseCommand('chin-ups');
-    const { session } = Session.createEmpty().addExerciseLogs('chin-ups', 'pull-ups', 'l-sit');
+    const { session } = Session.createEmpty().addExerciseLogs(['chin-ups', 'pull-ups', 'l-sit']);
     const exerciseLog = session.exercises[0];
     sessionStateHolder.session.mockReturnValueOnce(session);
-    const expectedSession = session.clone();
-    expectedSession.exercises = [
-      session.exercises[1].withIndex(0),
-      session.exercises[2].withIndex(1),
-    ];
+    const expectedSession = session.removeExerciseLog('chin-ups').session;
 
     handler.handle(command);
 
     expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
-    expect(eventBus.publish).toHaveBeenCalledTimes(3);
-    expect(eventBus.publish).toHaveBeenNthCalledWith(1, new ExerciseLogDeletedEvent(exerciseLog));
+    expect(eventBus.publish).toHaveBeenCalledTimes(4);
+    expect(eventBus.publish).toHaveBeenNthCalledWith(1, new SessionUpdatedEvent(expectedSession));
+    expect(eventBus.publish).toHaveBeenNthCalledWith(2, new ExerciseLogDeletedEvent(exerciseLog));
     expect(eventBus.publish).toHaveBeenNthCalledWith(
-      2,
+      3,
       new ExerciseLogUpdatedEvent(expectedSession.exercises[0]),
     );
     expect(eventBus.publish).toHaveBeenNthCalledWith(
-      3,
+      4,
       new ExerciseLogUpdatedEvent(expectedSession.exercises[1]),
     );
   });

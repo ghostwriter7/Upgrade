@@ -36,7 +36,7 @@ describe('DeleteSessionCommandHandler', () => {
 
   test('should delete a session', () => {
     const command = new DeleteSessionCommand(
-      Session.createEmpty().addExerciseLogs('chin-ups', 'pull-ups').session,
+      Session.createEmpty().addExerciseLogs(['chin-ups', 'pull-ups']).session,
     );
 
     handler.handle(command);

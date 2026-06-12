@@ -5,7 +5,7 @@ import { BodyweightSet } from '../exercise-set/exercise-set.model';
 
 describe('Session', () => {
   const sessionWithExercises = (...exerciseNames: string[]) =>
-    Session.createEmpty().addExerciseLogs(...exerciseNames).session;
+    Session.createEmpty().addExerciseLogs(exerciseNames).session;
 
   const logMatcher = (sessionId: string, exerciseId: string, index: number) =>
     expect.objectContaining({ exerciseId, sessionId, index });
@@ -69,6 +69,7 @@ describe('Session', () => {
 
       const matcher = logMatcher(session.uuid, 'chin-ups', 0);
       expect(updatedSession.exercises).toEqual(expect.arrayContaining([matcher]));
+      expect(updatedSession.exerciseIds).toEqual(['chin-ups']);
       expect(addedLog).toEqual(matcher);
     });
 
@@ -82,6 +83,7 @@ describe('Session', () => {
       expect(updatedSession.exercises).toEqual(
         expect.arrayContaining([session.exercises[0], session.exercises[1], matcher]),
       );
+      expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'pull-ups']);
       expect(addedLog).toEqual(matcher);
     });
   });
@@ -90,7 +92,7 @@ describe('Session', () => {
     it('should throw an exception when invoked with an empty list of exercise IDs', () => {
       const session = Session.createEmpty();
 
-      expect(() => session.addExerciseLogs()).toThrow(
+      expect(() => session.addExerciseLogs([])).toThrow(
         'At least one exercise ID must be provided to add exercise logs.',
       );
     });
@@ -98,7 +100,7 @@ describe('Session', () => {
     it('should throw an exception when any exercise ID already exists in the session', () => {
       const session = sessionWithExercises('chin-ups', 'pull-ups');
 
-      expect(() => session.addExerciseLogs('front-splits', 'deadlifts', 'pull-ups')).toThrow(
+      expect(() => session.addExerciseLogs(['front-splits', 'deadlifts', 'pull-ups'])).toThrow(
         'One or more exercise IDs already exist in the session.',
       );
     });
@@ -106,17 +108,18 @@ describe('Session', () => {
     it('should add multiple exercise logs to an empty session', () => {
       const session = Session.createEmpty();
 
-      const { session: updatedSession, addedLogs } = session.addExerciseLogs(
+      const { session: updatedSession, addedLogs } = session.addExerciseLogs([
         'chin-ups',
         'front-splits',
         'deadlifts',
-      );
+      ]);
 
       const expectedLogs = [
         logMatcher(session.uuid, 'chin-ups', 0),
         logMatcher(session.uuid, 'front-splits', 1),
         logMatcher(session.uuid, 'deadlifts', 2),
       ];
+      expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'deadlifts']);
       expect(updatedSession.exercises.length).toBe(3);
       expect(addedLogs).toEqual(expectedLogs);
       expect(updatedSession.exercises).toEqual(expectedLogs);
@@ -125,10 +128,10 @@ describe('Session', () => {
     it('should add multiple exercise logs to a session with existing logs', () => {
       const session = sessionWithExercises('chin-ups', 'front-splits');
 
-      const { session: updatedSession, addedLogs } = session.addExerciseLogs(
+      const { session: updatedSession, addedLogs } = session.addExerciseLogs([
         'l-sit',
         'side-splits',
-      );
+      ]);
 
       const expectedAddedLogs = [
         logMatcher(session.uuid, 'l-sit', 2),
@@ -136,6 +139,7 @@ describe('Session', () => {
       ];
       const expectedLogs = [session.exercises[0], session.exercises[1], ...expectedAddedLogs];
       expect(updatedSession.exercises.length).toBe(4);
+      expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'l-sit', 'side-splits']);
       expect(addedLogs).toEqual(expectedAddedLogs);
       expect(updatedSession.exercises).toEqual(expectedLogs);
     });
@@ -146,6 +150,7 @@ describe('Session', () => {
       const session = sessionWithExercises('chin-ups', 'front-splits');
       const expectedSession = session.clone();
       expectedSession.exercises = [expectedSession.exercises[0]];
+      expectedSession.exerciseIds = ['chin-ups'];
 
       const {
         removedLog,
@@ -167,6 +172,7 @@ describe('Session', () => {
         expectedSession.exercises[3].withIndex(2),
       ];
       expectedSession.exercises = expectedReIndexedLogs;
+      expectedSession.exerciseIds = ['front-splits', 'l-sit', 'dips'];
 
       const {
         removedLog,
@@ -187,6 +193,7 @@ describe('Session', () => {
         expectedSession.exercises[3].withIndex(2),
       ];
       expectedSession.exercises = [session.exercises[0], ...expectedReIndexedLogs];
+      expectedSession.exerciseIds = ['chin-ups', 'l-sit', 'dips'];
 
       const {
         removedLog,
