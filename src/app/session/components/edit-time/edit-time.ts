@@ -10,8 +10,8 @@ import {
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { FieldTree, form, FormField } from '@angular/forms/signals';
-import { DateHelper } from '../../../common/helper/date.helper';
-import { pad } from '../../../common/function/pad-time.function';
+import { DateHelper } from '@common/helper/date.helper';
+import { pad } from '@common/function/pad-time.function';
 import { EditTimeDialogData } from './edit-time-dialog-data.interface';
 
 @Component({

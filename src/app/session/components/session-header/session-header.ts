@@ -1,4 +1,10 @@
-import { Component, computed, inject, input, linkedSignal } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  linkedSignal,
+} from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Session } from '../../../domain/model/session/session.model';

@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -24,6 +24,7 @@ import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angula
   ],
   templateUrl: './exercise-selector.html',
   styleUrl: './exercise-selector.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   host: {
     'data-testid': 'exercise-selector',
   },

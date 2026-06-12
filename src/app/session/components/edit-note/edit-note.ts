@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -24,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
   templateUrl: './edit-note.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './edit-note.css',
 })
 export class EditNote {

@@ -1,4 +1,11 @@
-import { Component, computed, effect, input, linkedSignal, signal } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { pad } from '@common/function/pad-time.function';

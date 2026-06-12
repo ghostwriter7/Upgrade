@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-timer',
-  template: '<p>Timer</p>'
+  changeDetection: ChangeDetectionStrategy.Eager,
+  template: '<p>Timer</p>',
 })
 export class TimerMock {}

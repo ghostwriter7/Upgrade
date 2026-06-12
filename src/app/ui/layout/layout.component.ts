@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-layout',
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css',
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
     MatToolbarModule,
     MatButtonModule,
