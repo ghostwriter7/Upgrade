@@ -7,13 +7,13 @@ import {
 } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { Router } from '@angular/router';
-import { DateHelper } from '../../../common/helper/date.helper';
+import { DateHelper } from '@common/helper/date.helper';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditTime } from '../edit-time/edit-time';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
 import { CommandBus } from '@common/routers/command/command-bus';
@@ -28,9 +28,11 @@ import { DeleteSessionCommand } from '../../commands/delete-session/delete-sessi
   styleUrl: './session-header.css',
 })
 export class SessionHeader {
+  public isEditable = input(false);
   public isNew = input.required<boolean>();
   public session = input.required<Session>();
 
+  protected readonly isNonEditable = computed(() => !this.isEditable());
   protected readonly showEdit = linkedSignal(() => !this.isNew());
   protected readonly testIds = {
     editMenuOption: 'session-header-edit-menu-option',

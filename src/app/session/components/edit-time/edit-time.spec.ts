@@ -1,12 +1,12 @@
-import { getButton } from '../../../../test/harness.utils';
-import { pad } from '../../../common/function/pad-time.function';
+import { getButton } from '@test/harness.utils';
+import { pad } from '@common/function/pad-time.function';
 
 import { EditTime } from './edit-time';
-import { OpenDialogFnResult, TestBedUtils } from '../../../../test/test-bed.utils';
+import { OpenDialogFnResult, TestBedUtils } from '@test/test-bed.utils';
 import { EditTimeDialogData } from './edit-time-dialog-data.interface';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
-import { DateHelper } from '../../../common/helper/date.helper';
+import { DateHelper } from '@common/helper/date.helper';
 
 describe('EditTime', () => {
   let openDialog: (data: EditTimeDialogData) => OpenDialogFnResult;

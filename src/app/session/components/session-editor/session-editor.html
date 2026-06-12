@@ -1,5 +1,5 @@
 <div class="session-editor">
-  <app-session-header [isNew]="isNew()" [session]="session()!" />
+  <app-session-header [isEditable]="true" [isNew]="isNew()" [session]="session()!" />
 
   @for (entry of session()?.exercises; track entry.exerciseId) {
     <app-exercise-card

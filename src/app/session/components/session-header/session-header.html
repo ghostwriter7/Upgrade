@@ -1,7 +1,9 @@
 <header>
   <div class="row">
     <button
-      [attr.data-testid]="testIds.startedAt" matFab extended
+      [attr.data-testid]="testIds.startedAt"
+      matFab extended
+      [class.no-events]="isNonEditable()"
       (click)="editStartedAt()">
       <mat-icon>access_time</mat-icon>
       <span [attr.data-testid]="testIds.startedAtValue">{{ startedAt() }}</span>
@@ -9,7 +11,9 @@
     @if (finishedAt(); as finishedAt) {
       <button
         [attr.data-testid]="testIds.finishedAt"
-        matFab extended (click)="editFinishedAt()">
+        matFab extended
+        [class.no-events]="isNonEditable()"
+        (click)="editFinishedAt()">
         <mat-icon>access_time_filled</mat-icon>
         <span [attr.data-testid]="testIds.finishedAtValue">{{ finishedAt }}</span>
       </button>
