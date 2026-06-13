@@ -20,6 +20,7 @@ import { from, switchMap, tap } from 'rxjs';
 import { SkillCoverageService } from '@home/components/skill-coverage/service/skill-coverage.service';
 import { SkillCoverageRecord } from '@home/components/skill-coverage/skill-coverage-record.interface';
 import { ReplacePipe } from '@ui/pipes/replace-pipe';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-skill-coverage',
@@ -41,6 +42,8 @@ import { ReplacePipe } from '@ui/pipes/replace-pipe';
     MatButtonToggle,
     FormField,
     ReplacePipe,
+    MatSortHeader,
+    MatSort,
   ],
 })
 export class SkillCoverage {
@@ -60,5 +63,15 @@ export class SkillCoverage {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+  }
+
+  protected onSortChange(event: Sort): void {
+    const property = event.active as keyof Pick<SkillCoverageRecord, 'daysAgo' | 'count'>;
+    const isAscending = event.direction === 'asc';
+    this.skillCoverage.update((records) =>
+      records.toSorted((a, b) =>
+        isAscending ? a[property] - b[property] : b[property] - a[property],
+      ),
+    );
   }
 }
