@@ -1,6 +1,7 @@
 <div class="skill-coverage">
   <div class="actions">
-    <mat-button-toggle-group class="full-width" [hideSingleSelectionIndicator]="true" [formField]="form.option" aria-label="Last Days">
+    <mat-button-toggle-group class="full-width" [hideSingleSelectionIndicator]="true" [formField]="form.option"
+                             aria-label="Last Days">
       @for (option of queryOptions; track option.value) {
         <mat-button-toggle [value]="option.value">{{ option.label }}</mat-button-toggle>
       }
@@ -10,8 +11,8 @@
   <table mat-table [dataSource]="skillCoverage()" class="mat-elevation-z8">
 
     <ng-container matColumnDef="label">
-      <th mat-header-cell *matHeaderCellDef>Name</th>
-      <td mat-cell *matCellDef="let element"> {{ element.label | titlecase }}</td>
+      <th mat-header-cell *matHeaderCellDef>Skill</th>
+      <td mat-cell *matCellDef="let element"> {{ element.skill | replace: '_' : ' ' | titlecase }}</td>
     </ng-container>
 
     <ng-container matColumnDef="count">
@@ -21,7 +22,13 @@
 
     <ng-container matColumnDef="daysAgo">
       <th mat-header-cell *matHeaderCellDef>Days Ago</th>
-      <td mat-cell *matCellDef="let element"> {{ element.daysAgo }}</td>
+      <td mat-cell *matCellDef="let element">
+        @if (element.daysAgo === -1) {
+          Never
+        } @else {
+          {{ element.daysAgo }}
+        }
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

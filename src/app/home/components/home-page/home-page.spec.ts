@@ -6,12 +6,19 @@ import { SessionCalendar } from '../session-calendar/session-calendar';
 import { provideRouter, Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { RouterTestingHarness } from '@angular/router/testing';
+import { SkillCoverage } from '@home/components/skill-coverage/skill-coverage';
 
 @Component({
   selector: 'app-session-calendar',
   template: '<p>Calendar</p>',
 })
-export class SessionCalendarMock {}
+class SessionCalendarMock {}
+
+@Component({
+  selector: 'app-skill-coverage',
+  template: '<p>Skill Coverage</p>'
+})
+class SkillCoverageMock {}
 
 @Component({ selector: 'app-session', template: '' })
 class SessionMock {}
@@ -39,8 +46,8 @@ describe('HomePage', () => {
       imports: [HomePage],
     })
       .overrideComponent(HomePage, {
-        add: { imports: [SessionCalendarMock] },
-        remove: { imports: [SessionCalendar] },
+        add: { imports: [SessionCalendarMock, SkillCoverageMock] },
+        remove: { imports: [SessionCalendar, SkillCoverage] },
       })
       .compileComponents();
 

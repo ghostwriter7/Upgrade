@@ -1,8 +1,4 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { QueryBus } from '@common/routers/query/query-bus';
-import { DateHelper } from '@common/helper/date.helper';
-import { GetSkillCoverageQuery } from '@session/queries/get-skill-coverage/get-skill-coverage.query';
-import { Skills } from '@domain/enum/skill-tag.enum';
 import {
   MatCell,
   MatCellDef,
@@ -21,14 +17,9 @@ import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-
 import { form, FormField } from '@angular/forms/signals';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { from, switchMap, tap } from 'rxjs';
-
-interface SkillCoverageRecord {
-  count: number;
-  lastDate?: Temporal.Instant;
-  daysAgo: number | 'Never';
-  skill: Skills;
-  label: string;
-}
+import { SkillCoverageService } from '@home/components/skill-coverage/service/skill-coverage.service';
+import { SkillCoverageRecord } from '@home/components/skill-coverage/skill-coverage-record.interface';
+import { ReplacePipe } from '@ui/pipes/replace-pipe';
 
 @Component({
   selector: 'app-skill-coverage',
@@ -49,41 +40,23 @@ interface SkillCoverageRecord {
     MatButtonToggleGroup,
     MatButtonToggle,
     FormField,
+    ReplacePipe,
   ],
 })
 export class SkillCoverage {
-  private readonly queryBus = inject(QueryBus);
   protected readonly displayedColumns: string[] = ['label', 'count', 'daysAgo'];
   protected readonly queryOptions = queryOptions;
-  protected readonly activeOption = signal({ option: 30 });
+  private readonly activeOption = signal({ option: 30 });
   protected readonly form = form(this.activeOption);
   protected readonly skillCoverage = signal<SkillCoverageRecord[]>([]);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly skillCoverageService = inject(SkillCoverageService);
 
   constructor() {
-    const now = DateHelper.now();
-
     toObservable(this.activeOption)
       .pipe(
-        switchMap(({ option }) =>
-          from(this.queryBus.execute(new GetSkillCoverageQuery(now, option))),
-        ),
-        tap((skillCoverage) => {
-          const records: SkillCoverageRecord[] = Object.entries(skillCoverage)
-            .map(([skill, { count, lastDate }]) => ({
-              skill: skill as Skills,
-              count,
-              lastDate,
-              daysAgo: lastDate
-                ? lastDate.until(now, { largestUnit: 'seconds' }).round({ largestUnit: 'days' })
-                    .days
-                : ('Never' as const),
-              label: skill.replaceAll('_', ' '),
-            }))
-            .sort((a, b) => b.count - a.count);
-
-          this.skillCoverage.set(records);
-        }),
+        switchMap(({ option }) => from(this.skillCoverageService.fetchCoverage(option))),
+        tap((records) => this.skillCoverage.set(records)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
