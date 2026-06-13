@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Content } from '../content/content';
 import { RouterLink } from '@angular/router';
+import { InstallUpdate } from '@ui/install-update/install-update';
 
 @Component({
   selector: 'app-layout',
@@ -23,6 +24,7 @@ import { RouterLink } from '@angular/router';
     MatIconModule,
     Content,
     RouterLink,
+    InstallUpdate,
   ],
 })
 export class LayoutComponent {

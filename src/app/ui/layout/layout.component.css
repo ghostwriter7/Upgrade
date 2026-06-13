@@ -17,6 +17,8 @@
   }
 }
 
-.home-link {
+.buttons {
+  display: flex;
+  gap: var(--space-3);
   margin-left: auto;
 }
