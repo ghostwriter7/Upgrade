@@ -26,6 +26,8 @@ export class GetSkillCoverageQueryHandler implements QueryHandler<GetSkillCovera
 
     const sessions = await this.sessionRepository.getSessionsForRange(startDate, endDate);
 
+    if (!sessions.length) return this.getEmptyResult();
+
     return this.computeSkillCoverageBySkill(sessions);
   }
 

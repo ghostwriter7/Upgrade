@@ -7,7 +7,6 @@ import { SessionHeader } from '../session-header/session-header';
 import { ExerciseCard } from '../exercise-card/exercise-card';
 import { Component, signal, WritableSignal } from '@angular/core';
 import { SessionActions } from '../session-actions/session-actions';
-import { TimerMock } from '@home/components/home-page/home-page.spec';
 import { Timer } from '../timer/timer';
 import { Mock } from 'vitest';
 import { Session } from '@domain/model/session/session.model';
@@ -15,6 +14,7 @@ import { SessionStore } from '@store/session/session.store';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { CreateSessionCommand } from '../../commands/create-session/create-session-command';
+import { TimerMock } from '@test/mocks/timer.mock';
 
 @Component({
   selector: 'app-session-actions',
