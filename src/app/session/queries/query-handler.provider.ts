@@ -9,6 +9,7 @@ import {
 import {
   GetInitialSetForExerciseIdQueryHandler
 } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id-query.handler';
+import { GetSkillCoverageQueryHandler } from '@session/queries/get-skill-coverage/get-skill-coverage-query.handler';
 
 export class QueryHandlerProvider {
   public static forRoot(): Provider[] {
@@ -27,6 +28,11 @@ export class QueryHandlerProvider {
         provide: QUERY_HANDLERS,
         multi: true,
         useClass: GetInitialSetForExerciseIdQueryHandler,
+      },
+      {
+        provide: QUERY_HANDLERS,
+        multi: true,
+        useClass: GetSkillCoverageQueryHandler
       }
     ];
   }

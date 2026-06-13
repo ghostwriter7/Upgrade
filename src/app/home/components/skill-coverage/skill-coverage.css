@@ -1,0 +1,8 @@
+.actions {
+  display: flex;
+  justify-content: center;
+
+  mat-button-toggle {
+    flex: 1;
+  }
+}

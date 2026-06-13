@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { HomePage } from './home/home-page/home-page';
+import { HomePage } from '@home/components/home-page/home-page';
 import { inject } from '@angular/core';
-import { SessionStateHolder } from './session/store/session-state-holder.store';
+import { SessionStateHolder } from '@session/store/session-state-holder.store';
 
 export const routes: Routes = [
   {

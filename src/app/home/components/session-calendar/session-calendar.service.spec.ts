@@ -1,7 +1,7 @@
 import { describe, Mock, test, vi } from 'vitest';
 import { SessionCalendarService } from './session-calendar.service';
 import { TestBed } from '@angular/core/testing';
-import { SessionStore } from '../../store/session/session.store';
+import { SessionStore } from '@store/session/session.store';
 import { signal, WritableSignal } from '@angular/core';
 
 async function flushPromises() {

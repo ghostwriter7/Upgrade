@@ -22,6 +22,28 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     return super.deleteAll(StoreName.SESSIONS);
   }
 
+  public async getSessionsForRange(
+    startDate: Temporal.Instant,
+    endDate: Temporal.Instant,
+  ): Promise<Session[]> {
+    const sessionDTOs = await super.findAllBy<SessionDto>(
+      StoreName.SESSIONS,
+      (store: IDBObjectStore) =>
+        store
+          .index(IndexName.SessionByStartedAt)
+          .getAll(
+            IDBKeyRange.bound(
+              startDate.toString({ smallestUnit: 'second' }),
+              endDate.toString({ smallestUnit: 'second' }),
+            ),
+          ),
+    );
+    return Iterator.from(sessionDTOs)
+      .map((dto) => SessionSchema.parse(dto))
+      .map(SessionMapper.INSTANCE.toDomain)
+      .toArray();
+  }
+
   public async getCountsByMonthAndYear(
     month: number,
     year: number,

@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HomePage } from './home-page';
 import { Component } from '@angular/core';
 import { SessionCalendar } from '../session-calendar/session-calendar';
-import { Timer } from '../../session/components/timer/timer';
 import { provideRouter, Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -13,12 +12,6 @@ import { RouterTestingHarness } from '@angular/router/testing';
   template: '<p>Calendar</p>',
 })
 export class SessionCalendarMock {}
-
-@Component({
-  selector: 'app-timer',
-  template: '<p>Timer</p>',
-})
-export class TimerMock {}
 
 @Component({ selector: 'app-session', template: '' })
 class SessionMock {}
@@ -46,8 +39,8 @@ describe('HomePage', () => {
       imports: [HomePage],
     })
       .overrideComponent(HomePage, {
-        add: { imports: [SessionCalendarMock, TimerMock] },
-        remove: { imports: [SessionCalendar, Timer] },
+        add: { imports: [SessionCalendarMock] },
+        remove: { imports: [SessionCalendar] },
       })
       .compileComponents();
 

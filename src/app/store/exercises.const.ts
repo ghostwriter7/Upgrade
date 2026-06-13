@@ -1,6 +1,6 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
-import { SkillTag } from '@domain/enum/skill-tag.enum';
+import { Skills, SkillTag } from '@domain/enum/skill-tag.enum';
 
 export const exercises: {
   id: string;
@@ -8,7 +8,7 @@ export const exercises: {
   description?: string;
   muscles?: string[];
   measurementDefinition?: AngleMeasurementDefinition;
-  skillTags?: SkillTag[];
+  skillTags?: Skills[];
 }[] = [
   {
     id: 'arching-standing-kneeling',
