@@ -7,6 +7,10 @@ import { DateHelper } from '@common/helper/date.helper';
 import { SkillCoverage } from '@session/queries/get-skill-coverage/skill-coverage.type';
 import { Sort } from '@angular/material/sort';
 
+function normalize(value: number, min: number, max: number): number {
+  return max === min ? 0 : (value - min) / (max - min);
+}
+
 @Service({ autoProvided: false })
 export class SkillCoverageService {
   private readonly queryBus = inject(QueryBus);
@@ -40,7 +44,27 @@ export class SkillCoverageService {
         return a.skill.localeCompare(b.skill);
       });
 
-    this.skillCoverage.set(skillCoverageRecords);
+    const counts = skillCoverageRecords.map((r) => r.count);
+    const days = Iterator.from(skillCoverageRecords)
+      .filter((r) => r.daysAgo !== -1)
+      .map((r) => r.daysAgo)
+      .toArray();
+
+    const maxCount = Math.max(...counts);
+    const minCount = Math.min(...counts);
+
+    const maxDays = Math.max(...days);
+    const minDays = Math.min(...days);
+
+    const enriched: SkillCoverageRecord[] = skillCoverageRecords.map((r) => ({
+      ...r,
+      metrics: {
+        countScore: normalize(r.count, minCount, maxCount),
+        recencyScore: r.daysAgo === -1 ? 1 : normalize(r.daysAgo, minDays, maxDays)
+      }
+    }))
+
+    this.skillCoverage.set(enriched);
   }
 
   public sortBy({ active, direction }: Sort): void {

@@ -18,12 +18,12 @@
 
     <ng-container matColumnDef="count">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by count">Count</th>
-      <td mat-cell *matCellDef="let element"> {{ element.count }}</td>
+      <td mat-cell *matCellDef="let element" [ngClass]="element.countClass"> {{ element.count }}</td>
     </ng-container>
 
     <ng-container matColumnDef="daysAgo">
       <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by days ago">Days Ago</th>
-      <td mat-cell *matCellDef="let element">
+      <td mat-cell *matCellDef="let element" [ngClass]="element.daysAgoClass">
         @if (element.daysAgo === -1) {
           Never
         } @else {

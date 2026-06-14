@@ -5,4 +5,8 @@ export interface SkillCoverageRecord {
   lastDate?: Temporal.Instant;
   daysAgo: number;
   skill: Skills;
+  metrics: {
+    countScore: number;
+    recencyScore: number;
+  };
 }

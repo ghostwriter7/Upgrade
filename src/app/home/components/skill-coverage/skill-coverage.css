@@ -6,3 +6,23 @@
     flex: 1;
   }
 }
+
+.heat-high {
+  background: var(--green);
+  color: color-mix(in srgb, var(--green) 20%, white);
+}
+
+.heat-mid-high {
+  background: color-mix(in srgb, var(--green) 75%, white);
+  color: color-mix(in srgb, var(--green) 18%, white);
+}
+
+.heat-mid {
+  background: var(--yellow);
+  color: color-mix(in srgb, var(--yellow) 22%, white);
+}
+
+.heat-low {
+  background: var(--mat-sys-error-container);
+  color: var(--mat-sys-on-error-container);
+}
