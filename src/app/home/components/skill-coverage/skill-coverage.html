@@ -8,10 +8,11 @@
     </mat-button-toggle-group>
   </div>
 
-  <table mat-table matSort [dataSource]="skillCoverage()" class="mat-elevation-z8" (matSortChange)="onSortChange($event)" >
+  <table mat-table matSort [dataSource]="skillCoverage()" class="mat-elevation-z8"
+         (matSortChange)="onSortChange($event)">
 
-    <ng-container matColumnDef="label">
-      <th mat-header-cell *matHeaderCellDef>Skill</th>
+    <ng-container matColumnDef="skill">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by skill name">Skill</th>
       <td mat-cell *matCellDef="let element"> {{ element.skill | replace: '_' : ' ' | titlecase }}</td>
     </ng-container>
 

@@ -13,19 +13,29 @@ import {
   MatHeaderCellHarness,
   MatTableHarness,
 } from '@angular/material/table/testing';
+import { signal, WritableSignal } from '@angular/core';
+import { SkillCoverageRecord } from '@home/components/skill-coverage/skill-coverage-record.interface';
+import { SkillTag } from '@domain/enum/skill-tag.enum';
 
 describe('SkillCoverage', () => {
   let component: SkillCoverage;
   let fixture: ComponentFixture<SkillCoverage>;
-  let skillCoverageServiceMock: { fetchCoverage: Mock };
+  let skillCoverageServiceMock: {
+    computeCoverage: Mock;
+    $skillCoverage: WritableSignal<SkillCoverageRecord[]>;
+  };
   let loader: HarnessLoader;
 
   beforeEach(async () => {
-    skillCoverageServiceMock = { fetchCoverage: vi.fn().mockResolvedValue([]) };
+    skillCoverageServiceMock = {
+      computeCoverage: vi.fn().mockResolvedValue([]),
+      $skillCoverage: signal([]),
+    };
     await TestBed.configureTestingModule({
       imports: [SkillCoverage],
-      providers: [{ provide: SkillCoverageService, useValue: skillCoverageServiceMock }],
-    }).compileComponents();
+    })
+      .overrideProvider(SkillCoverageService, { useValue: skillCoverageServiceMock })
+      .compileComponents();
 
     fixture = TestBed.createComponent(SkillCoverage);
     loader = TestbedHarnessEnvironment.loader(fixture);
@@ -61,17 +71,17 @@ describe('SkillCoverage', () => {
 
     await toggle.check();
 
-    expect(skillCoverageServiceMock.fetchCoverage).toHaveBeenCalledWith(expectedValue);
+    expect(skillCoverageServiceMock.computeCoverage).toHaveBeenCalledWith(expectedValue);
   });
 
   const assertCells = (cells: (MatCellHarness | MatHeaderCellHarness)[], expected: string[]) =>
     expect(Promise.all(cells.map((c) => c.getText()))).resolves.toEqual(expected);
 
   it('should render table rows', async () => {
-    skillCoverageServiceMock.fetchCoverage.mockResolvedValue([
-      { skill: 'side_splits', count: 5, daysAgo: 1 },
-      { skill: 'front_splits', count: 3, daysAgo: 3 },
-      { skill: 'shoulder_mobility', count: 0, daysAgo: -1 },
+    skillCoverageServiceMock.$skillCoverage.set([
+      { skill: SkillTag.SideSplit, count: 5, daysAgo: 1 },
+      { skill: SkillTag.FrontSplit, count: 3, daysAgo: 3 },
+      { skill: SkillTag.ShoulderMobility, count: 0, daysAgo: -1 },
     ]);
     const table = await loader.getHarness(MatTableHarness);
 
@@ -81,15 +91,15 @@ describe('SkillCoverage', () => {
     const [cells1, cells2, cells3] = await Promise.all(rows.map((r) => r.getCells()));
 
     await Promise.all([
-      assertCells(cells1, ['Side Splits', '5', '1']),
-      assertCells(cells2, ['Front Splits', '3', '3']),
+      assertCells(cells1, ['Side Split', '5', '1']),
+      assertCells(cells2, ['Front Split', '3', '3']),
       assertCells(cells3, ['Shoulder Mobility', '0', 'Never']),
     ]);
 
     const headerRows = await table.getHeaderRows();
     expect(headerRows.length).toBe(1);
-    const headerCells = await headerRows[0].getCells()
+    const headerCells = await headerRows[0].getCells();
     expect(headerCells.length).toBe(3);
-    await assertCells(headerCells, ['Skill', 'Count', 'Days Ago'])
+    await assertCells(headerCells, ['Skill', 'Count', 'Days Ago']);
   });
 });
