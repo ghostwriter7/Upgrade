@@ -56,7 +56,7 @@ interface EnhancedSkillCoverageRecord extends SkillCoverageRecord {
 export class SkillCoverage {
   protected readonly displayedColumns: string[] = ['skill', 'count', 'daysAgo'];
   protected readonly queryOptions = queryOptions;
-  private readonly activeOption = signal({ option: 30 });
+  private readonly activeOption = signal({ option: 7 });
   protected readonly form = form(this.activeOption);
   private readonly destroyRef = inject(DestroyRef);
   private readonly skillCoverageService = inject(SkillCoverageService);
