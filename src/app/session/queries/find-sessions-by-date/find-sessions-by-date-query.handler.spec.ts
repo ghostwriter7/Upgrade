@@ -8,6 +8,7 @@ import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/
 import { Session } from '@domain/model/session/session.model';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
+import { createNanoId } from '@common/function/create-uuid.function';
 
 describe('FindSessionsByDateQueryHandler', () => {
   let sessionRepositoryMock: { findAllByDate: Mock };
@@ -36,8 +37,14 @@ describe('FindSessionsByDateQueryHandler', () => {
   const log = (sessionId: string, exerciseId: string, index: number) =>
     new ExerciseLog(sessionId, exerciseId).withIndex(index);
 
-  const set = (sessionId: string, exerciseId: string, index: number) =>
-    new BodyweightSet(sessionId, exerciseId, index, index + 1);
+  const set = (sessionId: string, exerciseId: string, index: number): BodyweightSet => ({
+    sessionId,
+    exerciseId,
+    index,
+    id: createNanoId(),
+    reps: index + 1,
+    type: 'bodyweight',
+  });
 
   const assertSessionId = (actual: Session, expected: string) => expect(actual.uuid).toBe(expected);
 

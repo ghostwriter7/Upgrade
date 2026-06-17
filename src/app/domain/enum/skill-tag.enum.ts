@@ -1,5 +1,6 @@
 export const SkillTag = {
   Bridge: 'bridge',
+  Dance: 'dance',
   FrontSplit: 'front_split',
   Handstand: 'handstand',
   OneArmChinUp: 'one_arm_chin_up',

@@ -1,6 +1,7 @@
 import { ExerciseSet } from '../exercise-set/exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { DateHelper } from '@common/helper/date.helper';
+import { compareSet } from '@domain/model/exercise-set/compare-set';
 
 export class ExerciseLog {
   public sets: ExerciseSet[] = [];
@@ -25,18 +26,10 @@ export class ExerciseLog {
       const currentSet = this.sets[i];
       const nextSet = this.sets[i + 1];
 
-      if (!currentSet.isEqual(nextSet)) return false;
+      if (!compareSet(currentSet, nextSet)) return false;
     }
 
     return true;
-  }
-
-  public computeSetSummary(): string[] {
-    if (this.isEmpty) return [];
-
-    if (this.hasAllEqualSets()) return [`${this.sets.length} x ${this.sets[0].print()}`];
-
-    return this.sets.map((set) => set.print());
   }
 
   public clone(): ExerciseLog {
@@ -53,7 +46,10 @@ export class ExerciseLog {
       throw new Error(`Set at index ${index} does not exist`);
     }
 
-    return set.clone().withIndex(this.sets.length);
+    return {
+      ...set,
+      index: this.sets.length,
+    };
   }
 
   public withIndex(index: number): ExerciseLog {

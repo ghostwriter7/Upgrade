@@ -19,6 +19,7 @@ import {
 } from './set-form-options.const';
 import { SetData } from './set-data.interface';
 import { ExerciseStore } from '@store/exercises.store';
+import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 
 @Component({
   selector: 'app-set-form',
@@ -33,6 +34,8 @@ export class SetForm implements FormValueControl<SetData> {
   public readonly isInvalid = computed(() => this.setForm().invalid());
 
   private readonly exerciseStore = inject(ExerciseStore);
+  private static readonly TIME_SET_TYPES = ['iso', 'duration'] as ExerciseSetType[];
+  private static readonly NO_WEIGHT_SET_TYPES = ['bodyweight', 'duration'] as ExerciseSetType[];
 
   protected readonly setForm = form<SetData>(this.value, (schemaPath) => {
     required(schemaPath.reps);
@@ -46,9 +49,15 @@ export class SetForm implements FormValueControl<SetData> {
       }
       return null;
     });
-    hidden(schemaPath.weight, { when: ({ valueOf }) => valueOf(schemaPath.type) === 'bodyweight' });
-    hidden(schemaPath.reps, { when: ({ valueOf }) => valueOf(schemaPath.type) === 'iso' });
-    hidden(schemaPath.duration, { when: ({ valueOf }) => valueOf(schemaPath.type) !== 'iso' });
+    hidden(schemaPath.weight, {
+      when: ({ valueOf }) => SetForm.NO_WEIGHT_SET_TYPES.includes(valueOf(schemaPath.type)),
+    });
+    hidden(schemaPath.reps, {
+      when: ({ valueOf }) => SetForm.TIME_SET_TYPES.includes(valueOf(schemaPath.type)),
+    });
+    hidden(schemaPath.duration, {
+      when: ({ valueOf }) => !SetForm.TIME_SET_TYPES.includes(valueOf(schemaPath.type)),
+    });
   });
   protected readonly setTypeOptions = computed(() => {
     const { supportedSetTypes } = this.exerciseStore.getExerciseById(this.exerciseId())!;
