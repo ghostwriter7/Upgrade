@@ -5,8 +5,8 @@ import { CreateSessionCommand } from '@session/commands/create-session/create-se
 import { DeleteSessionCommand } from '@session/commands/delete-session/delete-session-command';
 import { Session } from '@domain/model/session/session.model';
 import { UpdateSetCommand } from '@session/commands/update-set/update-set.command';
-import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Command } from '@common/routers/command/command';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 class UnknownCommand extends Command {
   constructor() {
@@ -40,7 +40,7 @@ describe('CommandBus', () => {
     { command: new CreateSessionCommand(), expectedHandler: handlerA },
     { command: new DeleteSessionCommand(Session.createEmpty()), expectedHandler: handlerB },
     {
-      command: new UpdateSetCommand(new BodyweightSet('sessionId', 'exerciseId', 0, 1)),
+      command: new UpdateSetCommand(bwSet(0, 1)),
       expectedHandler: handlerC,
     },
   ])('should dispatch a command to the right handler', ({ command, expectedHandler }) => {

@@ -3,7 +3,7 @@ import { Mock } from 'vitest';
 import { SetUpdatedEvent } from './set-updated.event';
 import { SetUpdatedEventHandler } from './set-updated-event.handler';
 import { SetRepository } from '@persistence/repository/set.repository';
-import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 describe('SetUpdatedEventHandler', () => {
   let setRepositoryMock: { upsertSet: Mock };
@@ -25,7 +25,7 @@ describe('SetUpdatedEventHandler', () => {
     expect(handler.appliesTo()).toEqual(SetUpdatedEvent));
 
   it('should update a set', () => {
-    const event = new SetUpdatedEvent(new BodyweightSet('sessionId', 'exerciseId', 0, 10));
+    const event = new SetUpdatedEvent(bwSet(0, 10));
 
     handler.handle(event);
 

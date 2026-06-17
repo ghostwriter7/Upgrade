@@ -5,7 +5,6 @@ import { Session } from '@domain/model/session/session.model';
 import { SessionSchema } from '@persistence/schema/session.schema';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
 import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
-import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
 import { ExerciseSetSchema } from '@persistence/schema/set.schema';
 import { ExerciseLogSchema } from '@persistence/schema/exercise-log.schema';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
@@ -103,7 +102,17 @@ export class ImportDataService {
   }
 
   private getSets(data: Record<string, unknown>): ExerciseSet[] {
-    return this.read(data, 'sets', ExerciseSetSchema, ExerciseSetMapper.INSTANCE.toDomain);
+    if (typeof data === 'object' && data !== null && 'sets' in data) {
+      const dtos = data['sets'];
+
+      if (Array.isArray(dtos)) {
+        return Iterator.from(dtos)
+          .map((entry) => ExerciseSetSchema.parse(entry))
+          .toArray();
+      }
+    }
+
+    return [];
   }
 
   private getExerciseLogs(data: Record<string, unknown>): ExerciseLog[] {

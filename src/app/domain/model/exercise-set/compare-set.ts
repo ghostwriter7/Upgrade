@@ -15,7 +15,7 @@ export function compareSet(a: ExerciseSet, b: ExerciseSet): boolean {
     case 'weight':
       return a.reps === (b as WeightedSet).reps && a.weight === (b as WeightedSet).weight;
     case 'iso':
-      return a.duration === (b as IsoSet).duration && a.weight === (b as IsoSet).duration;
+      return a.duration === (b as IsoSet).duration && a.weight === (b as IsoSet).weight;
     case 'duration':
       return a.duration === (b as DurationSet).duration;
   }

@@ -25,7 +25,7 @@ describe('compareSet', () => {
     },
     {
       sets: [weightSet(0, 10, 10), isoSet(0, 10, 10)],
-      expected: true,
+      expected: false,
     },
   ])('should compare 2 sets', ({ sets, expected }) =>
     expect(compareSet(sets[0], sets[1])).toBe(expected),

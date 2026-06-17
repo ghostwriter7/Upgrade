@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { Session } from '@domain/model/session/session.model';
-import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { DomainEvent } from '@common/routers/event/domain-event';
 import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
 import { SessionDeletedEvent } from '@session/events/delete-session/session-deleted.event';
@@ -9,6 +8,7 @@ import { EventBus } from '@common/routers/event/event-bus';
 import { EVENT_HANDLERS } from '@common/routers/event/event-handlers.token';
 import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { Constructor } from '@common/types/constructor.type';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 class UnknownEvent extends DomainEvent {
   constructor() {
@@ -56,7 +56,7 @@ describe('EventBus', () => {
     },
     { command: new SessionDeletedEvent('anyId', ['anyLogId']), expectedHandlers: [handlerB] },
     {
-      command: new SetUpdatedEvent(new BodyweightSet('sessionId', 'exerciseId', 0, 1)),
+      command: new SetUpdatedEvent(bwSet(0, 1)),
       expectedHandlers: [handlerC],
     },
   ])('should publish an event to the interested handlers', ({ command, expectedHandlers }) => {

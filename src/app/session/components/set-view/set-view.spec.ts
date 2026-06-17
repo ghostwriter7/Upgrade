@@ -2,18 +2,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SetView } from './set-view';
 import { Component, input, output } from '@angular/core';
-import {
-  BodyweightSet,
-  ExerciseSet,
-  IsoSet,
-  WeightedSet,
-} from '@domain/model/exercise-set/exercise-set.model';
+import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { SetActions } from '../set-actions/set-actions';
 import { Mock } from 'vitest';
 import { EventService } from '@common/service/event/event.service';
 import { Subject } from 'rxjs';
 import { ElementClickedEvent } from '@common/events/element-clicked.event';
 import { By } from '@angular/platform-browser';
+import { bwSet, isoSet, weightSet } from '@test/fixtures/exercise-set.fixtures';
 
 @Component({
   selector: 'app-set-actions',
@@ -30,7 +26,7 @@ describe('SetView', () => {
   let eventServiceMock: { listen: Mock };
   let elementClicked$: Subject<ElementClickedEvent>;
 
-  const set = new BodyweightSet('sessionId', 'exerciseId', 5, 10);
+  const set = bwSet(5, 10);
 
   beforeEach(async () => {
     elementClicked$ = new Subject<ElementClickedEvent>();
@@ -78,10 +74,10 @@ describe('SetView', () => {
     expect(eventServiceMock.listen).toHaveBeenCalledExactlyOnceWith(ElementClickedEvent));
 
   test.each([
-    { set: new BodyweightSet('sessionId', 'exerciseId', 5, 10), message: '10 reps' },
-    { set: new WeightedSet('sessionId', 'exerciseId', 5, 8, 60), message: '8 reps + 60 kg' },
-    { set: new IsoSet('sessionId', 'exerciseId', 5, 30, 0), message: '30 seconds' },
-    { set: new IsoSet('sessionId', 'exerciseId', 5, 30, 20), message: '30 seconds + 20 kg' },
+    { set: bwSet(5, 10), message: '10 reps' },
+    { set: weightSet(5, 8, 60), message: '8 reps + 60 kg' },
+    { set: isoSet(5, 30, 0), message: '30 seconds' },
+    { set: isoSet(5, 30, 20), message: '30 seconds + 20 kg' },
   ])('should display set value', ({ set, message }) => {
     setSet(set);
 

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DateHelper } from '@common/helper/date.helper';
 import { Session } from './session.model';
-import { BodyweightSet } from '../exercise-set/exercise-set.model';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 describe('Session', () => {
   const sessionWithExercises = (...exerciseNames: string[]) =>
@@ -47,7 +47,7 @@ describe('Session', () => {
 
     it('should return false when there is at least one set associated with at least one exercise', () => {
       const session = sessionWithExercises('chin-ups', 'pull-ups', 'dips');
-      session.addSet(new BodyweightSet(session.uuid, 'dips', 0, 5));
+      session.addSet(bwSet(0, 5, { sessionId: session.uuid, exerciseId: 'dips' }));
 
       expect(session.isEmpty).toEqual(false);
     });
@@ -139,7 +139,12 @@ describe('Session', () => {
       ];
       const expectedLogs = [session.exercises[0], session.exercises[1], ...expectedAddedLogs];
       expect(updatedSession.exercises.length).toBe(4);
-      expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'l-sit', 'side-splits']);
+      expect(updatedSession.exerciseIds).toEqual([
+        'chin-ups',
+        'front-splits',
+        'l-sit',
+        'side-splits',
+      ]);
       expect(addedLogs).toEqual(expectedAddedLogs);
       expect(updatedSession.exercises).toEqual(expectedLogs);
     });

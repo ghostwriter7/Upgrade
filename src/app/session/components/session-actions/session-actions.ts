@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -6,7 +6,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { CompleteSessionCommand } from '../../commands/complete-session/complete-session.command';
 import { ExerciseSelector } from '../exercise-selector/exercise-selector';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { AddExerciseCommand } from '../../commands/add-exercise/add-exercise.command';
 
 @Component({

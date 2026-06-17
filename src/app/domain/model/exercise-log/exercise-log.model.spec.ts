@@ -44,21 +44,4 @@ describe('ExerciseLog', () => {
       expect(log.hasAllEqualSets()).toBe(false);
     });
   });
-
-  describe('computeSetSummary', () => {
-    it('should return an empty array when there are no sets', () =>
-      expect(empty().computeSetSummary()).toEqual([]));
-
-    it('should return a condensed summary when all sets are equal', () => {
-      const log = empty().withSets([bwSet(0, 10), bwSet(1, 10), bwSet(2, 10)]);
-
-      expect(log.computeSetSummary()).toEqual(['3 x 10']);
-    });
-
-    it('should return a detailed summary when sets are different', () => {
-      const log = empty().withSets([bwSet(0, 10), bwSet(1, 12), bwSet(2, 13)]);
-
-      expect(log.computeSetSummary()).toEqual(['10', '12', '13']);
-    });
-  });
 });

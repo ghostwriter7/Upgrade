@@ -5,7 +5,6 @@ import { Mock } from 'vitest';
 import { ImportDataService } from './import-data.service';
 import { Session } from '@domain/model/session/session.model';
 import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
-import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
@@ -18,6 +17,7 @@ import { BodyPart } from '@domain/enum/body-part.enum';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 describe('ImportDataService', () => {
   let sessionRepositoryMock: { save: Mock; deleteAllSessions: Mock };
@@ -96,10 +96,10 @@ describe('ImportDataService', () => {
     new ExerciseLog(sessions[0].uuid, pullUpsId),
   ];
   const sets = [
-    new BodyweightSet(sessions[0].uuid, chinUpsId, 0, 5),
-    new BodyweightSet(sessions[0].uuid, chinUpsId, 1, 5),
-    new BodyweightSet(sessions[1].uuid, pullUpsId, 0, 3),
-    new BodyweightSet(sessions[1].uuid, pullUpsId, 1, 3),
+    bwSet(0, 5, { sessionId: sessions[0].uuid, exerciseId: chinUpsId }),
+    bwSet(1, 5, { sessionId: sessions[0].uuid, exerciseId: chinUpsId }),
+    bwSet(0, 3, { sessionId: sessions[1].uuid, exerciseId: pullUpsId }),
+    bwSet(1, 3, { sessionId: sessions[1].uuid, exerciseId: pullUpsId }),
   ];
   const blackPixelBlob = new Blob(
     [
@@ -126,7 +126,7 @@ describe('ImportDataService', () => {
   it('should import data from a file', async () => {
     const json = JSON.stringify({
       sessions: sessions.map(SessionMapper.INSTANCE.toDto),
-      sets: sets.map(ExerciseSetMapper.INSTANCE.toDto),
+      sets,
       exerciseLogs: exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDto),
       media: await Promise.all(media.map(ExerciseMediaMapper.INSTANCE.toJson)),
       angleMeasurements: measurements.map(AngleMeasurementMapper.INSTANCE.toDto),
@@ -167,6 +167,8 @@ describe('ImportDataService', () => {
     );
 
     expect(mediaRepository.save).toHaveBeenCalledExactlyOnceWith(media[0]);
-    expect(angleMeasurementRepository.saveMeasurement).toHaveBeenCalledExactlyOnceWith(measurements[0]);
+    expect(angleMeasurementRepository.saveMeasurement).toHaveBeenCalledExactlyOnceWith(
+      measurements[0],
+    );
   });
 });

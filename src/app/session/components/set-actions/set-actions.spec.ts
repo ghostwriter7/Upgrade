@@ -6,7 +6,6 @@ import { SetActions } from './set-actions';
 import { DialogService } from '@common/service/dialog/dialog.service';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { Mock } from 'vitest';
-import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { CopySetCommand } from '../../commands/copy-set/copy-set.command';
@@ -14,7 +13,7 @@ import { UpsertSet } from '../upsert-set/upsert-set.component';
 import { UpsertSetDialogData } from '../upsert-set/upsert-set-dialog-data.interface';
 import { DeleteSetCommand } from '../../commands/delete-set/delete-set.command';
 import { getButtonByTestId } from '@test/harness.utils';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 describe('SetActions', () => {
   let component: SetActions;
@@ -23,8 +22,7 @@ describe('SetActions', () => {
   let loader: HarnessLoader;
   let commandBusMock: { dispatch: Mock };
 
-  const set = new BodyweightSet('sessionId', 'exerciseId', 0, 10);
-  set.id = createNanoId();
+  const set = bwSet(0, 10);
 
   beforeEach(async () => {
     dialogServiceMock = { open: vi.fn() };
@@ -74,7 +72,7 @@ describe('SetActions', () => {
             weight: 0,
             type: 'bodyweight',
           },
-          exerciseId: set.exerciseId
+          exerciseId: set.exerciseId,
         },
       }),
     );
@@ -96,11 +94,12 @@ describe('SetActions', () => {
       type: 'bodyweight',
     });
 
-    const expectedSet = new BodyweightSet('sessionId', 'exerciseId', 0, 15);
+    const expectedSet = bwSet(0, 15);
     expectedSet.id = set.id;
-    expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(new UpdateSetCommand(expectedSet));
+    expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
+      new UpdateSetCommand(expectedSet),
+    );
   });
-
 
   it('should emit setDelete and dispatch delete command when delete button is clicked', async () => {
     const setDeleteHandler = vi.fn();

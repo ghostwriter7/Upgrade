@@ -2,7 +2,6 @@ import { GenericRepository } from './generic.repository';
 import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Injectable } from '@angular/core';
 import { StoreName } from './store-name.enum';
-import { ExerciseSetMapper } from '../mapper/exercise-set/exercise-set.mapper';
 import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
 import { IndexName } from './index-name.enum';
 
@@ -23,7 +22,6 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     );
     return Iterator.from(sets)
       .map((set) => ExerciseSetSchema.parse(set))
-      .map(ExerciseSetMapper.INSTANCE.toDomain)
       .toArray()
       .sort((a, b) => a.index - b.index);
   }
@@ -34,7 +32,6 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     );
     return Iterator.from(sets)
       .map((set) => ExerciseSetSchema.parse(set))
-      .map(ExerciseSetMapper.INSTANCE.toDomain)
       .toArray();
   }
 
@@ -70,9 +67,8 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     return super.deleteAllByIndex(StoreName.SETS, IndexName.SetBySessionId, sessionId);
   }
 
-  public async getAllSets(): Promise<ExerciseSet[]> {
-    const sets = await super.findAll(StoreName.SETS);
-    return sets.map(ExerciseSetMapper.INSTANCE.toDomain);
+  public getAllSets(): Promise<ExerciseSet[]> {
+    return super.findAll(StoreName.SETS);
   }
 
   public deleteSet(setId: string): Promise<void> {
@@ -80,7 +76,6 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
   }
 
   public async upsertSet(set: ExerciseSet): Promise<IDBValidKey> {
-    const dto = ExerciseSetMapper.INSTANCE.toDto(set);
-    return await super.put(StoreName.SETS, dto);
+    return super.put(StoreName.SETS, set);
   }
 }

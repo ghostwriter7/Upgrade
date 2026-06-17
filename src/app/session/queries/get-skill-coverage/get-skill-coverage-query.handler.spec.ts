@@ -33,7 +33,7 @@ describe('GetSkillCoverageQueryHandler', () => {
   const now = DateHelper.now();
   const start30DaysAgo = DateHelper.toLocal(now).subtract({ days: 30 }).toInstant();
 
-  const assertRepositoryQuery = (startDate = start30DaysAgo) =>
+  const assertRepositoryQuery = () =>
     expect(sessionRepositoryMock.getSessionsForRange).toHaveBeenCalledExactlyOnceWith(
       start30DaysAgo,
       now,
@@ -91,6 +91,7 @@ describe('GetSkillCoverageQueryHandler', () => {
 
     expect(result).toEqual({
       [SkillTag.Bridge]: { count: 1, lastDate: yesterday },
+      [SkillTag.Dance]: { count: 0 },
       [SkillTag.Pancake]: { count: 2, lastDate: twoDaysAgo },
       [SkillTag.SideSplit]: { count: 2, lastDate: twoDaysAgo },
       [SkillTag.FrontSplit]: { count: 1, lastDate: weekAgo },

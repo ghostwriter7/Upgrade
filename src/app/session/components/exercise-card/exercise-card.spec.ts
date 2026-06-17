@@ -5,7 +5,7 @@ import { Component, input, Pipe } from '@angular/core';
 import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-actions';
 import { SetView } from '../set-view/set-view';
 import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
-import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
+import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { By } from '@angular/platform-browser';
 import { Mock } from 'vitest';
 import { EventService } from '@common/service/event/event.service';
@@ -14,6 +14,7 @@ import { ElementClickedEvent } from '@common/events/element-clicked.event';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
 import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
+import { bwSet } from '@test/fixtures/exercise-set.fixtures';
 
 @Component({
   selector: 'app-exercise-card-actions',
@@ -64,24 +65,32 @@ describe('ExerciseCard', () => {
   let eventServiceMock: { listen: Mock };
   let eventSubject = new Subject<ElementClickedEvent>();
 
-  const exerciseLog = new ExerciseLog('sessionId', 'exerciseId').withSet(
-    new BodyweightSet('sessionId', 'exerciseId', 0, 5),
-  );
+  const exerciseLog = new ExerciseLog('sessionId', 'exerciseId').withSet(bwSet(0, 5));
 
   beforeEach(async () => {
     eventServiceMock = { listen: vi.fn().mockReturnValue(eventSubject) };
     await TestBed.configureTestingModule({
-      providers: [
-        { provide: EventService, useValue: eventServiceMock },
-      ],
+      providers: [{ provide: EventService, useValue: eventServiceMock }],
       imports: [ExerciseCard],
     })
       .overrideComponent(ExerciseCard, {
         add: {
-          imports: [ExerciseCardActionsMock, SetViewMock, ExerciseNamePipeMock, ProgressGalleryMock, ExerciseLogSummaryMock],
+          imports: [
+            ExerciseCardActionsMock,
+            SetViewMock,
+            ExerciseNamePipeMock,
+            ProgressGalleryMock,
+            ExerciseLogSummaryMock,
+          ],
         },
         remove: {
-          imports: [ExerciseCardActions, SetView, ExerciseNamePipe, ProgressGallery, ExerciseLogSummary],
+          imports: [
+            ExerciseCardActions,
+            SetView,
+            ExerciseNamePipe,
+            ProgressGallery,
+            ExerciseLogSummary,
+          ],
         },
       })
       .compileComponents();
@@ -101,8 +110,9 @@ describe('ExerciseCard', () => {
 
   const getActions = () => fixture.debugElement.query(By.css('app-exercise-card-actions'));
   const getHeader = () =>
-    fixture.debugElement.query(By.css(`[data-testid=exercise-card-header-${exerciseLog.exerciseId}]`))
-      .nativeElement as HTMLDivElement;
+    fixture.debugElement.query(
+      By.css(`[data-testid=exercise-card-header-${exerciseLog.exerciseId}]`),
+    ).nativeElement as HTMLDivElement;
   const getShowMediaButton = () =>
     fixture.debugElement.query(
       By.css(`[data-testid=exercise-card-show-media-button-${exerciseLog.exerciseId}]`),

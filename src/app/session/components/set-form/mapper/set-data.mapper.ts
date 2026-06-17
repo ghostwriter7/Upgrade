@@ -40,9 +40,21 @@ export class SetDataMapper {
   }
 
   public static toDto(exerciseSet: ExerciseSet): SetData {
-    return {
-      ...emptySetData,
-      ...exerciseSet,
-    };
+    const { type } = exerciseSet;
+    switch (type) {
+      case 'bodyweight':
+        return { ...emptySetData, reps: exerciseSet.reps, type };
+      case 'weight':
+        return { ...emptySetData, reps: exerciseSet.reps, weight: exerciseSet.weight, type };
+      case 'iso':
+        return {
+          ...emptySetData,
+          duration: exerciseSet.duration,
+          weight: exerciseSet.weight ?? 0,
+          type,
+        };
+      case 'duration':
+        return { ...emptySetData, duration: exerciseSet.duration, type };
+    }
   }
 }

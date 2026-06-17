@@ -8,14 +8,7 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
 
 @Component({
   selector: 'app-backup-page',
-  imports: [
-    MatButton,
-    Loader,
-    MatCard,
-    MatCardTitle,
-    MatCardContent,
-    MatCardHeader,
-  ],
+  imports: [MatButton, Loader, MatCard, MatCardTitle, MatCardContent, MatCardHeader],
   templateUrl: './backup-page.html',
   styleUrl: './backup-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,11 +21,11 @@ export default class BackupPage {
   private readonly exportDataService = inject(ExportDataService);
   private readonly importDataService = inject(ImportDataService);
 
-  protected async exportData(): Promise<void> {
+  protected exportData(): void {
     this.performOperation(() => this.exportDataService.exportData());
   }
 
-  protected async importData(): Promise<void> {
+  protected importData(): void {
     this.performOperation(() => this.importDataService.importData());
   }
 

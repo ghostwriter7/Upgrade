@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { SessionRepository } from '@persistence/repository/session.repository';
 import { SetRepository } from '@persistence/repository/set.repository';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
-import { ExerciseSetMapper } from '@persistence/mapper/exercise-set/exercise-set.mapper';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
@@ -43,7 +42,7 @@ export class ExportDataService {
 
     const data: ExportData = {
       sessions: sessions.map(SessionMapper.INSTANCE.toDto),
-      sets: sets.map(ExerciseSetMapper.INSTANCE.toDto),
+      sets,
       exerciseLogs: exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDto),
       angleMeasurements: angleMeasurements.map(AngleMeasurementMapper.INSTANCE.toDto),
     };
