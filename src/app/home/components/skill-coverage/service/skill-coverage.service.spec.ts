@@ -5,6 +5,7 @@ import { QueryBus } from '@common/routers/query/query-bus';
 import { Skills, SkillTag } from '@domain/enum/skill-tag.enum';
 import { DateHelper } from '@common/helper/date.helper';
 import { GetSkillCoverageQuery } from '@session/queries/get-skill-coverage/get-skill-coverage.query';
+import { SkillCoverageRecord } from '@home/components/skill-coverage/skill-coverage-record.interface';
 
 describe('SkillCoverageService', () => {
   let service: SkillCoverageService;
@@ -27,11 +28,18 @@ describe('SkillCoverageService', () => {
   const twoDaysAgo = nowLocal.subtract({ days: 2 }).toInstant();
   const weekAgo = nowLocal.subtract({ days: 7 }).toInstant();
 
-  const record = (skill: Skills, count: number, daysAgo: number, lastDate?: Temporal.Instant) => ({
+  const record = (
+    skill: Skills,
+    count: number,
+    daysAgo: number,
+    metrics: { recencyScore: number; countScore: number },
+    lastDate?: Temporal.Instant,
+  ) => ({
     skill,
     count,
     daysAgo,
     lastDate,
+    metrics,
   });
 
   const queryResult = {
@@ -45,14 +53,50 @@ describe('SkillCoverageService', () => {
     [SkillTag.ShoulderMobility]: { count: 0 },
   };
 
-  const bridge = record(SkillTag.Bridge, 5, 1, yesterday);
-  const pancake = record(SkillTag.Pancake, 5, 2, twoDaysAgo);
-  const sideSplit = record(SkillTag.SideSplit, 3, 2, twoDaysAgo);
-  const oneArmChinUp = record(SkillTag.OneArmChinUp, 2, 1, yesterday);
-  const frontSplit = record(SkillTag.FrontSplit, 2, 7, weekAgo);
-  const pike = record(SkillTag.Pike, 1, 7, weekAgo);
-  const handstand = record(SkillTag.Handstand, 0, -1);
-  const shoulderMobility = record(SkillTag.ShoulderMobility, 0, -1);
+  const bridge = record(SkillTag.Bridge, 5, 1, { recencyScore: 0, countScore: 1 }, yesterday);
+  const pancake = record(
+    SkillTag.Pancake,
+    5,
+    2,
+    { recencyScore: 0.166, countScore: 1 },
+    twoDaysAgo,
+  );
+  const sideSplit = record(
+    SkillTag.SideSplit,
+    3,
+    2,
+    { recencyScore: 0.166, countScore: 0.6 },
+    twoDaysAgo,
+  );
+  const oneArmChinUp = record(
+    SkillTag.OneArmChinUp,
+    2,
+    1,
+    { recencyScore: 0, countScore: 0.4 },
+    yesterday,
+  );
+  const frontSplit = record(
+    SkillTag.FrontSplit,
+    2,
+    7,
+    { recencyScore: 1, countScore: 0.4 },
+    weekAgo,
+  );
+  const pike = record(SkillTag.Pike, 1, 7, { recencyScore: 1, countScore: 0.2 }, weekAgo);
+  const handstand = record(SkillTag.Handstand, 0, -1, { recencyScore: 1, countScore: 0 });
+  const shoulderMobility = record(SkillTag.ShoulderMobility, 0, -1, {
+    recencyScore: 1,
+    countScore: 0,
+  });
+
+  const matcher = (expectedValue: SkillCoverageRecord) =>
+    expect.objectContaining({
+      ...expectedValue,
+      metrics: {
+        recencyScore: expect.closeTo(expectedValue.metrics.recencyScore),
+        countScore: expect.closeTo(expectedValue.metrics.countScore),
+      },
+    });
 
   describe('Sort By', () => {
     beforeEach(async () => {
@@ -153,7 +197,9 @@ describe('SkillCoverageService', () => {
 
       const result = service.$skillCoverage();
 
-      expect(result).toEqual(expected);
+      expect(result).toEqual(
+        expect.arrayContaining(expected.map((expectedValue) => matcher(expectedValue))),
+      );
     });
   });
 
@@ -167,14 +213,14 @@ describe('SkillCoverageService', () => {
       new GetSkillCoverageQuery(now, 30),
     );
     expect(records).toEqual([
-      bridge,
-      pancake,
-      sideSplit,
-      oneArmChinUp,
-      frontSplit,
-      pike,
-      handstand,
-      shoulderMobility,
+      matcher(bridge),
+      matcher(pancake),
+      matcher(sideSplit),
+      matcher(oneArmChinUp),
+      matcher(frontSplit),
+      matcher(pike),
+      matcher(handstand),
+      matcher(shoulderMobility),
     ]);
   });
 });

@@ -6,7 +6,7 @@
     <mat-card-title>{{ exerciseLog().exerciseId | exerciseName }}</mat-card-title>
 
     @if (displayActions()) {
-      <app-exercise-card-actions [entry]="exerciseLog()" [isNonDeletable]="isNonDeletable()" />
+      <app-exercise-card-actions [exerciseLog]="exerciseLog()" [isNonDeletable]="isNonDeletable()" />
     }
   </mat-card-header>
   <mat-card-content>

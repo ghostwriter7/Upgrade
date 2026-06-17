@@ -1,16 +1,16 @@
 <div class="actions">
   @let ids = testIds();
-  <button [attr.data-testid]="ids.videoCaptureButton" matMiniFab (click)="activateVideoCapture($event, entry().exerciseId)">
+  <button [attr.data-testid]="ids.videoCaptureButton" matMiniFab (click)="activateVideoCapture($event, exerciseLog().exerciseId)">
     <mat-icon>video_camera_front</mat-icon>
   </button>
-  <button [attr.data-testid]="ids.showSetFormButton" matMiniFab (click)="showSetForm($event, entry().exerciseId)">
+  <button [attr.data-testid]="ids.showSetFormButton" matMiniFab (click)="showSetForm($event, exerciseLog().exerciseId)">
     <mat-icon>add</mat-icon>
   </button>
-  <button [attr.data-testid]="ids.editNoteButton" matMiniFab (click)="editNote($event, entry())">
+  <button [attr.data-testid]="ids.editNoteButton" matMiniFab (click)="editNote($event, exerciseLog())">
     <mat-icon>note_add</mat-icon>
   </button>
   <button [attr.data-testid]="ids.deleteButton" matMiniFab class="danger" [disabled]="isNonDeletable()"
-          (click)="deleteExercise($event, entry())">
+          (click)="deleteExercise($event, exerciseLog())">
     <mat-icon>delete</mat-icon>
   </button>
 </div>

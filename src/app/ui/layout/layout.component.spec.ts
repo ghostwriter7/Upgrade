@@ -1,4 +1,4 @@
-import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LayoutComponent } from './layout.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -7,6 +7,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { provideRouter } from '@angular/router';
+import { Component } from '@angular/core';
+import { InstallUpdate } from '@ui/install-update/install-update';
+
+@Component({
+  selector: 'app-install-update',
+  template: '',
+})
+export class InstallUpdateMock {}
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -23,7 +31,16 @@ describe('LayoutComponent', () => {
         MatSidenavModule,
         MatToolbarModule,
       ],
-    }).compileComponents();
+    })
+      .overrideComponent(LayoutComponent, {
+        remove: {
+          imports: [InstallUpdate],
+        },
+        add: {
+          imports: [InstallUpdateMock],
+        },
+      })
+      .compileComponents();
   });
 
   beforeEach(() => {

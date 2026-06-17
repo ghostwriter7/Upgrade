@@ -2,15 +2,15 @@ import { signalStore, withComputed, withMethods, withState } from '@ngrx/signals
 import { Exercise } from '@domain/model/exercise.model';
 import { exercises } from './exercises.const';
 import { computed } from '@angular/core';
-import { SkillTag, Skills } from '@domain/enum/skill-tag.enum';
+import { Skills } from '@domain/enum/skill-tag.enum';
 
 interface State {
   exercises: Exercise[];
 }
 
 const initialState: State = {
-  exercises: exercises.map(({ id, name, description, measurementDefinition, skillTags }) => {
-    const exercise = new Exercise(id, name, description);
+  exercises: exercises.map(({ id, name, description, measurementDefinition, skillTags, supportedSetTypes }) => {
+    const exercise = new Exercise(id, name, supportedSetTypes, description);
     exercise.measurementDefinition = measurementDefinition;
     exercise.skillTags = skillTags;
     return exercise;

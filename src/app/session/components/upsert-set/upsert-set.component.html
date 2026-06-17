@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>{{ label }}</h2>
 <mat-dialog-content>
-  <app-set-form [value]="setData" #form />
+  <app-set-form [value]="setData" [exerciseId]="data.exerciseId" #form />
 </mat-dialog-content>
 <mat-dialog-actions>
   <button

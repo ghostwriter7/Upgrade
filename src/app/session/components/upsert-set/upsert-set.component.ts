@@ -17,7 +17,7 @@ import { UpsertSetDialogData } from './upsert-set-dialog-data.interface';
   styleUrl: './upsert-set.component.css',
 })
 export class UpsertSet {
-  private readonly data: UpsertSetDialogData = inject(MAT_DIALOG_DATA);
+  protected readonly data: UpsertSetDialogData = inject(MAT_DIALOG_DATA);
   protected readonly setData = this.data.set;
 
   protected readonly label = this.data.label ?? 'Edit Set';

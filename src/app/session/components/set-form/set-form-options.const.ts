@@ -1,25 +1,10 @@
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 
-export const setTypeOptions: {
-  label: string;
-  value: ExerciseSetType;
-  testId: `set-form-type-${string}`;
-}[] = (
-  [
-    {
-      label: 'Bodyweight',
-      value: 'bodyweight',
-    },
-    {
-      label: 'Weighted',
-      value: 'weight',
-    },
-    {
-      label: 'Isometric',
-      value: 'iso',
-    },
-  ] as const
-).map((option) => ({ ...option, testId: `set-form-type-${option.value}` }));
+export const setTypeToLabel: Record<ExerciseSetType, string> = {
+  bodyweight: 'Bodyweight',
+  weight: 'Weighted',
+  iso: 'Isometric'
+};
 
 export const durationOptions = [-5, -2.5, 5, 10, 15, 20, 25, 30].map((value) => ({
   value,

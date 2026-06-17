@@ -30,7 +30,7 @@ describe('ExerciseCardActions', () => {
   let dialogServiceMock: { open: Mock };
   let queryBus: { execute: Mock };
 
-  const exercise = new ExerciseLog('sessionId', 'any-id');
+  const exerciseLog = new ExerciseLog('sessionId', 'any-id');
 
   beforeEach(async () => {
     commandBusMock = { dispatch: vi.fn() };
@@ -49,7 +49,7 @@ describe('ExerciseCardActions', () => {
     fixture = TestBed.createComponent(ExerciseCardActions);
     loader = TestbedHarnessEnvironment.loader(fixture);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('entry', exercise);
+    fixture.componentRef.setInput('exerciseLog', exerciseLog);
     fixture.componentRef.setInput('isNonDeletable', false);
     await fixture.whenStable();
   });
@@ -61,7 +61,7 @@ describe('ExerciseCardActions', () => {
   const callCallback = (data: unknown = undefined) => dialogServiceMock.open.mock.calls[0][1](data);
 
   const getDeleteButton = () =>
-    getButtonByTestId(loader, `exercise-card-actions-delete-btn-${exercise.exerciseId}`);
+    getButtonByTestId(loader, `exercise-card-actions-delete-btn-${exerciseLog.exerciseId}`);
 
   it('should delete an exercise', async () => {
     const button = await getDeleteButton();
@@ -74,7 +74,7 @@ describe('ExerciseCardActions', () => {
       expect.any(Function),
     );
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
-      new DeleteExerciseCommand(exercise.exerciseId),
+      new DeleteExerciseCommand(exerciseLog.exerciseId),
     );
   });
 
@@ -93,20 +93,20 @@ describe('ExerciseCardActions', () => {
   it('should edit note', async () => {
     const button = await getButtonByTestId(
       loader,
-      `exercise-card-actions-edit-note-btn-${exercise.exerciseId}`,
+      `exercise-card-actions-edit-note-btn-${exerciseLog.exerciseId}`,
     );
 
     await button.click();
 
     callCallback('Updated Note');
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
-      new EditExerciseNoteCommand('Updated Note', exercise.exerciseId),
+      new EditExerciseNoteCommand('Updated Note', exerciseLog.exerciseId),
     );
     expect(dialogServiceMock.open).toHaveBeenCalledExactlyOnceWith(
       EditNote,
       expect.any(Function),
       {
-        data: { note: exercise.notes },
+        data: { note: exerciseLog.notes },
         width: '90svw',
         height: '90svh',
       },
@@ -117,7 +117,7 @@ describe('ExerciseCardActions', () => {
   it('should show set form and handle its response', async () => {
     const button = await getButtonByTestId(
       loader,
-      `exercise-card-actions-show-set-form-btn-${exercise.exerciseId}`,
+      `exercise-card-actions-show-set-form-btn-${exerciseLog.exerciseId}`,
     );
     const setData: SetData = {
       reps: 1,
@@ -131,10 +131,10 @@ describe('ExerciseCardActions', () => {
 
     callCallback(setData);
     expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(
-      new GetInitialSetForExerciseIdQuery(exercise.exerciseId),
+      new GetInitialSetForExerciseIdQuery(exerciseLog.exerciseId),
     );
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
-      new CreateSetCommand(setData, exercise.exerciseId),
+      new CreateSetCommand(setData, exerciseLog.exerciseId),
     );
     expect(dialogServiceMock.open).toHaveBeenCalledExactlyOnceWith(
       UpsertSet,
@@ -144,6 +144,7 @@ describe('ExerciseCardActions', () => {
           set: { type: 'bodyweight', reps: 1, weight: 0, duration: 0 },
           label: 'Add Set',
           button: 'Save',
+          exerciseId: exerciseLog.exerciseId
         },
       },
     );
@@ -152,7 +153,7 @@ describe('ExerciseCardActions', () => {
   it('should trigger video capturing', async () => {
     const button = await getButtonByTestId(
       loader,
-      `exercise-card-actions-video-capture-btn-${exercise.exerciseId}`,
+      `exercise-card-actions-video-capture-btn-${exerciseLog.exerciseId}`,
     );
     const result: MeasureProgressOutput = {
       image: new Blob(),
@@ -167,7 +168,7 @@ describe('ExerciseCardActions', () => {
     callCallback(result);
     expect(commandBusMock.dispatch).toHaveBeenCalledExactlyOnceWith(
       new CaptureProgressCommand(
-        exercise.exerciseId,
+        exerciseLog.exerciseId,
         result.image,
         result.width,
         result.height,

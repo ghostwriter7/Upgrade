@@ -74,6 +74,7 @@ describe('SetActions', () => {
             weight: 0,
             type: 'bodyweight',
           },
+          exerciseId: set.exerciseId
         },
       }),
     );

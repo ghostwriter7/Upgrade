@@ -49,7 +49,7 @@ describe('CaptureProgressCommandHandler', () => {
     sessionStateHolder.session.mockReturnValueOnce(session);
     const exerciseLogId = session.getExerciseById(exerciseId).id;
 
-    const exercise = new Exercise(exerciseId, 'Any Exercise', 'Any Description');
+    const exercise = new Exercise(exerciseId, 'Any Exercise', [],'Any Description');
     exercise.measurementDefinition = {
       landmarks: [BodyPart.RightAnkle, BodyPart.PelvisCenter, BodyPart.LeftAnkle],
     };

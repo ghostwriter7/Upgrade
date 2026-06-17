@@ -20,7 +20,7 @@ import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exe
   template: '<div>Actions</div>',
 })
 export class ExerciseCardActionsMock {
-  public entry = input<ExerciseLog | null>(null);
+  public exerciseLog = input<ExerciseLog | null>(null);
   public isNonDeletable = input<boolean>(false);
 }
 

@@ -1,4 +1,4 @@
-import { Component, computed, model } from '@angular/core';
+import { Component, computed, inject, input, model } from '@angular/core';
 import { MatButton, MatMiniFabButton } from '@angular/material/button';
 import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 import { MatIcon } from '@angular/material/icon';
@@ -14,10 +14,11 @@ import {
 import {
   durationOptions,
   repOptions,
-  setTypeOptions,
+  setTypeToLabel,
   weightOptions,
 } from './set-form-options.const';
 import { SetData } from './set-data.interface';
+import { ExerciseStore } from '@store/exercises.store';
 
 @Component({
   selector: 'app-set-form',
@@ -27,8 +28,11 @@ import { SetData } from './set-data.interface';
 })
 export class SetForm implements FormValueControl<SetData> {
   public value = model.required<SetData>();
+  public exerciseId = input.required<string>();
 
   public readonly isInvalid = computed(() => this.setForm().invalid());
+
+  private readonly exerciseStore = inject(ExerciseStore);
 
   protected readonly setForm = form<SetData>(this.value, (schemaPath) => {
     required(schemaPath.reps);
@@ -42,11 +46,19 @@ export class SetForm implements FormValueControl<SetData> {
       }
       return null;
     });
-    hidden(schemaPath.weight, ({ valueOf }) => valueOf(schemaPath.type) === 'bodyweight');
-    hidden(schemaPath.reps, ({ valueOf }) => valueOf(schemaPath.type) === 'iso');
-    hidden(schemaPath.duration, ({ valueOf }) => valueOf(schemaPath.type) !== 'iso');
+    hidden(schemaPath.weight, { when: ({ valueOf }) => valueOf(schemaPath.type) === 'bodyweight' });
+    hidden(schemaPath.reps, { when: ({ valueOf }) => valueOf(schemaPath.type) === 'iso' });
+    hidden(schemaPath.duration, { when: ({ valueOf }) => valueOf(schemaPath.type) !== 'iso' });
   });
-  protected readonly setTypeOptions = setTypeOptions;
+  protected readonly setTypeOptions = computed(() => {
+    const { supportedSetTypes } = this.exerciseStore.getExerciseById(this.exerciseId())!;
+
+    return supportedSetTypes.map((value) => ({
+      value,
+      label: setTypeToLabel[value],
+      testId: `set-form-type-${value}`,
+    }));
+  });
   protected readonly durations = computed(() => {
     const { duration } = this.value();
     return durationOptions.map((option) => ({

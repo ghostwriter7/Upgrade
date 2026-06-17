@@ -6,6 +6,8 @@ import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
+import { Mock } from 'vitest';
+import { ExerciseStore } from '@store/exercises.store';
 
 describe('SetForm', () => {
   let component: SetForm;
@@ -19,21 +21,36 @@ describe('SetForm', () => {
     duration: 0,
   };
 
-  const setValue = (value: SetData = initialValue): void => {
+  const setInputs = (value: SetData = initialValue, exerciseId = frontSplitId): void => {
     fixture.componentRef.setInput('value', value);
+    fixture.componentRef.setInput('exerciseId', exerciseId);
     fixture.detectChanges();
   };
 
+  let exerciseStoreMock: { getExerciseById: Mock };
+
+  const deadliftsId = 'deadlifts';
+  const frontSplitId = 'front-splits';
+  const exercises: Record<string, { supportedSetTypes: ExerciseSetType[] }> = {
+    [frontSplitId]: { supportedSetTypes: ['iso', 'bodyweight', 'weight'] },
+    [deadliftsId]: { supportedSetTypes: ['weight'] },
+  };
+
   beforeEach(async () => {
+    exerciseStoreMock = {
+      getExerciseById: vi.fn().mockImplementation((exerciseId: string) => exercises[exerciseId]),
+    };
+
     await TestBed.configureTestingModule({
       imports: [SetForm],
+      providers: [{ provide: ExerciseStore, useValue: exerciseStoreMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SetForm);
     component = fixture.componentInstance;
     loader = TestbedHarnessEnvironment.loader(fixture);
 
-    setValue();
+    setInputs();
 
     await fixture.whenStable();
   });
@@ -132,7 +149,7 @@ describe('SetForm', () => {
   });
 
   it('should decrement reps', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       reps: 3,
     });
@@ -144,7 +161,7 @@ describe('SetForm', () => {
   });
 
   it('should decrement reps but not below 1', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       reps: 1,
     });
@@ -163,7 +180,7 @@ describe('SetForm', () => {
   });
 
   it('should increment weight when weighted controls are visible', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       type: 'weight',
       weight: 5,
@@ -178,7 +195,7 @@ describe('SetForm', () => {
   });
 
   it('should increment weight using a quick option', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       type: 'weight',
       weight: 1,
@@ -191,7 +208,7 @@ describe('SetForm', () => {
   });
 
   it('should increment duration when isometric controls are visible', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       type: 'iso',
       duration: 10,
@@ -204,7 +221,7 @@ describe('SetForm', () => {
   });
 
   it('should decrement duration', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       type: 'iso',
       duration: 10,
@@ -217,7 +234,7 @@ describe('SetForm', () => {
   });
 
   it('should decrement duration but not below 1', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       type: 'iso',
       duration: 1,
@@ -230,7 +247,7 @@ describe('SetForm', () => {
   });
 
   it('should increment duration using a quick option', () => {
-    setValue({
+    setInputs({
       ...initialValue,
       type: 'iso',
       duration: 5,
@@ -271,7 +288,7 @@ describe('SetForm', () => {
       message: 'duration is below minimum for isometric set',
     },
   ])('should be invalid when $message', ({ value }) => {
-    setValue(value as SetData);
+    setInputs(value as SetData);
     expect(component.isInvalid()).toBe(true);
   });
 
@@ -304,7 +321,7 @@ describe('SetForm', () => {
       message: 'duration is above minimum for isometric set',
     },
   ])('should be valid when $message', ({ value }) => {
-    setValue(value as SetData);
+    setInputs(value as SetData);
     expect(component.isInvalid()).toBe(false);
   });
 });

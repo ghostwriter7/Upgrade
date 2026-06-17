@@ -79,9 +79,24 @@ describe('SkillCoverage', () => {
 
   it('should render table rows', async () => {
     skillCoverageServiceMock.$skillCoverage.set([
-      { skill: SkillTag.SideSplit, count: 5, daysAgo: 1 },
-      { skill: SkillTag.FrontSplit, count: 3, daysAgo: 3 },
-      { skill: SkillTag.ShoulderMobility, count: 0, daysAgo: -1 },
+      {
+        skill: SkillTag.SideSplit,
+        count: 5,
+        daysAgo: 1,
+        metrics: { recencyScore: 0, countScore: 0 },
+      },
+      {
+        skill: SkillTag.FrontSplit,
+        count: 3,
+        daysAgo: 3,
+        metrics: { recencyScore: 0.5, countScore: 0.5 },
+      },
+      {
+        skill: SkillTag.ShoulderMobility,
+        count: 0,
+        daysAgo: -1,
+        metrics: { recencyScore: 1, countScore: 1 },
+      },
     ]);
     const table = await loader.getHarness(MatTableHarness);
 

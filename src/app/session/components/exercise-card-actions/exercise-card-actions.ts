@@ -25,7 +25,7 @@ import { GetInitialSetForExerciseIdQuery } from '@session/queries/get-initial-se
   styleUrl: './exercise-card-actions.css',
 })
 export class ExerciseCardActions {
-  public entry = input.required<ExerciseLog>();
+  public exerciseLog = input.required<ExerciseLog>();
   public isNonDeletable = input.required<boolean>();
 
   private readonly commandBus = inject(CommandBus);
@@ -33,7 +33,7 @@ export class ExerciseCardActions {
   private readonly queryBus = inject(QueryBus);
 
   protected readonly testIds = computed(() => {
-    const uuid = this.entry().exerciseId;
+    const uuid = this.exerciseLog().exerciseId;
     return {
       showSetFormButton: `exercise-card-actions-show-set-form-btn-${uuid}`,
       editNoteButton: `exercise-card-actions-edit-note-btn-${uuid}`,
@@ -53,6 +53,7 @@ export class ExerciseCardActions {
           set,
           label: 'Add Set',
           button: 'Save',
+          exerciseId
         } as UpsertSetDialogData,
       },
     );

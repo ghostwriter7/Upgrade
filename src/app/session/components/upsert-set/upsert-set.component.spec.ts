@@ -1,11 +1,11 @@
 import { UpsertSet } from './upsert-set.component';
-import { OpenDialogFnResult, TestBedUtils } from '../../../../test/test-bed.utils';
+import { OpenDialogFnResult, TestBedUtils } from '@test/test-bed.utils';
 import { UpsertSetDialogData } from './upsert-set-dialog-data.interface';
 import { Component, input, signal } from '@angular/core';
 import { SetForm } from '../set-form/set-form';
 import { SetData } from '../set-form/set-data.interface';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
-import { getButton } from '../../../../test/harness.utils';
+import { getButton } from '@test/harness.utils';
 
 const mockSetFormInvalid = signal(false);
 
@@ -16,11 +16,14 @@ const mockSetFormInvalid = signal(false);
 })
 class MockSetForm {
   public readonly value = input<unknown>();
+  public readonly exerciseId = input<string>();
   public readonly isInvalid = mockSetFormInvalid;
 }
 
 describe('UpsertSet', () => {
   let openDialog: (data: UpsertSetDialogData) => OpenDialogFnResult;
+
+  const exerciseId = 'front-splits';
 
   beforeEach(async () => {
     const result = await TestBedUtils.configureForDialog({
@@ -47,7 +50,7 @@ describe('UpsertSet', () => {
   };
 
   it('should show default title and button text', async () => {
-    const { dialog } = await openDialog({ set });
+    const { dialog } = await openDialog({ set, exerciseId });
 
     await expect(dialog.getTitleText()).resolves.toBe('Edit Set');
 
@@ -61,6 +64,7 @@ describe('UpsertSet', () => {
       set,
       label: 'Add Set',
       button: 'Save',
+      exerciseId
     });
 
     await expect(dialog.getTitleText()).resolves.toBe('Add Set');
@@ -73,7 +77,7 @@ describe('UpsertSet', () => {
   it('should disable save button when form is invalid', async () => {
     mockSetFormInvalid.set(true);
 
-    const { dialog } = await openDialog({ set });
+    const { dialog } = await openDialog({ set, exerciseId });
 
     const saveButton = await getButton(dialog, 'Update');
 
@@ -81,7 +85,7 @@ describe('UpsertSet', () => {
   });
 
   it('should close with form value when save is clicked', async () => {
-    const { dialog, result } = await openDialog({ set });
+    const { dialog, result } = await openDialog({ set, exerciseId });
 
     await click(dialog, 'Update');
 
@@ -89,7 +93,7 @@ describe('UpsertSet', () => {
   });
 
   it('should close without result when cancel is clicked', async () => {
-    const { dialog, result } = await openDialog({ set });
+    const { dialog, result } = await openDialog({ set, exerciseId });
 
     await click(dialog, 'Cancel');
 

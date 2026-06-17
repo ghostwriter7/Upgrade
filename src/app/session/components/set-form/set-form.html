@@ -4,7 +4,7 @@
   [formField]="setForm.type"
   [hideSingleSelectionIndicator]="true"
 >
-  @for (option of setTypeOptions; track option.value) {
+  @for (option of setTypeOptions(); track option.value) {
     <mat-button-toggle
       [attr.data-testid]="option.testId"
       class="set-type-value"

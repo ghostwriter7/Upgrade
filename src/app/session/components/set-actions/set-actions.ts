@@ -41,7 +41,12 @@ export class SetActions {
         updatedSet.id = this.set().id;
         this.commandBus.dispatch(new UpdateSetCommand(updatedSet));
       },
-      { data: { set: SetDataMapper.toDto(set) } as UpsertSetDialogData },
+      {
+        data: {
+          set: SetDataMapper.toDto(set),
+          exerciseId: this.set().exerciseId,
+        } as UpsertSetDialogData,
+      },
     );
   }
 
