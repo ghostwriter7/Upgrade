@@ -11,10 +11,10 @@ import { Recorder } from '../recorder/recorder';
 import { FramePicker } from '../frame-picker/frame-picker';
 import { PoseMeasureEditor } from '../pose-measure-editor/pose-measure-editor';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
+import { MeasureProgressOutput } from '@session/components/media/measure-progress/measure-progress-output.interface';
 import { Point } from '@domain/model/measurement.model';
 import { MatFabButton } from '@angular/material/button';
-import { FrameData } from '@session/components/frame-picker/video-frame-capturer';
+import { FrameData } from '@session/components/media/frame-picker/video-frame-capturer';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({

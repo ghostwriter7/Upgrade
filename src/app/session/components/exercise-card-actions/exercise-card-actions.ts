@@ -12,9 +12,9 @@ import { EditExerciseNoteCommand } from '../../commands/edit-exercise-note/edit-
 import { EditNote } from '../edit-note/edit-note';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { DeleteExerciseCommand } from '../../commands/delete-exercise/delete-exercise.command';
-import { MeasureProgress } from '../measure-progress/measure-progress';
+import { MeasureProgress } from '@session/components/media/measure-progress/measure-progress';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
-import { MeasureProgressOutput } from '@session/components/measure-progress/measure-progress-output.interface';
+import { MeasureProgressOutput } from '@session/components/media/measure-progress/measure-progress-output.interface';
 import { QueryBus } from '@common/routers/query/query-bus';
 import { GetInitialSetForExerciseIdQuery } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id.query';
 
