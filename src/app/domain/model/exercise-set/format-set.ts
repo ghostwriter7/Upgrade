@@ -3,14 +3,14 @@ import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 export function formatSet(set: ExerciseSet): string {
   switch (set.type) {
     case 'bodyweight':
-      return `${set.reps} reps`;
+      return `${set.reps}`;
     case 'weight':
-      return `${set.reps} reps + ${set.weight} kg`;
+      return `${set.reps} + ${set.weight} kg`;
     case 'iso': {
       if (set.weight) {
-        return `${set.duration} seconds + ${set.weight} kg`;
+        return `${set.duration}s + ${set.weight} kg`;
       }
-      return `${set.duration} seconds`;
+      return `${set.duration}s`;
     }
     case 'duration': {
       const { hours, minutes } = Temporal.Duration.from({ seconds: set.duration });
