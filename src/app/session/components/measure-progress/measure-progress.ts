@@ -25,7 +25,7 @@ import { MatIcon } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasureProgress implements OnInit {
-  protected readonly activeStep = signal<'record' | 'pick-frame' | 'measure'>('record');
+  protected readonly activeStep = signal<'record' | 'crop-video' | 'pick-frame' | 'measure'>('record');
 
   protected videoData: { video: Blob; width: number; height: number } | null = null;
   protected frameData: FrameData | null = null;
@@ -42,7 +42,6 @@ export class MeasureProgress implements OnInit {
 
   protected onVideoCapture($event: { video: Blob; width: number; height: number }): void {
     this.videoData = $event;
-    this.activeStep.set('pick-frame');
   }
 
   protected onFramePick($event: { image: Blob; width: number; height: number }): void {
@@ -73,5 +72,9 @@ export class MeasureProgress implements OnInit {
       return framePicker.captureFrame();
     }
     throw new Error('FramePicker cannot be found');
+  }
+
+  protected goTo(step: 'crop-video' | 'pick-frame'): void {
+    this.activeStep.set(step);
   }
 }

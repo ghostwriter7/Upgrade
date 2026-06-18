@@ -1,0 +1,12 @@
+:host {
+  position: relative;
+}
+
+.actions {
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  inset: 0;
+  gap: var(--space-6);
+}

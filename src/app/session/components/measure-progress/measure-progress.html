@@ -1,6 +1,18 @@
 @switch (this.activeStep()) {
   @case ('record') {
     <app-recorder (videoCapture)="onVideoCapture($event)" />
+    @if (videoData) {
+      <div class="actions">
+        <button matFab extended (click)="goTo('crop-video')">
+          <mat-icon>movie_edit</mat-icon>
+          Video
+        </button>
+        <button matFab extended (click)="goTo('pick-frame')">
+          <mat-icon>add_a_photo</mat-icon>
+          Image
+        </button>
+      </div>
+    }
   }
   @case ('pick-frame') {
     <app-frame-picker [data]="videoData!" (framePick)="onFramePick($event)" #framePicker>
