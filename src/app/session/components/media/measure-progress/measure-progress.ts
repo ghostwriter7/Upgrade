@@ -16,16 +16,28 @@ import { Point } from '@domain/model/measurement.model';
 import { MatFabButton } from '@angular/material/button';
 import { FrameData } from '@session/components/media/frame-picker/video-frame-capturer';
 import { MatIcon } from '@angular/material/icon';
+import { VideoEditor } from '@session/components/media/video-editor/video-editor';
+import { IconButton } from '@ui/icon-button/icon-button';
 
 @Component({
   selector: 'app-measure-progress',
-  imports: [Recorder, FramePicker, PoseMeasureEditor, MatFabButton, MatIcon],
+  imports: [
+    Recorder,
+    FramePicker,
+    PoseMeasureEditor,
+    MatFabButton,
+    MatIcon,
+    VideoEditor,
+    IconButton,
+  ],
   templateUrl: './measure-progress.html',
   styleUrl: './measure-progress.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasureProgress implements OnInit {
-  protected readonly activeStep = signal<'record' | 'crop-video' | 'pick-frame' | 'measure'>('record');
+  protected readonly activeStep = signal<'record' | 'crop-video' | 'pick-frame' | 'measure'>(
+    'record',
+  );
 
   protected videoData: { video: Blob; width: number; height: number } | null = null;
   protected frameData: FrameData | null = null;
@@ -40,12 +52,12 @@ export class MeasureProgress implements OnInit {
     }
   }
 
-  protected onVideoCapture($event: { video: Blob; width: number; height: number }): void {
-    this.videoData = $event;
+  protected onVideoCapture(event: { video: Blob; width: number; height: number }): void {
+    this.videoData = event;
   }
 
-  protected onFramePick($event: { image: Blob; width: number; height: number }): void {
-    this.frameData = $event;
+  protected onFramePick(event: { image: Blob; width: number; height: number }): void {
+    this.frameData = event;
   }
 
   protected onAngleConfirm({ points, angle }: { points: Point[]; angle: number }) {

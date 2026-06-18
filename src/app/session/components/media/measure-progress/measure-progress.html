@@ -3,12 +3,10 @@
     <app-recorder (videoCapture)="onVideoCapture($event)" />
     @if (videoData) {
       <div class="actions">
-        <button matFab extended (click)="goTo('crop-video')">
-          <mat-icon>movie_edit</mat-icon>
+        <button icon-button icon="movie_edit" (click)="goTo('crop-video')">
           Video
         </button>
-        <button matFab extended (click)="goTo('pick-frame')">
-          <mat-icon>add_a_photo</mat-icon>
+        <button icon-button icon="add_a_photo" (click)="goTo('pick-frame')">
           Image
         </button>
       </div>
@@ -16,18 +14,19 @@
   }
   @case ('pick-frame') {
     <app-frame-picker [data]="videoData!" (framePick)="onFramePick($event)" #framePicker>
-      <button matFab extended (click)="saveImage()">
-        <mat-icon>save</mat-icon>
+      <button icon-button icon="save" (click)="saveImage()">
         Save
       </button>
 
-      <button matFab extended (click)="measureAngles()">
-        <mat-icon>arrow_range</mat-icon>
+      <button icon-button icon="arrow_range" (click)="measureAngles()">
         Measure
       </button>
     </app-frame-picker>
   }
   @case ('measure') {
     <app-pose-measure-editor [data]="frameData!" (angleConfirm)="onAngleConfirm($event)" />
+  }
+  @case ('crop-video') {
+    <app-video-editor />
   }
 }
