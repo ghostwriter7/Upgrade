@@ -15,6 +15,6 @@
 
 <mat-action-list>
   @for (exercise of exercises(); track exercise.id) {
-    <button mat-list-item (click)="select(exercise)">{{ exercise.name }}</button>
+    <button mat-list-item [routerLink]="[exercise.id]">{{ exercise.name }}</button>
   }
 </mat-action-list>

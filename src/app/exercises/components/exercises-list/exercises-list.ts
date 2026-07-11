@@ -8,7 +8,7 @@ import {
   MatActionList,
   MatListItem,
 } from '@angular/material/list';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-exercises-list',
@@ -24,6 +24,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatOption,
     MatActionList,
     MatListItem,
+    RouterLink,
   ],
 })
 export class ExercisesList {

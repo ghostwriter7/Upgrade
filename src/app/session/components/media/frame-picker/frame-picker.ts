@@ -13,13 +13,12 @@ import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { form, FormField } from '@angular/forms/signals';
 import { FrameData, VideoFrameCapturer } from './video-frame-capturer';
 import { VideoData } from '@session/components/media/video-data.interface';
-import { IconButton } from '@ui/icon-button/icon-button';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-frame-picker',
-  imports: [MatSlider, FormField, MatSliderThumb, IconButton, MatIcon, MatMiniFabButton],
+  imports: [MatSlider, FormField, MatSliderThumb, MatIcon, MatMiniFabButton],
   templateUrl: './frame-picker.html',
   styleUrl: './frame-picker.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

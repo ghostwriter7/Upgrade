@@ -48,6 +48,16 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
     });
   }
 
+  public async getAllLogsByExerciseId(exerciseId: string): Promise<ExerciseLog[]> {
+    const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
+      store.index(IndexName.ExerciseLogsByExerciseId).getAll(exerciseId),
+    );
+    return Iterator.from(logs)
+      .map((log) => ExerciseLogSchema.parse(log))
+      .map(ExerciseLogMapper.INSTANCE.toDomain)
+      .toArray();
+  }
+
   public async getAllLogsBySessionId(sessionId: string): Promise<ExerciseLog[]> {
     const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
       store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId),

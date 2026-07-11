@@ -1,1 +1,20 @@
-This is an exercise view for {{ id() }}
+@if (loading()) {
+  <app-loader />
+} @else {
+  <div class="logs">
+    @for (log of logs.value(); track log.sessionId) {
+      <mat-card>
+        <mat-card-header>
+          {{ log.createdAtValue }}
+        </mat-card-header>
+        <mat-card-content>
+          @if (log.notes) {
+            <p class="notes">{{ log.notes }}</p>
+          }
+          <app-progress-gallery [exerciseLogId]="log.id" />
+          <app-exercise-log-summary [exerciseLog]="log" />
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}

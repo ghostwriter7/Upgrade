@@ -7,13 +7,16 @@ export class ExerciseLog {
   public sets: ExerciseSet[] = [];
   public notes: string | null = null;
   public index: number = 0;
+  public readonly createdAtValue: string;
 
   constructor(
     public readonly sessionId: string,
     public readonly exerciseId: string,
     public readonly id: string = createNanoId(),
     public readonly createdAt = DateHelper.now(),
-  ) {}
+  ) {
+    this.createdAtValue = this.createdAt.toLocaleString('en-GB');
+  }
 
   public get isEmpty(): boolean {
     return this.sets.length === 0;
@@ -33,7 +36,7 @@ export class ExerciseLog {
   }
 
   public clone(): ExerciseLog {
-    const log = new ExerciseLog(this.sessionId, this.exerciseId, this.id);
+    const log = new ExerciseLog(this.sessionId, this.exerciseId, this.id, this.createdAt);
     log.sets = this.sets;
     log.notes = this.notes;
     log.index = this.index;

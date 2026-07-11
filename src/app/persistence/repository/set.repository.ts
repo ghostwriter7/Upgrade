@@ -30,6 +30,17 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
     const sets = await super.findAllBy(StoreName.SETS, (store: IDBObjectStore) =>
       store.index(IndexName.SetBySessionId).getAll(sessionId),
     );
+    return this.parseSets(sets);
+  }
+
+  public async getAllBeExerciseId(exerciseId: string): Promise<ExerciseSet[]> {
+    const sets = await super.findAllBy(StoreName.SETS, (store: IDBObjectStore) =>
+      store.index(IndexName.SetByExerciseId).getAll(exerciseId),
+    );
+    return this.parseSets(sets);
+  }
+
+  private parseSets(sets: unknown[]): ExerciseSet[] {
     return Iterator.from(sets)
       .map((set) => ExerciseSetSchema.parse(set))
       .toArray();
