@@ -78,6 +78,12 @@ export const exercises: {
     supportedSetTypes: ['iso', 'bodyweight', 'weight'],
   },
   {
+    id: 'german-hang',
+    name: 'German Hang',
+    skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
+    supportedSetTypes: ['bodyweight', 'iso', 'weight'],
+  },
+  {
     id: 'hip-external-rotation-good-mornings',
     name: 'Hip External Rotation Good Mornings',
     skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
@@ -141,7 +147,7 @@ export const exercises: {
     id: 'lindy-hop',
     name: 'Lindy Hop',
     skillTags: [SkillTag.Dance],
-    supportedSetTypes: ['duration']
+    supportedSetTypes: ['duration'],
   },
   {
     id: 'l-sit',
@@ -220,6 +226,12 @@ export const exercises: {
     name: 'Single Leg Glute Bridge',
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
+  },
+  {
+    id: 'skin-the-cat',
+    name: 'Skin The Cat',
+    skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
+    supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'split-squats',
