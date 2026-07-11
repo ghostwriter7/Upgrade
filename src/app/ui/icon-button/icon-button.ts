@@ -3,16 +3,11 @@ import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'button[icon-button]',
-  imports: [MatIcon],
+  selector: 'app-icon-button',
+  imports: [MatIcon, MatFabButton],
   templateUrl: './icon-button.html',
   styleUrl: './icon-button.css',
-  hostDirectives: [{
-    inputs: ['extended'],
-    directive: MatFabButton
-  }],
 })
 export class IconButton {
   public icon = input.required<string>();
-  protected readonly extended = true;
 }

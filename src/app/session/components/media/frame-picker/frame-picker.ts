@@ -12,6 +12,7 @@ import {
 import { MatSlider, MatSliderThumb } from '@angular/material/slider';
 import { form, FormField } from '@angular/forms/signals';
 import { FrameData, VideoFrameCapturer } from './video-frame-capturer';
+import { VideoData } from '@session/components/media/video-data.interface';
 
 @Component({
   selector: 'app-frame-picker',
@@ -21,7 +22,7 @@ import { FrameData, VideoFrameCapturer } from './video-frame-capturer';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FramePicker implements OnInit {
-  public data = input.required<{ video: Blob; width: number; height: number }>();
+  public data = input.required<VideoData>();
   public framePick = output<{ image: Blob; width: number; height: number }>();
   protected readonly duration = signal(0);
 

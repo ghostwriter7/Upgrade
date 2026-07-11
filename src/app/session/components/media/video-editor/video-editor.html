@@ -1,1 +1,8 @@
-<p>video-editor works!</p>
+<video playsinline muted #video></video>
+
+<div class="edit-actions">
+  <mat-slider class="slider" min="0" [max]="duration()" step="0.1">
+    <input [formField]="form.startAt" matSliderStartThumb>
+    <input [formField]="form.endAt" matSliderEndThumb>
+  </mat-slider>
+</div>

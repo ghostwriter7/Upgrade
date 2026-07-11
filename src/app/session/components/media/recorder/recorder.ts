@@ -2,6 +2,7 @@ import { Component, effect, ElementRef, OnInit, output, signal, viewChild } from
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Timer } from '@session/components/timer/timer';
+import { VideoData } from '@session/components/media/video-data.interface';
 
 @Component({
   selector: 'app-recorder',
@@ -10,7 +11,7 @@ import { Timer } from '@session/components/timer/timer';
   styleUrl: './recorder.css',
 })
 export class Recorder implements OnInit {
-  public videoCapture = output<{ video: Blob; width: number; height: number }>();
+  public videoCapture = output<VideoData>();
 
   private readonly video = viewChild.required<ElementRef<HTMLVideoElement>>('video');
   private readonly mediaRecorder = signal<MediaRecorder | null>(null);

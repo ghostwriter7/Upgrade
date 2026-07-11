@@ -13,11 +13,10 @@ import { PoseMeasureEditor } from '../pose-measure-editor/pose-measure-editor';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MeasureProgressOutput } from '@session/components/media/measure-progress/measure-progress-output.interface';
 import { Point } from '@domain/model/measurement.model';
-import { MatFabButton } from '@angular/material/button';
 import { FrameData } from '@session/components/media/frame-picker/video-frame-capturer';
-import { MatIcon } from '@angular/material/icon';
 import { VideoEditor } from '@session/components/media/video-editor/video-editor';
 import { IconButton } from '@ui/icon-button/icon-button';
+import { VideoData } from '@session/components/media/video-data.interface';
 
 @Component({
   selector: 'app-measure-progress',
@@ -25,8 +24,6 @@ import { IconButton } from '@ui/icon-button/icon-button';
     Recorder,
     FramePicker,
     PoseMeasureEditor,
-    MatFabButton,
-    MatIcon,
     VideoEditor,
     IconButton,
   ],
@@ -39,7 +36,7 @@ export class MeasureProgress implements OnInit {
     'record',
   );
 
-  protected videoData: { video: Blob; width: number; height: number } | null = null;
+  protected videoData: VideoData | null = null;
   protected frameData: FrameData | null = null;
   private readonly elementRef = inject(ElementRef);
   private readonly dialogRef: MatDialogRef<MeasureProgress, MeasureProgressOutput> =
@@ -52,7 +49,7 @@ export class MeasureProgress implements OnInit {
     }
   }
 
-  protected onVideoCapture(event: { video: Blob; width: number; height: number }): void {
+  protected onVideoCapture(event: VideoData): void {
     this.videoData = event;
   }
 
