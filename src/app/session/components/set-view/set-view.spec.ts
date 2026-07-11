@@ -74,10 +74,10 @@ describe('SetView', () => {
     expect(eventServiceMock.listen).toHaveBeenCalledExactlyOnceWith(ElementClickedEvent));
 
   test.each([
-    { set: bwSet(5, 10), message: '10 reps' },
-    { set: weightSet(5, 8, 60), message: '8 reps + 60 kg' },
-    { set: isoSet(5, 30, 0), message: '30 seconds' },
-    { set: isoSet(5, 30, 20), message: '30 seconds + 20 kg' },
+    { set: bwSet(5, 10), message: '10' },
+    { set: weightSet(5, 8, 60), message: '8 + 60 kg' },
+    { set: isoSet(5, 30, 0), message: '30s' },
+    { set: isoSet(5, 30, 20), message: '30s + 20 kg' },
   ])('should display set value', ({ set, message }) => {
     setSet(set);
 
