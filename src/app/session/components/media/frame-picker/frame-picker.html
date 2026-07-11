@@ -1,9 +1,17 @@
 <video playsinline muted #video></video>
 
 <div class="edit-actions">
-  <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
-    <input [formField]="form.frameAt" matSliderThumb>
-  </mat-slider>
+  <div class="row">
+    <button matMiniFab (click)="goTo(-.1)">
+      <mat-icon>remove</mat-icon>
+    </button>
+    <mat-slider class="slider" min="0" [max]="duration()" step="0.01">
+      <input [formField]="form.frameAt" matSliderThumb>
+    </mat-slider>
+    <button matMiniFab (click)="goTo(.1)">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
   <div class="buttons">
     <ng-content />
   </div>

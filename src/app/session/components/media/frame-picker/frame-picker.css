@@ -13,6 +13,16 @@
   padding: var(--space-6);
 }
 
+.row {
+  align-items: center;
+  display: flex;
+  gap: var(--space-3);
+}
+
+.slider {
+  flex: 1;
+}
+
 .buttons {
   display: flex;
   gap: var(--space-2);
