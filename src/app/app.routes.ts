@@ -31,5 +31,9 @@ export const routes: Routes = [
   {
     path: 'backup',
     loadComponent: () => import('./backup/components/backup-page/backup-page'),
-  }
+  },
+  {
+    path: 'exercises',
+    loadComponent: () => import('./exercises/components/exercises-page/exercises-page'),
+  },
 ];
