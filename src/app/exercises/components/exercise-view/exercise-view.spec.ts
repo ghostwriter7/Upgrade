@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ExerciseView } from './exercise-view';
+import ExerciseView from './exercise-view';
 
 describe('ExerciseView', () => {
   let component: ExerciseView;
