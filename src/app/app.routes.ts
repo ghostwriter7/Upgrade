@@ -36,4 +36,8 @@ export const routes: Routes = [
     path: 'exercises',
     loadComponent: () => import('./exercises/components/exercises-page/exercises-page'),
   },
+  {
+    path: 'exercises/:id',
+    loadComponent: () => import('./exercises/components/exercise-view/exercise-view')
+  }
 ];
