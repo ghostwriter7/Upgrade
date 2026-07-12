@@ -33,6 +33,12 @@ export class ExerciseDropdown {
 
     if (!filter) return this.exerciseStore.exercises();
 
-    return this.exerciseStore.exercises().filter((exercise) => exercise.name.toLowerCase().includes(filter));
+    return this.exerciseStore
+      .exercises()
+      .filter((exercise) => exercise.name.toLowerCase().includes(filter));
   });
+
+  protected displayExercise(exercise: Exercise | string): string {
+    return exercise instanceof Exercise ? exercise.name : exercise;
+  }
 }
