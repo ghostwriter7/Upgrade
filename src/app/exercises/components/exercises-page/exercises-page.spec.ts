@@ -2,10 +2,19 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import ExercisesPage from './exercises-page';
 import { ExercisesList } from '../exercises-list/exercises-list';
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
+import { ExerciseDropdown } from '../exercise-dropdown/exercise-dropdown';
+import { provideRouter } from '@angular/router';
 
-@Component({ selector: 'app-exercises-list', template: '<div>Exercises...</div>' })
-class ExercisesListMock {}
+@Component({ selector: 'app-exercises-list', template: '<div>Exercises List</div>' })
+class ExercisesListMock {
+  public exerciseSelected = output<string>();
+}
+
+@Component({ selector: 'app-exercise-dropdown', template: '<div>Exercise Dropdown</div>' })
+class ExerciseDropdownMock {
+  public exerciseSelected = output<string>();
+}
 
 describe('ExercisesPage', () => {
   let component: ExercisesPage;
@@ -14,10 +23,11 @@ describe('ExercisesPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ExercisesPage],
+      providers: [provideRouter([])],
     })
       .overrideComponent(ExercisesPage, {
-        remove: { imports: [ExercisesList] },
-        add: { imports: [ExercisesListMock] },
+        remove: { imports: [ExercisesList, ExerciseDropdown] },
+        add: { imports: [ExercisesListMock, ExerciseDropdownMock] },
       })
       .compileComponents();
 
@@ -26,7 +36,5 @@ describe('ExercisesPage', () => {
     await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  it('should create', () => expect(component).toBeTruthy());
 });
