@@ -1,20 +1,5 @@
-<mat-form-field class="full-width">
-  <mat-label>Exercise</mat-label>
-  <input type="text"
-         placeholder="Pick one"
-         aria-label="Exercise"
-         matInput
-         [formField]="exerciseForm.exercise"
-         [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="select($event.option.value)">
-    @for (exercise of options(); track exercise) {
-      <mat-option [value]="exercise">{{ exercise.name }}</mat-option>
-    }
-  </mat-autocomplete>
-</mat-form-field>
-
 <mat-action-list>
   @for (exercise of exercises(); track exercise.id) {
-    <button mat-list-item [routerLink]="[exercise.id]">{{ exercise.name }}</button>
+    <button mat-list-item (click)="exerciseSelected.emit(exercise.id)">{{ exercise.name }}</button>
   }
 </mat-action-list>
