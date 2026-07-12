@@ -35,8 +35,4 @@ export class ExerciseDropdown {
 
     return this.exerciseStore.exercises().filter((exercise) => exercise.name.toLowerCase().includes(filter));
   });
-
-  protected onOptionSelected(exerciseId: string): void {
-    this.exerciseSelected.emit(exerciseId);
-  }
 }

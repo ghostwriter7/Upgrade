@@ -1,27 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExercisesList } from './exercises-list';
-import { signal, WritableSignal } from '@angular/core';
-import { Exercise } from '@domain/model/exercise.model';
 import { ExerciseStore } from '@store/exercises.store';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatActionListHarness } from '@angular/material/list/testing';
+import { createExerciseStoreMock, ExerciseStoreMock } from '@test/mocks/exercise-store.mock';
 
 describe('ExercisesList', () => {
   let component: ExercisesList;
   let fixture: ComponentFixture<ExercisesList>;
   let loader: HarnessLoader;
 
-  let exerciseStoreMock: { exercises: WritableSignal<Exercise[]> };
+  let exerciseStoreMock: ExerciseStoreMock;
 
   beforeEach(async () => {
-    exerciseStoreMock = {
-      exercises: signal([
-        new Exercise('chin-ups', 'Chin Ups'),
-        new Exercise('pull-ups', 'Pull Ups'),
-      ]),
-    };
+    exerciseStoreMock = createExerciseStoreMock();
 
     await TestBed.configureTestingModule({
       imports: [ExercisesList],
@@ -40,9 +34,9 @@ describe('ExercisesList', () => {
     const harness = await loader.getHarness(MatActionListHarness);
     const items = await harness.getItems();
 
-    expect(items).toHaveLength(2);
+    expect(items).toHaveLength(5);
     const labels = await Promise.all(items.map((item) => item.getFullText()));
-    expect(labels).toEqual(['Chin Ups', 'Pull Ups']);
+    expect(labels).toEqual(['Back Squats', 'Chin Ups', 'L-Sit', 'Pull Ups', 'Side Split']);
   });
 
   it('should emit exerciseSelected event upon clicking on an exercise', async () => {

@@ -6,7 +6,7 @@
          matInput
          [formField]="exerciseForm.exercise"
          [matAutocomplete]="auto">
-  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event.option.value)">
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="exerciseSelected.emit($event.option.value)">
     @for (exercise of options(); track exercise) {
       <mat-option [value]="exercise">{{ exercise.name }}</mat-option>
     }
