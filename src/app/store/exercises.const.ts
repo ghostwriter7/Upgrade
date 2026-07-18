@@ -66,6 +66,11 @@ export const exercises: {
     supportedSetTypes: ['weight'],
   },
   {
+    id: 'dragon-squats',
+    name: 'Dragon Squats',
+    supportedSetTypes: ['bodyweight', 'iso'],
+  },
+  {
     id: 'drop-stance-squats',
     name: 'Drop Stance Squats',
     skillTags: [SkillTag.SideSplit],
@@ -190,6 +195,11 @@ export const exercises: {
     id: 'pike-good-morning-standing',
     name: 'Pike Good Morning Standing',
     skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
+    supportedSetTypes: ['bodyweight', 'iso', 'weight'],
+  },
+  {
+    id: 'pistols',
+    name: 'Pistols',
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
