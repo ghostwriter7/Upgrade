@@ -1,0 +1,13 @@
+<mat-selection-list
+  [disabled]="disabled()"
+  (selectionChange)="handleSelectionChange($event)"
+>
+  @for (exercise of visibleExercises(); track exercise.id) {
+    <mat-list-option
+      togglePosition="after"
+      [value]="exercise.id"
+    >
+      <span matListItemTitle>{{ exercise.name }}</span>
+    </mat-list-option>
+  }
+</mat-selection-list>

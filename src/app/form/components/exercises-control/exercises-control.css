@@ -1,0 +1,5 @@
+:host {
+  max-height: 300px;
+  display: block;
+  overflow-y: scroll;
+}

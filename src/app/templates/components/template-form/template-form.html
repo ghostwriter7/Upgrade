@@ -1,0 +1,33 @@
+<form class="template-form" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Name</mat-label>
+    <input
+      [formField]="form.name"
+      matInput
+      type="text"
+      placeholder="Enter template name"
+    />
+    <mat-error>Name is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description</mat-label>
+    <textarea
+      [formField]="form.description"
+      matInput
+      placeholder="Enter template description (optional)"
+      rows="4"
+    ></textarea>
+  </mat-form-field>
+
+  <app-exercises-control [formField]="form.exerciseIds" />
+
+  <section class="checkbox-section">
+    <mat-checkbox [formField]="form.isFavourite">Mark as favourite</mat-checkbox>
+  </section>
+
+  <div class="actions">
+    <button matButton="filled" class="full-width" type="submit" [disabled]="form().invalid()">Save</button>
+    <button matButton class="full-width" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

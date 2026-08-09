@@ -38,10 +38,14 @@ export const routes: Routes = [
   },
   {
     path: 'exercises/:id',
-    loadComponent: () => import('./exercises/components/exercise-view/exercise-view')
+    loadComponent: () => import('./exercises/components/exercise-view/exercise-view'),
   },
   {
     path: 'templates',
-    loadComponent: () => import('./templates/components/templates/templates')
-  }
+    loadComponent: () => import('./templates/components/templates/templates'),
+  },
+  {
+    path: 'templates/new',
+    loadComponent: () => import('./templates/components/template-form/template-form'),
+  },
 ];
