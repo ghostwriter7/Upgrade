@@ -1,27 +1,16 @@
-@if (templatesExist()) {
-  <mat-list>
-    @if (showFavouriteSection()) {
-      <div mat-subheader>Favourites</div>
-      @for (template of favourites(); track template) {
-        <mat-list-item>
-          <div matListItemTitle>{{ template.name }}</div>
-          @if (template.description) {
-            <span>{{ template.description }}</span>
-          }
-        </mat-list-item>
-      }
-      <mat-divider></mat-divider>
-    }
-    @if (showNormalSection()) {
-      <div mat-subheader>Templates</div>
-      @for (template of templates(); track template) {
-        <mat-list-item>
-          <div matListItemTitle>{{ template.name }}</div>
-          @if (template.description) {
-            <span>{{ template.description }}</span>
-          }
-        </mat-list-item>
-      }
-    }
-  </mat-list>
-}
+<div class="template-list">
+  @for (template of templates(); track template) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title class="header">
+          <mat-icon [class.active]="template.isFavourite" (click)="toggleFavourite(template)">star</mat-icon>
+
+          {{ template.name }}
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        {{ template.description }}
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

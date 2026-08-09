@@ -14,22 +14,39 @@ const initialState: State = {
 export const TemplateStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
-  withMethods((store, repository = inject(TemplateRepository)) => ({
-    upsert: (template: Template): void => {
-      const index = store.templates().findIndex(({ id }) => template.id === id);
-      if (index !== -1) {
-        patchState(store, (state) => ({
-          templates: state.templates.with(index, { ...template }),
-        }));
-      } else {
-        patchState(store, (state) => ({
-          templates: [...state.templates, template].sort(comparator),
-        }));
-      }
+  withMethods((store, repository = inject(TemplateRepository)) => {
+    const findIndex = (template: Template): number =>
+      store.templates().findIndex(({ id }) => template.id === id);
 
-      repository.save(template);
-    },
-  })),
+    const update = (index: number, template: Template): void =>
+      patchState(store, (state) => ({
+        templates: state.templates.with(index, { ...template }),
+      }));
+
+    return {
+      upsert: (template: Template): void => {
+        const index = findIndex(template);
+        if (index !== -1) {
+          update(index, template);
+        } else {
+          patchState(store, (state) => ({
+            templates: [...state.templates, template].sort(comparator),
+          }));
+        }
+
+        repository.save(template);
+      },
+
+      toggleFavourite: (template: Template): void => {
+        const index = findIndex(template);
+        if (index !== -1) {
+          const updated = { ...template, isFavourite: !template.isFavourite };
+          update(index, updated);
+          repository.save(updated);
+        }
+      },
+    };
+  }),
   withHooks({
     onInit: (store, templateRepository = inject(TemplateRepository)) => {
       templateRepository
@@ -40,7 +57,7 @@ export const TemplateStore = signalStore(
 );
 
 function comparator(a: Template, b: Template): number {
-  if (a.isFavourite !== b.isFavourite) return a.isFavourite ? 1 : -1;
+  if (a.isFavourite !== b.isFavourite) return a.isFavourite ? -1 : 1;
 
   return a.name.localeCompare(b.name);
 }

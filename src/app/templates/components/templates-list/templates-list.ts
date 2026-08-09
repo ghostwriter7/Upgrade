@@ -1,37 +1,30 @@
-import { Component, computed, inject } from '@angular/core';
-import {
-  MatDivider,
-  MatList,
-  MatListItem,
-  MatListSubheaderCssMatStyler,
-} from '@angular/material/list';
+import { Component, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { TemplateStore } from '../../store/template.store';
+import {
+  MatExpansionModule,
+} from '@angular/material/expansion';
+import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { Template } from '@domain/model/template/template.model';
 
 @Component({
   selector: 'app-templates-list',
-  imports: [MatList, MatListSubheaderCssMatStyler, MatDivider, MatListItem],
+  imports: [
+    MatExpansionModule,
+    MatCard,
+    MatCardHeader,
+    MatCardTitle,
+    MatCardContent,
+    MatIcon,
+  ],
   templateUrl: './templates-list.html',
   styleUrl: './templates-list.css',
 })
 export class TemplatesList {
   private readonly store = inject(TemplateStore);
-  private readonly allTemplates = this.store.templates;
-  private readonly favouriteTemplateKey = 'FAVOURITE';
-  private readonly normalTemplateKey = 'BASIC';
+  protected readonly templates = this.store.templates;
 
-  private readonly groupedTemplates = computed(() => {
-    const templates = this.allTemplates();
-    return Object.groupBy(templates, (template) =>
-      template.isFavourite ? this.favouriteTemplateKey : this.normalTemplateKey,
-    );
-  });
-
-  protected readonly favourites = computed(
-    () => this.groupedTemplates()[this.favouriteTemplateKey] || [],
-  );
-  protected readonly templates = computed(() => this.groupedTemplates()[this.normalTemplateKey] || []);
-  protected readonly showFavouriteSection = computed(() => !!this.favourites()?.length);
-  protected readonly showNormalSection = computed(() => !!this.templates()?.length);
-  protected readonly templatesExist = computed(() => !!this.allTemplates().length);
+  protected toggleFavourite(template: Template): void {
+    this.store.toggleFavourite(template);
+  }
 }
