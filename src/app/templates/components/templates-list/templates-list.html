@@ -1,1 +1,27 @@
-<p>templates-list works!</p>
+@if (templatesExist()) {
+  <mat-list>
+    @if (showFavouriteSection()) {
+      <div mat-subheader>Favourites</div>
+      @for (template of favourites(); track template) {
+        <mat-list-item>
+          <div matListItemTitle>{{ template.name }}</div>
+          @if (template.description) {
+            <span>{{ template.description }}</span>
+          }
+        </mat-list-item>
+      }
+      <mat-divider></mat-divider>
+    }
+    @if (showNormalSection()) {
+      <div mat-subheader>Templates</div>
+      @for (template of templates(); track template) {
+        <mat-list-item>
+          <div matListItemTitle>{{ template.name }}</div>
+          @if (template.description) {
+            <span>{{ template.description }}</span>
+          }
+        </mat-list-item>
+      }
+    }
+  </mat-list>
+}
