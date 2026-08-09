@@ -60,3 +60,9 @@ body {
 .no-events {
   pointer-events: none;
 }
+
+.page {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

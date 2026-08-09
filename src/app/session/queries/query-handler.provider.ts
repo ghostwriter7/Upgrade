@@ -9,31 +9,15 @@ import { FindExerciseLogsByExerciseIdQueryHandler } from '@session/queries/find-
 export class QueryHandlerProvider {
   public static forRoot(): Provider[] {
     return [
-      {
-        provide: QUERY_HANDLERS,
-        multi: true,
-        useClass: FindSessionsByDateQueryHandler,
-      },
-      {
-        provide: QUERY_HANDLERS,
-        multi: true,
-        useClass: FindMediaAndMeasurementsByExerciseLogIdQueryHandler,
-      },
-      {
-        provide: QUERY_HANDLERS,
-        multi: true,
-        useClass: GetInitialSetForExerciseIdQueryHandler,
-      },
-      {
-        provide: QUERY_HANDLERS,
-        multi: true,
-        useClass: GetSkillCoverageQueryHandler,
-      },
-      {
-        provide: QUERY_HANDLERS,
-        multi: true,
-        useClass: FindExerciseLogsByExerciseIdQueryHandler,
-      },
-    ];
+      FindSessionsByDateQueryHandler,
+      FindMediaAndMeasurementsByExerciseLogIdQueryHandler,
+      GetInitialSetForExerciseIdQueryHandler,
+      GetSkillCoverageQueryHandler,
+      FindExerciseLogsByExerciseIdQueryHandler,
+    ].map((handler) => ({
+      provide: QUERY_HANDLERS,
+      multi: true,
+      useClass: handler,
+    }));
   }
 }

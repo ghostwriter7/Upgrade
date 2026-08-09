@@ -1,1 +1,1 @@
-export const DatabaseVersion = 10;
+export const DatabaseVersion = 11;
