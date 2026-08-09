@@ -1,5 +1,5 @@
 <div class="template-list">
-  @for (template of templates(); track template) {
+  @for (template of templates(); track template.id) {
     <mat-card appearance="outlined">
       <mat-card-header>
         <mat-card-title class="header">
@@ -10,7 +10,21 @@
       </mat-card-header>
       <mat-card-content>
         {{ template.description }}
+
+        <mat-list>
+          @for (exerciseId of template.exerciseIds; track exerciseId) {
+            <mat-list-item>{{ exerciseId | exerciseName }}</mat-list-item>
+          }
+        </mat-list>
       </mat-card-content>
+      <mat-card-actions class="actions">
+        <button matMiniFab>
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button matMiniFab class="danger">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
     </mat-card>
   }
 </div>

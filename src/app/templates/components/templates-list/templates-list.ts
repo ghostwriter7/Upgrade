@@ -4,8 +4,11 @@ import { TemplateStore } from '../../store/template.store';
 import {
   MatExpansionModule,
 } from '@angular/material/expansion';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { Template } from '@domain/model/template/template.model';
+import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
+import { MatList, MatListItem } from '@angular/material/list';
+import { MatMiniFabButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-templates-list',
@@ -16,6 +19,11 @@ import { Template } from '@domain/model/template/template.model';
     MatCardTitle,
     MatCardContent,
     MatIcon,
+    ExerciseNamePipe,
+    MatList,
+    MatListItem,
+    MatCardActions,
+    MatMiniFabButton,
   ],
   templateUrl: './templates-list.html',
   styleUrl: './templates-list.css',
