@@ -4,7 +4,7 @@ import {
   computed,
   inject,
   input,
-  resource,
+  resource, signal,
 } from '@angular/core';
 import { QueryBus } from '@common/routers/query/query-bus';
 import { FindMediaAndMeasurementsByExerciseLogIdQuery } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id.query';
@@ -30,6 +30,9 @@ export class ProgressGallery {
       this.queryBus.execute(new FindMediaAndMeasurementsByExerciseLogIdQuery(params.exerciseLogId)),
   });
 
+  protected readonly current = signal(1);
+  protected readonly total = computed(() => this.mediaWithMeasurements().length);
+  protected readonly showCounter = computed(() => this.total() > 1);
   protected readonly mediaWithMeasurements = computed(() => {
     if (!this.progressEntries.isLoading() && this.progressEntries.hasValue()) {
       return this.progressEntries
@@ -61,4 +64,14 @@ export class ProgressGallery {
 
     return [];
   });
+
+  protected onScroll(event: Event): void {
+    const carousel = event.target as HTMLDivElement;
+    const { scrollWidth, scrollLeft } = carousel;
+
+    const scrolledPercentage = scrollLeft / scrollWidth;
+    const current = Math.floor(this.total() * scrolledPercentage) + 1;
+
+    this.current.set(current);
+  }
 }

@@ -1,6 +1,10 @@
-<div class="carousel">
+<div class="carousel" (scrollend)="onScroll($event)">
+  @if (showCounter()) {
+    <div class="counter">{{ current() }} / {{ total() }}</div>
+  }
   @for (entry of mediaWithMeasurements(); track entry) {
     <div class="slide">
+
       @if (entry.angle; as angle) {
         <app-lozenge class="angle-lozenge">
           {{ angle }}°
