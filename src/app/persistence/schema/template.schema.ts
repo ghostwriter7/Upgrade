@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const TemplateSchema = z.object({
+export const TemplateSchema = z.object({
   id: z.nanoid(),
   name: z.string(),
   description: z.string().optional(),

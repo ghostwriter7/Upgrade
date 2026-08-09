@@ -3,6 +3,6 @@ export interface Template {
   name: string;
   description?: string;
   exerciseIds: string[];
-  isFavourite?: boolean;
+  isFavourite: boolean;
 }
 
