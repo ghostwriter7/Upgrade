@@ -13,6 +13,7 @@ describe('VideoEditor', () => {
 
     fixture = TestBed.createComponent(VideoEditor);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('data', { video: new Blob(), width: 10, height: 10 });
     await fixture.whenStable();
   });
 
