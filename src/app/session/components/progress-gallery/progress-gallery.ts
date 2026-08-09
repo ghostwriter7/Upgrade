@@ -11,10 +11,14 @@ import { FindMediaAndMeasurementsByExerciseLogIdQuery } from '@session/queries/f
 import { Lozenge } from '@ui/lozenge/lozenge';
 import { ImageRenderer } from '@session/components/image-renderer/image-renderer';
 import { Line } from '@domain/model/line.model';
+import { MatIcon } from '@angular/material/icon';
+import { MatMiniFabButton } from '@angular/material/button';
+import { CommandBus } from '@common/routers/command/command-bus';
+import { DownloadImageCommand } from '@session/commands/download-image/download-image.command';
 
 @Component({
   selector: 'app-progress-gallery',
-  imports: [Lozenge, ImageRenderer],
+  imports: [Lozenge, ImageRenderer, MatIcon, MatMiniFabButton],
   templateUrl: './progress-gallery.html',
   styleUrl: './progress-gallery.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +27,7 @@ export class ProgressGallery {
   public exerciseLogId = input.required<string>();
 
   private readonly queryBus = inject(QueryBus);
+  private readonly commandBus = inject(CommandBus);
 
   private readonly progressEntries = resource({
     params: () => ({ exerciseLogId: this.exerciseLogId() }),
@@ -30,6 +35,7 @@ export class ProgressGallery {
       this.queryBus.execute(new FindMediaAndMeasurementsByExerciseLogIdQuery(params.exerciseLogId)),
   });
 
+  protected readonly showActions = signal(false);
   protected readonly current = signal(1);
   protected readonly total = computed(() => this.mediaWithMeasurements().length);
   protected readonly showCounter = computed(() => this.total() > 1);
@@ -73,5 +79,17 @@ export class ProgressGallery {
     const current = Math.floor(this.total() * scrolledPercentage) + 1;
 
     this.current.set(current);
+  }
+
+  protected onDownload(): void {
+    const media = this.mediaWithMeasurements().at(this.current() - 1);
+    if (media) {
+      const { image } = media;
+      this.commandBus.dispatch(new DownloadImageCommand(image, this.exerciseLogId()));
+    }
+  }
+
+  protected toggleActions(): void {
+    this.showActions.update((show) => !show);
   }
 }

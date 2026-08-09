@@ -13,75 +13,29 @@ import { EditExerciseNoteCommandHandler } from './edit-exercise-note/edit-exerci
 import { CaptureProgressCommandHandler } from '@session/commands/capture-progress/capture-progress-command.handler';
 import { DeleteSessionCommandHandler } from './delete-session/delete-session-command.handler';
 import { CreateSessionCommandHandler } from './create-session/create-session-command.handler';
+import { DownloadImageCommandHandler } from '@session/commands/download-image/download-image-command.handler';
 
 export class CommandHandlerProvider {
   public static forRoot(): Provider[] {
     return [
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: DeleteSetCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: CopySetCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: UpdateSetCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: CreateSetCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: PatchStartedAtCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: PatchFinishedAtCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: CompleteSessionCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: DeleteSessionCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: CreateSessionCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: DeleteExerciseCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: AddExerciseCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: EditExerciseNoteCommandHandler,
-      },
-      {
-        provide: COMMAND_HANDLERS,
-        multi: true,
-        useClass: CaptureProgressCommandHandler,
-      },
-    ];
+      DeleteSetCommandHandler,
+      CopySetCommandHandler,
+      UpdateSetCommandHandler,
+      CreateSetCommandHandler,
+      PatchStartedAtCommandHandler,
+      PatchFinishedAtCommandHandler,
+      CompleteSessionCommandHandler,
+      DeleteSessionCommandHandler,
+      CreateSessionCommandHandler,
+      DeleteExerciseCommandHandler,
+      AddExerciseCommandHandler,
+      EditExerciseNoteCommandHandler,
+      CaptureProgressCommandHandler,
+      DownloadImageCommandHandler,
+    ].map((handler) => ({
+      useClass: handler,
+      multi: true,
+      provide: COMMAND_HANDLERS,
+    }));
   }
 }

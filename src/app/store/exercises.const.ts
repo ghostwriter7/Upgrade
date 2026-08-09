@@ -149,12 +149,6 @@ export const exercises: {
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
-    id: 'lindy-hop',
-    name: 'Lindy Hop',
-    skillTags: [SkillTag.Dance],
-    supportedSetTypes: ['duration'],
-  },
-  {
     id: 'l-sit',
     name: 'L-Sit',
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],

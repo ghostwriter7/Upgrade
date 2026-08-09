@@ -48,6 +48,11 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
     });
   }
 
+  public async findLogById(exerciseLogId: string): Promise<ExerciseLog | undefined> {
+    return super.findById(StoreName.EXERCISE_LOGS, exerciseLogId)
+      .then((log) => log ? ExerciseLogMapper.INSTANCE.toDomain(ExerciseLogSchema.parse(log)) : undefined);
+  }
+
   public async getAllLogsByExerciseId(exerciseId: string): Promise<ExerciseLog[]> {
     const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
       store.index(IndexName.ExerciseLogsByExerciseId).getAll(exerciseId),

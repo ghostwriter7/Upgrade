@@ -1,7 +1,15 @@
-<div class="carousel" (scrollend)="onScroll($event)">
+<div class="carousel" (scrollend)="onScroll($event)" (click)="toggleActions()">
   @if (showCounter()) {
     <div class="counter">{{ current() }} / {{ total() }}</div>
   }
+
+  @if (showActions()) {
+    <button mat-mini-fab class="download-btn" (click)="onDownload()">
+      <mat-icon>download</mat-icon>
+    </button>
+  }
+
+
   @for (entry of mediaWithMeasurements(); track entry) {
     <div class="slide">
 
