@@ -25,7 +25,9 @@
       "@backup/*": ["./src/app/backup/*"],
       "@store/*": ["./src/app/store/*"],
       "@ui/*": ["./src/app/ui/*"],
-      "@test/*": ["./src/test/*"]
+      "@test/*": ["./src/test/*"],
+      "@templates/*": ["./src/app/templates/*"],
+      "@form/*": ["./src/app/form/*"]
     }
   },
   "angularCompilerOptions": {

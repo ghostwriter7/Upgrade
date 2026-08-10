@@ -1,7 +1,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { ExercisesControl } from '../../../form/components/exercises-control/exercises-control';
+import { ExercisesControl } from '@form/components/exercises-control/exercises-control';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { form, FormField, required, validate } from '@angular/forms/signals';
 import { MatButton } from '@angular/material/button';

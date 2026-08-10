@@ -1,12 +1,12 @@
-import { Component, computed, inject, resource } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { MatMiniFabButton } from '@angular/material/button';
-import { TemplateRepository } from '@persistence/repository/templates/template.repository';
 import { Template } from '@domain/model/template/template.model';
 import { Session } from '@domain/model/session/session.model';
 import { SessionStateHolder } from '@session/store/session-state-holder.store';
 import { Router } from '@angular/router';
+import { TemplateFacade } from '@templates/template.facade';
 
 @Component({
   selector: 'app-template-selector',
@@ -15,21 +15,12 @@ import { Router } from '@angular/router';
   styleUrl: './template-selector.css',
 })
 export class TemplateSelector {
-  private readonly templateRepository = inject(TemplateRepository);
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly router = inject(Router);
-
-  private readonly templateResource = resource({
-    loader: () => this.templateRepository.getAllTemplates(),
-  });
+  private readonly templateFacade = inject(TemplateFacade);
 
   protected readonly isDisabled = computed(() => !this.templates().length);
-  protected readonly templates = computed(() => {
-    if (this.templateResource.hasValue()) {
-      return this.templateResource.value();
-    }
-    return [];
-  });
+  protected readonly templates = this.templateFacade.$templates;
 
   protected selectTemplate(template: Template): void {
     const { session } = Session.createEmpty().addExerciseLogs(template.exerciseIds);
