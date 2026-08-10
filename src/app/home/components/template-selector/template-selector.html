@@ -1,0 +1,8 @@
+<button matMiniFab [matMenuTriggerFor]="menu" [disabled]="isDisabled()">
+  <mat-icon>more_vert</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  @for (template of templates(); track template.id) {
+    <button mat-menu-item (click)="selectTemplate(template)">{{ template.name }}</button>
+  }
+</mat-menu>

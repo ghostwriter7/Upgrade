@@ -1,5 +1,10 @@
 <div class="home">
-  <button data-testid="home-create-session-btn" class="full-width" matButton="filled" routerLink="/session/new">Start Session</button>
+  <div class="actions">
+    <button data-testid="home-create-session-btn" class="full-width" matButton="filled" routerLink="/session/new">Start
+      Session
+    </button>
+    <app-template-selector />
+  </div>
   <mat-divider />
   <app-session-calendar />
   <mat-divider />
