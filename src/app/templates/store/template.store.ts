@@ -4,10 +4,12 @@ import { inject } from '@angular/core';
 import { TemplateRepository } from '@persistence/repository/templates/template.repository';
 
 interface State {
+  edited: Template | null;
   templates: Template[];
 }
 
 const initialState: State = {
+  edited: null,
   templates: [],
 };
 
@@ -24,6 +26,8 @@ export const TemplateStore = signalStore(
       }));
 
     return {
+      setEdited: (edited: Template | null): void => patchState(store, { edited }),
+
       upsert: (template: Template): void => {
         const index = findIndex(template);
         if (index !== -1) {

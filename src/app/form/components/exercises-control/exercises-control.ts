@@ -1,4 +1,4 @@
-import { Component, computed, forwardRef, inject, input, signal } from '@angular/core';
+import { Component, computed, forwardRef, inject, input, signal, viewChild } from '@angular/core';
 import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
 import { ExerciseStore } from '@store/exercises.store';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -28,6 +28,7 @@ export class ExercisesControl implements ControlValueAccessor {
   );
   private onChange?: (value: string[]) => void;
   private onTouched?: () => void;
+  private readonly selectionList = viewChild.required(MatSelectionList);
 
   protected handleSelectionChange(selectionListChange: MatSelectionListChange): void {
     const selectedIds = selectionListChange.source.selectedOptions.selected.map(
@@ -53,5 +54,6 @@ export class ExercisesControl implements ControlValueAccessor {
 
   public writeValue(ids: string[] = []): void {
     this.selectedIds.set(ids);
+    this.selectionList().writeValue(ids);
   }
 }

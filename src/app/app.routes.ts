@@ -45,7 +45,7 @@ export const routes: Routes = [
     loadComponent: () => import('./templates/components/templates/templates'),
   },
   {
-    path: 'templates/new',
+    path: 'templates/edit',
     loadComponent: () => import('./templates/components/template-form/template-form'),
   },
 ];

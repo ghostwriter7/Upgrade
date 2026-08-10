@@ -3,7 +3,7 @@ import { z } from 'zod';
 export const TemplateSchema = z.object({
   id: z.nanoid(),
   name: z.string(),
-  description: z.string().optional(),
+  description: z.string().default(''),
   exerciseIds: z.array(z.string()).nonempty(),
   isFavourite: z.boolean().default(false),
 });

@@ -1,14 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { TemplateStore } from '../../store/template.store';
+import { MatExpansionModule } from '@angular/material/expansion';
 import {
-  MatExpansionModule,
-} from '@angular/material/expansion';
-import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
+  MatCard,
+  MatCardActions,
+  MatCardContent,
+  MatCardHeader,
+  MatCardTitle,
+} from '@angular/material/card';
 import { Template } from '@domain/model/template/template.model';
 import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
 import { MatList, MatListItem } from '@angular/material/list';
 import { MatMiniFabButton } from '@angular/material/button';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-templates-list',
@@ -31,8 +36,14 @@ import { MatMiniFabButton } from '@angular/material/button';
 export class TemplatesList {
   private readonly store = inject(TemplateStore);
   protected readonly templates = this.store.templates;
+  private readonly router = inject(Router);
 
   protected toggleFavourite(template: Template): void {
     this.store.toggleFavourite(template);
+  }
+
+  protected onEdit(template: Template): void {
+    this.store.setEdited(template);
+    this.router.navigate(['templates', 'edit']);
   }
 }

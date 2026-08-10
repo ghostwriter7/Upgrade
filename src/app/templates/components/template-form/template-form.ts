@@ -1,4 +1,4 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ExercisesControl } from '../../../form/components/exercises-control/exercises-control';
@@ -6,7 +6,6 @@ import { createNanoId } from '@common/function/create-uuid.function';
 import { form, FormField, required, validate } from '@angular/forms/signals';
 import { MatButton } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { Template } from '@domain/model/template/template.model';
 import { TemplateStore } from '../../store/template.store';
 import { Router } from '@angular/router';
 
@@ -30,14 +29,17 @@ import { Router } from '@angular/router';
   },
 })
 export default class TemplateForm {
-  public template = input<Required<Template>>({
-    id: createNanoId(),
-    name: '',
-    description: '',
-    exerciseIds: [],
-    isFavourite: false,
-  });
   private readonly store = inject(TemplateStore);
+  private readonly template = computed(
+    () =>
+      this.store.edited() ?? {
+        id: createNanoId(),
+        name: '',
+        description: '',
+        exerciseIds: [],
+        isFavourite: false,
+      },
+  );
 
   private readonly model = signal(this.template());
   protected readonly form = form(this.model, (schemaPath) => {
