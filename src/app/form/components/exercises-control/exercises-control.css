@@ -1,7 +1,7 @@
 :host {
-  max-height: 400px;
   display: block;
   overflow-y: scroll;
+  flex-grow: 1;
 }
 
 .entry {

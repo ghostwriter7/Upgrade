@@ -1,11 +1,5 @@
-import { Component, computed, forwardRef, inject, input, signal, viewChild } from '@angular/core';
-import {
-  MatList,
-  MatListItem,
-  MatListOption,
-  MatSelectionList,
-  MatSelectionListChange,
-} from '@angular/material/list';
+import { Component, computed, forwardRef, inject, input, signal } from '@angular/core';
+import { MatActionList, MatDivider, MatList, MatListItem } from '@angular/material/list';
 import { ExerciseStore } from '@store/exercises.store';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
@@ -15,14 +9,14 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-exercises-control',
   imports: [
-    MatListOption,
-    MatSelectionList,
     MatList,
     MatListItem,
     ExerciseNamePipe,
     CdkDropList,
     CdkDrag,
     MatIcon,
+    MatActionList,
+    MatDivider,
   ],
   templateUrl: './exercises-control.html',
   styleUrl: './exercises-control.css',
@@ -48,16 +42,6 @@ export class ExercisesControl implements ControlValueAccessor {
   );
   private onChange?: (value: string[]) => void;
   private onTouched?: () => void;
-  private readonly selectionList = viewChild.required(MatSelectionList);
-
-  protected handleSelectionChange(selectionListChange: MatSelectionListChange): void {
-    const selectedIds = selectionListChange.source.selectedOptions.selected.map(
-      (option) => option.value,
-    );
-
-    this.selectedIds.update((ids) => [...ids, ...selectedIds]);
-    this.notify();
-  }
 
   public registerOnChange(fn: (value: string[]) => void): void {
     this.onChange = fn;
@@ -73,7 +57,6 @@ export class ExercisesControl implements ControlValueAccessor {
 
   public writeValue(ids: string[] = []): void {
     this.selectedIds.set(ids);
-    this.selectionList().writeValue(ids);
   }
 
   protected onDrop($event: CdkDragDrop<any, any>): void {
@@ -87,6 +70,11 @@ export class ExercisesControl implements ControlValueAccessor {
 
   protected remove(index: number): void {
     this.selectedIds.update((ids) => ids.toSpliced(index, 1));
+    this.notify();
+  }
+
+  protected add(id: string): void {
+    this.selectedIds.update((ids) => [...ids, id]);
     this.notify();
   }
 
