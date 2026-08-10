@@ -1,11 +1,29 @@
 import { Component, computed, forwardRef, inject, input, signal, viewChild } from '@angular/core';
-import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import {
+  MatList,
+  MatListItem,
+  MatListOption,
+  MatSelectionList,
+  MatSelectionListChange,
+} from '@angular/material/list';
 import { ExerciseStore } from '@store/exercises.store';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-exercises-control',
-  imports: [MatListOption, MatSelectionList],
+  imports: [
+    MatListOption,
+    MatSelectionList,
+    MatList,
+    MatListItem,
+    ExerciseNamePipe,
+    CdkDropList,
+    CdkDrag,
+    MatIcon,
+  ],
   templateUrl: './exercises-control.html',
   styleUrl: './exercises-control.css',
   providers: [
@@ -24,7 +42,9 @@ export class ExercisesControl implements ControlValueAccessor {
   protected readonly disabled = signal(false);
 
   protected readonly visibleExercises = computed(() =>
-    this.exerciseStore.exercises().filter(({ id }) => !this.excludedExerciseIds().has(id)),
+    this.exerciseStore
+      .exercises()
+      .filter(({ id }) => !this.excludedExerciseIds().has(id) && !this.selectedIds().includes(id)),
   );
   private onChange?: (value: string[]) => void;
   private onTouched?: () => void;
@@ -35,9 +55,8 @@ export class ExercisesControl implements ControlValueAccessor {
       (option) => option.value,
     );
 
-    this.selectedIds.set(selectedIds);
-    this.onChange?.(selectedIds);
-    this.onTouched?.();
+    this.selectedIds.update((ids) => [...ids, ...selectedIds]);
+    this.notify();
   }
 
   public registerOnChange(fn: (value: string[]) => void): void {
@@ -55,5 +74,24 @@ export class ExercisesControl implements ControlValueAccessor {
   public writeValue(ids: string[] = []): void {
     this.selectedIds.set(ids);
     this.selectionList().writeValue(ids);
+  }
+
+  protected onDrop($event: CdkDragDrop<any, any>): void {
+    const { previousIndex, currentIndex } = $event;
+    this.selectedIds.update((ids) => {
+      const [item] = ids.splice(previousIndex, 1);
+      return ids.toSpliced(currentIndex, 0, item);
+    });
+    this.notify();
+  }
+
+  protected remove(index: number): void {
+    this.selectedIds.update((ids) => ids.toSpliced(index, 1));
+    this.notify();
+  }
+
+  private notify(): void {
+    this.onChange?.(this.selectedIds());
+    this.onTouched?.();
   }
 }

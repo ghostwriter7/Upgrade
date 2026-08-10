@@ -1,5 +1,11 @@
 :host {
-  max-height: 300px;
+  max-height: 400px;
   display: block;
   overflow-y: scroll;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }

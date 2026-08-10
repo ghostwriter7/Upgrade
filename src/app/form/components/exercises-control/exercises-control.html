@@ -1,3 +1,16 @@
+@if (selectedIds().length) {
+  <mat-list cdkDropList (cdkDropListDropped)="onDrop($event)">
+    @for (id of selectedIds(); track id) {
+      <mat-list-item cdkDrag>
+        <div class="entry">
+          {{ id | exerciseName }}
+          <mat-icon (click)="remove($index)">close</mat-icon>
+        </div>
+      </mat-list-item>
+    }
+  </mat-list>
+}
+
 <mat-selection-list
   [disabled]="disabled()"
   (selectionChange)="handleSelectionChange($event)"
