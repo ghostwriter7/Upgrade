@@ -22,6 +22,7 @@ export const TemplateStore = signalStore(
 
     const update = (index: number, template: Template): void =>
       patchState(store, (state) => ({
+        ...state,
         templates: state.templates.with(index, { ...template }),
       }));
 
@@ -34,6 +35,7 @@ export const TemplateStore = signalStore(
           update(index, template);
         } else {
           patchState(store, (state) => ({
+            ...state,
             templates: [...state.templates, template].sort(comparator),
           }));
         }
@@ -48,6 +50,14 @@ export const TemplateStore = signalStore(
           update(index, updated);
           repository.save(updated);
         }
+      },
+
+      delete: (template: Template): void => {
+        patchState(store, (state) => ({
+          ...state,
+          templates: state.templates.filter(({ id }) => template.id !== id),
+        }));
+        repository.deleteById(template.id);
       },
     };
   }),

@@ -18,4 +18,8 @@ export class TemplateRepository extends GenericRepository<TemplateDto> {
   public save(template: Template): Promise<IDBValidKey> {
     return super.put(StoreName.TEMPLATES, TemplateSchema.parse(template));
   }
+
+  public deleteById(id: string): Promise<void> {
+    return super.delete(StoreName.TEMPLATES, id);
+  }
 }
