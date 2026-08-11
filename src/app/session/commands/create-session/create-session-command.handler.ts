@@ -4,7 +4,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
 import { SessionUpdatedEvent } from '../../events/session-updated/session-updated.event';
 import { CreateSessionCommand } from './create-session-command';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()

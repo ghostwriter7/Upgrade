@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TemplateForm } from './template-form';
+import TemplateForm from './template-form';
 
 describe('TemplateForm', () => {
   let component: TemplateForm;
