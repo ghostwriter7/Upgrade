@@ -1,3 +1,7 @@
+<button matMiniFab class="close info" (click)="closeRecording()">
+  <mat-icon>close</mat-icon>
+</button>
+
 @switch (this.activeStep()) {
   @case ('record') {
     <app-recorder (videoCapture)="onVideoCapture($event)" />

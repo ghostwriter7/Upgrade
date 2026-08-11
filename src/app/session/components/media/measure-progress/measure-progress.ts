@@ -17,6 +17,8 @@ import { FrameData } from '@session/components/media/frame-picker/video-frame-ca
 import { VideoEditor } from '@session/components/media/video-editor/video-editor';
 import { IconButton } from '@ui/icon-button/icon-button';
 import { VideoData } from '@session/components/media/video-data.interface';
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-measure-progress',
@@ -26,6 +28,8 @@ import { VideoData } from '@session/components/media/video-data.interface';
     PoseMeasureEditor,
     VideoEditor,
     IconButton,
+    MatMiniFabButton,
+    MatIcon,
   ],
   templateUrl: './measure-progress.html',
   styleUrl: './measure-progress.css',
@@ -85,5 +89,9 @@ export class MeasureProgress implements OnInit {
 
   protected goTo(step: 'crop-video' | 'pick-frame'): void {
     this.activeStep.set(step);
+  }
+
+  protected closeRecording(): void {
+    this.dialogRef.close();
   }
 }

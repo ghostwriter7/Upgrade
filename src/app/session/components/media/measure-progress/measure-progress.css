@@ -10,3 +10,9 @@
   inset: 0;
   gap: var(--space-6);
 }
+
+.close {
+  position: absolute;
+  right: var(--space-2);
+  top: var(--space-2);
+}
