@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { TemplateStore } from '../../store/template.store';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -16,9 +16,11 @@ import { MatMiniFabButton } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { ConfirmDeleteAlert } from '@session/components/confirm-delete-alert/confirm-delete-alert.component';
 import { DialogService } from '@common/service/dialog/dialog.service';
+import { RateOfPerceivedEffortIconPipe } from '@templates/pipes/rate-of-perceived-effort-icon.pipe';
 
 @Component({
   selector: 'app-templates-list',
+  encapsulation: ViewEncapsulation.None,
   imports: [
     MatExpansionModule,
     MatCard,
@@ -31,6 +33,7 @@ import { DialogService } from '@common/service/dialog/dialog.service';
     MatListItem,
     MatCardActions,
     MatMiniFabButton,
+    RateOfPerceivedEffortIconPipe,
   ],
   templateUrl: './templates-list.html',
   styleUrl: './templates-list.css',

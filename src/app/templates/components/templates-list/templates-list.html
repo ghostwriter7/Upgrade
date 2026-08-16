@@ -6,6 +6,8 @@
           <mat-icon [class.active]="template.isFavourite" (click)="toggleFavourite(template)">star</mat-icon>
 
           {{ template.name }}
+
+          <span class="rpe">{{ template.rpe | rateOfPerceivedEffortIcon }}</span>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
