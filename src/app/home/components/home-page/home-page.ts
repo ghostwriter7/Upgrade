@@ -5,10 +5,19 @@ import { RouterLink } from '@angular/router';
 import { SessionCalendar } from '../session-calendar/session-calendar';
 import { SkillCoverage } from '@home/components/skill-coverage/skill-coverage';
 import { TemplateSelector } from '@home/components/template-selector/template-selector';
+import { RandomSessionControl } from '@home/components/random-session-control/random-session-control';
 
 @Component({
   selector: 'app-home-page',
-  imports: [MatButton, MatDivider, RouterLink, SessionCalendar, SkillCoverage, TemplateSelector],
+  imports: [
+    MatButton,
+    MatDivider,
+    RouterLink,
+    SessionCalendar,
+    SkillCoverage,
+    TemplateSelector,
+    RandomSessionControl,
+  ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
 })

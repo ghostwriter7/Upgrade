@@ -21,7 +21,6 @@ interface AddExerciseLogsResult {
 
 export class Session {
   public exercises: ExerciseLog[] = [];
-  public notes: string | null = null;
   public startedAt: Temporal.Instant = DateHelper.now();
   public finishedAt: Temporal.Instant | null = null;
   public exerciseIds: string[] = [];

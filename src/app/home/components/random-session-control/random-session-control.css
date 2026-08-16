@@ -1,0 +1,10 @@
+@scope (app-random-session-control) {
+  :scope {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  button {
+    text-wrap: nowrap;
+  }
+}

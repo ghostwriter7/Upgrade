@@ -13,6 +13,31 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     super();
   }
 
+  public async getLastSessions(count: number): Promise<Session[]> {
+    const transaction = await this.createReadTransaction(StoreName.SESSIONS);
+    const store = transaction.objectStore(StoreName.SESSIONS);
+    const request = store.index(IndexName.SessionByStartedAt).openCursor(null, 'prev');
+
+    const sessionDTOs: SessionDto[] = await new Promise((resolve, reject) => {
+      const results: SessionDto[] = [];
+      request.onsuccess = () => {
+        const cursor = request.result;
+
+        if (!cursor) {
+          resolve(results);
+        } else {
+          results.push(cursor.value);
+          if (results.length === count) resolve(results);
+
+          cursor.continue();
+        }
+      };
+      request.onerror = () => reject(request.error!);
+    });
+
+    return sessionDTOs.map(SessionMapper.INSTANCE.toDomain);
+  }
+
   public async getAllSessions(): Promise<Session[]> {
     const sessions = await super.findAll(StoreName.SESSIONS);
     return sessions.map(SessionMapper.INSTANCE.toDomain);

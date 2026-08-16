@@ -5,6 +5,7 @@ import { FindMediaAndMeasurementsByExerciseLogIdQueryHandler } from '@session/qu
 import { GetInitialSetForExerciseIdQueryHandler } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id-query.handler';
 import { GetSkillCoverageQueryHandler } from '@session/queries/get-skill-coverage/get-skill-coverage-query.handler';
 import { FindExerciseLogsByExerciseIdQueryHandler } from '@session/queries/find-exercise-logs-by-exercise-id/find-exercise-logs-by-exercise-id-query.handler';
+import { FindLastXSessionsQueryHandler } from '@session/queries/find-last-x-sessions/find-last-x-sessions-query.handler';
 
 export class QueryHandlerProvider {
   public static forRoot(): Provider[] {
@@ -14,6 +15,7 @@ export class QueryHandlerProvider {
       GetInitialSetForExerciseIdQueryHandler,
       GetSkillCoverageQueryHandler,
       FindExerciseLogsByExerciseIdQueryHandler,
+      FindLastXSessionsQueryHandler,
     ].map((handler) => ({
       provide: QUERY_HANDLERS,
       multi: true,

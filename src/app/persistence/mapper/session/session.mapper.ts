@@ -11,7 +11,6 @@ export class SessionMapper implements Mapper<Session, SessionDto> {
 
     session.startedAt = DateHelper.from(sessionDto.startedAt);
     session.finishedAt = sessionDto.finishedAt ? DateHelper.from(sessionDto.finishedAt) : null;
-    session.notes = sessionDto.notes;
     session.exerciseIds = sessionDto.exerciseIds;
 
     return session;
@@ -25,7 +24,6 @@ export class SessionMapper implements Mapper<Session, SessionDto> {
       finishedAt: session.finishedAt
         ? session.finishedAt.toString({ smallestUnit: 'second' })
         : null,
-      notes: session.notes,
       exerciseIds: session.exerciseIds,
     };
   }

@@ -66,3 +66,7 @@ body {
   flex-direction: column;
   width: 100%;
 }
+
+.d-none {
+  display: none !important;
+}

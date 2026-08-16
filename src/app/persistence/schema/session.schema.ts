@@ -6,7 +6,6 @@ export const SessionSchema = z.object({
   createdAt: z.iso.datetime(),
   startedAt: z.iso.datetime(),
   finishedAt: z.iso.datetime().nullable(),
-  notes: z.string().nullable(),
   exerciseIds: z.array(z.string()).default([]),
 });
 
