@@ -1,5 +1,9 @@
-<button data-testid="backup-export-data-btn"  class="info" matButton [disabled]="loading()" (click)="exportData()">Export Data</button>
-<button data-testid="backup-import-data-btn" class="info" matButton [disabled]="loading()" (click)="importData()">Import Data</button>
+<button data-testid="backup-export-data-btn" class="info" matButton [disabled]="loading()" (click)="exportData()">
+  Export Data
+</button>
+<button data-testid="backup-import-data-btn" class="info" matButton [disabled]="loading()" (click)="importData()">
+  Import Data
+</button>
 
 @if (loading()) {
   <app-loader data-testid="backup-loader" />
@@ -21,6 +25,7 @@
         <span>Exercise logs</span><span>{{ summary.totalExerciseLogs }}</span>
         <span>Angles</span><span>{{ summary.totalAngleMeasurements }}</span>
         <span>Media</span><span>{{ summary.totalMedia }}</span>
+        <span>Templates</span><span>{{ summary.totalTemplates }}</span>
       </div>
     </mat-card-content>
   </mat-card>

@@ -22,4 +22,8 @@ export class TemplateRepository extends GenericRepository<TemplateDto> {
   public deleteById(id: string): Promise<void> {
     return super.delete(StoreName.TEMPLATES, id);
   }
+
+  public deleteAllTemplates(): Promise<void> {
+    return super.deleteAll(StoreName.TEMPLATES);
+  }
 }

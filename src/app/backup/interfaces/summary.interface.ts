@@ -4,4 +4,5 @@ export interface BackupSummary {
   totalExerciseLogs: number;
   totalAngleMeasurements: number;
   totalMedia: number;
+  totalTemplates: number;
 }
