@@ -3,6 +3,8 @@
 </button>
 <mat-menu #menu="matMenu">
   @for (template of templates(); track template.id) {
-    <button mat-menu-item (click)="selectTemplate(template)">{{ template.name }}</button>
+    <button mat-menu-item (click)="selectTemplate(template)">
+      {{ template.rpe | rateOfPerceivedEffortIcon }}  {{ template.name }}
+    </button>
   }
 </mat-menu>

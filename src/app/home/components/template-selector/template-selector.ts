@@ -7,10 +7,18 @@ import { Router } from '@angular/router';
 import { TemplateFacade } from '@templates/template.facade';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { CreateFromTemplateCommand } from '@session/commands/create-from-template/create-from-template.command';
+import { RateOfPerceivedEffortIconPipe } from '@templates/pipes/rate-of-perceived-effort-icon.pipe';
 
 @Component({
   selector: 'app-template-selector',
-  imports: [MatIcon, MatMenu, MatMiniFabButton, MatMenuTrigger, MatMenuItem],
+  imports: [
+    MatIcon,
+    MatMenu,
+    MatMiniFabButton,
+    MatMenuTrigger,
+    MatMenuItem,
+    RateOfPerceivedEffortIconPipe,
+  ],
   templateUrl: './template-selector.html',
   styleUrl: './template-selector.css',
 })
