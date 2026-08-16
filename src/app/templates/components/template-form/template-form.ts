@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { ExercisesControl } from '@form/components/exercises-control/exercises-control';
@@ -35,7 +35,7 @@ import { MatOption, MatSelect } from '@angular/material/select';
     class: 'page',
   },
 })
-export default class TemplateForm {
+export default class TemplateForm implements OnDestroy {
   private readonly store = inject(TemplateStore);
   private readonly template = computed(
     () =>
@@ -61,6 +61,11 @@ export default class TemplateForm {
   });
   private readonly router = inject(Router);
   protected readonly rpeOptions = RateOfPerceivedEffortOptions;
+  private readonly templateStore = inject(TemplateStore);
+
+  public ngOnDestroy(): void {
+    this.templateStore.setEdited(null);
+  }
 
   protected onSubmit(): void {
     if (!this.form().invalid()) {
