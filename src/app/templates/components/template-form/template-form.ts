@@ -8,6 +8,11 @@ import { MatButton } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { TemplateStore } from '../../store/template.store';
 import { Router } from '@angular/router';
+import {
+  RateOfPerceivedEffortOptions,
+  RateOfPerceivedEffortValue,
+} from '@domain/enum/rate-of-perceived-effort-value';
+import { MatOption, MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-template-form',
@@ -21,6 +26,8 @@ import { Router } from '@angular/router';
     FormField,
     MatButton,
     FormsModule,
+    MatSelect,
+    MatOption,
   ],
   templateUrl: './template-form.html',
   styleUrl: './template-form.css',
@@ -35,6 +42,7 @@ export default class TemplateForm {
       this.store.edited() ?? {
         id: createNanoId(),
         name: '',
+        rpe: RateOfPerceivedEffortValue.Mid,
         description: '',
         exerciseIds: [],
         isFavourite: false,
@@ -52,6 +60,7 @@ export default class TemplateForm {
     });
   });
   private readonly router = inject(Router);
+  protected readonly rpeOptions = RateOfPerceivedEffortOptions;
 
   protected onSubmit(): void {
     if (!this.form().invalid()) {

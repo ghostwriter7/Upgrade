@@ -20,6 +20,15 @@
     ></textarea>
   </mat-form-field>
 
+  <mat-form-field>
+    <mat-label>Rate Of Perceived Effort</mat-label>
+    <mat-select [formField]="form.rpe">
+      @for (option of rpeOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
   <app-exercises-control [formField]="form.exerciseIds" />
 
   <section class="checkbox-section">
