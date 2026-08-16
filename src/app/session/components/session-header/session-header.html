@@ -49,6 +49,12 @@
         <mat-icon>delete_forever</mat-icon>
         Delete
       </button>
+      <button
+        [attr.data-testid]="testIds.deleteMenuOption"
+        mat-menu-item (click)="saveAsTemplate()">
+        <mat-icon>save</mat-icon>
+        Save As Template
+      </button>
     </mat-menu>
 
   </div>

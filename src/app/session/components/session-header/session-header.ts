@@ -1,10 +1,4 @@
-import {
-  Component,
-  computed,
-  inject,
-  input,
-  linkedSignal,
-} from '@angular/core';
+import { Component, computed, inject, input, linkedSignal } from '@angular/core';
 import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Session } from '@domain/model/session/session.model';
@@ -19,6 +13,8 @@ import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-sta
 import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 import { DeleteSessionCommand } from '../../commands/delete-session/delete-session-command';
+import { TemplateFacade } from '@templates/template.facade';
+import { ErrorHelper } from '@common/helper/error/error.helper';
 
 @Component({
   selector: 'app-session-header',
@@ -37,6 +33,7 @@ export class SessionHeader {
   protected readonly testIds = {
     editMenuOption: 'session-header-edit-menu-option',
     deleteMenuOption: 'session-header-delete-menu-option',
+    saveAsTemplateMenuOption: 'session-header-save-as-template-option',
     startedAt: 'session-header-started-at',
     startedAtValue: 'session-header-started-at-value',
     finishedAt: 'session-header-finished-at',
@@ -70,6 +67,15 @@ export class SessionHeader {
   private readonly dialog = inject(DialogService);
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly commandBus = inject(CommandBus);
+  private readonly templateFacade = inject(TemplateFacade);
+
+  protected saveAsTemplate(): void {
+    try {
+      this.templateFacade.initNewTemplateFromSession(this.session());
+    } catch (error) {
+      this.dialog.alert(ErrorHelper.getMessage(error));
+    }
+  }
 
   protected deleteSession(): void {
     this.dialog.open(ConfirmDeleteAlert, () =>

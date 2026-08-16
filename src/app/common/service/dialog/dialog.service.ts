@@ -2,6 +2,7 @@ import { DestroyRef, inject, Injectable, Type } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { Alert } from '@ui/alert/alert';
 
 @Injectable()
 export class DialogService {
@@ -19,5 +20,9 @@ export class DialogService {
       .afterClosed()
       .pipe(filter(valuePredicate), takeUntilDestroyed(this.destroyRef))
       .subscribe(afterClosedHandler);
+  }
+
+  public alert(message: string): void {
+    this.dialog.open(Alert, { data: { message } });
   }
 }

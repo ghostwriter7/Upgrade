@@ -7,10 +7,10 @@ import { EditTime } from '../edit-time/edit-time';
 import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatMenuHarness } from '@angular/material/menu/testing';
-import { DateHelper } from '../../../common/helper/date.helper';
-import { Session } from '../../../domain/model/session/session.model';
-import { SessionStore } from '../../../store/session/session.store';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DateHelper } from '@common/helper/date.helper';
+import { Session } from '@domain/model/session/session.model';
+import { SessionStore } from '@store/session/session.store';
+import { DialogService } from '@common/service/dialog/dialog.service';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
@@ -21,7 +21,7 @@ describe('SessionHeader', () => {
   let fixture: ComponentFixture<SessionHeader>;
   let loader: ReturnType<typeof TestbedHarnessEnvironment.loader>;
 
-  let sessionStore: { delete: Mock; };
+  let sessionStore: { delete: Mock };
   let router: { navigate: Mock };
   let dialogService: { open: Mock };
   let commandBus: { dispatch: Mock };
@@ -81,8 +81,7 @@ describe('SessionHeader', () => {
 
   const getStartedAtButton = () => queryByTestId(`session-header-started-at`);
   const getFinishedAtButton = () => queryByTestId(`session-header-finished-at`);
-  const getFinishedAtValue = () =>
-    queryByTestId(`session-header-finished-at-value`);
+  const getFinishedAtValue = () => queryByTestId(`session-header-finished-at-value`);
   const getDuration = () => queryByTestId(`session-header-duration`);
 
   beforeEach(() => {
@@ -128,9 +127,7 @@ describe('SessionHeader', () => {
       session: createSession(false),
     });
 
-    expect(queryByTestId(`session-header-started-at-value`)?.textContent).toEqual(
-      '12:00',
-    );
+    expect(queryByTestId(`session-header-started-at-value`)?.textContent).toEqual('12:00');
   });
 
   it('should not render finished time when session is unfinished', () => {
@@ -296,6 +293,6 @@ describe('SessionHeader', () => {
     const [, callback] = dialogService.open.mock.calls.at(-1)!;
     callback();
 
-    expect(commandBus.dispatch).toHaveBeenCalledExactlyOnceWith(new DeleteSessionCommand(session))
+    expect(commandBus.dispatch).toHaveBeenCalledExactlyOnceWith(new DeleteSessionCommand(session));
   });
 });
