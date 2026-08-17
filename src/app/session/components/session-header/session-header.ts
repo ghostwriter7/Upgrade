@@ -9,6 +9,7 @@ import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-sta
 import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 import { SessionHeaderMenu } from '@session/components/session-header-menu/session-header-menu';
+import { Constructor } from '@common/types/constructor.type';
 
 @Component({
   selector: 'app-session-header',
@@ -56,22 +57,22 @@ export class SessionHeader {
   private readonly commandBus = inject(CommandBus);
 
   protected editStartedAt(): void {
-    this.dialog.open(
-      EditTime,
-      (result: Temporal.Instant) => this.commandBus.dispatch(new PatchStartedAtCommand(result)),
-      {
-        data: { instant: this.session().startedAt, label: 'Edit Started At' },
-      },
-    );
+    this.editTime(this.session().startedAt, 'Edit Started At', PatchStartedAtCommand);
   }
 
   protected editFinishedAt(): void {
+    this.editTime(this.session().finishedAt, 'Edit Finished At', PatchFinishedAtCommand);
+  }
+
+  private editTime(
+    instant: Temporal.Instant | null,
+    label: string,
+    command: Constructor<PatchFinishedAtCommand | PatchStartedAtCommand>,
+  ) {
     this.dialog.open(
       EditTime,
-      (result: Temporal.Instant) => this.commandBus.dispatch(new PatchFinishedAtCommand(result)),
-      {
-        data: { instant: this.session().finishedAt, label: 'Edit Finished At' },
-      },
+      (result: Temporal.Instant) => this.commandBus.dispatch(new command(result)),
+      { data: { instant, label } },
     );
   }
 }
