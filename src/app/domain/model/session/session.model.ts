@@ -24,6 +24,7 @@ export class Session {
   public startedAt: Temporal.Instant = DateHelper.now();
   public finishedAt: Temporal.Instant | null = null;
   public exerciseIds: string[] = [];
+  public rpe?: number;
 
   constructor(
     public readonly uuid: string,

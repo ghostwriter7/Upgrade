@@ -6,6 +6,7 @@ export const SessionSchema = z.object({
   createdAt: z.iso.datetime(),
   startedAt: z.iso.datetime(),
   finishedAt: z.iso.datetime().nullable(),
+  rpe: z.float64().max(10).min(0.5).optional(),
   exerciseIds: z.array(z.string()).default([]),
 });
 
