@@ -26,36 +26,6 @@
       </span>
     }
 
-    <button
-      [attr.data-testid]="testIds.menu"
-      class="ml-auto info"
-      matMiniFab
-      aria-label="Show session context menu"
-      [matMenuTriggerFor]="menu">
-      <mat-icon>menu</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      @if (showEdit()) {
-        <button
-          [attr.data-testid]="testIds.editMenuOption"
-          mat-menu-item (click)="triggerEdit()">
-          <mat-icon>edit</mat-icon>
-          Edit
-        </button>
-      }
-      <button
-        [attr.data-testid]="testIds.deleteMenuOption"
-        mat-menu-item class="danger" (click)="deleteSession()">
-        <mat-icon>delete_forever</mat-icon>
-        Delete
-      </button>
-      <button
-        [attr.data-testid]="testIds.deleteMenuOption"
-        mat-menu-item (click)="saveAsTemplate()">
-        <mat-icon>save</mat-icon>
-        Save As Template
-      </button>
-    </mat-menu>
-
+    <app-session-header-menu [session]="session()" [isNew]="isNew()" />
   </div>
 </header>

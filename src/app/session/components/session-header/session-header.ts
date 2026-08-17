@@ -1,24 +1,18 @@
-import { Component, computed, inject, input, linkedSignal } from '@angular/core';
-import { MatFabButton, MatMiniFabButton } from '@angular/material/button';
+import { Component, computed, inject, input } from '@angular/core';
+import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Session } from '@domain/model/session/session.model';
-import { Router } from '@angular/router';
 import { DateHelper } from '@common/helper/date.helper';
-import { ConfirmDeleteAlert } from '../confirm-delete-alert/confirm-delete-alert.component';
 import { EditTime } from '../edit-time/edit-time';
-import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
 import { DialogService } from '@common/service/dialog/dialog.service';
-import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { PatchStartedAtCommand } from '../../commands/patch-started-at/patch-started-at.command';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
-import { DeleteSessionCommand } from '../../commands/delete-session/delete-session-command';
-import { TemplateFacade } from '@templates/template.facade';
-import { ErrorHelper } from '@common/helper/error/error.helper';
+import { SessionHeaderMenu } from '@session/components/session-header-menu/session-header-menu';
 
 @Component({
   selector: 'app-session-header',
-  imports: [MatFabButton, MatIcon, MatMiniFabButton, MatMenu, MatMenuItem, MatMenuTrigger],
+  imports: [MatFabButton, MatIcon, SessionHeaderMenu],
   templateUrl: './session-header.html',
   providers: [DialogService],
   styleUrl: './session-header.css',
@@ -29,17 +23,12 @@ export class SessionHeader {
   public session = input.required<Session>();
 
   protected readonly isNonEditable = computed(() => !this.isEditable());
-  protected readonly showEdit = linkedSignal(() => !this.isNew());
   protected readonly testIds = {
-    editMenuOption: 'session-header-edit-menu-option',
-    deleteMenuOption: 'session-header-delete-menu-option',
-    saveAsTemplateMenuOption: 'session-header-save-as-template-option',
     startedAt: 'session-header-started-at',
     startedAtValue: 'session-header-started-at-value',
     finishedAt: 'session-header-finished-at',
     finishedAtValue: 'session-header-finished-at-value',
     duration: 'session-header-duration',
-    menu: 'session-header-menu',
   };
   protected readonly startedAt = computed(() =>
     DateHelper.toLocal(this.session().startedAt).toLocaleString('en-GB', { timeStyle: 'short' }),
@@ -63,25 +52,8 @@ export class SessionHeader {
     return `${minutes}m`;
   });
 
-  private readonly router = inject(Router);
   private readonly dialog = inject(DialogService);
-  private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly commandBus = inject(CommandBus);
-  private readonly templateFacade = inject(TemplateFacade);
-
-  protected saveAsTemplate(): void {
-    try {
-      this.templateFacade.initNewTemplateFromSession(this.session());
-    } catch (error) {
-      this.dialog.alert(ErrorHelper.getMessage(error));
-    }
-  }
-
-  protected deleteSession(): void {
-    this.dialog.open(ConfirmDeleteAlert, () =>
-      this.commandBus.dispatch(new DeleteSessionCommand(this.session())),
-    );
-  }
 
   protected editStartedAt(): void {
     this.dialog.open(
@@ -101,10 +73,5 @@ export class SessionHeader {
         data: { instant: this.session().finishedAt, label: 'Edit Finished At' },
       },
     );
-  }
-
-  protected triggerEdit(): void {
-    this.sessionStateHolder.set(this.session());
-    this.router.navigate(['/session/edit']);
   }
 }
