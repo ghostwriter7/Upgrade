@@ -25,7 +25,12 @@ export class RpeInput implements OnInit {
   protected readonly valueClasses = computed(() => {
     const value = this.value();
     if (!value) return 'label';
-    return ['label', `label--${value.toFixed(1).replace('.', '')}`];
+
+    if (value < 3) return ['label', 'label--very-soft'];
+    if (value < 5) return ['label', 'label--soft'];
+    if (value < 7) return ['label', 'label--mid'];
+    if (value < 9) return ['label', 'label--hard'];
+    return ['label', 'label--very-hard'];
   });
 
   public ngOnInit(): void {

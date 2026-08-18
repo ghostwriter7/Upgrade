@@ -10,5 +10,33 @@ mat-slider {
 }
 
 .label {
-  min-width: 55px;
+  min-width: 30px;
+  border-radius: var(--mat-sys-corner-small);
+  text-align: center;
+  padding: var(--space-2);
+}
+
+.label--very-soft {
+  background-color: #4caf50;
+  color: #ffffff;
+}
+
+.label--soft {
+  background-color: #8bc34a;
+  color: #ffffff;
+}
+
+.label--mid {
+  background-color: #ffeb3b;
+  color: #000000;
+}
+
+.label--hard {
+  background-color: #ff9800;
+  color: #000000;
+}
+
+.label--very-hard {
+  background-color: #f44336;
+  color: #ffffff;
 }
