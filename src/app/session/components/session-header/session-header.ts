@@ -57,6 +57,7 @@ export class SessionHeader {
 
   private readonly dialog = inject(DialogService);
   private readonly commandBus = inject(CommandBus);
+  protected readonly showRpe = computed(() => this.session().rpe || this.isEditable());
 
   protected editStartedAt(): void {
     this.editTime(this.session().startedAt, 'Edit Started At', PatchStartedAtCommand);

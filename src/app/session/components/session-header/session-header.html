@@ -28,10 +28,9 @@
 
     <app-session-header-menu [session]="session()" [isNew]="isNew()" />
   </div>
-  @let rpe = session().rpe;
-  @if (rpe) {
+  @if (showRpe()) {
     <div class="row">
-      <app-rpe-input [rpe]="rpe" [isEditable]="isEditable()" />
+      <app-rpe-input [rpe]="session().rpe" [isEditable]="isEditable()" />
     </div>
   }
 </header>
