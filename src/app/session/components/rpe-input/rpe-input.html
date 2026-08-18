@@ -1,0 +1,10 @@
+<span [class]="valueClasses()">{{ value() }}</span>
+@if (!isDisabled()) {
+  <mat-slider
+    [max]="10"
+    [min]="0.5"
+    [step]="0.5"
+  >
+    <input matSliderThumb [formControl]="control">
+  </mat-slider>
+}

@@ -28,4 +28,7 @@
 
     <app-session-header-menu [session]="session()" [isNew]="isNew()" />
   </div>
+  <div class="row">
+    <app-rpe-input [rpe]="session().rpe" [isEditable]="isEditable()" />
+  </div>
 </header>

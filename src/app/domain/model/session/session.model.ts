@@ -56,6 +56,13 @@ export class Session {
     session.finishedAt = this.finishedAt;
     session.exercises = [...this.exercises.map((exercise) => exercise.clone())];
     session.exerciseIds = [...this.exerciseIds];
+    session.rpe = this.rpe;
+    return session;
+  }
+
+  public withRpe(rpe?: number): Session {
+    const session = this.clone();
+    session.rpe = rpe;
     return session;
   }
 

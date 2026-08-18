@@ -10,10 +10,12 @@ import { CommandBus } from '@common/routers/command/command-bus';
 import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-finished-at.command';
 import { SessionHeaderMenu } from '@session/components/session-header-menu/session-header-menu';
 import { Constructor } from '@common/types/constructor.type';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RpeInput } from '@session/components/rpe-input/rpe-input';
 
 @Component({
   selector: 'app-session-header',
-  imports: [MatFabButton, MatIcon, SessionHeaderMenu],
+  imports: [MatFabButton, MatIcon, SessionHeaderMenu, ReactiveFormsModule, RpeInput],
   templateUrl: './session-header.html',
   providers: [DialogService],
   styleUrl: './session-header.css',

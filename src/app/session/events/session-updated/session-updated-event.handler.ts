@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { SessionUpdatedEvent } from './session-updated.event';
-import { SessionRepository } from '../../../persistence/repository/session.repository';
+import { SessionRepository } from '@persistence/repository/session.repository';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
