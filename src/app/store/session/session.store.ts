@@ -16,13 +16,13 @@ import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/
 interface State {
   activeDate: string;
   sessionsByDate: Record<string, Session[] | undefined>;
-  countsByMonthAndYear: Record<string, Record<number, number>>;
+  sessionsByMonthAndYear: Record<string, Record<number, Session[]>>;
 }
 
 const initialState: State = {
   activeDate: DateHelper.toLocal(DateHelper.now()).toPlainDate().toString(),
   sessionsByDate: {},
-  countsByMonthAndYear: {},
+  sessionsByMonthAndYear: {},
 };
 
 export const SessionStore = signalStore(
@@ -41,15 +41,23 @@ export const SessionStore = signalStore(
       return `${zonedDate.year}-${zonedDate.month}`;
     };
 
-    const computeCounts = (
+    const computeSessionCache = (
       session: Session,
-      change: number,
-    ): Record<string, Record<number, number>> => {
+      operation: 'add' | 'remove',
+    ): Record<string, Record<number, Session[]>> => {
       const countId = createCountId(session.startedAt);
-      const counts = { ...store.countsByMonthAndYear() };
+      const counts = { ...store.sessionsByMonthAndYear() };
       const targetCounts = { ...counts[countId] };
       const dateIndex = session.dayOfMonth;
-      targetCounts[dateIndex] = Math.max(0, (targetCounts[dateIndex] ?? 0) + change);
+
+      if (operation === 'add') {
+        targetCounts[dateIndex] = [...(targetCounts[dateIndex] || []), session];
+      } else {
+        targetCounts[dateIndex] = (targetCounts[dateIndex] || []).filter(
+          (s) => s.uuid !== session.uuid,
+        );
+      }
+
       counts[countId] = targetCounts;
       return counts;
     };
@@ -57,23 +65,23 @@ export const SessionStore = signalStore(
     return {
       setActiveDate: (activeDate: string) => patchState(store, { activeDate }),
 
-      getCountsByMonthAndYear: async (
+      getSessionsByMonthAndYear: async (
         month: number,
         year: number,
-      ): Promise<Record<number, number>> => {
+      ): Promise<Record<number, Session[]>> => {
         const storeId = createCountId(new Temporal.PlainDate(year, month, 1));
-        const cachedEntry = store.countsByMonthAndYear()[storeId];
+        const cachedEntry = store.sessionsByMonthAndYear()[storeId];
         if (cachedEntry) return cachedEntry;
 
-        const counts = await sessionRepository.getCountsByMonthAndYear(month, year);
+        const sessions = await sessionRepository.getSessionsByMonthAndYear(month, year);
         patchState(store, (state) => ({
           ...state,
-          countsByMonthAndYear: {
-            ...state.countsByMonthAndYear,
-            [storeId]: counts,
+          sessionsByMonthAndYear: {
+            ...state.sessionsByMonthAndYear,
+            [storeId]: sessions,
           },
         }));
-        return counts;
+        return sessions;
       },
 
       updateCache: (session: Session) => {
@@ -87,7 +95,7 @@ export const SessionStore = signalStore(
           patchState(store, (state) => ({
             ...state,
             sessionsByDate,
-            countsByMonthAndYear: computeCounts(session, +1),
+            sessionsByMonthAndYear: computeSessionCache(session, 'add'),
           }));
         } else {
           sessionsByDate[dateId] = thisDateSessions.with(existingIndex, session);
@@ -105,7 +113,7 @@ export const SessionStore = signalStore(
         patchState(store, (state) => ({
           ...state,
           sessionsByDate,
-          countsByMonthAndYear: computeCounts(session, -1),
+          sessionsByMonthAndYear: computeSessionCache(session, 'remove'),
         }));
       },
     };

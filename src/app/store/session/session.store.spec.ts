@@ -7,9 +7,7 @@ import { Session } from '@domain/model/session/session.model';
 import { QueryBus } from '@common/routers/query/query-bus';
 import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/find-sessions-by-date.query';
 
-type SessionRepositoryMock = Mocked<
-  Pick<SessionRepository, 'getCountsByMonthAndYear' | 'save'>
->;
+type SessionRepositoryMock = Mocked<Pick<SessionRepository, 'getSessionsByMonthAndYear' | 'save'>>;
 
 const createSessionAt = (iso: string): Session => {
   const session = Session.createEmpty();
@@ -97,7 +95,9 @@ describe('SessionStore', () => {
 
       await flushEffectsAndPromises();
 
-      expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(new FindSessionsByDateQuery(yesterday));
+      expect(queryBus.execute).toHaveBeenCalledExactlyOnceWith(
+        new FindSessionsByDateQuery(yesterday),
+      );
       expect(store.activeSessions()).toEqual([]);
     });
 
@@ -139,25 +139,25 @@ describe('SessionStore', () => {
 
     const savedCounts = { 1: 1, 3: 1 };
     it('should fetch counts from the repository when there is no cached entry', async () => {
-      sessionRepositoryMock.getCountsByMonthAndYear.mockResolvedValueOnce(savedCounts);
+      sessionRepositoryMock.getSessionsByMonthAndYear.mockResolvedValueOnce(savedCounts);
 
       const counts = await store.getCountsByMonthAndYear(7, 2026);
 
       expect(counts).toEqual(savedCounts);
-      expect(sessionRepositoryMock.getCountsByMonthAndYear).toHaveBeenCalledExactlyOnceWith(
+      expect(sessionRepositoryMock.getSessionsByMonthAndYear).toHaveBeenCalledExactlyOnceWith(
         7,
         2026,
       );
     });
 
     it('should return counts from the cache when it is available', async () => {
-      sessionRepositoryMock.getCountsByMonthAndYear.mockResolvedValueOnce(savedCounts);
+      sessionRepositoryMock.getSessionsByMonthAndYear.mockResolvedValueOnce(savedCounts);
       await store.getCountsByMonthAndYear(7, 2026);
 
       const counts = await store.getCountsByMonthAndYear(7, 2026);
 
       expect(counts).toEqual(savedCounts);
-      expect(sessionRepositoryMock.getCountsByMonthAndYear).toHaveBeenCalledTimes(1);
+      expect(sessionRepositoryMock.getSessionsByMonthAndYear).toHaveBeenCalledTimes(1);
     });
   });
 

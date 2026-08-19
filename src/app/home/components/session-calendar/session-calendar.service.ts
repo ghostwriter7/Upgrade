@@ -4,6 +4,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { from, switchMap, tap } from 'rxjs';
 import { pad } from '@common/function/pad-time.function';
 import { CalendarCell } from './session-calendar.model';
+import { Session } from '@domain/model/session/session.model';
 
 @Injectable({ providedIn: 'root' })
 export class SessionCalendarService {
@@ -18,14 +19,14 @@ export class SessionCalendarService {
   });
   private readonly firstDayOfWeek = computed(() => this.$firstDayOfMonth().dayOfWeek);
   private readonly numberOfDaysInMonth = computed(() => this.$firstDayOfMonth().daysInMonth);
-  private readonly sessionCountByDate = signal<Record<number, number>>({});
+  private readonly sessionsByDay = signal<Record<number, Session[]>>({});
 
   public readonly $calendarCells = computed<CalendarCell[]>(() => {
     const firstDayOfWeek = this.firstDayOfWeek();
 
     const leadingEmptyCells = firstDayOfWeek - 1;
 
-    const sessionCountByDate = this.sessionCountByDate();
+    const sessionsByDate = this.sessionsByDay();
     const { year, month } = this.activeYearAndMonth();
     const cells: Omit<CalendarCell, 'testId'>[] = [];
 
@@ -46,9 +47,16 @@ export class SessionCalendarService {
     }
 
     for (let i = 1; i <= this.numberOfDaysInMonth(); i++) {
+      const sessions = sessionsByDate[i];
+      const maxRpe = sessions
+        ?.filter(({ rpe }) => rpe !== undefined)
+        .reduce((max, { rpe }) => Math.max(max, rpe as number), 0);
+      const rpeClass = maxRpe ? this.computeClass(maxRpe) : undefined;
       cells.push({
         day: i,
-        hasSessions: !!sessionCountByDate[i],
+        hasSessions: !!sessions?.length,
+        maxRpe,
+        rpeClass,
         date: this.toDateString(year, month, i),
       });
     }
@@ -70,19 +78,19 @@ export class SessionCalendarService {
 
   constructor() {
     effect(() => {
-      const countsByMonthAndYear = this.sessionStore.countsByMonthAndYear();
+      const sessionsByMonthAndYear = this.sessionStore.sessionsByMonthAndYear();
       const { year, month } = this.activeYearAndMonth();
-      const sessionCount = countsByMonthAndYear[`${year}-${month}`] ?? {};
+      const monthlySessions = sessionsByMonthAndYear[`${year}-${month}`] ?? {};
 
-      untracked(() => this.sessionCountByDate.set(sessionCount));
+      untracked(() => this.sessionsByDay.set(monthlySessions));
     });
 
     toObservable(this.activeYearAndMonth)
       .pipe(
         switchMap(({ year, month }) =>
-          from(this.sessionStore.getCountsByMonthAndYear(month, year)),
+          from(this.sessionStore.getSessionsByMonthAndYear(month, year)),
         ),
-        tap((sessionCountByDate) => this.sessionCountByDate.set(sessionCountByDate)),
+        tap((sessionCountByDate) => this.sessionsByDay.set(sessionCountByDate)),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
@@ -108,5 +116,13 @@ export class SessionCalendarService {
 
   private toDateString(year: number, month: number, day: number): string {
     return `${year}-${pad(month)}-${pad(day)}`;
+  }
+
+  private computeClass(rpe: number): string {
+    if (rpe < 3) return 'very-soft';
+    if (rpe < 5) return 'soft';
+    if (rpe < 7) return 'mid';
+    if (rpe < 9) return 'hard';
+    return 'very-hard';
   }
 }

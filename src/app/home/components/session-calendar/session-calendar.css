@@ -21,10 +21,36 @@
 
 .cell {
   padding: 0.5rem;
+  position: relative;
   border: 1px solid var(--mat-sys-outline-variant);
   border-radius: 0.75rem;
   background: var(--mat-sys-surface-container);
   color: var(--mat-sys-on-surface);
+
+  &.very-soft {
+    background-color: #4caf50 !important;
+    color: #ffffff !important;
+  }
+
+  &.soft {
+    background-color: #8bc34a !important;
+    color: #ffffff !important;
+  }
+
+  &.mid {
+    background-color: #ffeb3b !important;
+    color: #000000 !important;
+  }
+
+  &.hard {
+    background-color: #ff9800 !important;
+    color: #000000 !important;
+  }
+
+  &.very-hard {
+    background-color: #f44336 !important;
+    color: #ffffff !important;
+  }
 }
 
 .empty {
@@ -43,6 +69,12 @@
   min-width: 2rem;
   height: 2rem;
   border-radius: 999px;
-  color: var(--mat-sys-on-surface);
   font: var(--mat-sys-label-large);
+}
+
+.rpe {
+  position: absolute;
+  left: 5px;
+  top: 3px;
+  font: var(--mat-sys-label-small);
 }

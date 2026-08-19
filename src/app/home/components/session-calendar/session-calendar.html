@@ -1,11 +1,13 @@
 <div class="nav">
-  <button data-testid="session-calendar-show-prev-month" matMiniFab aria-label="Show previous month" (click)="showPreviousMonth()">
+  <button data-testid="session-calendar-show-prev-month" matMiniFab aria-label="Show previous month"
+          (click)="showPreviousMonth()">
     <mat-icon>chevron_left</mat-icon>
   </button>
 
   <span data-testid="session-calendar-month-label">{{ label() }}</span>
 
-  <button data-testid="session-calendar-show-next-month" matMiniFab aria-label="Show next month" (click)="showNextMonth()">
+  <button data-testid="session-calendar-show-next-month" matMiniFab aria-label="Show next month"
+          (click)="showNextMonth()">
     <mat-icon>chevron_right</mat-icon>
   </button>
 </div>
@@ -24,10 +26,14 @@
       [attr.data-testid]="cell.testId"
       [class.highlight]="cell.hasSessions"
       [class.empty]="cell.day === null"
+      [ngClass]="cell.rpeClass"
       [routerLink]="['/session', cell.date]"
     >
       @if (cell.day !== null) {
         <span class="day">{{ cell.day }}</span>
+        @if (cell.maxRpe; as rpe) {
+          <span class="rpe">{{ rpe }}</span>
+        }
       }
     </div>
   }

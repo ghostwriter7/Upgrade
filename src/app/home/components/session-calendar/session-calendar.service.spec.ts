@@ -20,7 +20,7 @@ describe('SessionCalendarService', () => {
     vi.spyOn(Temporal.Now, 'plainDateISO').mockReturnValue(Temporal.PlainDate.from('2026-05-15'));
 
     sessionStore = {
-      getCountsByMonthAndYear: vi.fn().mockResolvedValue({}),
+      getSessionsByMonthAndYear: vi.fn().mockResolvedValue({}),
       countsByMonthAndYear: signal({}),
     };
 

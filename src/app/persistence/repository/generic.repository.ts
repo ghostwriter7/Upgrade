@@ -11,14 +11,14 @@ export abstract class GenericRepository<T> {
     return firstValueFrom(this.db);
   }
 
-  protected async openKeyCursor(
+  protected async openCursor(
     storeName: StoreName,
     index: IndexName,
     createRange: () => IDBKeyRange,
-  ): Promise<IDBRequest<IDBCursor | null>> {
+  ): Promise<IDBRequest<IDBCursorWithValue | null>> {
     const transaction = await this.createReadTransaction(storeName);
     const store = transaction.objectStore(storeName);
-    return store.index(index).openKeyCursor(createRange());
+    return store.index(index).openCursor(createRange());
   }
 
   protected async findById(storeName: StoreName, id: string): Promise<T | undefined> {
