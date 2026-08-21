@@ -4,6 +4,7 @@ import { exercises } from './exercises.const';
 import { computed } from '@angular/core';
 import { Skills } from '@domain/enum/skill-tag.enum';
 import { Skill } from '@domain/model/skill';
+import { CapabilityId } from '@store/capabilities.const';
 
 interface State {
   activeSkill: Skill | undefined;
@@ -34,11 +35,22 @@ export const ExerciseStore = signalStore(
       const capabilityIds = new Set(
         skill.capabilities.map((capability) => capability.capabilityId),
       );
-      return store
+      const importanceByCapabilityId = skill.capabilities.reduce(
+        (index, { capabilityId, importance }) => ({ ...index, [capabilityId]: importance }),
+        {} as Record<CapabilityId, number>,
+      );
+      const eligibleExercises = store
         .allExercises()
         .filter((exercise) =>
           exercise.capabilities?.some((capability) => capabilityIds.has(capability.capabilityId)),
-        );
+        )
+        .map((exercise) => {
+          const score = computeScore(exercise, importanceByCapabilityId);
+          return { score, exercise };
+        })
+        .sort((a, b) => b.score - a.score);
+
+      return eligibleExercises.map(({ exercise }) => exercise);
     }),
     skillsByExerciseId: computed(() =>
       store.allExercises().reduce((index, exercise) => {
@@ -52,3 +64,16 @@ export const ExerciseStore = signalStore(
     getExerciseById: (id: string) => store.exercises().find((exercise) => exercise.id === id),
   })),
 );
+
+function computeScore(
+  exercise: Exercise,
+  importanceByCapabilityId: Record<CapabilityId, number>,
+): number {
+  return (
+    exercise.capabilities?.reduce(
+      (score, { capabilityId, weight }) =>
+        score + (importanceByCapabilityId[capabilityId] ?? 0) * weight,
+      0,
+    ) ?? 0
+  );
+}
