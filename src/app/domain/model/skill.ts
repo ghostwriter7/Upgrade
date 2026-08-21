@@ -1,6 +1,7 @@
 import { CapabilityId } from '@store/capabilities.const';
 
 export interface Skill {
+  id: string;
   name: string;
   capabilities: SkillCapability[];
 }

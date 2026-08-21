@@ -3,6 +3,7 @@ import { Skill, SkillCapability } from '@domain/model/skill';
 import { SkillTag } from '@domain/enum/skill-tag.enum';
 import { CapabilityDefinition } from '@domain/model/capability-definition';
 import { capabilities, CapabilityId } from '@store/capabilities.const';
+import { snakeToTitleCase } from '@common/helper/string/string.utils';
 
 interface State {
   skills: Skill[];
@@ -16,7 +17,7 @@ const capability = (capabilityId: CapabilityId, importance: number): SkillCapabi
 
 const skills: Skill[] = [
   {
-    name: SkillTag.Bridge,
+    id: SkillTag.Bridge,
     capabilities: [
       capability('shoulder-flexion', 1.0),
       capability('shoulder-external-rotation', 0.8),
@@ -25,14 +26,14 @@ const skills: Skill[] = [
     ],
   },
   {
-    name: SkillTag.SideSplit,
+    id: SkillTag.SideSplit,
     capabilities: [
       capability('adductor-extensibility', 1.0),
       capability('adductor-end-range-strength', 0.8),
     ],
   },
   {
-    name: SkillTag.FrontSplit,
+    id: SkillTag.FrontSplit,
     capabilities: [
       capability('hip-flexor-extensibility', 1.0),
       capability('hamstring-extensibility', 1.0),
@@ -40,7 +41,7 @@ const skills: Skill[] = [
     ],
   },
   {
-    name: SkillTag.Pancake,
+    id: SkillTag.Pancake,
     capabilities: [
       capability('adductor-extensibility', 1.0),
       capability('hamstring-extensibility', 0.9),
@@ -49,14 +50,14 @@ const skills: Skill[] = [
     ],
   },
   {
-    name: SkillTag.Pike,
+    id: SkillTag.Pike,
     capabilities: [
       capability('hamstring-extensibility', 1.0),
       capability('active-hip-flexion', 0.9),
       capability('hamstring-end-range-strength', 0.7),
     ],
   },
-];
+].map((skill) => ({ ...skill, name: snakeToTitleCase(skill.id) }));
 
 const initialState: State = {
   skills,

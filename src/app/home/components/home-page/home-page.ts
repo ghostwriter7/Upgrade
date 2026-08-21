@@ -6,6 +6,7 @@ import { SessionCalendar } from '../session-calendar/session-calendar';
 import { SkillCoverage } from '@home/components/skill-coverage/skill-coverage';
 import { TemplateSelector } from '@home/components/template-selector/template-selector';
 import { RandomSessionControl } from '@home/components/random-session-control/random-session-control';
+import { SkillSessionSelector } from '@home/components/skill-session-selector/skill-session-selector';
 
 @Component({
   selector: 'app-home-page',
@@ -17,6 +18,7 @@ import { RandomSessionControl } from '@home/components/random-session-control/ra
     SkillCoverage,
     TemplateSelector,
     RandomSessionControl,
+    SkillSessionSelector,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',

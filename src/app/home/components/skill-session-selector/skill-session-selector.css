@@ -1,0 +1,8 @@
+.slider {
+  display: flex;
+  overflow-x: scroll;
+}
+
+.skill {
+  text-wrap: nowrap;
+}
