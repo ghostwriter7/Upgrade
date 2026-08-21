@@ -38,7 +38,8 @@ export class ExerciseDropdown {
       .filter((exercise) => exercise.name.toLowerCase().includes(filter));
   });
 
-  protected displayExercise(exercise: Exercise | string): string {
+  protected displayExercise(exercise?: Exercise | string | null): string {
+    if (!exercise) return '';
     return typeof exercise === 'string' ? exercise : exercise.name;
   }
 }
