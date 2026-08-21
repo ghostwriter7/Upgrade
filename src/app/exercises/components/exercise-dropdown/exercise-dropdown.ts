@@ -29,7 +29,7 @@ export class ExerciseDropdown {
 
   protected readonly options = computed(() => {
     const { exercise } = this.model();
-    const filter = (exercise instanceof Exercise ? exercise.name : exercise)?.toLowerCase();
+    const filter = exercise ? this.displayExercise(exercise)?.toLowerCase() : null;
 
     if (!filter) return this.exerciseStore.exercises();
 
@@ -39,6 +39,6 @@ export class ExerciseDropdown {
   });
 
   protected displayExercise(exercise: Exercise | string): string {
-    return exercise instanceof Exercise ? exercise.name : exercise;
+    return typeof exercise === 'string' ? exercise : exercise.name;
   }
 }

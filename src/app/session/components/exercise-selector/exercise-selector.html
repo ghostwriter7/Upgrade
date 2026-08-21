@@ -4,6 +4,7 @@
     @for (exercise of availableExercises(); track exercise.id) {
       <mat-list-option togglePosition="after" [value]="exercise.id">
         <span matListItemTitle>{{ exercise.name }}</span>
+        <span matListItemLine>{{ exercise.stats?.lastPerformedHoursAgo | printHours }}</span>
       </mat-list-option>
     }
   </mat-selection-list>
@@ -14,6 +15,7 @@
     class="success"
     matButton
     [disabled]="hasNoneSelected()"
-    [mat-dialog-close]="selectedExerciseIds()">Add</button>
+    [mat-dialog-close]="selectedExerciseIds()">Add
+  </button>
   <button data-testid="exercise-selector-cancel-btn" class="info" matButton mat-dialog-close>Cancel</button>
 </mat-dialog-actions>

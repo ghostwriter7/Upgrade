@@ -1,16 +1,22 @@
 import { signal, WritableSignal } from '@angular/core';
 import { Exercise } from '@domain/model/exercise.model';
 
+const drill = (id: string, name: string): Exercise => ({
+  id,
+  name,
+  supportedSetTypes: [],
+});
+
 export const createExerciseStoreMock = () => ({
   exercises: signal([
-    new Exercise('back-squats', 'Back Squats'),
-    new Exercise('chin-ups', 'Chin Ups'),
-    new Exercise('l-sit', 'L-Sit'),
-    new Exercise('pull-ups', 'Pull Ups'),
-    new Exercise('side-split', 'Side Split'),
-  ])
+    drill('back-squats', 'Back Squats'),
+    drill('chin-ups', 'Chin Ups'),
+    drill('l-sit', 'L-Sit'),
+    drill('pull-ups', 'Pull Ups'),
+    drill('side-split', 'Side Split'),
+  ]),
 });
 
 export interface ExerciseStoreMock {
-  exercises: WritableSignal<Exercise[]>
+  exercises: WritableSignal<Exercise[]>;
 }

@@ -1,10 +1,19 @@
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { Exercise } from '@domain/model/exercise.model';
 import { exercises } from './exercises.const';
-import { computed } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { Skills } from '@domain/enum/skill-tag.enum';
 import { Skill } from '@domain/model/skill';
 import { CapabilityId } from '@store/capabilities.const';
+import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
+import { DateHelper } from '@common/helper/date.helper';
 
 interface State {
   activeSkill: Skill | undefined;
@@ -13,15 +22,7 @@ interface State {
 
 const initialState: State = {
   activeSkill: undefined,
-  allExercises: exercises.map(
-    ({ id, name, measurementDefinition, skillTags, supportedSetTypes, capabilities }) => {
-      const exercise = new Exercise(id, name, supportedSetTypes);
-      exercise.measurementDefinition = measurementDefinition;
-      exercise.skillTags = skillTags;
-      exercise.capabilities = capabilities;
-      return exercise;
-    },
-  ),
+  allExercises: exercises,
 };
 
 export const ExerciseStore = signalStore(
@@ -32,25 +33,7 @@ export const ExerciseStore = signalStore(
       const skill = store.activeSkill();
       if (!skill) return store.allExercises();
 
-      const capabilityIds = new Set(
-        skill.capabilities.map((capability) => capability.capabilityId),
-      );
-      const importanceByCapabilityId = skill.capabilities.reduce(
-        (index, { capabilityId, importance }) => ({ ...index, [capabilityId]: importance }),
-        {} as Record<CapabilityId, number>,
-      );
-      const eligibleExercises = store
-        .allExercises()
-        .filter((exercise) =>
-          exercise.capabilities?.some((capability) => capabilityIds.has(capability.capabilityId)),
-        )
-        .map((exercise) => {
-          const score = computeScore(exercise, importanceByCapabilityId);
-          return { score, exercise };
-        })
-        .sort((a, b) => b.score - a.score);
-
-      return eligibleExercises.map(({ exercise }) => exercise);
+      return findSupportingExercises(skill, store.allExercises());
     }),
     skillsByExerciseId: computed(() =>
       store.allExercises().reduce((index, exercise) => {
@@ -63,7 +46,60 @@ export const ExerciseStore = signalStore(
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
     getExerciseById: (id: string) => store.exercises().find((exercise) => exercise.id === id),
   })),
+  withHooks((store, exerciseLogRepository = inject(ExerciseLogRepository)) => ({
+    onInit: async () => {
+      const allExercises = store.allExercises();
+      const exerciseIds = allExercises.map(({ id }) => id);
+
+      const latestLogs = await Promise.all(
+        exerciseIds.map((id) => exerciseLogRepository.findLatestExerciseLogsByExerciseId(id)),
+      );
+
+      const lastDateByExerciseId = latestLogs
+        .filter((log) => !!log.length)
+        .reduce(
+          (index, [{ exerciseId, createdAt }]) => ({ ...index, [exerciseId]: createdAt }),
+          {} as Record<string, Temporal.Instant>,
+        );
+
+      const now = DateHelper.now();
+
+      patchState(store, {
+        allExercises: allExercises.map((exercise) => {
+          const lastPerformedAt = lastDateByExerciseId[exercise.id];
+          const lastPerformedHoursAgo = lastPerformedAt
+            ? lastPerformedAt.until(now).round({ largestUnit: 'hours' }).hours
+            : 0;
+          return {
+            ...exercise,
+            stats: {
+              lastPerformedAt,
+              lastPerformedHoursAgo,
+            },
+          };
+        }),
+      });
+    },
+  })),
 );
+
+function findSupportingExercises(skill: Skill, exercises: Exercise[]): Exercise[] {
+  const capabilityIds = new Set(skill.capabilities.map((capability) => capability.capabilityId));
+  const importanceByCapabilityId = skill.capabilities.reduce(
+    (index, { capabilityId, importance }) => ({ ...index, [capabilityId]: importance }),
+    {} as Record<CapabilityId, number>,
+  );
+  return exercises
+    .filter((exercise) =>
+      exercise.capabilities?.some((capability) => capabilityIds.has(capability.capabilityId)),
+    )
+    .map((exercise) => {
+      const score = computeScore(exercise, importanceByCapabilityId);
+      return { score, exercise };
+    })
+    .sort((a, b) => b.score - a.score)
+    .map(({ exercise }) => exercise);
+}
 
 function computeScore(
   exercise: Exercise,

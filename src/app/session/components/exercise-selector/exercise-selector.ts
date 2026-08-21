@@ -9,7 +9,14 @@ import {
 } from '@angular/material/dialog';
 import { ExerciseStore } from '@store/exercises.store';
 import { Session } from '@domain/model/session/session.model';
-import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angular/material/list';
+import {
+  MatListItemLine,
+  MatListItemTitle,
+  MatListOption,
+  MatSelectionList,
+  MatSelectionListChange,
+} from '@angular/material/list';
+import { PrintHoursPipe } from '@ui/pipes/print-hours-pipe';
 
 @Component({
   selector: 'app-exercise-selector',
@@ -21,6 +28,9 @@ import { MatListOption, MatSelectionList, MatSelectionListChange } from '@angula
     MatDialogTitle,
     MatSelectionList,
     MatListOption,
+    MatListItemTitle,
+    MatListItemLine,
+    PrintHoursPipe,
   ],
   templateUrl: './exercise-selector.html',
   styleUrl: './exercise-selector.css',

@@ -1,8 +1,6 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
-import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
-import { Skills, SkillTag } from '@domain/enum/skill-tag.enum';
-import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
-import { ExerciseCapability } from '@domain/model/exercise.model';
+import { SkillTag } from '@domain/enum/skill-tag.enum';
+import { Exercise, ExerciseCapability } from '@domain/model/exercise.model';
 import { CapabilityId } from '@store/capabilities.const';
 
 const capability = (capabilityId: CapabilityId, weight: number): ExerciseCapability => ({
@@ -10,14 +8,7 @@ const capability = (capabilityId: CapabilityId, weight: number): ExerciseCapabil
   weight,
 });
 
-export const exercises: {
-  id: string;
-  name: string;
-  measurementDefinition?: AngleMeasurementDefinition;
-  skillTags?: Skills[];
-  capabilities?: ExerciseCapability[];
-  supportedSetTypes: ExerciseSetType[];
-}[] = [
+export const exercises: Exercise[] = [
   {
     id: 'archer-pull-ups',
     name: 'Archer Pull-Ups',
