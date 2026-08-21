@@ -13,6 +13,9 @@ export const capabilities = [
 
   { id: 'hip-flexor-extensibility', name: 'Hip flexor extensibility' },
   { id: 'active-hip-flexion', name: 'Active hip flexion' },
+
+  { id: 'vertical-pulling-strength', name: 'Vertical pulling strength' },
+  { id: 'grip-and-hanging-strength', name: 'Grip and hanging strength' },
 ] as const satisfies CapabilityDefinition[];
 
 export type CapabilityId = (typeof capabilities)[number]['id'];

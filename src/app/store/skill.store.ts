@@ -58,6 +58,13 @@ const skills: Skill[] = [
       capability('hamstring-end-range-strength', 0.7),
     ],
   },
+  {
+    id: SkillTag.OneArmChinUp,
+    capabilities: [
+      capability('vertical-pulling-strength', 1),
+      capability('grip-and-hanging-strength', 0.8),
+    ],
+  },
 ].map((skill) => ({ ...skill, name: snakeToTitleCase(skill.id) }));
 
 const initialState: State = {

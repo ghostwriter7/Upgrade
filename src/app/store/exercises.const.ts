@@ -19,6 +19,15 @@ export const exercises: {
   supportedSetTypes: ExerciseSetType[];
 }[] = [
   {
+    id: 'archer-pull-ups',
+    name: 'Archer Pull-Ups',
+    capabilities: [
+      capability('vertical-pulling-strength', 1),
+      capability('grip-and-hanging-strength', 0.8),
+    ],
+    supportedSetTypes: ['bodyweight', 'weight', 'iso'],
+  },
+  {
     id: 'arching-standing-kneeling',
     name: 'Arching (Standing / Kneeling)',
     capabilities: [
@@ -48,6 +57,10 @@ export const exercises: {
   {
     id: 'chin-ups',
     name: 'Chin Ups',
+    capabilities: [
+      capability('vertical-pulling-strength', 1),
+      capability('grip-and-hanging-strength', 0.8),
+    ],
     skillTags: [SkillTag.OneArmChinUp],
     supportedSetTypes: ['bodyweight', 'weight'],
   },
@@ -292,6 +305,10 @@ export const exercises: {
   {
     id: 'pull-ups',
     name: 'Pull-Ups',
+    capabilities: [
+      capability('vertical-pulling-strength', 1),
+      capability('grip-and-hanging-strength', 0.8),
+    ],
     skillTags: [SkillTag.OneArmChinUp],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -396,5 +413,14 @@ export const exercises: {
     ],
     skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
+  },
+  {
+    id: 'uneven-chin-ups',
+    name: 'Uneven Chin-Ups',
+    capabilities: [
+      capability('vertical-pulling-strength', 1),
+      capability('grip-and-hanging-strength', 0.8),
+    ],
+    supportedSetTypes: ['bodyweight', 'weight', 'iso'],
   },
 ];

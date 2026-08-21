@@ -1,8 +1,9 @@
 .slider {
   display: flex;
-  overflow: scroll hidden;
+  overflow: auto hidden;
 }
 
 .skill {
   text-wrap: nowrap;
+  min-width: fit-content;
 }
