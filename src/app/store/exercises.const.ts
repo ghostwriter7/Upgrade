@@ -2,19 +2,29 @@ import { BodyPart } from '@domain/enum/body-part.enum';
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
 import { Skills, SkillTag } from '@domain/enum/skill-tag.enum';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
+import { ExerciseCapability } from '@domain/model/exercise.model';
+import { CapabilityId } from '@store/capabilities.const';
+
+const capability = (capabilityId: CapabilityId, weight: number): ExerciseCapability => ({
+  capabilityId,
+  weight,
+});
 
 export const exercises: {
   id: string;
   name: string;
-  description?: string;
-  muscles?: string[];
   measurementDefinition?: AngleMeasurementDefinition;
   skillTags?: Skills[];
+  capabilities?: ExerciseCapability[];
   supportedSetTypes: ExerciseSetType[];
 }[] = [
   {
     id: 'arching-standing-kneeling',
     name: 'Arching (Standing / Kneeling)',
+    capabilities: [
+      capability('thoracic-extension', 0.8),
+      capability('hip-flexor-extensibility', 0.6),
+    ],
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
@@ -26,6 +36,12 @@ export const exercises: {
   {
     id: 'bridge-heel-lifts',
     name: 'Bridge Heel Lifts',
+    capabilities: [
+      capability('shoulder-flexion', 0.9),
+      capability('shoulder-external-rotation', 0.7),
+      capability('thoracic-extension', 0.7),
+      capability('hip-flexor-extensibility', 0.4),
+    ],
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
@@ -38,20 +54,21 @@ export const exercises: {
   {
     id: 'cobra-thoracic-&-lumbar',
     name: 'Cobra (Thoracic & Lumbar)',
+    capabilities: [capability('thoracic-extension', 1.0)],
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'couch-stretch-high',
     name: 'Couch Stretch - High',
-    description: 'Hips in high position. It targets quads.',
+    capabilities: [capability('hip-flexor-extensibility', 1.0)],
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'couch-stretch-low',
     name: 'Couch Stretch - Low',
-    description: 'Hips in low position. It targets hip flexors.',
+    capabilities: [capability('hip-flexor-extensibility', 0.9)],
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
@@ -73,24 +90,42 @@ export const exercises: {
   {
     id: 'drop-stance-squats',
     name: 'Drop Stance Squats',
+    capabilities: [
+      capability('adductor-extensibility', 0.8),
+      capability('adductor-end-range-strength', 0.7),
+    ],
     skillTags: [SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'weight'],
   },
   {
     id: 'front-split-slides',
     name: 'Front Split Slides',
+    capabilities: [
+      capability('hip-flexor-extensibility', 0.8),
+      capability('hamstring-extensibility', 0.8),
+      capability('hamstring-end-range-strength', 0.8),
+    ],
     skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['iso', 'bodyweight', 'weight'],
   },
   {
     id: 'german-hang',
     name: 'German Hang',
+    capabilities: [
+      capability('shoulder-flexion', 0.8),
+      capability('shoulder-external-rotation', 0.8),
+    ],
     skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'hip-external-rotation-good-mornings',
     name: 'Hip External Rotation Good Mornings',
+    capabilities: [
+      capability('adductor-extensibility', 0.6),
+      capability('adductor-end-range-strength', 0.6),
+      capability('hamstring-extensibility', 0.5),
+    ],
     skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
@@ -103,48 +138,80 @@ export const exercises: {
   {
     id: 'horse-stance-squats',
     name: 'Horse Stance Squats',
+    capabilities: [
+      capability('adductor-extensibility', 0.8),
+      capability('adductor-end-range-strength', 0.8),
+    ],
     skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'inlocates-&-dislocates',
     name: 'Inlocates & Dislocates',
+    capabilities: [
+      capability('shoulder-flexion', 0.9),
+      capability('shoulder-external-rotation', 0.8),
+    ],
     skillTags: [SkillTag.ShoulderMobility, SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'isometric-bridge',
     name: 'Isometric Bridge',
+    capabilities: [
+      capability('shoulder-flexion', 0.8),
+      capability('shoulder-external-rotation', 0.7),
+      capability('thoracic-extension', 0.7),
+    ],
     skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'isometric-front-split',
     name: 'Isometric Front Split',
+    capabilities: [
+      capability('hip-flexor-extensibility', 1.0),
+      capability('hamstring-extensibility', 1.0),
+      capability('hamstring-end-range-strength', 0.9),
+    ],
     skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'isometric-side-split',
     name: 'Isometric Side Split',
+    capabilities: [
+      capability('adductor-extensibility', 1.0),
+      capability('adductor-end-range-strength', 1.0),
+    ],
     skillTags: [SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'kneeling-needle',
     name: 'Kneeling Needle',
+    capabilities: [capability('hip-flexor-extensibility', 0.8)],
     skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'kneeling-tilt',
     name: 'Kneeling Tilt',
+    capabilities: [
+      capability('adductor-extensibility', 0.8),
+      capability('adductor-end-range-strength', 0.5),
+    ],
     skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'leg-elevated-pike-lift',
     name: 'Leg Elevated Pike Lift',
+    capabilities: [
+      capability('hamstring-extensibility', 0.7),
+      capability('active-hip-flexion', 0.9),
+      capability('hamstring-end-range-strength', 0.7),
+    ],
     skillTags: [SkillTag.FrontSplit, SkillTag.Pike],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -161,6 +228,11 @@ export const exercises: {
   {
     id: 'pancake-active-lifts',
     name: 'Pancake Active Lifts',
+    capabilities: [
+      capability('adductor-extensibility', 0.8),
+      capability('adductor-end-range-strength', 0.8),
+      capability('active-hip-flexion', 1.0),
+    ],
     skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -170,24 +242,45 @@ export const exercises: {
     measurementDefinition: {
       landmarks: [BodyPart.Knee, BodyPart.PelvisCenter, BodyPart.Chest],
     },
+    capabilities: [
+      capability('adductor-extensibility', 0.8),
+      capability('hamstring-extensibility', 0.8),
+      capability('active-hip-flexion', 0.8),
+      capability('adductor-end-range-strength', 0.6),
+    ],
     skillTags: [SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'pike-good-morning-b-stance',
     name: 'Pike Good Morning - B-Stance',
+    capabilities: [
+      capability('hamstring-extensibility', 0.8),
+      capability('active-hip-flexion', 0.7),
+      capability('hamstring-end-range-strength', 0.8),
+    ],
     skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'pike-good-morning-leg-elevated',
     name: 'Pike Good Morning - Leg Elevated',
+    capabilities: [
+      capability('hamstring-extensibility', 0.9),
+      capability('active-hip-flexion', 0.9),
+      capability('hamstring-end-range-strength', 0.8),
+    ],
     skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'pike-good-morning-standing',
     name: 'Pike Good Morning Standing',
+    capabilities: [
+      capability('hamstring-extensibility', 0.8),
+      capability('active-hip-flexion', 0.7),
+      capability('hamstring-end-range-strength', 0.8),
+    ],
     skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -210,18 +303,24 @@ export const exercises: {
   {
     id: 'reverse-nordic-curls',
     name: 'Reverse Nordic Curls',
+    capabilities: [capability('hip-flexor-extensibility', 0.9)],
     skillTags: [SkillTag.Bridge, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'seated-pike-active-lifts',
     name: 'Seated Pike Active Lifts',
+    capabilities: [
+      capability('hamstring-extensibility', 0.5),
+      capability('active-hip-flexion', 1.0),
+    ],
     skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'shoulder-external-rotation-stretch',
     name: 'Shoulder External Rotation Stretch',
+    capabilities: [capability('shoulder-external-rotation', 1.0)],
     skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
@@ -234,12 +333,20 @@ export const exercises: {
   {
     id: 'skin-the-cat',
     name: 'Skin The Cat',
+    capabilities: [
+      capability('shoulder-flexion', 0.8),
+      capability('shoulder-external-rotation', 0.7),
+    ],
     skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'split-squats',
     name: 'Split Squats',
+    capabilities: [
+      capability('hip-flexor-extensibility', 0.5),
+      capability('hamstring-end-range-strength', 0.3),
+    ],
     skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -252,27 +359,28 @@ export const exercises: {
   {
     id: 'standing-pancake-hang',
     name: 'Standing Pancake Hang',
-    muscles: ['hip-flexors'],
-    description:
-      'Stand on two solid objects (e.g. chairs). Straddle the legs with a slight turnout of the feet. Use Contract-Relax. Hang passively, then contract hip flexors hard for 5 seconds, followed by 5 seconds of relaxing (simply hanging). Repeat for 3-5 reps. Hang longer on the last rep.',
     skillTags: [SkillTag.Pancake],
+    capabilities: [
+      capability('hamstring-extensibility', 0.9),
+      capability('adductor-extensibility', 0.6),
+    ],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'straddle-jefferson-curl',
     name: 'Straddle Jefferson Curl',
-    description:
-      'Stand on the elevated surface. Straddle the legs with a slight feet turnout. Start tall, looking forward. Tuck the chin. Articulate spine vertebrae by vertebrae. Allow the arms to naturally come out. At the bottom, contract the hip flexors. Reverse the motion.',
-    muscles: ['hip-flexors', 'spine'],
+    capabilities: [
+      capability('adductor-extensibility', 0.8),
+      capability('hamstring-extensibility', 0.8),
+      capability('adductor-end-range-strength', 0.5),
+    ],
     skillTags: [SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'tailors-pose',
     name: 'Tailors Pose',
-    description:
-      'Sit against a wall. Keep upright posture. Pull feet in, heels touching. Test your unloaded range of motion. Select a dumbbell/kettlebell with just enough weight to increase your range slightly. Use weight in range of 4-10kg, the goal is to use little weight as possible. Sit on the blocks or objects if your knees can touch the floor. Focus on the bottom of the rep. Remember to teach your adductors how to relax in the bottom of the position.',
-    muscles: ['adductors'],
+    capabilities: [capability('adductor-extensibility', 0.7)],
     measurementDefinition: {
       landmarks: [BodyPart.RightKnee, BodyPart.PelvisCenter, BodyPart.LeftKnee],
     },
@@ -282,9 +390,10 @@ export const exercises: {
   {
     id: 'tailor-pose-straight-arm-lifts',
     name: 'Tailor Pose - Straight Arm Lifts',
-    description:
-      'Sit on the floor with the feet together. No need for a wall. Grab a light weight - 2-5kg. Lean forwards reaching your arms straight out. If you cannot create enough pelvic tilt to lean forward, you can elevate your hips slightly (sit on a block). Drill best suited for someone with a head-to-floor pancake. Use an object as a marker to reach for. Press down with the feed whilst pulling the knees apart. Contract-Relax (5 seconds) works well.',
-    muscles: ['adductors'],
+    capabilities: [
+      capability('adductor-extensibility', 0.6),
+      capability('adductor-end-range-strength', 0.8),
+    ],
     skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },

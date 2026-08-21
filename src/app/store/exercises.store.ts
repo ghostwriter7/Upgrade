@@ -9,12 +9,15 @@ interface State {
 }
 
 const initialState: State = {
-  exercises: exercises.map(({ id, name, description, measurementDefinition, skillTags, supportedSetTypes }) => {
-    const exercise = new Exercise(id, name, supportedSetTypes, description);
-    exercise.measurementDefinition = measurementDefinition;
-    exercise.skillTags = skillTags;
-    return exercise;
-  }),
+  exercises: exercises.map(
+    ({ id, name, measurementDefinition, skillTags, supportedSetTypes, capabilities }) => {
+      const exercise = new Exercise(id, name, supportedSetTypes);
+      exercise.measurementDefinition = measurementDefinition;
+      exercise.skillTags = skillTags;
+      exercise.capabilities = capabilities;
+      return exercise;
+    },
+  ),
 };
 
 export const ExerciseStore = signalStore(
