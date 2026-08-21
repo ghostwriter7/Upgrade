@@ -1,6 +1,6 @@
 .slider {
   display: flex;
-  overflow-x: scroll;
+  overflow: scroll hidden;
 }
 
 .skill {

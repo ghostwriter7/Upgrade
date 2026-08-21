@@ -1,9 +1,10 @@
-import { signalStore, withState } from '@ngrx/signals';
+import { signalStore, withComputed, withState } from '@ngrx/signals';
 import { Skill, SkillCapability } from '@domain/model/skill';
 import { SkillTag } from '@domain/enum/skill-tag.enum';
 import { CapabilityDefinition } from '@domain/model/capability-definition';
 import { capabilities, CapabilityId } from '@store/capabilities.const';
 import { snakeToTitleCase } from '@common/helper/string/string.utils';
+import { computed } from '@angular/core';
 
 interface State {
   skills: Skill[];
@@ -64,4 +65,14 @@ const initialState: State = {
   capabilities,
 };
 
-export const SkillStore = signalStore({ providedIn: 'root' }, withState(initialState));
+export const SkillStore = signalStore(
+  { providedIn: 'root' },
+  withState(initialState),
+  withComputed((store) => ({
+    skillsById: computed(() =>
+      store
+        .skills()
+        .reduce((index, skill) => ({ ...index, [skill.id]: skill }), {} as Record<string, Skill>),
+    ),
+  })),
+);
