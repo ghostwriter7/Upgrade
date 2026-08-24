@@ -48,4 +48,8 @@ export const routes: Routes = [
     path: 'templates/edit',
     loadComponent: () => import('./templates/components/template-form/template-form'),
   },
+  {
+    path: 'targets',
+    loadComponent: () => import('./target/components/target-page/target-page'),
+  },
 ];

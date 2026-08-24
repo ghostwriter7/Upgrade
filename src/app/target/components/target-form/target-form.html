@@ -1,0 +1,179 @@
+<form class="column" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Name</mat-label>
+    <input
+      [formField]="form.name"
+      matInput
+      type="text"
+      autocomplete="off"
+      placeholder="Enter target name"
+    />
+
+    @if (form.name().touched() && form.name().invalid()) {
+      <mat-error>Name is required and must be 120 characters or fewer</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Description</mat-label>
+    <textarea
+      [formField]="form.description"
+      matInput
+      placeholder="Describe this target (optional)"
+      rows="4"
+    ></textarea>
+
+    @if (form.description().touched() && form.description().invalid()) {
+      <mat-error>Description must be 1000 characters or fewer</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Skill</mat-label>
+    <mat-select [formField]="form.skillId">
+      @for (option of skillOptions(); track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+
+    @if (form.skillId().touched() && form.skillId().invalid()) {
+      <mat-error>Skill is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Priority</mat-label>
+    <mat-select [formField]="form.priority">
+      @for (option of priorityOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+
+    @if (form.priority().touched() && form.priority().invalid()) {
+      <mat-error>Priority is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Status</mat-label>
+    <mat-select [formField]="form.status">
+      @for (option of statusOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+
+    @if (form.status().touched() && form.status().invalid()) {
+      <mat-error>Status is required</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Weekly commitment</mat-label>
+    <input
+      [formField]="form.weeklyCommitmentInMinutes"
+      matInput
+      type="number"
+      step="15"
+      placeholder="Minutes per week"
+    />
+    <mat-hint>Minutes per week</mat-hint>
+
+    @if (form.weeklyCommitmentInMinutes().touched() &&
+    form.weeklyCommitmentInMinutes().invalid()) {
+      <mat-error>Enter a value between 0 and 10080</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Target date</mat-label>
+    <input matInput [matDatepicker]="targetDatePicker" [formField]="form.targetDate">
+    <mat-datepicker-toggle matIconSuffix [for]="targetDatePicker" />
+    <mat-datepicker #targetDatePicker />
+  </mat-form-field>
+
+  <mat-divider />
+
+  <section class="column">
+    <div class="column">
+      <h3>Motivation</h3>
+
+      <button matButton type="button" (click)="addMotivation()">Add motivation</button>
+    </div>
+
+    @for (motivation of form.motivation; track motivation; let index = $index) {
+      <div class="column">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Motivation {{ index + 1 }}</mat-label>
+          <textarea
+            [formField]="motivation.statement"
+            matInput
+            rows="2"
+            placeholder="Why does this target matter?"
+          ></textarea>
+
+          @if (motivation.statement().touched() && motivation.statement().invalid()) {
+            <mat-error>Motivation is required and must be 500 characters or fewer</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          matButton
+          type="button"
+          aria-label="Remove motivation"
+          [disabled]="hasOneMotivationOnly()"
+          (click)="removeMotivation(index)"
+        >
+          Remove
+        </button>
+      </div>
+    }
+  </section>
+
+  <mat-divider />
+
+  <section>
+    <div class="column">
+      <h3>Trade-offs</h3>
+
+      <button matButton type="button" (click)="addTradeOff()">Add trade-off</button>
+    </div>
+
+    @for (tradeOff of form.tradeOffs; track tradeOff; let index = $index) {
+      <div class="column">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Trade-off {{ index + 1 }}</mat-label>
+          <textarea
+            [formField]="tradeOff.statement"
+            matInput
+            rows="2"
+            placeholder="What are you willing to give up?"
+          ></textarea>
+
+          @if (tradeOff.statement().touched() && tradeOff.statement().invalid()) {
+            <mat-error>Trade-off is required and must be 500 characters or fewer</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          matButton
+          type="button"
+          aria-label="Remove trade-off"
+          [disabled]="hasOneTradeOffOnly()"
+          (click)="removeTradeOff(index)"
+        >
+          Remove
+        </button>
+      </div>
+    }
+  </section>
+
+  <mat-divider />
+
+  <div class="column">
+    <button matButton="filled" class="full-width" type="submit" [disabled]="form().invalid()">
+      Save
+    </button>
+
+    <button matButton class="full-width" type="button" (click)="onCancel()">Cancel</button>
+  </div>
+</form>

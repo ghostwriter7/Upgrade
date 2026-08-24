@@ -26,6 +26,9 @@ export interface Target {
   weeklyCommitmentInMinutes: number;
 }
 
+export type TargetPriority = Target['priority'];
+export type TargetStatus = Target['status'];
+
 interface Review {
   reviewedAt: Temporal.PlainDate;
   statement: string;
@@ -38,7 +41,7 @@ interface Attachment {
   attachmentId: string;
 }
 
-interface Motivation {
+export interface Motivation {
   statement: string;
 }
 
