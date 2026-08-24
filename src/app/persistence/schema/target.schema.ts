@@ -18,7 +18,7 @@ const ReviewSchema = z.object({
 export const TargetSchema = z.object({
   id: z.nanoid(),
   name: z.string(),
-  description: z.string().default(''),
+  description: z.string().optional(),
   skillId: z.string(),
   priority: z.enum(['primary', 'secondary']).optional(),
   status: z.enum(['active', 'reviewing', 'paused', 'achieved', 'archived']),

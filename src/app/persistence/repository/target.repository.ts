@@ -14,4 +14,8 @@ export class TargetRepository extends GenericRepository<TargetDto> {
     const templates = await super.findAll(StoreName.TARGETS);
     return templates.map((template) => TargetSchema.parse(template));
   }
+
+  public save(target: Target): Promise<IDBValidKey> {
+    return super.put(StoreName.TARGETS, TargetSchema.encode(target));
+  }
 }
