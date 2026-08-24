@@ -10,6 +10,16 @@ const capability = (capabilityId: CapabilityId, weight: number): ExerciseCapabil
 
 export const exercises: Exercise[] = [
   {
+    id: 'abductor-machine',
+    name: 'Abductor Machine',
+    supportedSetTypes: ['weight'],
+  },
+  {
+    id: 'adductor-machine',
+    name: 'Adductor Machine',
+    supportedSetTypes: ['weight'],
+  },
+  {
     id: 'archer-pull-ups',
     name: 'Archer Pull-Ups',
     capabilities: [
