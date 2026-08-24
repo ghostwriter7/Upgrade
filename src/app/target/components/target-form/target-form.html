@@ -43,15 +43,11 @@
 
   <mat-form-field appearance="outline">
     <mat-label>Priority</mat-label>
-    <mat-select [formField]="form.priority">
+    <mat-select [formField]="form.priority!">
       @for (option of priorityOptions; track option.value) {
         <mat-option [value]="option.value">{{ option.label }}</mat-option>
       }
     </mat-select>
-
-    @if (form.priority().touched() && form.priority().invalid()) {
-      <mat-error>Priority is required</mat-error>
-    }
   </mat-form-field>
 
   <mat-form-field appearance="outline">

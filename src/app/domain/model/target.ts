@@ -1,23 +1,21 @@
-import { Skills } from '@domain/enum/skill-tag.enum';
-
 export interface Target {
   id: string;
 
   name: string;
   description?: string;
 
-  skillId: Skills;
+  skillId: string;
 
-  priority: 'primary' | 'secondary';
+  priority?: 'primary' | 'secondary';
 
   status: 'active' | 'reviewing' | 'paused' | 'achieved' | 'archived';
 
   createdAt: Temporal.Instant;
   startedAt?: Temporal.Instant;
 
-  targetDate?: Temporal.PlainDate;
-  nextReviewDate?: Temporal.PlainDate;
-  achievedAt?: Temporal.PlainDate;
+  targetDate?: Temporal.Instant;
+  nextReviewDate?: Temporal.Instant;
+  achievedAt?: Temporal.Instant;
 
   motivation: Motivation[];
   reviews?: Review[];
@@ -30,7 +28,7 @@ export type TargetPriority = Target['priority'];
 export type TargetStatus = Target['status'];
 
 interface Review {
-  reviewedAt: Temporal.PlainDate;
+  reviewedAt: Temporal.Instant;
   statement: string;
   attachments?: Attachment[];
   outcome: 'continue' | 'modify' | 'pause' | 'archive';

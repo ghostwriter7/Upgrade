@@ -1,0 +1,17 @@
+import { Service } from '@angular/core';
+import { GenericRepository } from '@persistence/repository/generic.repository';
+import { StoreName } from '@persistence/repository/store-name.enum';
+import { TargetDto, TargetSchema } from '@persistence/schema/target.schema';
+import { Target } from '@domain/model/target';
+
+@Service()
+export class TargetRepository extends GenericRepository<TargetDto> {
+  constructor() {
+    super();
+  }
+
+  public async getAllTargets(): Promise<Target[]> {
+    const templates = await super.findAll(StoreName.TARGETS);
+    return templates.map((template) => TargetSchema.parse(template));
+  }
+}

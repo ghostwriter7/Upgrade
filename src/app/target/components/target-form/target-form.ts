@@ -24,8 +24,6 @@ import { FormsModule } from '@angular/forms';
 import { SkillStore } from '@store/skill.store';
 import { MatDivider } from '@angular/material/list';
 import { Motivation, Target, TargetPriority, TargetStatus } from '@domain/model/target';
-import { Skills } from '@domain/enum/skill-tag.enum';
-import { DateHelper } from '@common/helper/date.helper';
 import { StatusOptions } from './status-options';
 import { PriorityOptions } from './priority-options';
 import { TargetResult } from './target-result';
@@ -38,9 +36,9 @@ interface TargetFormValue {
   name: string;
   description: string;
 
-  skillId: Skills | null;
+  skillId: string | null;
 
-  priority: TargetPriority;
+  priority: TargetPriority | null;
   status: TargetStatus;
 
   targetDate: Date | null;
@@ -100,7 +98,6 @@ export class TargetForm {
 
     required(path.skillId);
 
-    required(path.priority);
     required(path.status);
 
     required(path.weeklyCommitmentInMinutes);
@@ -195,7 +192,7 @@ export class TargetForm {
 
         skillId,
 
-        priority: value.priority,
+        priority: value.priority ?? undefined,
         status: value.status,
 
         targetDate: this.toPlainDate(value.targetDate),
@@ -219,7 +216,7 @@ export class TargetForm {
 
       skillId: null,
 
-      priority: 'primary',
+      priority: null,
       status: 'reviewing',
 
       targetDate: null,
@@ -262,9 +259,9 @@ export class TargetForm {
       .filter((value) => value.statement.length > 0);
   }
 
-  private toPlainDate(targetDate: Date | null): Temporal.PlainDate | undefined {
+  private toPlainDate(targetDate: Date | null): Temporal.Instant | undefined {
     if (!targetDate) return undefined;
 
-    return DateHelper.toLocal(targetDate.toTemporalInstant()).toPlainDate();
+    return targetDate.toTemporalInstant();
   }
 }

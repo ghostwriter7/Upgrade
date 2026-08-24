@@ -1,1 +1,6 @@
-<app-target-form (saved)="onSaveTarget($event)" />
+@if (showForm()) {
+  <app-target-form (saved)="onSaveTarget($event)" />
+} @else {
+  <app-icon-button icon="add" class="full-width" (click)="showForm.set(true)">Create</app-icon-button>
+  <mat-divider />
+}
