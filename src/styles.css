@@ -76,3 +76,7 @@ body {
   flex-direction: column;
   gap: var(--space-3);
 }
+
+.wrap {
+  white-space: wrap;
+}

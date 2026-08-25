@@ -90,7 +90,7 @@
           @for (motivation of value.motivation; track motivation.statement) {
             <mat-list-item>
               <mat-icon class="icon" matListItemIcon>format_quote</mat-icon>
-              <div matListItemTitle>{{ motivation.statement }}</div>
+              <div matListItemTitle class="wrap">{{ motivation.statement }}</div>
             </mat-list-item>
           }
         </mat-list>
@@ -112,7 +112,7 @@
           @for (tradeOff of value.tradeOffs; track tradeOff.statement) {
             <mat-list-item>
               <mat-icon class="icon" matListItemIcon>remove_circle_outline</mat-icon>
-              <div matListItemTitle>{{ tradeOff.statement }}</div>
+              <div matListItemTitle class="wrap">{{ tradeOff.statement }}</div>
             </mat-list-item>
           }
         </mat-list>
