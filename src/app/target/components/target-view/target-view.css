@@ -8,6 +8,6 @@ section {
   padding-block: var(--space-3);
 }
 
-mat-icon {
+.icon {
   margin-right: var(--space-2);
 }

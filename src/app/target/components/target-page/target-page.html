@@ -1,7 +1,8 @@
 @if (showForm()) {
-  <app-target-form (saved)="onSaveTarget($event)" (cancelled)="onCancel()" />
+  <app-target-form [target]="targetStore.editedTarget()" (saved)="targetStore.save($event)"
+                   (cancelled)="targetStore.setShowForm(false)" />
 } @else {
-  <app-icon-button icon="add" class="full-width" (click)="showForm.set(true)">Create</app-icon-button>
+  <app-icon-button icon="add" class="full-width" (click)="targetStore.setShowForm(true)">Create</app-icon-button>
   <mat-divider />
   <app-target-list [targets]="targets()" />
 }

@@ -18,4 +18,8 @@ export class TargetRepository extends GenericRepository<TargetDto> {
   public save(target: Target): Promise<IDBValidKey> {
     return super.put(StoreName.TARGETS, TargetSchema.encode(target));
   }
+
+  public deleteById(targetId: string): Promise<void> {
+    return super.delete(StoreName.TARGETS, targetId);
+  }
 }

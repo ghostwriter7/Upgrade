@@ -1,7 +1,8 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { Review, Target, TargetPriority, TargetStatus } from '@domain/model/target';
 import {
   MatCard,
+  MatCardActions,
   MatCardContent,
   MatCardHeader,
   MatCardSubtitle,
@@ -13,6 +14,8 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
 import { PriorityLabels } from '../../consts/priority-options';
 import { StatusLabels } from '../../consts/status-options';
 import { SkillNamePipe } from '@ui/pipes/skill-name.pipe';
+import { MatMiniFabButton } from '@angular/material/button';
+import { TargetStore } from '@store/target.store';
 
 const iconByStatus: Record<TargetStatus, string> = {
   active: 'play_circle',
@@ -57,32 +60,15 @@ interface TargetViewModel extends Omit<
     MatChip,
     MatChipSet,
     SkillNamePipe,
+    MatCardActions,
+    MatMiniFabButton,
   ],
 })
 export class TargetView {
-  public readonly target = input.required<TargetViewModel, Target>({
-    transform: ({
-      createdAt,
-      startedAt,
-      targetDate,
-      nextReviewDate,
-      achievedAt,
-      reviews,
-      ...remaining
-    }) => ({
-      ...remaining,
-      createdAt: this.formatInstant(createdAt),
-      startedAt: this.formatInstant(startedAt),
-      targetDate: this.formatInstant(targetDate),
-      nextReviewDate: this.formatInstant(nextReviewDate),
-      achievedAt: this.formatInstant(achievedAt),
-      reviews: reviews?.map((review) => ({
-        ...review,
-        reviewedAt: this.formatInstant(review.reviewedAt),
-      })),
-    }),
-  });
+  public readonly target = input.required<Target>();
+  protected readonly targetViewModel = computed(() => this.toTargetViewModel(this.target()));
 
+  protected readonly targetStore = inject(TargetStore);
   protected readonly statusLabel = computed(() => StatusLabels[this.target().status]);
   protected readonly priorityLabel = computed(() => PriorityLabels[this.target().priority]);
 
@@ -107,5 +93,28 @@ export class TargetView {
       dateStyle: 'medium',
       timeStyle: 'short',
     });
+  }
+
+  private toTargetViewModel({
+    createdAt,
+    startedAt,
+    targetDate,
+    nextReviewDate,
+    achievedAt,
+    reviews,
+    ...remaining
+  }: Target): TargetViewModel {
+    return {
+      ...remaining,
+      createdAt: this.formatInstant(createdAt),
+      startedAt: this.formatInstant(startedAt),
+      targetDate: this.formatInstant(targetDate),
+      nextReviewDate: this.formatInstant(nextReviewDate),
+      achievedAt: this.formatInstant(achievedAt),
+      reviews: reviews?.map((review) => ({
+        ...review,
+        reviewedAt: this.formatInstant(review.reviewedAt),
+      })),
+    };
   }
 }

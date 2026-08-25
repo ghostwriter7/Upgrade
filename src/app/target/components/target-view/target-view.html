@@ -1,7 +1,7 @@
-@let value = target();
+@let value = targetViewModel();
 <mat-card>
   <mat-card-header>
-    <mat-icon mat-card-avatar>{{ statusIcon() }}</mat-icon>
+    <mat-icon class="icon" mat-card-avatar>{{ statusIcon() }}</mat-icon>
 
     <mat-card-title>{{ value.name }}</mat-card-title>
 
@@ -13,22 +13,22 @@
     <section aria-label="Target summary">
       <mat-chip-set aria-label="Target metadata">
         <mat-chip highlighted>
-          <mat-icon matChipAvatar>{{ statusIcon() }}</mat-icon>
+          <mat-icon class="icon" matChipAvatar>{{ statusIcon() }}</mat-icon>
           {{ statusLabel() }}
         </mat-chip>
 
         <mat-chip>
-          <mat-icon matChipAvatar>{{ priorityIcon() }}</mat-icon>
+          <mat-icon class="icon" matChipAvatar>{{ priorityIcon() }}</mat-icon>
           {{ priorityLabel() }}
         </mat-chip>
 
         <mat-chip>
-          <mat-icon matChipAvatar>schedule</mat-icon>
+          <mat-icon class="icon" matChipAvatar>schedule</mat-icon>
           {{ value.weeklyCommitmentInMinutes }} min/week
         </mat-chip>
 
         <mat-chip>
-          <mat-icon matChipAvatar>school</mat-icon>
+          <mat-icon class="icon" matChipAvatar>school</mat-icon>
           Skill: {{ value.skillId | skillName }}
         </mat-chip>
       </mat-chip-set>
@@ -44,32 +44,32 @@
 
       <mat-list>
         <mat-list-item>
-          <mat-icon matListItemIcon>add_circle</mat-icon>
+          <mat-icon class="icon" matListItemIcon>add_circle</mat-icon>
           <div matListItemTitle>Created</div>
           <div matListItemLine>{{ value.createdAt }}</div>
         </mat-list-item>
 
         <mat-list-item>
-          <mat-icon matListItemIcon>rocket_launch</mat-icon>
+          <mat-icon class="icon" matListItemIcon>rocket_launch</mat-icon>
           <div matListItemTitle>Started</div>
           <div matListItemLine>{{ value.startedAt }}</div>
         </mat-list-item>
 
         <mat-list-item>
-          <mat-icon matListItemIcon>flag</mat-icon>
+          <mat-icon class="icon" matListItemIcon>flag</mat-icon>
           <div matListItemTitle>Target date</div>
           <div matListItemLine>{{ value.targetDate }}</div>
         </mat-list-item>
 
         <mat-list-item>
-          <mat-icon matListItemIcon>rate_review</mat-icon>
+          <mat-icon class="icon" matListItemIcon>rate_review</mat-icon>
           <div matListItemTitle>Next review</div>
           <div matListItemLine>{{ value.nextReviewDate }}</div>
         </mat-list-item>
 
         @if (value.achievedAt) {
           <mat-list-item>
-            <mat-icon matListItemIcon>workspace_premium</mat-icon>
+            <mat-icon class="icon" matListItemIcon>workspace_premium</mat-icon>
             <div matListItemTitle>Achieved</div>
             <div matListItemLine>{{ value.achievedAt }}</div>
           </mat-list-item>
@@ -81,7 +81,7 @@
 
     <section aria-labelledby="motivation-heading">
       <h3 id="motivation-heading">
-        <mat-icon>psychology</mat-icon>
+        <mat-icon class="icon">psychology</mat-icon>
         Motivation
       </h3>
 
@@ -89,7 +89,7 @@
         <mat-list>
           @for (motivation of value.motivation; track motivation.statement) {
             <mat-list-item>
-              <mat-icon matListItemIcon>format_quote</mat-icon>
+              <mat-icon class="icon" matListItemIcon>format_quote</mat-icon>
               <div matListItemTitle>{{ motivation.statement }}</div>
             </mat-list-item>
           }
@@ -103,7 +103,7 @@
 
     <section aria-labelledby="trade-offs-heading">
       <h3 id="trade-offs-heading">
-        <mat-icon>balance</mat-icon>
+        <mat-icon class="icon">balance</mat-icon>
         Trade-offs
       </h3>
 
@@ -111,7 +111,7 @@
         <mat-list>
           @for (tradeOff of value.tradeOffs; track tradeOff.statement) {
             <mat-list-item>
-              <mat-icon matListItemIcon>remove_circle_outline</mat-icon>
+              <mat-icon class="icon" matListItemIcon>remove_circle_outline</mat-icon>
               <div matListItemTitle>{{ tradeOff.statement }}</div>
             </mat-list-item>
           }
@@ -125,7 +125,7 @@
 
     <section aria-labelledby="reviews-heading">
       <h3 id="reviews-heading">
-        <mat-icon>rate_review</mat-icon>
+        <mat-icon class="icon">rate_review</mat-icon>
         Reviews
       </h3>
 
@@ -133,7 +133,7 @@
         <mat-list>
           @for (review of value.reviews; track review.reviewedAt.toString()) {
             <mat-list-item>
-              <mat-icon matListItemIcon>fact_check</mat-icon>
+              <mat-icon class="icon" matListItemIcon>fact_check</mat-icon>
 
               <div matListItemTitle>
                 {{ review.statement }}
@@ -168,5 +168,13 @@
       </mat-list>
     </section>
   </mat-card-content>
+  <mat-card-actions align="end">
+    <button matMiniFab class="info icon" (click)="targetStore.initEdit(target())">
+      <mat-icon>edit</mat-icon>
+    </button>
+    <button matMiniFab class="danger" (click)="targetStore.delete(target())">
+      <mat-icon>delete_forever</mat-icon>
+    </button>
+  </mat-card-actions>
 </mat-card>
 
