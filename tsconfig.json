@@ -27,7 +27,8 @@
       "@ui/*": ["./src/app/ui/*"],
       "@test/*": ["./src/test/*"],
       "@templates/*": ["./src/app/templates/*"],
-      "@form/*": ["./src/app/form/*"]
+      "@form/*": ["./src/app/form/*"],
+      "@target/*": ["./src/app/target/*"]
     }
   },
   "angularCompilerOptions": {

@@ -20,7 +20,7 @@ export const TargetSchema = z.object({
   name: z.string(),
   description: z.string().optional(),
   skillId: z.string(),
-  priority: z.enum(['primary', 'secondary']).optional(),
+  priority: z.enum(['primary', 'secondary', 'unprioritized']),
   status: z.enum(['active', 'reviewing', 'paused', 'achieved', 'archived']),
   createdAt: TemporalInstantFromIsoDateTime,
   startedAt: TemporalInstantFromIsoDateTime.optional(),

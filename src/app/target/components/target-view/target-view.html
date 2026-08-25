@@ -1,1 +1,172 @@
-{{ target() | json }}
+@let value = target();
+<mat-card>
+  <mat-card-header>
+    <mat-icon mat-card-avatar>{{ statusIcon() }}</mat-icon>
+
+    <mat-card-title>{{ value.name }}</mat-card-title>
+
+    @if (value.description) {
+      <mat-card-subtitle>{{ value.description }}</mat-card-subtitle>
+    }
+  </mat-card-header>
+  <mat-card-content>
+    <section aria-label="Target summary">
+      <mat-chip-set aria-label="Target metadata">
+        <mat-chip highlighted>
+          <mat-icon matChipAvatar>{{ statusIcon() }}</mat-icon>
+          {{ statusLabel() }}
+        </mat-chip>
+
+        <mat-chip>
+          <mat-icon matChipAvatar>{{ priorityIcon() }}</mat-icon>
+          {{ priorityLabel() }}
+        </mat-chip>
+
+        <mat-chip>
+          <mat-icon matChipAvatar>schedule</mat-icon>
+          {{ value.weeklyCommitmentInMinutes }} min/week
+        </mat-chip>
+
+        <mat-chip>
+          <mat-icon matChipAvatar>school</mat-icon>
+          Skill: {{ value.skillId | skillName }}
+        </mat-chip>
+      </mat-chip-set>
+    </section>
+
+    <mat-divider />
+
+    <section aria-labelledby="timeline-heading">
+      <h3 id="timeline-heading">
+        <mat-icon>event</mat-icon>
+        Timeline
+      </h3>
+
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>add_circle</mat-icon>
+          <div matListItemTitle>Created</div>
+          <div matListItemLine>{{ value.createdAt }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>rocket_launch</mat-icon>
+          <div matListItemTitle>Started</div>
+          <div matListItemLine>{{ value.startedAt }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>flag</mat-icon>
+          <div matListItemTitle>Target date</div>
+          <div matListItemLine>{{ value.targetDate }}</div>
+        </mat-list-item>
+
+        <mat-list-item>
+          <mat-icon matListItemIcon>rate_review</mat-icon>
+          <div matListItemTitle>Next review</div>
+          <div matListItemLine>{{ value.nextReviewDate }}</div>
+        </mat-list-item>
+
+        @if (value.achievedAt) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>workspace_premium</mat-icon>
+            <div matListItemTitle>Achieved</div>
+            <div matListItemLine>{{ value.achievedAt }}</div>
+          </mat-list-item>
+        }
+      </mat-list>
+    </section>
+
+    <mat-divider />
+
+    <section aria-labelledby="motivation-heading">
+      <h3 id="motivation-heading">
+        <mat-icon>psychology</mat-icon>
+        Motivation
+      </h3>
+
+      @if (value.motivation.length) {
+        <mat-list>
+          @for (motivation of value.motivation; track motivation.statement) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>format_quote</mat-icon>
+              <div matListItemTitle>{{ motivation.statement }}</div>
+            </mat-list-item>
+          }
+        </mat-list>
+      } @else {
+        <p>No motivation statements added.</p>
+      }
+    </section>
+
+    <mat-divider />
+
+    <section aria-labelledby="trade-offs-heading">
+      <h3 id="trade-offs-heading">
+        <mat-icon>balance</mat-icon>
+        Trade-offs
+      </h3>
+
+      @if (value.tradeOffs.length) {
+        <mat-list>
+          @for (tradeOff of value.tradeOffs; track tradeOff.statement) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>remove_circle_outline</mat-icon>
+              <div matListItemTitle>{{ tradeOff.statement }}</div>
+            </mat-list-item>
+          }
+        </mat-list>
+      } @else {
+        <p>No trade-offs recorded.</p>
+      }
+    </section>
+
+    <mat-divider />
+
+    <section aria-labelledby="reviews-heading">
+      <h3 id="reviews-heading">
+        <mat-icon>rate_review</mat-icon>
+        Reviews
+      </h3>
+
+      @if (hasReviews()) {
+        <mat-list>
+          @for (review of value.reviews; track review.reviewedAt.toString()) {
+            <mat-list-item>
+              <mat-icon matListItemIcon>fact_check</mat-icon>
+
+              <div matListItemTitle>
+                {{ review.statement }}
+              </div>
+
+              <div matListItemLine>
+                {{ review.reviewedAt }}
+              </div>
+
+              <div matListItemMeta>
+                <mat-chip>{{ review.outcome }}</mat-chip>
+              </div>
+            </mat-list-item>
+          }
+        </mat-list>
+      } @else {
+        <p>No reviews yet.</p>
+      }
+    </section>
+
+    <mat-divider />
+
+    <section aria-label="Technical metadata">
+      <mat-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>timer</mat-icon>
+          <div matListItemTitle>Weekly commitment</div>
+          <div matListItemLine>
+            {{ value.weeklyCommitmentInMinutes }} minutes, approximately {{ commitmentHours() }} hours
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </section>
+  </mat-card-content>
+</mat-card>
+

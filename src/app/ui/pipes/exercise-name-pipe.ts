@@ -1,5 +1,5 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
-import { ExerciseStore } from '../../store/exercises.store';
+import { ExerciseStore } from '@store/exercises.store';
 
 @Pipe({
   name: 'exerciseName',

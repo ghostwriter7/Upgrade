@@ -6,7 +6,7 @@ export interface Target {
 
   skillId: string;
 
-  priority?: 'primary' | 'secondary';
+  priority: 'primary' | 'secondary' | 'unprioritized';
 
   status: 'active' | 'reviewing' | 'paused' | 'achieved' | 'archived';
 
@@ -27,7 +27,7 @@ export interface Target {
 export type TargetPriority = Target['priority'];
 export type TargetStatus = Target['status'];
 
-interface Review {
+export interface Review {
   reviewedAt: Temporal.Instant;
   statement: string;
   attachments?: Attachment[];

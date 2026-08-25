@@ -24,9 +24,9 @@ import { FormsModule } from '@angular/forms';
 import { SkillStore } from '@store/skill.store';
 import { MatDivider } from '@angular/material/list';
 import { Motivation, Target, TargetPriority, TargetStatus } from '@domain/model/target';
-import { StatusOptions } from './status-options';
-import { PriorityOptions } from './priority-options';
 import { TargetResult } from './target-result';
+import { PriorityOptions } from '../../consts/priority-options';
+import { StatusOptions } from '../../consts/status-options';
 
 interface StatementFormValue {
   statement: string;
@@ -38,7 +38,7 @@ interface TargetFormValue {
 
   skillId: string | null;
 
-  priority: TargetPriority | null;
+  priority: TargetPriority;
   status: TargetStatus;
 
   targetDate: Date | null;
@@ -192,7 +192,7 @@ export class TargetForm {
 
         skillId,
 
-        priority: value.priority ?? undefined,
+        priority: value.priority,
         status: value.status,
 
         targetDate: this.toPlainDate(value.targetDate),
@@ -216,7 +216,7 @@ export class TargetForm {
 
       skillId: null,
 
-      priority: null,
+      priority: 'unprioritized',
       status: 'reviewing',
 
       targetDate: null,
