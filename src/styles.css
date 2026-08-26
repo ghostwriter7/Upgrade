@@ -71,6 +71,10 @@ body {
   display: none !important;
 }
 
+.d-contents {
+  display: contents !important;
+}
+
 .column {
   display: flex;
   flex-direction: column;

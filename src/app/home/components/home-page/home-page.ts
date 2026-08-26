@@ -7,6 +7,7 @@ import { SkillCoverage } from '@home/components/skill-coverage/skill-coverage';
 import { TemplateSelector } from '@home/components/template-selector/template-selector';
 import { RandomSessionControl } from '@home/components/random-session-control/random-session-control';
 import { SkillSessionSelector } from '@home/components/skill-session-selector/skill-session-selector';
+import { TargetSummary } from '@home/components/target-summary/target-summary';
 
 @Component({
   selector: 'app-home-page',
@@ -19,6 +20,7 @@ import { SkillSessionSelector } from '@home/components/skill-session-selector/sk
     TemplateSelector,
     RandomSessionControl,
     SkillSessionSelector,
+    TargetSummary,
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
