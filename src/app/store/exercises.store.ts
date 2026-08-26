@@ -45,6 +45,9 @@ export const ExerciseStore = signalStore(
   withMethods((store) => ({
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
     getExerciseById: (id: string) => store.exercises().find((exercise) => exercise.id === id),
+
+    getExercisesForSkill: (skill: Skill): Exercise[] =>
+      findSupportingExercises(skill, store.allExercises()),
   })),
   withHooks((store, exerciseLogRepository = inject(ExerciseLogRepository)) => ({
     onInit: async () => {
