@@ -8,5 +8,6 @@ export const SideSplit: Skill = {
   capabilities: [
     capability('adductor-extensibility', 1.0),
     capability('adductor-end-range-strength', 0.8),
+    capability('abductors-strength', 0.7),
   ],
 };

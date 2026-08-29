@@ -11,11 +11,16 @@ export const exercises: Exercise[] = [
   {
     id: 'abductor-machine',
     name: 'Abductor Machine',
+    capabilities: [capability('abductors-strength', 1)],
     supportedSetTypes: ['weight'],
   },
   {
     id: 'adductor-machine',
     name: 'Adductor Machine',
+    capabilities: [
+      capability('adductor-end-range-strength', 1),
+      capability('adductor-extensibility', 1),
+    ],
     supportedSetTypes: ['weight'],
   },
   {
@@ -196,6 +201,7 @@ export const exercises: Exercise[] = [
     capabilities: [
       capability('adductor-extensibility', 0.8),
       capability('adductor-end-range-strength', 0.5),
+      capability('abductors-strength', 0.8),
     ],
     supportedSetTypes: ['bodyweight', 'iso'],
   },

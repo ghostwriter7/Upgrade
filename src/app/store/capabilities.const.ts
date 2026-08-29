@@ -8,6 +8,8 @@ export const capabilities = [
   { id: 'adductor-extensibility', name: 'Adductor extensibility' },
   { id: 'adductor-end-range-strength', name: 'Adductor end-range strength' },
 
+  { id: 'abductors-strength', name: 'Abductors strength' },
+
   { id: 'hamstring-extensibility', name: 'Hamstring extensibility' },
   { id: 'hamstring-end-range-strength', name: 'Hamstring end-range strength' },
 
