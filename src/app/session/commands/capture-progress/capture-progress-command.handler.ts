@@ -30,7 +30,7 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
     if (points && angle) {
       const measurementDefinition = this.findMeasurementDefinition(exerciseId);
 
-      if (points.length !== measurementDefinition.landmarks.length)
+      if (measurementDefinition && points.length !== measurementDefinition.landmarks.length)
         throw new Error('Invalid number of points provided');
 
       const angleMeasurement = AngleMeasurement.new(
@@ -38,9 +38,11 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
         exerciseId,
         exerciseLogId,
         angle,
-        measurementDefinition.landmarks.map(
-          (landmark, index) => new Landmark(points[index], landmark),
-        ),
+        measurementDefinition
+          ? measurementDefinition.landmarks.map(
+              (landmark, index) => new Landmark(points[index], landmark),
+            )
+          : points.map((point) => new Landmark(point)),
       );
 
       this.eventBus.publish(new AngleMeasurementCapturedEvent(angleMeasurement));
@@ -55,13 +57,10 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
     return session.getExerciseById(exerciseId).id;
   }
 
-  private findMeasurementDefinition(exerciseId: string): AngleMeasurementDefinition {
+  private findMeasurementDefinition(exerciseId: string): AngleMeasurementDefinition | undefined {
     const exercise = this.exerciseStore.getExerciseById(exerciseId);
     if (!exercise) throw new Error(`Exercise with ID ${exerciseId} not found`);
 
-    const { measurementDefinition } = exercise;
-    if (!measurementDefinition) throw new Error('Invalid exercise configuration');
-
-    return measurementDefinition;
+    return exercise.measurementDefinition;
   }
 }

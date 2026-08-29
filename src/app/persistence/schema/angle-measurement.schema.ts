@@ -14,10 +14,10 @@ export const AngleMeasurementSchema = z.object({
         x: z.number(),
         y: z.number(),
       }),
-      bodyPart: z.enum(BodyPart),
+      bodyPart: z.enum(BodyPart).optional(),
     }),
   ),
-  createdAt: z.iso.datetime()
+  createdAt: z.iso.datetime(),
 });
 
 export type AngleMeasurementDto = z.infer<typeof AngleMeasurementSchema>;

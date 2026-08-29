@@ -34,7 +34,7 @@ export class AngleMeasurement {
 export class Landmark {
   constructor(
     public readonly point: Point,
-    public readonly bodyPart: BodyPart,
+    public readonly bodyPart?: BodyPart,
   ) {}
 }
 
