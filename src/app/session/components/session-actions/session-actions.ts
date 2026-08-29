@@ -39,7 +39,13 @@ export class SessionActions {
     this.dialogService.open(
       ExerciseSelector,
       (exerciseIds: string[]) => this.commandBus.dispatch(new AddExerciseCommand(exerciseIds)),
-      { data: { session: this.sessionStateHolder.session() }, width: '90svw', height: '80svh' },
+      {
+        data: { session: this.sessionStateHolder.session() },
+        width: '100svw',
+        height: '100svh',
+        maxWidth: '100svw',
+        maxHeight: '100svh',
+      },
     );
   }
 }
