@@ -3,24 +3,48 @@
   <button matMiniFab (click)="toggleFilters()">
     <mat-icon>filter_list</mat-icon>
   </button>
-  <button matMiniFab>
+  <button matMiniFab (click)="toggleSorting()">
     <mat-icon>sort</mat-icon>
   </button>
   @if (showFilters()) {
     <div class="skill-filters">
       @for (option of skillOptions(); track option.skill.id) {
-        <button matMiniFab [ngClass]="{ success: option.isSelected, info: !option.isSelected }"
-                (click)="toggleSkill($index)">
+        <button
+          matMiniFab
+          [ngClass]="{ success: option.isSelected, info: !option.isSelected }"
+          (click)="toggleSkill($index)">
           <mat-icon [svgIcon]="option.skill.id" />
         </button>
       }
+    </div>
+  }
+
+  @if (showFilters() && showSorting()) {
+    <mat-divider class="full-width" />
+  }
+
+  @if (showSorting()) {
+    <div class="sort-options">
+      @for (option of sortOptions(); track option.id) {
+        <button
+          matMiniFab
+          [ngClass]="{ success: option.active, info: !option.active }"
+          (click)="toggleSortOption($index)"
+        >
+          <mat-icon>{{ option.icon }}</mat-icon>
+        </button>
+      }
+
+      <button matMiniFab class="ml-auto" (click)="toggleSortDirection()">
+        <mat-icon>{{ sortDirectionIcon() }}</mat-icon>
+      </button>
     </div>
   }
 </header>
 <mat-dialog-content>
 
 
-<mat-selection-list (selectionChange)="handleSelectionChange($event)">
+  <mat-selection-list (selectionChange)="handleSelectionChange($event)">
     @for (exercise of availableExercises(); track exercise.id) {
       <mat-list-option togglePosition="after" [value]="exercise.id">
         <span matListItemTitle>{{ exercise.name }}</span>

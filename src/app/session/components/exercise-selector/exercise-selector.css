@@ -26,3 +26,10 @@ mat-dialog-content {
   }
 }
 
+.sort-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  width: 100%;
+}
+
