@@ -9,7 +9,6 @@ import {
 import { Exercise } from '@domain/model/exercise.model';
 import { exercises } from './exercises.const';
 import { computed, inject } from '@angular/core';
-import { Skills } from '@domain/enum/skill-tag.enum';
 import { Skill } from '@domain/model/skill';
 import { CapabilityId } from '@store/capabilities.const';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
@@ -35,12 +34,6 @@ export const ExerciseStore = signalStore(
 
       return findSupportingExercises(skill, store.allExercises());
     }),
-    skillsByExerciseId: computed(() =>
-      store.allExercises().reduce((index, exercise) => {
-        index.set(exercise.id, exercise.skillTags ?? []);
-        return index;
-      }, new Map<string, Skills[]>()),
-    ),
   })),
   withMethods((store) => ({
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),

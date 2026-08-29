@@ -1,5 +1,4 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
-import { SkillTag } from '@domain/enum/skill-tag.enum';
 import { Exercise, ExerciseCapability } from '@domain/model/exercise.model';
 import { CapabilityId } from '@store/capabilities.const';
 
@@ -35,7 +34,6 @@ export const exercises: Exercise[] = [
       capability('thoracic-extension', 0.8),
       capability('hip-flexor-extensibility', 0.6),
     ],
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -52,7 +50,6 @@ export const exercises: Exercise[] = [
       capability('thoracic-extension', 0.7),
       capability('hip-flexor-extensibility', 0.4),
     ],
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -62,28 +59,24 @@ export const exercises: Exercise[] = [
       capability('vertical-pulling-strength', 1),
       capability('grip-and-hanging-strength', 0.8),
     ],
-    skillTags: [SkillTag.OneArmChinUp],
     supportedSetTypes: ['bodyweight', 'weight'],
   },
   {
     id: 'cobra-thoracic-&-lumbar',
     name: 'Cobra (Thoracic & Lumbar)',
     capabilities: [capability('thoracic-extension', 1.0)],
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'couch-stretch-high',
     name: 'Couch Stretch - High',
     capabilities: [capability('hip-flexor-extensibility', 1.0)],
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'couch-stretch-low',
     name: 'Couch Stretch - Low',
     capabilities: [capability('hip-flexor-extensibility', 0.9)],
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -108,7 +101,6 @@ export const exercises: Exercise[] = [
       capability('adductor-extensibility', 0.8),
       capability('adductor-end-range-strength', 0.7),
     ],
-    skillTags: [SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'weight'],
   },
   {
@@ -119,7 +111,6 @@ export const exercises: Exercise[] = [
       capability('hamstring-extensibility', 0.8),
       capability('hamstring-end-range-strength', 0.8),
     ],
-    skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['iso', 'bodyweight', 'weight'],
   },
   {
@@ -129,7 +120,6 @@ export const exercises: Exercise[] = [
       capability('shoulder-flexion', 0.8),
       capability('shoulder-external-rotation', 0.8),
     ],
-    skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -140,13 +130,11 @@ export const exercises: Exercise[] = [
       capability('adductor-end-range-strength', 0.6),
       capability('hamstring-extensibility', 0.5),
     ],
-    skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'handstand',
     name: 'Handstand',
-    skillTags: [SkillTag.Handstand],
     supportedSetTypes: ['iso'],
   },
   {
@@ -156,7 +144,6 @@ export const exercises: Exercise[] = [
       capability('adductor-extensibility', 0.8),
       capability('adductor-end-range-strength', 0.8),
     ],
-    skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -166,7 +153,6 @@ export const exercises: Exercise[] = [
       capability('shoulder-flexion', 0.9),
       capability('shoulder-external-rotation', 0.8),
     ],
-    skillTags: [SkillTag.ShoulderMobility, SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -177,7 +163,6 @@ export const exercises: Exercise[] = [
       capability('shoulder-external-rotation', 0.7),
       capability('thoracic-extension', 0.7),
     ],
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -188,7 +173,6 @@ export const exercises: Exercise[] = [
       capability('hamstring-extensibility', 1.0),
       capability('hamstring-end-range-strength', 0.9),
     ],
-    skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -198,14 +182,12 @@ export const exercises: Exercise[] = [
       capability('adductor-extensibility', 1.0),
       capability('adductor-end-range-strength', 1.0),
     ],
-    skillTags: [SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'kneeling-needle',
     name: 'Kneeling Needle',
     capabilities: [capability('hip-flexor-extensibility', 0.8)],
-    skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -215,7 +197,6 @@ export const exercises: Exercise[] = [
       capability('adductor-extensibility', 0.8),
       capability('adductor-end-range-strength', 0.5),
     ],
-    skillTags: [SkillTag.SideSplit, SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -226,7 +207,6 @@ export const exercises: Exercise[] = [
       capability('active-hip-flexion', 0.9),
       capability('hamstring-end-range-strength', 0.7),
     ],
-    skillTags: [SkillTag.FrontSplit, SkillTag.Pike],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -247,7 +227,6 @@ export const exercises: Exercise[] = [
       capability('adductor-end-range-strength', 0.8),
       capability('active-hip-flexion', 1.0),
     ],
-    skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -262,7 +241,6 @@ export const exercises: Exercise[] = [
       capability('active-hip-flexion', 0.8),
       capability('adductor-end-range-strength', 0.6),
     ],
-    skillTags: [SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -273,7 +251,6 @@ export const exercises: Exercise[] = [
       capability('active-hip-flexion', 0.7),
       capability('hamstring-end-range-strength', 0.8),
     ],
-    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -284,7 +261,6 @@ export const exercises: Exercise[] = [
       capability('active-hip-flexion', 0.9),
       capability('hamstring-end-range-strength', 0.8),
     ],
-    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -295,7 +271,6 @@ export const exercises: Exercise[] = [
       capability('active-hip-flexion', 0.7),
       capability('hamstring-end-range-strength', 0.8),
     ],
-    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -310,7 +285,6 @@ export const exercises: Exercise[] = [
       capability('vertical-pulling-strength', 1),
       capability('grip-and-hanging-strength', 0.8),
     ],
-    skillTags: [SkillTag.OneArmChinUp],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -322,7 +296,6 @@ export const exercises: Exercise[] = [
     id: 'reverse-nordic-curls',
     name: 'Reverse Nordic Curls',
     capabilities: [capability('hip-flexor-extensibility', 0.9)],
-    skillTags: [SkillTag.Bridge, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -332,20 +305,17 @@ export const exercises: Exercise[] = [
       capability('hamstring-extensibility', 0.5),
       capability('active-hip-flexion', 1.0),
     ],
-    skillTags: [SkillTag.Pike, SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'shoulder-external-rotation-stretch',
     name: 'Shoulder External Rotation Stretch',
     capabilities: [capability('shoulder-external-rotation', 1.0)],
-    skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'single-leg-glute-bridge',
     name: 'Single Leg Glute Bridge',
-    skillTags: [SkillTag.Bridge],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
@@ -355,7 +325,6 @@ export const exercises: Exercise[] = [
       capability('shoulder-flexion', 0.8),
       capability('shoulder-external-rotation', 0.7),
     ],
-    skillTags: [SkillTag.Bridge, SkillTag.ShoulderMobility],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -365,19 +334,16 @@ export const exercises: Exercise[] = [
       capability('hip-flexor-extensibility', 0.5),
       capability('hamstring-end-range-strength', 0.3),
     ],
-    skillTags: [SkillTag.FrontSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
     id: 'standing-calf-stretch',
     name: 'Standing Calf Stretch',
-    skillTags: [SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso'],
   },
   {
     id: 'standing-pancake-hang',
     name: 'Standing Pancake Hang',
-    skillTags: [SkillTag.Pancake],
     capabilities: [
       capability('hamstring-extensibility', 0.9),
       capability('adductor-extensibility', 0.6),
@@ -392,7 +358,6 @@ export const exercises: Exercise[] = [
       capability('hamstring-extensibility', 0.8),
       capability('adductor-end-range-strength', 0.5),
     ],
-    skillTags: [SkillTag.Pancake],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -402,7 +367,6 @@ export const exercises: Exercise[] = [
     measurementDefinition: {
       landmarks: [BodyPart.RightKnee, BodyPart.PelvisCenter, BodyPart.LeftKnee],
     },
-    skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
@@ -412,7 +376,6 @@ export const exercises: Exercise[] = [
       capability('adductor-extensibility', 0.6),
       capability('adductor-end-range-strength', 0.8),
     ],
-    skillTags: [SkillTag.Pancake, SkillTag.SideSplit],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
