@@ -3,3 +3,8 @@
   overflow: auto hidden;
   gap: var(--space-3);
 }
+
+mat-icon {
+  width: 30px;
+  height: 30px;
+}
