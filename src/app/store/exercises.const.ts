@@ -17,10 +17,7 @@ export const exercises: Exercise[] = [
   {
     id: 'adductor-machine',
     name: 'Adductor Machine',
-    capabilities: [
-      capability('adductor-end-range-strength', 1),
-      capability('adductor-extensibility', 1),
-    ],
+    capabilities: [capability('adductor-extensibility', 1)],
     supportedSetTypes: ['weight'],
   },
   {
@@ -102,10 +99,7 @@ export const exercises: Exercise[] = [
   {
     id: 'drop-stance-squats',
     name: 'Drop Stance Squats',
-    capabilities: [
-      capability('adductor-extensibility', 0.8),
-      capability('adductor-end-range-strength', 0.7),
-    ],
+    capabilities: [capability('adductor-extensibility', 0.8)],
     supportedSetTypes: ['bodyweight', 'weight'],
   },
   {
@@ -132,7 +126,6 @@ export const exercises: Exercise[] = [
     name: 'Hip External Rotation Good Mornings',
     capabilities: [
       capability('adductor-extensibility', 0.6),
-      capability('adductor-end-range-strength', 0.6),
       capability('hamstring-extensibility', 0.5),
     ],
     supportedSetTypes: ['bodyweight', 'iso'],
@@ -147,7 +140,7 @@ export const exercises: Exercise[] = [
     name: 'Horse Stance Squats',
     capabilities: [
       capability('adductor-extensibility', 0.8),
-      capability('adductor-end-range-strength', 0.8),
+      capability('abductors-strength', 0.7),
     ],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -185,7 +178,7 @@ export const exercises: Exercise[] = [
     name: 'Isometric Side Split',
     capabilities: [
       capability('adductor-extensibility', 1.0),
-      capability('adductor-end-range-strength', 1.0),
+      capability('abductors-strength', 0.8),
     ],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -200,7 +193,6 @@ export const exercises: Exercise[] = [
     name: 'Kneeling Tilt',
     capabilities: [
       capability('adductor-extensibility', 0.8),
-      capability('adductor-end-range-strength', 0.5),
       capability('abductors-strength', 0.8),
     ],
     supportedSetTypes: ['bodyweight', 'iso'],
@@ -230,7 +222,6 @@ export const exercises: Exercise[] = [
     name: 'Pancake Active Lifts',
     capabilities: [
       capability('adductor-extensibility', 0.8),
-      capability('adductor-end-range-strength', 0.8),
       capability('active-hip-flexion', 1.0),
     ],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
@@ -245,7 +236,6 @@ export const exercises: Exercise[] = [
       capability('adductor-extensibility', 0.8),
       capability('hamstring-extensibility', 0.8),
       capability('active-hip-flexion', 0.8),
-      capability('adductor-end-range-strength', 0.6),
     ],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -362,7 +352,6 @@ export const exercises: Exercise[] = [
     capabilities: [
       capability('adductor-extensibility', 0.8),
       capability('hamstring-extensibility', 0.8),
-      capability('adductor-end-range-strength', 0.5),
     ],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
@@ -378,10 +367,7 @@ export const exercises: Exercise[] = [
   {
     id: 'tailor-pose-straight-arm-lifts',
     name: 'Tailor Pose - Straight Arm Lifts',
-    capabilities: [
-      capability('adductor-extensibility', 0.6),
-      capability('adductor-end-range-strength', 0.8),
-    ],
+    capabilities: [capability('adductor-extensibility', 0.7)],
     supportedSetTypes: ['bodyweight', 'iso', 'weight'],
   },
   {
