@@ -1,5 +1,7 @@
 <div class="slider">
   @for (skill of skills(); track skill.id) {
-    <button class="skill" matButton (click)="initSession(skill)">{{ skill.name }}</button>
+    <button class="skill" matMiniFab (click)="initSession(skill)">
+      <mat-icon [svgIcon]="skill.id" />
+    </button>
   }
 </div>

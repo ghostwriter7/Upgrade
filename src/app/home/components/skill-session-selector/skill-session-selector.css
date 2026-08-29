@@ -1,9 +1,5 @@
 .slider {
   display: flex;
   overflow: auto hidden;
-}
-
-.skill {
-  text-wrap: nowrap;
-  min-width: fit-content;
+  gap: var(--space-3);
 }

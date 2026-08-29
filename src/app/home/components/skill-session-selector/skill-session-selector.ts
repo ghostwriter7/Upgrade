@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { SkillStore } from '@store/skill.store';
-import { MatButton } from '@angular/material/button';
+import { MatMiniFabButton } from '@angular/material/button';
 import { Skill } from '@domain/model/skill';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-skill-session-selector',
-  imports: [MatButton],
+  imports: [MatMiniFabButton, MatIcon],
   templateUrl: './skill-session-selector.html',
   styleUrl: './skill-session-selector.css',
 })
