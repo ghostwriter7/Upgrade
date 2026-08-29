@@ -20,7 +20,8 @@ import {
 import { PrintHoursPipe } from '@ui/pipes/print-hours-pipe';
 import { MatIcon } from '@angular/material/icon';
 import { SkillStore } from '@store/skill.store';
-import { NgClass } from '@angular/common';
+import { NgClass, PercentPipe } from '@angular/common';
+import { MatChip } from '@angular/material/chips';
 
 @Component({
   selector: 'app-exercise-selector',
@@ -39,6 +40,8 @@ import { NgClass } from '@angular/common';
     MatIcon,
     NgClass,
     MatDivider,
+    MatChip,
+    PercentPipe,
   ],
   templateUrl: './exercise-selector.html',
   styleUrl: './exercise-selector.css',
@@ -50,6 +53,11 @@ export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
   private readonly exerciseStore = inject(ExerciseStore);
   private readonly skillStore = inject(SkillStore);
+
+  protected readonly activeSkill = computed(() => {
+    const activeSkills = this.skillOptions().filter((s) => s.isSelected);
+    return activeSkills.length === 1 ? activeSkills[0] : undefined;
+  });
 
   protected readonly skillOptions = linkedSignal(() =>
     this.skillStore.skills().map((skill) => ({ skill, isSelected: false })),
@@ -72,12 +80,16 @@ export class ExerciseSelector {
     if (!activeSort) return drills;
     const order = this.sortDirection() === 'ASC' ? 1 : -1;
 
+    const activeSkill = this.activeSkill()?.skill?.id;
     return drills.sort((a, b) => {
       if (activeSort === 'alphabetical') return order * a.name.localeCompare(b.name);
       if (activeSort === 'last-performed-at') {
         const lastPerformedAtA = a.stats?.lastPerformedAt?.epochMilliseconds ?? 0;
         const lastPerformedAtB = b.stats?.lastPerformedAt?.epochMilliseconds ?? 0;
         return order * (lastPerformedAtA - lastPerformedAtB);
+      }
+      if (activeSort === 'skill-score') {
+        return order * ((a.skillScore[activeSkill!] ?? 0) - (b.skillScore[activeSkill!] ?? 0));
       }
       return 0;
     });
@@ -87,6 +99,7 @@ export class ExerciseSelector {
   protected readonly sortOptions = signal([
     { icon: 'sort_by_alpha', id: 'alphabetical', active: true },
     { icon: 'history', id: 'last-performed-at', active: false },
+    { icon: 'sports_score', id: 'skill-score', active: false },
   ]);
   protected readonly sortDirection = signal<'ASC' | 'DESC'>('ASC');
   protected readonly sortDirectionIcon = computed(() =>

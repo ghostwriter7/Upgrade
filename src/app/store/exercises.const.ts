@@ -7,7 +7,7 @@ const capability = (capabilityId: CapabilityId, weight: number): ExerciseCapabil
   weight,
 });
 
-export const exercises: Exercise[] = [
+export const exercises: Omit<Exercise, 'skillScore'>[] = [
   {
     id: 'abductor-machine',
     name: 'Abductor Machine',

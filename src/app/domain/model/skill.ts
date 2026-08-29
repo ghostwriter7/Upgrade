@@ -1,7 +1,8 @@
 import { CapabilityId } from '@store/capabilities.const';
+import { Skills } from '@domain/enum/skill-tag.enum';
 
 export interface Skill {
-  id: string;
+  id: Skills;
   name: string;
   capabilities: SkillCapability[];
 }

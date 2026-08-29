@@ -13,6 +13,7 @@ import { Skill } from '@domain/model/skill';
 import { CapabilityId } from '@store/capabilities.const';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { DateHelper } from '@common/helper/date.helper';
+import { SkillStore } from '@store/skill.store';
 
 interface State {
   activeSkill: Skill | undefined;
@@ -21,12 +22,28 @@ interface State {
 
 const initialState: State = {
   activeSkill: undefined,
-  allExercises: exercises,
+  allExercises: [],
 };
 
 export const ExerciseStore = signalStore(
   { providedIn: 'root' },
-  withState(initialState),
+  withState((skillStore = inject(SkillStore)) => {
+    const skills = skillStore.skills();
+
+    return {
+      ...initialState,
+      allExercises: exercises.map((exercise) => ({
+        ...exercise,
+        skillScore: skills.reduce(
+          (skillScore, skill) => ({
+            ...skillScore,
+            [skill.id]: calculateSkillScore(exercise, skill),
+          }),
+          {},
+        ),
+      })) as Exercise[],
+    };
+  }),
   withComputed((store) => ({
     exercises: computed(() => {
       const skill = store.activeSkill();
@@ -122,4 +139,25 @@ function computeScore(
       0,
     ) ?? 0
   );
+}
+
+function calculateSkillScore(exercise: Omit<Exercise, 'skillScore'>, skill: Skill): number {
+  const exerciseCapabilities = new Map(
+    exercise.capabilities?.map((c) => [c.capabilityId, c.weight]) ?? [],
+  );
+
+  const totalImportance = skill.capabilities.reduce((sum, c) => sum + c.importance, 0);
+
+  if (totalImportance === 0) {
+    return 0;
+  }
+
+  const contribution = skill.capabilities.reduce(
+    (sum, skillCapability) =>
+      sum +
+      skillCapability.importance * (exerciseCapabilities.get(skillCapability.capabilityId) ?? 0),
+    0,
+  );
+
+  return contribution / totalImportance;
 }

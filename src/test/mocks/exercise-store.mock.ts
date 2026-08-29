@@ -5,6 +5,7 @@ const drill = (id: string, name: string): Exercise => ({
   id,
   name,
   supportedSetTypes: [],
+  skillScore: {},
 });
 
 export const createExerciseStoreMock = () => ({

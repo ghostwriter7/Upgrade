@@ -48,7 +48,14 @@
     @for (exercise of availableExercises(); track exercise.id) {
       <mat-list-option togglePosition="after" [value]="exercise.id">
         <span matListItemTitle>{{ exercise.name }}</span>
-        <span matListItemLine>{{ exercise.stats?.lastPerformedHoursAgo | printHours }}</span>
+        <div matListItemLine>
+          {{ exercise.stats?.lastPerformedHoursAgo | printHours }}
+
+          @let active = activeSkill();
+          @if (active && exercise.skillScore[active.skill.id]; as score) {
+            <mat-chip>{{ score | percent }}</mat-chip>
+          }
+        </div>
       </mat-list-option>
     }
   </mat-selection-list>
