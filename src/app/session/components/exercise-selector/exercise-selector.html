@@ -1,6 +1,26 @@
-<h2 mat-dialog-title>Exercises</h2>
+<header class="header">
+  <h2 mat-dialog-title>Drills</h2>
+  <button matMiniFab (click)="toggleFilters()">
+    <mat-icon>filter_list</mat-icon>
+  </button>
+  <button matMiniFab>
+    <mat-icon>sort</mat-icon>
+  </button>
+  @if (showFilters()) {
+    <div class="skill-filters">
+      @for (option of skillOptions(); track option.skill.id) {
+        <button matMiniFab [ngClass]="{ success: option.isSelected, info: !option.isSelected }"
+                (click)="toggleSkill($index)">
+          <mat-icon [svgIcon]="option.skill.id" />
+        </button>
+      }
+    </div>
+  }
+</header>
 <mat-dialog-content>
-  <mat-selection-list (selectionChange)="handleSelectionChange($event)">
+
+
+<mat-selection-list (selectionChange)="handleSelectionChange($event)">
     @for (exercise of availableExercises(); track exercise.id) {
       <mat-list-option togglePosition="after" [value]="exercise.id">
         <span matListItemTitle>{{ exercise.name }}</span>

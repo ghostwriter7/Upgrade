@@ -1,0 +1,28 @@
+.header {
+  align-items: center;
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  padding-inline: var(--space-4);
+
+  h2 {
+    flex: 1;
+    padding-left: unset;
+  }
+}
+
+mat-dialog-content {
+  max-height: unset;
+}
+
+.skill-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+
+  mat-icon {
+    width: 30px;
+    height: 30px;
+  }
+}
+

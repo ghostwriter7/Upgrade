@@ -1,6 +1,6 @@
 <div class="slider">
   @for (skill of skills(); track skill.id) {
-    <button class="skill" matMiniFab (click)="initSession(skill)">
+    <button matMiniFab (click)="initSession(skill)">
       <mat-icon [svgIcon]="skill.id" />
     </button>
   }

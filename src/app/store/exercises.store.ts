@@ -41,6 +41,20 @@ export const ExerciseStore = signalStore(
 
     getExercisesForSkill: (skill: Skill): Exercise[] =>
       findSupportingExercises(skill, store.allExercises()),
+
+    getDrillsForSkills: (skills: Skill[]): Exercise[] => {
+      const drills = skills.flatMap((skill) =>
+        findSupportingExercises(skill, store.allExercises()),
+      );
+      const seen = new Set<string>();
+      return drills
+        .filter((drill) => {
+          if (seen.has(drill.id)) return false;
+          seen.add(drill.id);
+          return true;
+        })
+        .toSorted((a, b) => a.name.localeCompare(b.name));
+    },
   })),
   withHooks((store, exerciseLogRepository = inject(ExerciseLogRepository)) => ({
     onInit: async () => {
