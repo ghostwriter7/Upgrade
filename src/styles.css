@@ -84,3 +84,12 @@ body {
 .wrap {
   white-space: wrap;
 }
+
+.lozenge {
+  --progress: 0;
+  --hue: calc(var(--progress) * 1.2);
+
+  background-color: hsl(var(--hue), 80%, 45%) !important;
+  color: white !important;
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.35) !important;
+}
