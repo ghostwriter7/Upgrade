@@ -1,15 +1,14 @@
 @if (hasActiveTargets()) {
   <app-week-progress />
 
+
   @for (target of decoratedTargets(); track target.id) {
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>{{ target.name }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <mat-progress-bar mode="determinate" [value]="target.completionPercentage" />
-      </mat-card-content>
-    </mat-card>
+    <mat-chip>
+      <div class="summary">
+        <mat-icon [svgIcon]="target.skillId" />
+        {{ target.completionPercentage }}%
+      </div>
+    </mat-chip>
   }
 
 }

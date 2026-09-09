@@ -1,12 +1,12 @@
 import { Component, computed, inject, linkedSignal, OnInit } from '@angular/core';
 import { TargetStore } from '@store/target.store';
 import { WeekProgress } from '@home/components/week-progress/week-progress';
-import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { SkillStore } from '@store/skill.store';
 import { SessionRepository } from '@persistence/repository/session.repository';
 import { ExerciseStore } from '@store/exercises.store';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { Target } from '@domain/model/target';
+import { MatChip } from '@angular/material/chips';
+import { MatIcon } from '@angular/material/icon';
 
 interface TargetViewModel extends Target {
   completionPercentage?: number;
@@ -16,10 +16,7 @@ interface TargetViewModel extends Target {
   selector: 'app-target-summary',
   templateUrl: './target-summary.html',
   styleUrl: './target-summary.css',
-  host: {
-    class: 'd-contents',
-  },
-  imports: [WeekProgress, MatCard, MatCardHeader, MatCardTitle, MatCardContent, MatProgressBar],
+  imports: [WeekProgress, MatChip, MatIcon],
 })
 export class TargetSummary implements OnInit {
   private readonly targetStore = inject(TargetStore);
@@ -71,7 +68,9 @@ export class TargetSummary implements OnInit {
 
           return {
             ...target,
-            completionPercentage: (totalDuration / target.weeklyCommitmentInMinutes) * 100,
+            completionPercentage: Math.round(
+              (totalDuration / target.weeklyCommitmentInMinutes) * 100,
+            ),
           };
         });
 
