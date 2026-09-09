@@ -47,14 +47,15 @@
   <mat-selection-list (selectionChange)="handleSelectionChange($event)">
     @for (exercise of availableExercises(); track exercise.id) {
       <mat-list-option togglePosition="after" [value]="exercise.id">
-        <span matListItemTitle>{{ exercise.name }}</span>
-        <div matListItemLine>
-          {{ exercise.stats?.lastPerformedHoursAgo | printHours }}
-
-          @let active = activeSkill();
-          @if (active && exercise.skillScore[active.skill.id]; as score) {
-            <mat-chip>{{ score | percent }}</mat-chip>
-          }
+        <div class="option">
+          <span class="score">
+            @let active = activeSkill();
+            @if (active && exercise.skillScore[active.skill.id]; as score) {
+              <mat-chip class="lozenge" [style.--progress]="score * 100">{{ score | percent }}</mat-chip>
+            }
+          </span>
+          <span class="title">{{ exercise.name }}</span>
+          <span class="last-performed">          {{ exercise.stats?.lastPerformedHoursAgo | printHours }}</span>
         </div>
       </mat-list-option>
     }

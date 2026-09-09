@@ -1,3 +1,7 @@
+:host {
+  --mat-list-list-item-three-line-container-height: fit-content;
+}
+
 .header {
   align-items: center;
   display: flex;
@@ -33,3 +37,28 @@ mat-dialog-content {
   width: 100%;
 }
 
+.option {
+  display: grid;
+  align-items: center;
+  grid-template-columns: 55px auto;
+  grid-template-rows: repeat(2, auto);
+  column-gap: var(--space-2);
+
+  .score {
+    grid-row: 1 / 3;
+  }
+
+  .title, .last-performed {
+    grid-column: 2;
+  }
+
+  .title {
+    font: var(--mat-sys-body-medium);
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .last-performed {
+    font: var(--mat-sys-body-small);
+  }
+}

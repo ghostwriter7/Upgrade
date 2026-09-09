@@ -11,8 +11,6 @@ import { ExerciseStore } from '@store/exercises.store';
 import { Session } from '@domain/model/session/session.model';
 import {
   MatDivider,
-  MatListItemLine,
-  MatListItemTitle,
   MatListOption,
   MatSelectionList,
   MatSelectionListChange,
@@ -33,8 +31,6 @@ import { MatChip } from '@angular/material/chips';
     MatDialogTitle,
     MatSelectionList,
     MatListOption,
-    MatListItemTitle,
-    MatListItemLine,
     PrintHoursPipe,
     MatMiniFabButton,
     MatIcon,
@@ -60,7 +56,9 @@ export class ExerciseSelector {
   });
 
   protected readonly skillOptions = linkedSignal(() =>
-    this.skillStore.skills().map((skill) => ({ skill, isSelected: false })),
+    this.skillStore
+      .skills()
+      .map((skill) => ({ skill, isSelected: this.exerciseStore.activeSkill() === skill })),
   );
   protected readonly hasNoneSelected = computed(() => this.selectedExerciseIds().length === 0);
   protected readonly selectedExerciseIds = signal<string[]>([]);
@@ -70,10 +68,11 @@ export class ExerciseSelector {
   protected readonly availableExercises = computed(() => {
     const selectedSkills = this.skillOptions().filter((o) => o.isSelected);
 
-    const drills =
+    const drills = (
       selectedSkills.length === 0
-        ? this.exerciseStore.exercises().filter(({ id }) => !this.activeExerciseIds.has(id))
-        : this.exerciseStore.getDrillsForSkills(selectedSkills.map((o) => o.skill));
+        ? this.exerciseStore.exercises()
+        : this.exerciseStore.getDrillsForSkills(selectedSkills.map((o) => o.skill))
+    ).filter(({ id }) => !this.activeExerciseIds.has(id));
 
     const activeSort = this.sortOptions().find((option) => option.active)?.id;
 
@@ -97,11 +96,11 @@ export class ExerciseSelector {
   protected readonly showFilters = signal(false);
   protected readonly showSorting = signal(false);
   protected readonly sortOptions = signal([
-    { icon: 'sort_by_alpha', id: 'alphabetical', active: true },
+    { icon: 'sort_by_alpha', id: 'alphabetical', active: false },
     { icon: 'history', id: 'last-performed-at', active: false },
-    { icon: 'sports_score', id: 'skill-score', active: false },
+    { icon: 'sports_score', id: 'skill-score', active: true },
   ]);
-  protected readonly sortDirection = signal<'ASC' | 'DESC'>('ASC');
+  protected readonly sortDirection = signal<'ASC' | 'DESC'>('DESC');
   protected readonly sortDirectionIcon = computed(() =>
     this.sortDirection() === 'ASC' ? 'arrow_upward' : 'arrow_downward',
   );
