@@ -1,12 +1,12 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatIcon } from '@angular/material/icon';
+import { MatChip } from '@angular/material/chips';
 
 @Component({
   selector: 'app-week-progress',
   templateUrl: './week-progress.html',
   styleUrl: './week-progress.css',
-  imports: [MatProgressBar, MatIcon],
+  imports: [MatIcon, MatChip],
 })
 export class WeekProgress implements OnInit {
   protected readonly percentage = signal<number>(0);
@@ -26,6 +26,7 @@ export class WeekProgress implements OnInit {
     const total =
       nextWeekStart.toInstant().epochMilliseconds - weekStart.toInstant().epochMilliseconds;
 
-    this.percentage.set((elapsed / total) * 100);
+    const value = Math.round((elapsed / total) * 100);
+    this.percentage.set(value);
   }
 }
