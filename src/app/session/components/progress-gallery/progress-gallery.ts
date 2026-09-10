@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  input,
-  resource, signal,
-} from '@angular/core';
+import { Component, computed, inject, input, resource, signal } from '@angular/core';
 import { QueryBus } from '@common/routers/query/query-bus';
 import { FindMediaAndMeasurementsByExerciseLogIdQuery } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id.query';
 import { Lozenge } from '@ui/lozenge/lozenge';
@@ -21,7 +14,6 @@ import { DownloadImageCommand } from '@session/commands/download-image/download-
   imports: [Lozenge, ImageRenderer, MatIcon, MatMiniFabButton],
   templateUrl: './progress-gallery.html',
   styleUrl: './progress-gallery.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProgressGallery {
   public exerciseLogId = input.required<string>();

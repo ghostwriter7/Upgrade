@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
@@ -22,7 +21,6 @@ import { ProgressGallery } from '@session/components/progress-gallery/progress-g
 import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-exercise-card',
   imports: [
     ExerciseNamePipe,
