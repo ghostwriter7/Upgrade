@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, resource, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { QueryBus } from '@common/routers/query/query-bus';
 import { FindMediaAndMeasurementsByExerciseLogIdQuery } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id.query';
 import { Lozenge } from '@ui/lozenge/lozenge';
@@ -8,6 +8,17 @@ import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { DownloadImageCommand } from '@session/commands/download-image/download-image.command';
+import { FileService } from '@common/service/file/file.service';
+import { Point } from '@domain/model/measurement.model';
+
+interface UiMedia {
+  image: Blob;
+  width: number;
+  height: number;
+  points: Point[];
+  lines: Line[];
+  angle?: number;
+}
 
 @Component({
   selector: 'app-progress-gallery',
@@ -21,21 +32,31 @@ export class ProgressGallery {
   private readonly queryBus = inject(QueryBus);
   private readonly commandBus = inject(CommandBus);
 
-  private readonly progressEntries = resource({
-    params: () => ({ exerciseLogId: this.exerciseLogId() }),
-    loader: ({ params }) =>
-      this.queryBus.execute(new FindMediaAndMeasurementsByExerciseLogIdQuery(params.exerciseLogId)),
-  });
-
   protected readonly showActions = signal(false);
   protected readonly current = signal(1);
   protected readonly total = computed(() => this.mediaWithMeasurements().length);
   protected readonly showCounter = computed(() => this.total() > 1);
-  protected readonly mediaWithMeasurements = computed(() => {
-    if (!this.progressEntries.isLoading() && this.progressEntries.hasValue()) {
-      return this.progressEntries
-        .value()
-        .map(({ measurement: { landmarks, angle } = {}, media: { blob, size } }) => {
+
+  protected readonly mediaWithMeasurements = signal<UiMedia[]>([]);
+
+  private readonly fileService = inject(FileService);
+
+  constructor() {
+    effect(async () => {
+      const exerciseLogId = this.exerciseLogId();
+
+      const results = await this.queryBus.execute(
+        new FindMediaAndMeasurementsByExerciseLogIdQuery(exerciseLogId),
+      );
+
+      if (!results.length) return;
+
+      const fileNames = results.map(({ media }) => `${media.exerciseId}-${media.id}.jpeg`);
+      const files = await this.fileService.getMany(fileNames);
+      const arrayBuffers = await Promise.all(files.map((file) => file.arrayBuffer()));
+
+      const finalResults = results.map(
+        ({ media: { size }, measurement: { landmarks, angle } = {} }, i) => {
           const { width, height } = size;
 
           const points = Iterator.from(landmarks || [])
@@ -49,6 +70,9 @@ export class ProgressGallery {
             return lines;
           }, [] as Line[]);
 
+          const arrayBuffer = arrayBuffers[i];
+          const blob = new Blob([arrayBuffer]);
+
           return {
             image: blob,
             width,
@@ -57,11 +81,12 @@ export class ProgressGallery {
             lines,
             angle,
           };
-        });
-    }
+        },
+      );
 
-    return [];
-  });
+      this.mediaWithMeasurements.set(finalResults);
+    });
+  }
 
   protected onScroll(event: Event): void {
     const carousel = event.target as HTMLDivElement;
