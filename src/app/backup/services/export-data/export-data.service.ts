@@ -14,7 +14,7 @@ import { AngleMeasurementDto } from '@persistence/schema/angle-measurement.schem
 import { BackupSummary } from '@backup/interfaces/summary.interface';
 import { ExerciseMediaDto } from '@persistence/schema/media.schema';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
-import { ZipService } from '@common/service/zip/zip.service';
+import { ZipService, ZipStructure } from '@common/service/zip/zip.service';
 import { FileService } from '@common/service/file/file.service';
 import { ZipOptions } from 'fflate';
 
@@ -60,15 +60,15 @@ export class ExportDataService {
       : Promise.resolve([]));
     const fileBytes = await Promise.all(files.map((file) => file.bytes()));
 
-    const zipStructure = {
-      'data.json': new TextEncoder().encode(json),
+    const zipStructure: ZipStructure = {
+      data: new TextEncoder().encode(json),
       images: fileBytes.reduce(
         (directory, fileByte, index) => {
           const mediaEntry = media[index];
           const fileName = `${mediaEntry.exerciseId}-${mediaEntry.id}.jpeg`;
           return {
             ...directory,
-            [fileName]: [fileByte, { level: 0 }] as [Uint8Array<ArrayBufferLike>, ZipOptions],
+            [fileName]: [fileByte, { level: 0 }],
           };
         },
         {} as Record<string, [Uint8Array<ArrayBufferLike>, ZipOptions]>,

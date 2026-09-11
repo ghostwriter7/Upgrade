@@ -43,11 +43,15 @@ export class ImportDataService {
         },
       ],
     });
-    const file = await handle.getFile();
-    const bytes = await file.bytes();
-    const zipContent = this.zipService.unzip(bytes);
+    const zipContent = await this.zipService.unzip(await handle.getFile());
 
-    const json = new TextDecoder().decode(zipContent['data.json']);
+    await this.handleImages(zipContent);
+
+    return this.handleData(zipContent['data']);
+  }
+
+  private async handleData(input: Uint8Array<ArrayBuffer>): Promise<BackupSummary> {
+    const json = new TextDecoder().decode(input);
     const data = JSON.parse(json);
 
     const sessions = this.getSessions(data);
@@ -56,14 +60,7 @@ export class ImportDataService {
     const angleMeasurements = this.getAngleMeasurements(data);
     const media = this.getMedia(data);
 
-    await Promise.all([
-      this.sessionRepository.deleteAllSessions(),
-      this.setRepository.deleteAllSets(),
-      this.exerciseLogRepository.deleteAllLogs(),
-      this.angleMeasurementRepository.deleteAllMeasurements(),
-      this.mediaRepository.deleteAllMedia(),
-      this.handleImages(zipContent),
-    ]);
+    await this.clearResources();
 
     await Promise.all([
       ...sessions.map((session) => this.sessionRepository.save(session)),
@@ -155,5 +152,15 @@ export class ImportDataService {
         return this.fileService.persist(data.name, data.bytes);
       }),
     );
+  }
+
+  private clearResources(): Promise<void[]> {
+    return Promise.all([
+      this.sessionRepository.deleteAllSessions(),
+      this.setRepository.deleteAllSets(),
+      this.exerciseLogRepository.deleteAllLogs(),
+      this.angleMeasurementRepository.deleteAllMeasurements(),
+      this.mediaRepository.deleteAllMedia(),
+    ]);
   }
 }
