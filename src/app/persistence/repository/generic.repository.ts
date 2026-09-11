@@ -3,9 +3,11 @@ import { DATABASE_TOKEN } from './database.token';
 import { firstValueFrom } from 'rxjs';
 import { StoreName } from './store-name.enum';
 import { IndexName } from './index-name.enum';
+import { DatabaseConnection } from '@infrastructure/database-connection';
 
 export abstract class GenericRepository<T> {
   private readonly db = inject(DATABASE_TOKEN);
+  private readonly databaseConnection = inject(DatabaseConnection);
 
   protected async getDb(): Promise<IDBDatabase> {
     return firstValueFrom(this.db);
