@@ -1,5 +1,5 @@
 import { SqlResponse } from './sql-response.type';
-import { SqlRequest } from './sql-request.interface';
+import { ExportDbRequest, RequestType } from './sql-request.interface';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { Service } from '@angular/core';
 
@@ -21,6 +21,12 @@ export class DatabaseConnection {
     this.worker.onerror = (event: ErrorEvent) => this.handleWorkerError(event);
   }
 
+  public export(): Promise<Uint8Array<ArrayBuffer>> {
+    return this.sendRequest({ type: 'export-db' } as ExportDbRequest) as Promise<
+      Uint8Array<ArrayBuffer>
+    >;
+  }
+
   public query<T>(sql: string, params: unknown[]): Promise<T[]> {
     return this.sendRequest({ sql, params, type: 'query' }) as Promise<T[]>;
   }
@@ -33,7 +39,7 @@ export class DatabaseConnection {
     return this.sendRequest({ sql, params, type: 'execute' }) as Promise<void>;
   }
 
-  private sendRequest(request: Omit<SqlRequest, 'id'>): Promise<unknown> {
+  private sendRequest(request: Omit<RequestType, 'id'>): Promise<unknown> {
     const id = createNanoId();
 
     return new Promise((resolve, reject) => {

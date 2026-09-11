@@ -17,6 +17,7 @@ import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { ZipService, ZipStructure } from '@common/service/zip/zip.service';
 import { FileService } from '@common/service/file/file.service';
 import { ZipOptions } from 'fflate';
+import { DatabaseConnection } from '@infrastructure/database-connection';
 
 interface ExportData {
   sessions: SessionDto[];
@@ -35,6 +36,26 @@ export class ExportDataService {
   private readonly mediaRepository = inject(MediaRepository);
   private readonly zipService = inject(ZipService);
   private readonly fileService = inject(FileService);
+  private readonly databaseConnection = inject(DatabaseConnection);
+
+  public async exportDatabase(): Promise<void> {
+    const bytes = await this.databaseConnection.export();
+    const handle = await window.showSaveFilePicker({
+      suggestedName: `upgradedb.sqlite3`,
+      types: [
+        {
+          description: 'Upgrade DB',
+          accept: {
+            'application/octet-stream': ['.sqlite3'],
+          },
+        },
+      ],
+    });
+    const writableStream = await handle.createWritable();
+
+    await writableStream.write(bytes);
+    await writableStream.close();
+  }
 
   public async exportData(): Promise<BackupSummary> {
     const [sessions, sets, exerciseLogs, angleMeasurements, media] = await Promise.all([

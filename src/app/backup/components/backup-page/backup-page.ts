@@ -20,6 +20,18 @@ export default class BackupPage {
   private readonly exportDataService = inject(ExportDataService);
   private readonly importDataService = inject(ImportDataService);
 
+  protected async exportDatabase(): Promise<void> {
+    this.loading.set(true);
+    this.error.set(null);
+    try {
+      await this.exportDataService.exportDatabase();
+    } catch (error) {
+      this.error.set(error);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
   protected exportData(): void {
     this.performOperation(() => this.exportDataService.exportData());
   }

@@ -1,18 +1,23 @@
 /// <reference lib="webworker" />
 import sqlite3InitModule, { type OpfsDatabase, type Sqlite3Static } from '@sqlite.org/sqlite-wasm';
-import { SqlRequest } from '@infrastructure/sql-request.interface';
+import { RequestType } from '@infrastructure/sql-request.interface';
 import { Changelog } from './changelog';
 
 const databaseName = 'upgradedb';
 
-addEventListener('message', ({ data }: MessageEvent<SqlRequest>) => {
-  const response = `worker response to ${data}`;
-  postMessage(response);
+let sqlite3: Sqlite3Static | null = null;
+let db: OpfsDatabase | null = null;
+
+addEventListener('message', ({ data }: MessageEvent<RequestType>) => {
+  if (data.type === 'export-db') {
+    const array = sqlite3!.capi.sqlite3_js_db_export(db!);
+    postMessage({ id: data.id, type: 'success', result: array.buffer }, [array.buffer]);
+  }
 });
 
 const start = (sqlite3: Sqlite3Static) => {
   console.log('Running SQLite3 version', sqlite3.version.libVersion);
-  const db = new sqlite3.oo1.OpfsDb(`/${databaseName}.sqlite3`);
+  db = new sqlite3.oo1.OpfsDb(`/${databaseName}.sqlite3`);
   console.log(`Created persisted database at ${db.filename}`);
 
   applyMigrations(db);
@@ -21,7 +26,7 @@ const start = (sqlite3: Sqlite3Static) => {
 const initializeSqlLite = async () => {
   try {
     console.log('Loading and initializing SQLite3 module...');
-    const sqlite3 = await sqlite3InitModule();
+    sqlite3 = await sqlite3InitModule();
     start(sqlite3);
     console.log('SQLite3 module loaded and initialized.');
   } catch (err) {
