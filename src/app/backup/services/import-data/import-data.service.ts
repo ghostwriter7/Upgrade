@@ -16,7 +16,7 @@ import { AngleMeasurement } from '@domain/model/measurement.model';
 import { AngleMeasurementSchema } from '@persistence/schema/angle-measurement.schema';
 import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
-import { JsonSerializedMediaSchema } from '@persistence/schema/media.schema';
+import { ExerciseMediaSchema } from '@persistence/schema/media.schema';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { BackupSummary } from '@backup/interfaces/summary.interface';
 
@@ -131,11 +131,6 @@ export class ImportDataService {
   }
 
   private getMedia(data: Record<string, unknown>): ExerciseMedia[] {
-    return this.read(
-      data,
-      'media',
-      JsonSerializedMediaSchema,
-      ExerciseMediaMapper.INSTANCE.fromJson,
-    );
+    return this.read(data, 'media', ExerciseMediaSchema, ExerciseMediaMapper.INSTANCE.fromDto);
   }
 }

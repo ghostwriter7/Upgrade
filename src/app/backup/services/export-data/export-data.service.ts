@@ -7,20 +7,20 @@ import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log
 import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
 import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
 import { MediaRepository } from '@persistence/repository/media.repository';
-import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { SessionDto } from '@persistence/schema/session.schema';
 import { ExerciseSetDto } from '@persistence/schema/set.schema';
 import { ExerciseLogDto } from '@persistence/schema/exercise-log.schema';
 import { AngleMeasurementDto } from '@persistence/schema/angle-measurement.schema';
-import { JsonSerializedMediaDto } from '@persistence/schema/media.schema';
 import { BackupSummary } from '@backup/interfaces/summary.interface';
+import { ExerciseMediaDto } from '@persistence/schema/media.schema';
+import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 
 interface ExportData {
   sessions: SessionDto[];
   sets: ExerciseSetDto[];
   exerciseLogs: ExerciseLogDto[];
   angleMeasurements?: AngleMeasurementDto[];
-  media?: JsonSerializedMediaDto[];
+  media?: ExerciseMediaDto[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -45,11 +45,8 @@ export class ExportDataService {
       sets,
       exerciseLogs: exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDto),
       angleMeasurements: angleMeasurements.map(AngleMeasurementMapper.INSTANCE.toDto),
+      media: media.map(ExerciseMediaMapper.INSTANCE.toDto),
     };
-
-    if (media.length) {
-      data.media = await Promise.all(media.map(ExerciseMediaMapper.INSTANCE.toJson));
-    }
 
     const json = JSON.stringify(data, null, 2);
 

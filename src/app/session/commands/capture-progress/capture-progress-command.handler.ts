@@ -24,8 +24,8 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
   public handle({ image, width, height, exerciseId, points, angle }: CaptureProgressCommand): void {
     const exerciseLogId = this.findExerciseLogId(exerciseId);
 
-    const media = ExerciseMedia.newImage(exerciseId, exerciseLogId, image, width, height);
-    this.eventBus.publish(new MediaCapturedEvent(media));
+    const media = ExerciseMedia.newImage(exerciseId, exerciseLogId, width, height);
+    this.eventBus.publish(new MediaCapturedEvent(media, image));
 
     if (points && angle) {
       const measurementDefinition = this.findMeasurementDefinition(exerciseId);

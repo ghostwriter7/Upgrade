@@ -14,9 +14,9 @@ export class MediaCapturedEventHandler implements EventHandler<MediaCapturedEven
     return MediaCapturedEvent;
   }
 
-  public handle({ media }: MediaCapturedEvent): void {
+  public handle({ media, image }: MediaCapturedEvent): void {
     this.mediaRepository.save(media);
     const fileName = `${media.exerciseId}-${media.id}.jpeg`;
-    this.fileService.persist(fileName, media.blob);
+    this.fileService.persist(fileName, image);
   }
 }

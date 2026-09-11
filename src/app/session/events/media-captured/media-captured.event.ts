@@ -2,7 +2,10 @@ import { DomainEvent } from '@common/routers/event/domain-event';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 
 export class MediaCapturedEvent extends DomainEvent {
-  constructor(public readonly media: ExerciseMedia) {
+  constructor(
+    public readonly media: ExerciseMedia,
+    public readonly image: Blob,
+  ) {
     super();
   }
 }

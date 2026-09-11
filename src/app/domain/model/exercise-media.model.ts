@@ -6,18 +6,21 @@ export class ExerciseMedia {
     public readonly id: string,
     public readonly exerciseId: string,
     public readonly exerciseLogId: string,
-    public readonly blob: Blob,
     public readonly size: Size,
     public readonly mimeType: 'image/jpeg' = 'image/jpeg',
-    public readonly createdAt: Temporal.Instant = Temporal.Now.instant()
+    public readonly createdAt: Temporal.Instant = Temporal.Now.instant(),
   ) {}
 
-  public static newImage(exerciseId: string, exerciseLogId: string, blob: Blob, width: number, height: number): ExerciseMedia {
+  public static newImage(
+    exerciseId: string,
+    exerciseLogId: string,
+    width: number,
+    height: number,
+  ): ExerciseMedia {
     return new ExerciseMedia(
       createNanoId(),
       exerciseId,
       exerciseLogId,
-      blob,
       new Size(width, height),
       'image/jpeg',
       DateHelper.now(),
@@ -28,7 +31,6 @@ export class ExerciseMedia {
 export class Size {
   constructor(
     public readonly width: number,
-    public readonly height: number
-  ) {
-  }
+    public readonly height: number,
+  ) {}
 }
