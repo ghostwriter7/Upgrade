@@ -19,6 +19,8 @@ import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { ExerciseMediaSchema } from '@persistence/schema/media.schema';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { BackupSummary } from '@backup/interfaces/summary.interface';
+import { ZipService } from '@common/service/zip/zip.service';
+import { FileService } from '@common/service/file/file.service';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {
@@ -27,21 +29,25 @@ export class ImportDataService {
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
   private readonly mediaRepository = inject(MediaRepository);
+  private readonly zipService = inject(ZipService);
+  private readonly fileService = inject(FileService);
 
   public async importData(): Promise<BackupSummary> {
     const [handle] = await window.showOpenFilePicker({
       types: [
         {
-          description: 'JSON Files',
+          description: 'ZIP Files',
           accept: {
-            'application/json': ['.json'],
+            'application/zip': ['.zip'],
           },
         },
       ],
     });
     const file = await handle.getFile();
     const bytes = await file.bytes();
-    const json = new TextDecoder().decode(bytes);
+    const zipContent = this.zipService.unzip(bytes);
+
+    const json = new TextDecoder().decode(zipContent['data.json']);
     const data = JSON.parse(json);
 
     const sessions = this.getSessions(data);
@@ -56,6 +62,7 @@ export class ImportDataService {
       this.exerciseLogRepository.deleteAllLogs(),
       this.angleMeasurementRepository.deleteAllMeasurements(),
       this.mediaRepository.deleteAllMedia(),
+      this.handleImages(zipContent),
     ]);
 
     await Promise.all([
@@ -132,5 +139,21 @@ export class ImportDataService {
 
   private getMedia(data: Record<string, unknown>): ExerciseMedia[] {
     return this.read(data, 'media', ExerciseMediaSchema, ExerciseMediaMapper.INSTANCE.fromDto);
+  }
+
+  private handleImages(zipContent: Record<string, Uint8Array<ArrayBuffer>>): Promise<void[]> {
+    const images = Object.entries(zipContent)
+      .filter((entry) => entry[0].startsWith('images/') && !!entry[1].byteLength)
+      .map((entry) => ({
+        name: entry[0].replace('images/', ''),
+        bytes: entry[1],
+      }));
+
+    return Promise.all(
+      images.map(async (data) => {
+        if (await this.fileService.exists(data.name)) return;
+        return this.fileService.persist(data.name, data.bytes);
+      }),
+    );
   }
 }

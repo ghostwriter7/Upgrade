@@ -1,12 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Service } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Service()
 export class FileService {
   public checkQuota(): Promise<StorageEstimate> {
     return navigator.storage.estimate();
   }
 
-  public async persist(name: string, data: Blob): Promise<void> {
+  public async exists(name: string): Promise<boolean> {
+    const directoryHandle = await navigator.storage.getDirectory();
+    try {
+      await directoryHandle.getFileHandle(name);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  public async persist(name: string, data: Blob | Uint8Array<ArrayBuffer>): Promise<void> {
     const directoryHandle = await navigator.storage.getDirectory();
     const fileHandle = await directoryHandle.getFileHandle(name, { create: true });
 

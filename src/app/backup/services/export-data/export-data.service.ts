@@ -14,6 +14,9 @@ import { AngleMeasurementDto } from '@persistence/schema/angle-measurement.schem
 import { BackupSummary } from '@backup/interfaces/summary.interface';
 import { ExerciseMediaDto } from '@persistence/schema/media.schema';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
+import { ZipService } from '@common/service/zip/zip.service';
+import { FileService } from '@common/service/file/file.service';
+import { ZipOptions } from 'fflate';
 
 interface ExportData {
   sessions: SessionDto[];
@@ -30,6 +33,8 @@ export class ExportDataService {
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
   private readonly mediaRepository = inject(MediaRepository);
+  private readonly zipService = inject(ZipService);
+  private readonly fileService = inject(FileService);
 
   public async exportData(): Promise<BackupSummary> {
     const [sessions, sets, exerciseLogs, angleMeasurements, media] = await Promise.all([
@@ -50,20 +55,42 @@ export class ExportDataService {
 
     const json = JSON.stringify(data, null, 2);
 
+    const files: File[] = await (media.length
+      ? this.fileService.getMany(media.map((entry) => `${entry.exerciseId}-${entry.id}.jpeg`))
+      : Promise.resolve([]));
+    const fileBytes = await Promise.all(files.map((file) => file.bytes()));
+
+    const zipStructure = {
+      'data.json': new TextEncoder().encode(json),
+      images: fileBytes.reduce(
+        (directory, fileByte, index) => {
+          const mediaEntry = media[index];
+          const fileName = `${mediaEntry.exerciseId}-${mediaEntry.id}.jpeg`;
+          return {
+            ...directory,
+            [fileName]: [fileByte, { level: 0 }] as [Uint8Array<ArrayBufferLike>, ZipOptions],
+          };
+        },
+        {} as Record<string, [Uint8Array<ArrayBufferLike>, ZipOptions]>,
+      ),
+    };
+
+    const zipFile = this.zipService.zip(zipStructure);
+
     const handle = await window.showSaveFilePicker({
       suggestedName: `upgrade-backup-${Temporal.Now.plainDateISO().toString()}`,
       types: [
         {
-          description: 'Upgrade Backup',
+          description: 'Upgrade Backup ZIP',
           accept: {
-            'application/json': ['.json'],
+            'application/zip': ['.zip'],
           },
         },
       ],
     });
     const writableStream = await handle.createWritable();
 
-    await writableStream.write(json);
+    await writableStream.write(zipFile);
     await writableStream.close();
 
     return {
