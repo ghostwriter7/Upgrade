@@ -23,5 +23,13 @@ export class App {
         this.eventService.dispatch(new ElementClickedEvent(target));
       }
     });
+
+    if (typeof Worker !== 'undefined') {
+      const worker = new Worker(new URL('./sql.worker', import.meta.url));
+      worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+      worker.postMessage('hello');
+    }
   }
 }

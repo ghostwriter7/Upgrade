@@ -29,7 +29,8 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/material-theme.scss", "src/styles.css"]
+            "styles": ["src/material-theme.scss", "src/styles.css"],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -71,7 +72,8 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "setupFiles": ["./test-setup.ts"]
+            "setupFiles": ["./test-setup.ts"],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           }
         },
         "e2e": {
