@@ -1,17 +1,17 @@
+import type { BindableValue } from '@sqlite.org/sqlite-wasm';
+
 export interface Request {
   id: string;
-  type: 'query' | 'execute' | 'export-db';
-  sql: string;
-  params: unknown[];
+  type: 'query' | 'query-one' | 'execute' | 'export-db';
 }
 
-interface SqlRequest {
+interface SqlRequest extends Request {
   sql: string;
-  params: unknown[];
+  params: BindableValue[];
 }
 
 export interface QueryRequest extends SqlRequest {
-  type: 'query';
+  type: 'query' | 'query-one';
 }
 
 export interface ExecuteRequest extends SqlRequest {

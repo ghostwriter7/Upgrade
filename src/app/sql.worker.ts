@@ -1,7 +1,8 @@
 /// <reference lib="webworker" />
 import sqlite3InitModule, { type OpfsDatabase, type Sqlite3Static } from '@sqlite.org/sqlite-wasm';
 import { RequestType } from '@infrastructure/sql-request.interface';
-import { Changelog } from './changelog';
+// @ts-ignore
+import changelog from './changelog.sql' with { type: 'text' };
 
 const databaseName = 'upgradedb';
 
@@ -12,14 +13,32 @@ addEventListener('message', ({ data }: MessageEvent<RequestType>) => {
   if (data.type === 'export-db') {
     const array = sqlite3!.capi.sqlite3_js_db_export(db!);
     postMessage({ id: data.id, type: 'success', result: array.buffer }, [array.buffer]);
+  } else if (data.type === 'query') {
+    const result = db!.selectArray(data.sql, data.params);
+    postMessage({ id: data.id, type: 'success', result });
+  } else if (data.type === 'query-one') {
+    const result = db!.selectValue(data.sql, data.params);
+    postMessage({ id: data.id, type: 'success', result });
+  } else if (data.type === 'execute') {
+    const ps = db!.prepare(data.sql);
+    ps.bind(data.params);
+    ps.stepFinalize();
+    postMessage({ id: data.id, type: 'success' });
   }
 });
 
-const start = (sqlite3: Sqlite3Static) => {
+const start = async (sqlite3: Sqlite3Static) => {
   console.log('Running SQLite3 version', sqlite3.version.libVersion);
-  db = new sqlite3.oo1.OpfsDb(`/${databaseName}.sqlite3`);
-  console.log(`Created persisted database at ${db.filename}`);
+  const filename = `${databaseName}.sqlite3`;
 
+  try {
+    // TODO Remove it once schema migration is complete
+    const root = await navigator.storage.getDirectory();
+    await root.removeEntry(filename);
+  } catch (err) {}
+
+  db = new sqlite3.oo1.OpfsDb(filename, 'wc');
+  console.log(`Created persisted database at ${db.filename}`);
   applyMigrations(db);
 };
 
@@ -47,12 +66,15 @@ const applyMigrations = (db: OpfsDatabase) => {
   let latestVersion = currentVersion;
 
   db.transaction(() => {
-    for (const changelog of Changelog) {
-      if (changelog.version > currentVersion) {
-        for (const change of changelog.changes) {
-          db.exec(change);
-        }
-        latestVersion = Math.max(latestVersion, changelog.version);
+    const changes = (changelog as string)
+      .split(/^-- @changeset \d+\s*$/m)
+      .map((change) => change.trim())
+      .filter(Boolean);
+
+    for (let i = 0; i < changes.length; i++) {
+      if (i + 1 > currentVersion) {
+        db.exec(changes[i]);
+        latestVersion++;
       }
     }
 

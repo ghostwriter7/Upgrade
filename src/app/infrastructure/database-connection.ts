@@ -1,7 +1,13 @@
 import { SqlResponse } from './sql-response.type';
-import { ExportDbRequest, RequestType } from './sql-request.interface';
+import {
+  ExecuteRequest,
+  ExportDbRequest,
+  QueryRequest,
+  RequestType,
+} from './sql-request.interface';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { Service } from '@angular/core';
+import { BindableValue } from '@sqlite.org/sqlite-wasm';
 
 @Service()
 export class DatabaseConnection {
@@ -27,16 +33,20 @@ export class DatabaseConnection {
     >;
   }
 
-  public query<T>(sql: string, params: unknown[]): Promise<T[]> {
-    return this.sendRequest({ sql, params, type: 'query' }) as Promise<T[]>;
+  public query<T>(sql: string, params: BindableValue[]): Promise<T[]> {
+    return this.sendRequest({ sql, params, type: 'query' } as QueryRequest) as Promise<T[]>;
   }
 
-  public queryOne<T>(sql: string, params: unknown[]): Promise<T | null> {
-    return this.sendRequest({ sql, params, type: 'query' }) as Promise<T | null>;
+  public queryOne<T>(sql: string, params: BindableValue[]): Promise<T | null> {
+    return this.sendRequest({
+      sql,
+      params,
+      type: 'query-one',
+    } as QueryRequest) as Promise<T | null>;
   }
 
-  public execute(sql: string, params: unknown[]): Promise<void> {
-    return this.sendRequest({ sql, params, type: 'execute' }) as Promise<void>;
+  public execute(sql: string, params: BindableValue[]): Promise<void> {
+    return this.sendRequest({ sql, params, type: 'execute' } as ExecuteRequest) as Promise<void>;
   }
 
   private sendRequest(request: Omit<RequestType, 'id'>): Promise<unknown> {
