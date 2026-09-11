@@ -13,6 +13,15 @@
       <a mat-list-item routerLink="/exercises">Exercises</a>
       <a mat-list-item routerLink="/backup">Backup</a>
       <a mat-list-item routerLink="/targets">Targets</a>
+
+
+      @if (storageEstimate(); as estimate) {
+        <div class="storage">
+          <span>Storage: </span>
+          <span>{{ estimate.usage }} / {{ estimate.quota }} MB</span>
+        </div>
+      }
+
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
