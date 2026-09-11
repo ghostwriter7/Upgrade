@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { ExportDataService } from '../../services/export-data/export-data.service';
 import { Loader } from '@ui/loader/loader';
@@ -11,7 +11,6 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
   imports: [MatButton, Loader, MatCard, MatCardTitle, MatCardContent, MatCardHeader],
   templateUrl: './backup-page.html',
   styleUrl: './backup-page.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class BackupPage {
   protected readonly loading = signal(false);

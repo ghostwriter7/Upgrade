@@ -41,14 +41,6 @@ export const routes: Routes = [
     loadComponent: () => import('./exercises/components/exercise-view/exercise-view'),
   },
   {
-    path: 'templates',
-    loadComponent: () => import('./templates/components/templates/templates'),
-  },
-  {
-    path: 'templates/edit',
-    loadComponent: () => import('./templates/components/template-form/template-form'),
-  },
-  {
     path: 'targets',
     loadComponent: () => import('./target/components/target-page/target-page'),
   },

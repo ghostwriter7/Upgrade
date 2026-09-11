@@ -5,5 +5,4 @@ export enum StoreName {
   SESSIONS = 'sessions',
   SETS = 'sets',
   TARGETS = 'targets',
-  TEMPLATES = 'templates',
 }

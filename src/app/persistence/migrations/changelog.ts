@@ -4,7 +4,6 @@ import { CreateBaseStoresMigration } from '@persistence/migrations/create-base-s
 import { CreateSetBySessionIdAndExerciseIdIndexMigration } from '@persistence/migrations/create-set-by-session-id-and-exercise-id-index/create-set-by-session-id-and-exercise-id-index';
 import { InjectionToken } from '@angular/core';
 import { IndexExerciseLogByCreatedAtMigration } from '@persistence/migrations/index-exercise-log-by-created-at/index-exercise-log-by-created-at';
-import { CreateTemplateStores } from '@persistence/migrations/create-template-stores/create-template-stores';
 import { CreateTargetStore } from '@persistence/migrations/create-target-store/create-target-store';
 
 export const CHANGELOG: Migrations = {
@@ -12,7 +11,6 @@ export const CHANGELOG: Migrations = {
   5: new CreateSetBySessionIdAndExerciseIdIndexMigration(),
   9: new CreateMediaAndMeasurementsMigration(),
   10: new IndexExerciseLogByCreatedAtMigration(),
-  11: new CreateTemplateStores(),
   12: new CreateTargetStore(),
 };
 

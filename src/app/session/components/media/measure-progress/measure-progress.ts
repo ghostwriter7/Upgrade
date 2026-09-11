@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, ElementRef, inject, OnInit, signal, viewChild } from '@angular/core';
 import { Recorder } from '../recorder/recorder';
 import { FramePicker } from '../frame-picker/frame-picker';
 import { PoseMeasureEditor } from '../pose-measure-editor/pose-measure-editor';
@@ -33,7 +25,6 @@ import { MatIcon } from '@angular/material/icon';
   ],
   templateUrl: './measure-progress.html',
   styleUrl: './measure-progress.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasureProgress implements OnInit {
   protected readonly activeStep = signal<'record' | 'crop-video' | 'pick-frame' | 'measure'>(

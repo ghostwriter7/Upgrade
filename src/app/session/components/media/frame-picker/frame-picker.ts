@@ -1,5 +1,4 @@
 import {
-  ChangeDetectionStrategy,
   Component,
   effect,
   ElementRef,
@@ -21,7 +20,6 @@ import { MatMiniFabButton } from '@angular/material/button';
   imports: [MatSlider, FormField, MatSliderThumb, MatIcon, MatMiniFabButton],
   templateUrl: './frame-picker.html',
   styleUrl: './frame-picker.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FramePicker implements OnInit {
   public data = input.required<VideoData>();

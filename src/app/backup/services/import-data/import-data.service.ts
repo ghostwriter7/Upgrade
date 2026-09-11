@@ -19,9 +19,6 @@ import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { JsonSerializedMediaSchema } from '@persistence/schema/media.schema';
 import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { BackupSummary } from '@backup/interfaces/summary.interface';
-import { Template } from '@domain/model/template/template.model';
-import { TemplateSchema } from '@persistence/schema/template.schema';
-import { TemplateRepository } from '@persistence/repository/templates/template.repository';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {
@@ -30,7 +27,6 @@ export class ImportDataService {
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
   private readonly mediaRepository = inject(MediaRepository);
-  private readonly templateRepository = inject(TemplateRepository);
 
   public async importData(): Promise<BackupSummary> {
     const [handle] = await window.showOpenFilePicker({
@@ -53,7 +49,6 @@ export class ImportDataService {
     const exerciseLogs = this.getExerciseLogs(data);
     const angleMeasurements = this.getAngleMeasurements(data);
     const media = this.getMedia(data);
-    const templates = this.getTemplates(data);
 
     await Promise.all([
       this.sessionRepository.deleteAllSessions(),
@@ -61,7 +56,6 @@ export class ImportDataService {
       this.exerciseLogRepository.deleteAllLogs(),
       this.angleMeasurementRepository.deleteAllMeasurements(),
       this.mediaRepository.deleteAllMedia(),
-      this.templateRepository.deleteAllTemplates(),
     ]);
 
     await Promise.all([
@@ -72,7 +66,6 @@ export class ImportDataService {
         this.angleMeasurementRepository.saveMeasurement(angleMeasurement),
       ),
       ...media.map((media) => this.mediaRepository.save(media)),
-      ...templates.map((template) => this.templateRepository.save(template)),
     ]);
 
     return {
@@ -81,7 +74,6 @@ export class ImportDataService {
       totalExerciseLogs: exerciseLogs.length,
       totalAngleMeasurements: angleMeasurements.length,
       totalMedia: media.length,
-      totalTemplates: templates.length,
     };
   }
 
@@ -127,10 +119,6 @@ export class ImportDataService {
 
   private getExerciseLogs(data: Record<string, unknown>): ExerciseLog[] {
     return this.read(data, 'exerciseLogs', ExerciseLogSchema, ExerciseLogMapper.INSTANCE.toDomain);
-  }
-
-  private getTemplates(data: Record<string, unknown>): Template[] {
-    return this.read(data, 'templates', TemplateSchema);
   }
 
   private getAngleMeasurements(data: Record<string, unknown>): AngleMeasurement[] {

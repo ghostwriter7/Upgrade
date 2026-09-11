@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { App } from './app';
 import { Component } from '@angular/core';
-import { LayoutComponent } from './ui/layout/layout.component';
+import { LayoutComponent } from '@ui/layout/layout.component';
 import { Mock } from 'vitest';
-import { EventService } from './common/service/event/event.service';
-import { ElementClickedEvent } from './common/events/element-clicked.event';
+import { EventService } from '@common/service/event/event.service';
+import { ElementClickedEvent } from '@common/events/element-clicked.event';
 
 @Component({ selector: 'app-layout', template: '<div></div>' })
 class LayoutMock {}

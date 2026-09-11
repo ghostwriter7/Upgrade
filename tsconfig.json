@@ -26,7 +26,6 @@
       "@store/*": ["./src/app/store/*"],
       "@ui/*": ["./src/app/ui/*"],
       "@test/*": ["./src/test/*"],
-      "@templates/*": ["./src/app/templates/*"],
       "@form/*": ["./src/app/form/*"],
       "@target/*": ["./src/app/target/*"]
     }

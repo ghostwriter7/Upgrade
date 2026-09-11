@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ElementRef,
-  input,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, ElementRef, input, viewChild } from '@angular/core';
 import { Point } from '@domain/model/measurement.model';
 import { Line } from '@domain/model/line.model';
 
@@ -13,9 +6,8 @@ import { Line } from '@domain/model/line.model';
   selector: 'app-image-renderer',
   templateUrl: './image-renderer.html',
   styleUrl: './image-renderer.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    style: 'display: contents;'
+    style: 'display: contents;',
   },
 })
 export class ImageRenderer {

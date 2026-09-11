@@ -14,8 +14,6 @@ import { ExerciseLogDto } from '@persistence/schema/exercise-log.schema';
 import { AngleMeasurementDto } from '@persistence/schema/angle-measurement.schema';
 import { JsonSerializedMediaDto } from '@persistence/schema/media.schema';
 import { BackupSummary } from '@backup/interfaces/summary.interface';
-import { TemplateFacade } from '@templates/template.facade';
-import { TemplateDto } from '@persistence/schema/template.schema';
 
 interface ExportData {
   sessions: SessionDto[];
@@ -23,7 +21,6 @@ interface ExportData {
   exerciseLogs: ExerciseLogDto[];
   angleMeasurements?: AngleMeasurementDto[];
   media?: JsonSerializedMediaDto[];
-  templates?: TemplateDto[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -33,7 +30,6 @@ export class ExportDataService {
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
   private readonly mediaRepository = inject(MediaRepository);
-  private readonly templateFacade = inject(TemplateFacade);
 
   public async exportData(): Promise<BackupSummary> {
     const [sessions, sets, exerciseLogs, angleMeasurements, media] = await Promise.all([
@@ -49,7 +45,6 @@ export class ExportDataService {
       sets,
       exerciseLogs: exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDto),
       angleMeasurements: angleMeasurements.map(AngleMeasurementMapper.INSTANCE.toDto),
-      templates: this.templateFacade.$templates(),
     };
 
     if (media.length) {
@@ -80,7 +75,6 @@ export class ExportDataService {
       totalExerciseLogs: exerciseLogs.length,
       totalAngleMeasurements: angleMeasurements.length,
       totalMedia: media.length,
-      totalTemplates: data.templates?.length ?? 0,
     };
   }
 }
