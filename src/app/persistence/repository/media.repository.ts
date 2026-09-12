@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
 import { ExerciseMediaDto, ExerciseMediaSchema } from '../schema/media.schema';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
-import { StoreName } from './store-name.enum';
 import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
-import { IndexName } from './index-name.enum';
 
 @Injectable({ providedIn: 'root' })
 export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
@@ -13,36 +11,70 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
   }
 
   public async findAllByExerciseLogId(exerciseLogId: string): Promise<ExerciseMedia[]> {
-    return super
-      .findAllBy(StoreName.MEDIA, (store: IDBObjectStore) =>
-        store.index(IndexName.MediaByExerciseLogId).getAll(exerciseLogId),
-      )
-      .then((media) =>
-        Iterator.from(media)
-          .map((entry) => ExerciseMediaSchema.parse(entry))
-          .map(ExerciseMediaMapper.INSTANCE.toDomain)
-          .toArray(),
-      );
+    const results = await this.database.queryMany(
+      `
+      select id,
+      exercise_id as exerciseId,
+      exercise_log_id as exerciseLogId,
+      mime_type as mimeType,
+      created_at as createdAt,
+      width,
+      height
+      from media where exercise_log_id = :exerciseLogId
+    `,
+      { exerciseLogId },
+    );
+
+    return this.toDomain(results);
   }
 
-  public save(media: ExerciseMedia): Promise<IDBValidKey> {
-    return this.put(StoreName.MEDIA, ExerciseMediaMapper.INSTANCE.toDto(media));
+  public save(media: ExerciseMedia): Promise<void> {
+    return this.database.execute(
+      `insert into media (id, exercise_id, exercise_log_id, mime_type, created_at, width, height)
+            values (:id, :exerciseId, :exerciseLogId, :mimeType, :createdAt, :width, :height)`,
+      {
+        id: media.id,
+        exerciseId: media.exerciseId,
+        exerciseLogId: media.exerciseLogId,
+        mimeType: media.mimeType,
+        createdAt: media.createdAt.toString(),
+        width: media.size.width,
+        height: media.size.height,
+      },
+    );
   }
 
   public deleteMedia(mediaId: string): Promise<void> {
-    return super.delete(StoreName.MEDIA, mediaId);
+    return this.database.execute(`delete from media where id = :mediaId`, { mediaId });
   }
 
   public deleteAllByExerciseLogId(exerciseLogId: string): Promise<void> {
-    return super.deleteAllByIndex(StoreName.MEDIA, IndexName.MediaByExerciseLogId, exerciseLogId);
+    return this.database.execute(`delete from media where exercise_log_id = :exerciseLogId`, {
+      exerciseLogId,
+    });
   }
 
   public async getAllMedia(): Promise<ExerciseMedia[]> {
-    const media = await super.findAll(StoreName.MEDIA);
-    return media.map(ExerciseMediaMapper.INSTANCE.toDomain);
+    const results = await this.database.queryMany(`
+      select id,
+             exercise_id     as exerciseId,
+             exercise_log_id as exerciseLogId,
+             mime_type       as mimeType,
+             created_at      as createdAt,
+             width,
+             height
+      from media;`);
+    return this.toDomain(results);
   }
 
   public deleteAllMedia(): Promise<void> {
-    return super.deleteAll(StoreName.MEDIA);
+    return this.database.execute(`delete from media`);
+  }
+
+  private toDomain(results: unknown[]): ExerciseMedia[] {
+    return Iterator.from(results)
+      .map((entry) => ExerciseMediaSchema.parse(entry))
+      .map(ExerciseMediaMapper.INSTANCE.toDomain)
+      .toArray();
   }
 }

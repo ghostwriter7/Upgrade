@@ -40,3 +40,18 @@ create table if not exists exercise_set
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade,
   constraint uq_exercise_set_log_idx unique (exercise_log_id, set_index)
 );
+
+-- @changeset 5
+create table if not exists media
+(
+  id              text primary key,
+  exercise_id     text    not null,
+  exercise_log_id text    not null,
+  mime_type       text    not null,
+  created_at      text    not null,
+  width           integer not null,
+  height          integer not null,
+
+  foreign key (exercise_id) references exercise (id) on delete restrict,
+  foreign key (exercise_log_id) references exercise_log (id) on delete cascade
+);
