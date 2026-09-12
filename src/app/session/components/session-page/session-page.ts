@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatMiniFabButton } from '@angular/material/button';
 import { Router } from '@angular/router';
@@ -7,7 +7,6 @@ import { DateHelper } from '@common/helper/date.helper';
 import { SessionStore } from '@store/session/session.store';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-page',
   imports: [MatIcon, MatMiniFabButton, SessionList],
   templateUrl: './session-page.html',

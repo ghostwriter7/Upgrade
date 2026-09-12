@@ -1,4 +1,4 @@
-import type { BindableValue } from '@sqlite.org/sqlite-wasm';
+import type { BindingSpec } from '@sqlite.org/sqlite-wasm';
 
 export interface Request {
   id: string;
@@ -7,7 +7,7 @@ export interface Request {
 
 interface SqlRequest extends Request {
   sql: string;
-  params: BindableValue[];
+  params: BindingSpec;
 }
 
 export interface QueryRequest extends SqlRequest {

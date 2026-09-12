@@ -1,4 +1,4 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, Mock, test, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
@@ -32,7 +32,7 @@ describe('EditExerciseNoteCommandHandler', () => {
     const { session } = Session.createEmpty().addExerciseLog('exerciseId');
     const expectedSession = session.clone();
     expectedSession.setExerciseNotes('exerciseId', 'note');
-    const exerciseLog = expectedSession.exercises[0];
+    const exerciseLog = expectedSession.exerciseLogs[0];
     sessionStateHolder.session.mockReturnValueOnce(session);
 
     handler.handle(command);

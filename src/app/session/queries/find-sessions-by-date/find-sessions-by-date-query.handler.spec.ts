@@ -129,7 +129,7 @@ describe('FindSessionsByDateQueryHandler', () => {
     assertSessionId(actualSessionB, sessionB.uuid);
 
     assertExerciseLogs(
-      actualSessionA.exercises,
+      actualSessionA.exerciseLogs,
       sessionA.uuid,
       { sets: pullUpSets, exerciseId: 'pull-ups' },
       { sets: [], exerciseId: 'l-sit' },
@@ -137,7 +137,7 @@ describe('FindSessionsByDateQueryHandler', () => {
     );
 
     assertExerciseLogs(
-      actualSessionB.exercises,
+      actualSessionB.exerciseLogs,
       sessionB.uuid,
       { sets: pushUpSets, exerciseId: 'push-ups' },
       { sets: backSquatSets, exerciseId: 'back-squats' },

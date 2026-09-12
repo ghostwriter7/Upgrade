@@ -7,7 +7,7 @@ import {
 } from './sql-request.interface';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { Service } from '@angular/core';
-import { BindableValue } from '@sqlite.org/sqlite-wasm';
+import { BindingSpec } from '@sqlite.org/sqlite-wasm';
 
 @Service()
 export class DatabaseConnection {
@@ -33,11 +33,11 @@ export class DatabaseConnection {
     >;
   }
 
-  public query<T>(sql: string, params: BindableValue[]): Promise<T[]> {
+  public queryMany<T>(sql: string, params?: BindingSpec): Promise<T[]> {
     return this.sendRequest({ sql, params, type: 'query' } as QueryRequest) as Promise<T[]>;
   }
 
-  public queryOne<T>(sql: string, params: BindableValue[]): Promise<T | null> {
+  public queryOne<T>(sql: string, params: BindingSpec): Promise<T | null> {
     return this.sendRequest({
       sql,
       params,
@@ -45,7 +45,7 @@ export class DatabaseConnection {
     } as QueryRequest) as Promise<T | null>;
   }
 
-  public execute(sql: string, params: BindableValue[]): Promise<void> {
+  public execute(sql: string, params?: BindingSpec): Promise<void> {
     return this.sendRequest({ sql, params, type: 'execute' } as ExecuteRequest) as Promise<void>;
   }
 

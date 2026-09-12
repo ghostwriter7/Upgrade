@@ -23,7 +23,7 @@ export class DeleteSessionCommandHandler implements CommandHandler<DeleteSession
     this.eventBus.publish(
       new SessionDeletedEvent(
         session.uuid,
-        session.exercises.map(({ id }) => id),
+        session.exerciseLogs.map(({ id }) => id),
       ),
     );
   }

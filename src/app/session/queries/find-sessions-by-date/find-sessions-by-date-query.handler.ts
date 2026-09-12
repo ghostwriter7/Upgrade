@@ -41,9 +41,9 @@ export class FindSessionsByDateQueryHandler implements QueryHandler<FindSessions
     for (let i = 0; i < sessions.length; i++) {
       const session = sessions[i];
 
-      session.exercises = logs[i].sort((a, b) => a.index - b.index);
+      session.exerciseLogs = logs[i].sort((a, b) => a.index - b.index);
 
-      for (const log of session.exercises) {
+      for (const log of session.exerciseLogs) {
         log.sets = sets[i][log.exerciseId]?.sort((a, b) => a.index - b.index) ?? [];
       }
     }

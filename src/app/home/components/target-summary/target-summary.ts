@@ -36,7 +36,7 @@ export class TargetSummary implements OnInit {
     const weekStart = now.subtract({ days: now.dayOfWeek - 1 }).startOfDay();
 
     this.sessionRepository
-      .getSessionsForRange(weekStart.toInstant(), now.toInstant())
+      .getSessionsForRange(weekStart.toPlainDateTime(), now.toPlainDateTime())
       .then((sessions) => {
         /*
           1. Each Target corresponds to a Skill

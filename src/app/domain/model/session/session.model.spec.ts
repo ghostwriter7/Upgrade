@@ -68,7 +68,7 @@ describe('Session', () => {
       const { session: updatedSession, addedLog } = session.addExerciseLog('chin-ups');
 
       const matcher = logMatcher(session.uuid, 'chin-ups', 0);
-      expect(updatedSession.exercises).toEqual(expect.arrayContaining([matcher]));
+      expect(updatedSession.exerciseLogs).toEqual(expect.arrayContaining([matcher]));
       expect(updatedSession.exerciseIds).toEqual(['chin-ups']);
       expect(addedLog).toEqual(matcher);
     });
@@ -78,10 +78,10 @@ describe('Session', () => {
 
       const { session: updatedSession, addedLog } = session.addExerciseLog('pull-ups');
 
-      expect(updatedSession.exercises.length).toBe(3);
+      expect(updatedSession.exerciseLogs.length).toBe(3);
       const matcher = logMatcher(session.uuid, 'pull-ups', 2);
-      expect(updatedSession.exercises).toEqual(
-        expect.arrayContaining([session.exercises[0], session.exercises[1], matcher]),
+      expect(updatedSession.exerciseLogs).toEqual(
+        expect.arrayContaining([session.exerciseLogs[0], session.exerciseLogs[1], matcher]),
       );
       expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'pull-ups']);
       expect(addedLog).toEqual(matcher);
@@ -120,9 +120,9 @@ describe('Session', () => {
         logMatcher(session.uuid, 'deadlifts', 2),
       ];
       expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'deadlifts']);
-      expect(updatedSession.exercises.length).toBe(3);
+      expect(updatedSession.exerciseLogs.length).toBe(3);
       expect(addedLogs).toEqual(expectedLogs);
-      expect(updatedSession.exercises).toEqual(expectedLogs);
+      expect(updatedSession.exerciseLogs).toEqual(expectedLogs);
     });
 
     it('should add multiple exercise logs to a session with existing logs', () => {
@@ -137,8 +137,8 @@ describe('Session', () => {
         logMatcher(session.uuid, 'l-sit', 2),
         logMatcher(session.uuid, 'side-splits', 3),
       ];
-      const expectedLogs = [session.exercises[0], session.exercises[1], ...expectedAddedLogs];
-      expect(updatedSession.exercises.length).toBe(4);
+      const expectedLogs = [session.exerciseLogs[0], session.exerciseLogs[1], ...expectedAddedLogs];
+      expect(updatedSession.exerciseLogs.length).toBe(4);
       expect(updatedSession.exerciseIds).toEqual([
         'chin-ups',
         'front-splits',
@@ -146,7 +146,7 @@ describe('Session', () => {
         'side-splits',
       ]);
       expect(addedLogs).toEqual(expectedAddedLogs);
-      expect(updatedSession.exercises).toEqual(expectedLogs);
+      expect(updatedSession.exerciseLogs).toEqual(expectedLogs);
     });
   });
 
@@ -154,7 +154,7 @@ describe('Session', () => {
     it('should remove the last exercise log and perform no reindexing', () => {
       const session = sessionWithExercises('chin-ups', 'front-splits');
       const expectedSession = session.clone();
-      expectedSession.exercises = [expectedSession.exercises[0]];
+      expectedSession.exerciseLogs = [expectedSession.exerciseLogs[0]];
       expectedSession.exerciseIds = ['chin-ups'];
 
       const {
@@ -164,7 +164,7 @@ describe('Session', () => {
       } = session.removeExerciseLog('front-splits');
 
       expect(updatedSession).toEqual(expectedSession);
-      expect(removedLog).toEqual(session.exercises[1]);
+      expect(removedLog).toEqual(session.exerciseLogs[1]);
       expect(reIndexedLogs).toEqual([]);
     });
 
@@ -172,11 +172,11 @@ describe('Session', () => {
       const session = sessionWithExercises('chin-ups', 'front-splits', 'l-sit', 'dips');
       const expectedSession = session.clone();
       const expectedReIndexedLogs = [
-        expectedSession.exercises[1].withIndex(0),
-        expectedSession.exercises[2].withIndex(1),
-        expectedSession.exercises[3].withIndex(2),
+        expectedSession.exerciseLogs[1].withIndex(0),
+        expectedSession.exerciseLogs[2].withIndex(1),
+        expectedSession.exerciseLogs[3].withIndex(2),
       ];
-      expectedSession.exercises = expectedReIndexedLogs;
+      expectedSession.exerciseLogs = expectedReIndexedLogs;
       expectedSession.exerciseIds = ['front-splits', 'l-sit', 'dips'];
 
       const {
@@ -186,7 +186,7 @@ describe('Session', () => {
       } = session.removeExerciseLog('chin-ups');
 
       expect(updatedSession).toEqual(expectedSession);
-      expect(removedLog).toEqual(session.exercises[0]);
+      expect(removedLog).toEqual(session.exerciseLogs[0]);
       expect(reIndexedLogs).toEqual(expectedReIndexedLogs);
     });
 
@@ -194,10 +194,10 @@ describe('Session', () => {
       const session = sessionWithExercises('chin-ups', 'front-splits', 'l-sit', 'dips');
       const expectedSession = session.clone();
       const expectedReIndexedLogs = [
-        expectedSession.exercises[2].withIndex(1),
-        expectedSession.exercises[3].withIndex(2),
+        expectedSession.exerciseLogs[2].withIndex(1),
+        expectedSession.exerciseLogs[3].withIndex(2),
       ];
-      expectedSession.exercises = [session.exercises[0], ...expectedReIndexedLogs];
+      expectedSession.exerciseLogs = [session.exerciseLogs[0], ...expectedReIndexedLogs];
       expectedSession.exerciseIds = ['chin-ups', 'l-sit', 'dips'];
 
       const {
@@ -207,7 +207,7 @@ describe('Session', () => {
       } = session.removeExerciseLog('front-splits');
 
       expect(updatedSession).toEqual(expectedSession);
-      expect(removedLog).toEqual(session.exercises[1]);
+      expect(removedLog).toEqual(session.exerciseLogs[1]);
       expect(reIndexedLogs).toEqual(expectedReIndexedLogs);
     });
   });

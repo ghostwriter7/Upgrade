@@ -1,4 +1,4 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, Mock, test, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { EventBus } from '@common/routers/event/event-bus';
 import { Session } from '@domain/model/session/session.model';
@@ -43,7 +43,10 @@ describe('DeleteSessionCommandHandler', () => {
 
     expect(sessionStore.delete).toHaveBeenCalledExactlyOnceWith(command.session);
     expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
-      new SessionDeletedEvent(command.session.uuid, command.session.exercises.map((log) => log.id)),
+      new SessionDeletedEvent(
+        command.session.uuid,
+        command.session.exerciseLogs.map((log) => log.id),
+      ),
     );
     expect(sessionStateHolder.set).toHaveBeenCalledExactlyOnceWith(null);
   });

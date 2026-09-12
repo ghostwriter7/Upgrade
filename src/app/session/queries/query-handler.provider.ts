@@ -4,7 +4,6 @@ import { FindSessionsByDateQueryHandler } from '@session/queries/find-sessions-b
 import { FindMediaAndMeasurementsByExerciseLogIdQueryHandler } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id-query.handler';
 import { GetInitialSetForExerciseIdQueryHandler } from '@session/queries/get-initial-set-for-exercise-id/get-initial-set-for-exercise-id-query.handler';
 import { FindExerciseLogsByExerciseIdQueryHandler } from '@session/queries/find-exercise-logs-by-exercise-id/find-exercise-logs-by-exercise-id-query.handler';
-import { FindLastXSessionsQueryHandler } from '@session/queries/find-last-x-sessions/find-last-x-sessions-query.handler';
 
 export class QueryHandlerProvider {
   public static forRoot(): Provider[] {
@@ -13,7 +12,6 @@ export class QueryHandlerProvider {
       FindMediaAndMeasurementsByExerciseLogIdQueryHandler,
       GetInitialSetForExerciseIdQueryHandler,
       FindExerciseLogsByExerciseIdQueryHandler,
-      FindLastXSessionsQueryHandler,
     ].map((handler) => ({
       provide: QUERY_HANDLERS,
       multi: true,

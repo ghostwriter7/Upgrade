@@ -1,4 +1,4 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, Mock, test, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
@@ -37,7 +37,7 @@ describe('CreateSessionCommandHandler', () => {
 
     const session = sessionStateHolder.set.mock.calls[0][0];
     expect(sessionStateHolder.set).toHaveBeenCalledExactlyOnceWith(
-      expect.toSatisfy((value) => value instanceof Session && value.exercises.length === 0),
+      expect.toSatisfy((value) => value instanceof Session && value.exerciseLogs.length === 0),
     );
     expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(new SessionUpdatedEvent(session));
   });

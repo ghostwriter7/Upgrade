@@ -63,7 +63,7 @@ export class ExerciseSelector {
   protected readonly hasNoneSelected = computed(() => this.selectedExerciseIds().length === 0);
   protected readonly selectedExerciseIds = signal<string[]>([]);
   private readonly activeExerciseIds = new Set(
-    this.data.session.exercises.map(({ exerciseId }) => exerciseId),
+    this.data.session.exerciseLogs.map(({ exerciseId }) => exerciseId),
   );
   protected readonly availableExercises = computed(() => {
     const selectedSkills = this.skillOptions().filter((o) => o.isSelected);

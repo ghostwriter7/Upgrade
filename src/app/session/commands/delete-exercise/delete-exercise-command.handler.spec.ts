@@ -1,4 +1,4 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, Mock, test, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { EventBus } from '@common/routers/event/event-bus';
@@ -35,13 +35,13 @@ describe('DeleteExerciseCommandHandler', () => {
   test('should delete an exercise log', () => {
     const command = new DeleteExerciseCommand('exerciseId');
     const { session } = Session.createEmpty().addExerciseLog('exerciseId');
-    const exerciseLog = session.exercises[0];
+    const exerciseLog = session.exerciseLogs[0];
     sessionStateHolder.session.mockReturnValueOnce(session);
     const expectedSession = session.removeExerciseLog('exerciseId').session;
 
     handler.handle(command);
 
-    expectedSession.exercises = [];
+    expectedSession.exerciseLogs = [];
     expect(sessionStateHolder.set).toHaveBeenCalledWith(expectedSession);
     expect(eventBus.publish).toHaveBeenNthCalledWith(1, new SessionUpdatedEvent(expectedSession));
     expect(eventBus.publish).toHaveBeenNthCalledWith(2, new ExerciseLogDeletedEvent(exerciseLog));
@@ -51,7 +51,7 @@ describe('DeleteExerciseCommandHandler', () => {
   test('should dispatch ExerciseLogUpdatedEvents for re-indexed logs', () => {
     const command = new DeleteExerciseCommand('chin-ups');
     const { session } = Session.createEmpty().addExerciseLogs(['chin-ups', 'pull-ups', 'l-sit']);
-    const exerciseLog = session.exercises[0];
+    const exerciseLog = session.exerciseLogs[0];
     sessionStateHolder.session.mockReturnValueOnce(session);
     const expectedSession = session.removeExerciseLog('chin-ups').session;
 
@@ -63,11 +63,11 @@ describe('DeleteExerciseCommandHandler', () => {
     expect(eventBus.publish).toHaveBeenNthCalledWith(2, new ExerciseLogDeletedEvent(exerciseLog));
     expect(eventBus.publish).toHaveBeenNthCalledWith(
       3,
-      new ExerciseLogUpdatedEvent(expectedSession.exercises[0]),
+      new ExerciseLogUpdatedEvent(expectedSession.exerciseLogs[0]),
     );
     expect(eventBus.publish).toHaveBeenNthCalledWith(
       4,
-      new ExerciseLogUpdatedEvent(expectedSession.exercises[1]),
+      new ExerciseLogUpdatedEvent(expectedSession.exerciseLogs[1]),
     );
   });
 });

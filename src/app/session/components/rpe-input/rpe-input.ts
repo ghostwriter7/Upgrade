@@ -14,7 +14,7 @@ import { map } from 'rxjs/operators';
   styleUrl: './rpe-input.css',
 })
 export class RpeInput implements OnInit {
-  public rpe = input<number | undefined>();
+  public rpe = input<number | null>(null);
   public isEditable = input.required<boolean>();
 
   protected readonly isDisabled = computed(() => !this.isEditable());

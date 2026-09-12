@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { SessionStore } from '../../../store/session/session.store';
-import { Loader } from '../../../ui/loader/loader';
+import { Component, inject, input } from '@angular/core';
+import { SessionStore } from '@store/session/session.store';
+import { Loader } from '@ui/loader/loader';
 import SessionView from '../session-view/session-view';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-list',
   imports: [Loader, SessionView, MatIcon],
   templateUrl: './session-list.html',

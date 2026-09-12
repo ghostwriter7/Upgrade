@@ -7,7 +7,7 @@ import { DatabaseConnection } from '@infrastructure/database-connection';
 
 export abstract class GenericRepository<T> {
   private readonly db = inject(DATABASE_TOKEN);
-  private readonly databaseConnection = inject(DatabaseConnection);
+  protected readonly databaseConnection = inject(DatabaseConnection);
 
   protected async getDb(): Promise<IDBDatabase> {
     return firstValueFrom(this.db);

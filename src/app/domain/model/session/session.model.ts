@@ -20,16 +20,13 @@ interface AddExerciseLogsResult {
 }
 
 export class Session {
-  public exercises: ExerciseLog[] = [];
+  public exerciseLogs: ExerciseLog[] = [];
   public startedAt: Temporal.Instant = DateHelper.now();
   public finishedAt: Temporal.Instant | null = null;
   public exerciseIds: string[] = [];
-  public rpe?: number;
+  public rpe: number | null = null;
 
-  constructor(
-    public readonly uuid: string,
-    public readonly createdAt: Temporal.Instant,
-  ) {}
+  constructor(public readonly uuid: string) {}
 
   public get dayOfMonth(): number {
     return DateHelper.toLocal(this.startedAt).day;
@@ -40,27 +37,27 @@ export class Session {
   }
 
   public get isEmpty(): boolean {
-    return this.exercises.every((entry) => entry.sets.length === 0);
+    return this.exerciseLogs.every((entry) => entry.sets.length === 0);
   }
 
   public static createEmpty(): Session {
-    return new Session(createNanoId(), DateHelper.now());
+    return new Session(createNanoId());
   }
 
   /**
    * Performs a shallow clone of the session, creating a new instance with the same properties.
    */
   public clone(): Session {
-    const session = new Session(this.uuid, this.createdAt);
+    const session = new Session(this.uuid);
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
-    session.exercises = [...this.exercises.map((exercise) => exercise.clone())];
+    session.exerciseLogs = [...this.exerciseLogs.map((exercise) => exercise.clone())];
     session.exerciseIds = [...this.exerciseIds];
     session.rpe = this.rpe;
     return session;
   }
 
-  public withRpe(rpe?: number): Session {
+  public withRpe(rpe: number | null = null): Session {
     const session = this.clone();
     session.rpe = rpe;
     return session;
@@ -73,8 +70,8 @@ export class Session {
 
     const clone = this.clone();
 
-    const log = new ExerciseLog(clone.uuid, exerciseId).withIndex(clone.exercises.length);
-    clone.exercises = [...clone.exercises, log];
+    const log = new ExerciseLog(clone.uuid, exerciseId).withIndex(clone.exerciseLogs.length);
+    clone.exerciseLogs = [...clone.exerciseLogs, log];
     clone.exerciseIds = [...clone.exerciseIds, exerciseId];
 
     return {
@@ -93,13 +90,13 @@ export class Session {
     }
 
     const clone = this.clone();
-    let index = clone.exercises.length;
+    let index = clone.exerciseLogs.length;
     const addedLogs: ExerciseLog[] = exerciseIds.reduce(
       (logs, exerciseId) => [...logs, new ExerciseLog(clone.uuid, exerciseId).withIndex(index++)],
       [] as ExerciseLog[],
     );
 
-    clone.exercises = [...clone.exercises, ...addedLogs];
+    clone.exerciseLogs = [...clone.exerciseLogs, ...addedLogs];
     clone.exerciseIds = [...clone.exerciseIds, ...exerciseIds];
 
     return {
@@ -113,14 +110,14 @@ export class Session {
     const cloned = this.clone();
 
     const reIndexedLogs: ExerciseLog[] = [];
-    for (let i = index + 1; i < cloned.exercises.length; i++) {
-      const log = cloned.exercises[i];
+    for (let i = index + 1; i < cloned.exerciseLogs.length; i++) {
+      const log = cloned.exerciseLogs[i];
       log.index--;
       reIndexedLogs.push(log);
     }
 
-    const removedLog = cloned.exercises[index];
-    cloned.exercises = cloned.exercises.toSpliced(index, 1);
+    const removedLog = cloned.exerciseLogs[index];
+    cloned.exerciseLogs = cloned.exerciseLogs.toSpliced(index, 1);
     cloned.exerciseIds = cloned.exerciseIds.filter((id) => id !== exerciseId);
     return {
       session: cloned,
@@ -131,44 +128,47 @@ export class Session {
 
   public setExerciseNotes(exerciseId: string, notes: string | null): Session {
     const index = this.getExerciseIndex(exerciseId);
-    this.exercises = this.exercises.with(index, this.exercises[index].withNotes(notes));
+    this.exerciseLogs = this.exerciseLogs.with(index, this.exerciseLogs[index].withNotes(notes));
     return this.clone();
   }
 
   public addSet(set: ExerciseSet): Session {
     const index = this.getExerciseIndex(set.exerciseId);
-    this.exercises = this.exercises.with(index, this.exercises[index].withSet(set));
+    this.exerciseLogs = this.exerciseLogs.with(index, this.exerciseLogs[index].withSet(set));
     return this.clone();
   }
 
   public removeSet(set: ExerciseSet): Session {
     const exerciseIndex = this.getExerciseIndex(set.exerciseId);
-    this.exercises = this.exercises.with(
+    this.exerciseLogs = this.exerciseLogs.with(
       exerciseIndex,
-      this.exercises[exerciseIndex].removeSetAt(set.index),
+      this.exerciseLogs[exerciseIndex].removeSetAt(set.index),
     );
     return this.clone();
   }
 
   public updateSet(set: ExerciseSet): Session {
     const exerciseIndex = this.getExerciseIndex(set.exerciseId);
-    const exercise = this.exercises[exerciseIndex];
+    const exercise = this.exerciseLogs[exerciseIndex];
     const setIndex = exercise.sets.findIndex(({ id }) => set.id === id);
     if (setIndex === -1)
       throw new Error(`Set with ID: ${set.id} not found in exercise ${exercise.exerciseId}`);
 
-    this.exercises = this.exercises.with(exerciseIndex, exercise.withUpdatedSet(set, setIndex));
+    this.exerciseLogs = this.exerciseLogs.with(
+      exerciseIndex,
+      exercise.withUpdatedSet(set, setIndex),
+    );
     return this.clone();
   }
 
   private getExerciseIndex(exerciseId: string): number {
-    const index = this.exercises.findIndex((entry) => entry.exerciseId === exerciseId);
+    const index = this.exerciseLogs.findIndex((entry) => entry.exerciseId === exerciseId);
     if (index === -1) throw new Error(`Exercise with ID: ${exerciseId} not found`);
     return index;
   }
 
   public getExerciseById(exerciseId: string): ExerciseLog {
-    const exerciseEntry = this.exercises.find((entry) => entry.exerciseId === exerciseId);
+    const exerciseEntry = this.exerciseLogs.find((entry) => entry.exerciseId === exerciseId);
 
     if (!exerciseEntry) throw new Error(`Exercise Entry for exercise ID: ${exerciseId} not found`);
 
