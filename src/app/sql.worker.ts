@@ -45,7 +45,7 @@ function handleRequest(data: RequestType): void {
     const result = queryMany(db!, data.sql, data.params);
     postMessage({ id: data.id, type: 'success', result });
   } else if (data.type === 'query-one') {
-    const result = db!.selectValue(data.sql, data.params);
+    const result = db!.selectObject(data.sql, data.params);
     postMessage({ id: data.id, type: 'success', result });
   } else if (data.type === 'execute') {
     execute(db!, data.sql, data.params);

@@ -17,7 +17,7 @@ import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { ZipService, ZipStructure } from '@common/service/zip/zip.service';
 import { FileService } from '@common/service/file/file.service';
 import { ZipOptions } from 'fflate';
-import { DatabaseConnection } from '@infrastructure/database-connection';
+import { Database } from '@infrastructure/database';
 
 interface ExportData {
   sessions: SessionDto[];
@@ -36,7 +36,7 @@ export class ExportDataService {
   private readonly mediaRepository = inject(MediaRepository);
   private readonly zipService = inject(ZipService);
   private readonly fileService = inject(FileService);
-  private readonly databaseConnection = inject(DatabaseConnection);
+  private readonly databaseConnection = inject(Database);
 
   public async exportDatabase(): Promise<void> {
     const bytes = await this.databaseConnection.export();

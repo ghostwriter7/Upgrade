@@ -10,7 +10,7 @@ import { Service } from '@angular/core';
 import { BindingSpec } from '@sqlite.org/sqlite-wasm';
 
 @Service()
-export class DatabaseConnection {
+export class Database {
   private readonly pending = new Map<
     string,
     {
@@ -37,7 +37,7 @@ export class DatabaseConnection {
     return this.sendRequest({ sql, params, type: 'query' } as QueryRequest) as Promise<T[]>;
   }
 
-  public queryOne<T>(sql: string, params: BindingSpec): Promise<T | null> {
+  public queryOne<T>(sql: string, params?: BindingSpec): Promise<T | null> {
     return this.sendRequest({
       sql,
       params,

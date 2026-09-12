@@ -32,19 +32,19 @@ export class SessionRepository extends GenericRepository<SessionDto> {
   }
 
   public async getAllSessions(): Promise<Session[]> {
-    const results = await this.databaseConnection.queryMany(SQL_GET_ALL_SESSIONS);
+    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS);
     return this.toDomain(results);
   }
 
   public deleteAllSessions(): Promise<void> {
-    return this.databaseConnection.execute(`delete from session where 1 = 1;`);
+    return this.database.execute(`delete from session;`);
   }
 
   public async getSessionsForRange(
     startDate: Temporal.PlainDateTime,
     endDate: Temporal.PlainDateTime,
   ): Promise<Session[]> {
-    const results = await this.databaseConnection.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
+    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
       startDate: startDate.toString(),
       endDate: endDate.toString(),
     });
@@ -58,7 +58,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     const startDate = new Temporal.PlainDate(year, month, 1);
     const endDate = startDate.add({ months: 1 });
 
-    const results = await this.databaseConnection.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
+    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
       startDate: startDate.toString(),
       endDate: endDate.toString(),
     });
@@ -79,7 +79,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     const startOfDay = startOfDayZDT.toInstant().toString();
     const endOfDay = endOfDayZDT.toInstant().toString();
 
-    const results = await this.databaseConnection.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
+    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
       startOfDay,
       endOfDay,
     });
@@ -88,7 +88,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
   }
 
   public async save(session: Session): Promise<void> {
-    return this.databaseConnection.execute(
+    return this.database.execute(
       `insert into session (id, started_at, finished_at, rpe) values (:id, :startedAt, :finishedAt, :rpe)`,
       {
         id: session.uuid,
@@ -100,7 +100,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
   }
 
   public async deleteById(sessionId: string): Promise<void> {
-    return this.databaseConnection.execute(`delete from session where id = :sessionId`, {
+    return this.database.execute(`delete from session where id = :sessionId`, {
       sessionId,
     });
   }

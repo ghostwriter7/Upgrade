@@ -19,12 +19,12 @@ create table if not exists exercise
 -- @changeset 3
 create table if not exists exercise_log
 (
-  id text primary key,
+  id         text primary key,
   exercise_id integer not null,
   session_id  integer not null,
   notes       text    null,
-  'index'     integer not null,
-  created_at  text    not null default current_timestamp,
+  log_index  integer not null,
+  created_at text    not null,
   foreign key (exercise_id) references exercise (id) on delete restrict,
   foreign key (session_id) references session (id) on delete cascade
 );

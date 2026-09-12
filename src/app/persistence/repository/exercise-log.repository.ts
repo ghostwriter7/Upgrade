@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
 import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema';
-import { StoreName } from './store-name.enum';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
-import { IndexName } from './index-name.enum';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
 @Injectable({ providedIn: 'root' })
@@ -16,85 +14,106 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
     exerciseId: string,
     limit = 1,
   ): Promise<ExerciseLog[]> {
-    const tx = await this.createReadTransaction(StoreName.EXERCISE_LOGS);
-    const index = tx
-      .objectStore(StoreName.EXERCISE_LOGS)
-      .index(IndexName.ExerciseLogsByExerciseIdAndCreatedAt);
-
-    const request = index.openCursor(
-      IDBKeyRange.bound([exerciseId, ''], [exerciseId, '\uffff']),
-      'prev',
+    const results = await this.database.queryMany(
+      `
+      select id,
+             exercise_id as exerciseId,
+             session_id as sessionId,
+             notes,
+             log_index as "index",
+             created_at as createdAt from exercise_log
+      where exercise_id = :exerciseId
+      order by created_at desc
+      limit :limit
+    `,
+      { exerciseId, limit },
     );
-
-    return new Promise((resolve, reject) => {
-      const results: ExerciseLog[] = [];
-
-      request.onsuccess = () => {
-        const cursor = request.result;
-
-        if (cursor) {
-          results.push(ExerciseLogMapper.INSTANCE.toDomain(ExerciseLogSchema.parse(cursor.value)));
-
-          if (results.length === limit) {
-            resolve(results);
-          } else {
-            cursor.continue();
-          }
-        } else {
-          resolve(results);
-        }
-      };
-      request.onerror = () => reject(request.error);
-    });
+    return this.toDomain(results);
   }
 
   public async findLogById(exerciseLogId: string): Promise<ExerciseLog | undefined> {
-    return super.findById(StoreName.EXERCISE_LOGS, exerciseLogId)
-      .then((log) => log ? ExerciseLogMapper.INSTANCE.toDomain(ExerciseLogSchema.parse(log)) : undefined);
+    const result = await this.database.queryOne(
+      `select id,
+       exercise_id as exerciseId,
+       session_id as sessionId,
+       notes,
+       log_index as "index",
+       created_at as createdAt from exercise_log where id = :id;`,
+      { id: exerciseLogId },
+    );
+    if (!result) return undefined;
+    return ExerciseLogMapper.INSTANCE.toDomain(ExerciseLogSchema.parse(result));
   }
 
   public async getAllLogsByExerciseId(exerciseId: string): Promise<ExerciseLog[]> {
-    const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
-      store.index(IndexName.ExerciseLogsByExerciseId).getAll(exerciseId),
+    const results = await this.database.queryMany(
+      `select id,
+       exercise_id as exerciseId,
+       session_id as sessionId,
+       notes,
+       log_index as "index",
+       created_at as createdAt from exercise_log where exercise_id = :exerciseId;`,
+      { exerciseId },
     );
-    return Iterator.from(logs)
-      .map((log) => ExerciseLogSchema.parse(log))
-      .map(ExerciseLogMapper.INSTANCE.toDomain)
-      .toArray();
+    return this.toDomain(results);
   }
 
   public async getAllLogsBySessionId(sessionId: string): Promise<ExerciseLog[]> {
-    const logs = await super.findAllBy(StoreName.EXERCISE_LOGS, (store: IDBObjectStore) =>
-      store.index(IndexName.ExerciseLogsBySessionId).getAll(sessionId),
+    const results = await this.database.queryMany(
+      `select id,
+       exercise_id as exerciseId,
+       session_id as sessionId,
+       notes,
+       log_index as "index",
+       created_at as createdAt from exercise_log where session_id = :sessionId;`,
+      { sessionId },
     );
-    return Iterator.from(logs)
-      .map((log) => ExerciseLogSchema.parse(log))
-      .map(ExerciseLogMapper.INSTANCE.toDomain)
-      .toArray();
+    return this.toDomain(results);
   }
 
   public async getAllLogs(): Promise<ExerciseLog[]> {
-    const exerciseLogs = await super.findAll(StoreName.EXERCISE_LOGS);
-    return exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDomain);
+    const results = await this.database.queryMany(`select id,
+       exercise_id as exerciseId,
+       session_id as sessionId,
+       notes,
+       log_index as "index",
+       created_at as createdAt from exercise_log;`);
+    return this.toDomain(results);
   }
 
   public async deleteAllLogs(): Promise<void> {
-    return super.deleteAll(StoreName.EXERCISE_LOGS);
+    return this.database.execute('delete from exercise_log;');
   }
 
   public async deleteAllBySessionId(sessionId: string): Promise<void> {
-    return super.deleteAllByIndex(
-      StoreName.EXERCISE_LOGS,
-      IndexName.ExerciseLogsBySessionId,
+    return this.database.execute('delete from exercise_log where session_id = :sessionId;', {
       sessionId,
+    });
+  }
+
+  public async saveLog(entity: ExerciseLog): Promise<void> {
+    return this.database.execute(
+      `
+        insert into exercise_log (exercise_id, session_id, notes, log_index, created_at)
+        values (:exerciseId, :sessionId, :notes, :logIndex, :createdAt);`,
+      {
+        exerciseId: entity.exerciseId,
+        sessionId: entity.sessionId,
+        notes: entity.notes,
+        logIndex: entity.index,
+        createdAt: entity.createdAt.toString({ smallestUnit: 'seconds' }),
+      },
     );
   }
 
-  public async saveLog(entity: ExerciseLog): Promise<IDBValidKey> {
-    return super.put(StoreName.EXERCISE_LOGS, ExerciseLogMapper.INSTANCE.toDto(entity));
+  public async deleteLog(id: string): Promise<void> {
+    return this.database.execute('delete from exercise_log where id = :id;', { id });
   }
 
-  public async deleteLog(id: string): Promise<void> {
-    return super.delete(StoreName.EXERCISE_LOGS, id);
+  private toDomain(results: unknown[]): ExerciseLog[] {
+    return Iterator.from(results)
+      .map((r) => ExerciseLogSchema.parse(r))
+      .map(ExerciseLogMapper.INSTANCE.toDomain)
+      .toArray();
   }
 }
