@@ -1,7 +1,7 @@
 import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { inject, Injectable } from '@angular/core';
 import { SetCreatedEvent } from './set-created.event';
-import { SetRepository } from '../../../persistence/repository/set.repository';
+import { SetRepository } from '@persistence/repository/set.repository';
 import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
@@ -13,7 +13,6 @@ export class SetCreatedEventHandler implements EventHandler<SetCreatedEvent> {
   }
 
   public handle(event: SetCreatedEvent): void {
-    this.setRepository.upsertSet(event.set);
+    this.setRepository.createSet(event.set);
   }
-
 }

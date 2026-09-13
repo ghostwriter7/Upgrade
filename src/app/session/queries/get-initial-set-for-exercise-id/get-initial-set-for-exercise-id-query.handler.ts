@@ -29,10 +29,7 @@ export class GetInitialSetForExerciseIdQueryHandler implements QueryHandler<GetI
     );
 
     for (const exerciseLog of exerciseLogs) {
-      const sets = await this.setRepository.getAllBySessionIdAndExerciseId(
-        exerciseLog.sessionId,
-        exerciseLog.exerciseId,
-      );
+      const sets = await this.setRepository.getAllByExerciseLogId(exerciseLog.id);
       const set = sets.at(-1);
 
       if (set) return SetDataMapper.toDto(set);

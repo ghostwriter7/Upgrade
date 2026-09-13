@@ -85,12 +85,6 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
     return this.database.execute('delete from exercise_log;');
   }
 
-  public async deleteAllBySessionId(sessionId: string): Promise<void> {
-    return this.database.execute('delete from exercise_log where session_id = :sessionId;', {
-      sessionId,
-    });
-  }
-
   public async saveLog(entity: ExerciseLog): Promise<void> {
     return this.database.execute(
       `

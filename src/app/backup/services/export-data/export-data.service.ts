@@ -58,9 +58,8 @@ export class ExportDataService {
   }
 
   public async exportData(): Promise<BackupSummary> {
-    const [sessions, sets, exerciseLogs, angleMeasurements, media] = await Promise.all([
+    const [sessions, exerciseLogs, angleMeasurements, media] = await Promise.all([
       this.sessionRepository.getAllSessions(),
-      this.setRepository.getAllSets(),
       this.exerciseLogRepository.getAllLogs(),
       this.angleMeasurementRepository.getAllMeasurements(),
       this.mediaRepository.getAllMedia(),
@@ -68,7 +67,6 @@ export class ExportDataService {
 
     const data: ExportData = {
       sessions: sessions.map(SessionMapper.INSTANCE.toDto),
-      sets,
       exerciseLogs: exerciseLogs.map(ExerciseLogMapper.INSTANCE.toDto),
       angleMeasurements: angleMeasurements.map(AngleMeasurementMapper.INSTANCE.toDto),
       media: media.map(ExerciseMediaMapper.INSTANCE.toDto),

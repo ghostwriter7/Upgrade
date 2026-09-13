@@ -64,7 +64,7 @@ export class ImportDataService {
 
     await Promise.all([
       ...sessions.map((session) => this.sessionRepository.save(session)),
-      ...sets.map((set) => this.setRepository.upsertSet(set)),
+      ...sets.map((set) => this.setRepository.updateSet(set)),
       ...exerciseLogs.map((exerciseLog) => this.exerciseLogRepository.saveLog(exerciseLog)),
       ...angleMeasurements.map((angleMeasurement) =>
         this.angleMeasurementRepository.saveMeasurement(angleMeasurement),

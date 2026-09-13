@@ -48,12 +48,6 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
     return this.database.execute(`delete from media where id = :mediaId`, { mediaId });
   }
 
-  public deleteAllByExerciseLogId(exerciseLogId: string): Promise<void> {
-    return this.database.execute(`delete from media where exercise_log_id = :exerciseLogId`, {
-      exerciseLogId,
-    });
-  }
-
   public async getAllMedia(): Promise<ExerciseMedia[]> {
     const results = await this.database.queryMany(`
       select id,
