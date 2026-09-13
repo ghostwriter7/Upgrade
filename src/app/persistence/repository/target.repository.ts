@@ -1,25 +1,47 @@
 import { Service } from '@angular/core';
 import { GenericRepository } from '@persistence/repository/generic.repository';
-import { StoreName } from '@persistence/repository/store-name.enum';
-import { TargetDto, TargetSchema } from '@persistence/schema/target.schema';
+import { TargetSchema } from '@persistence/schema/target.schema';
 import { Target } from '@domain/model/target';
 
 @Service()
-export class TargetRepository extends GenericRepository<TargetDto> {
+export class TargetRepository extends GenericRepository {
   constructor() {
     super();
   }
 
   public async getAllTargets(): Promise<Target[]> {
-    const targets = await super.findAll(StoreName.TARGETS);
-    return targets.map((target) => TargetSchema.parse(target));
+    const results = await super.queryMany(`
+      select id, name, description, skill_id as skillId,
+      weekly_commitment_in_minutes as weeklyCommitmentInMinutes,
+      motivation, trade_offs as tradeOffs
+      from target;
+    `);
+    return this.toDomain(results);
   }
 
-  public save(target: Target): Promise<IDBValidKey> {
-    return super.put(StoreName.TARGETS, TargetSchema.encode(target));
+  public save(target: Target): Promise<void> {
+    return super.execute(
+      `insert into target (id, name, description, skill_id, weekly_commitment_in_minutes, motivation, trade_offs)
+       values (:id, :name, :description, :skillId, :weeklyCommitmentInMinutes, :motivation, :tradeOffs)`,
+      {
+        id: target.id,
+        name: target.name,
+        description: target.description,
+        skillId: target.skillId,
+        weeklyCommitmentInMinutes: target.weeklyCommitmentInMinutes,
+        motivation: JSON.stringify(target.motivation),
+        tradeOffs: JSON.stringify(target.tradeOffs),
+      },
+    );
   }
 
   public deleteById(targetId: string): Promise<void> {
-    return super.delete(StoreName.TARGETS, targetId);
+    return super.execute(`delete from target where id = :id`, { id: targetId });
+  }
+
+  private toDomain(results: unknown[]): Target[] {
+    return Iterator.from(results)
+      .map((result) => TargetSchema.parse(result))
+      .toArray();
   }
 }

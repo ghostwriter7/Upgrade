@@ -2,7 +2,7 @@
 create table if not exists session
 (
   id  text primary key,
-  started_at  text not null default current_timestamp,
+  started_at text not null,
   finished_at text null,
   rpe real null
 );
@@ -48,10 +48,61 @@ create table if not exists media
   exercise_id     text    not null,
   exercise_log_id text    not null,
   mime_type       text    not null,
-  created_at      text    not null,
   width           integer not null,
   height          integer not null,
 
   foreign key (exercise_id) references exercise (id) on delete restrict,
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade
+);
+
+-- @changeset 6
+create table if not exists angle_measurement
+(
+  id              text primary key,
+  media_id        text    not null,
+  exercise_log_id text    not null,
+  angle           integer not null,
+  landmarks       text    not null,
+
+  foreign key (media_id) references media (id) on delete cascade,
+  foreign key (exercise_log_id) references exercise_log (id) on delete cascade
+);
+
+-- @changeset 7
+create table if not exists capability
+(
+  id   text primary key,
+  name text not null unique
+);
+
+-- @changeset 8
+create table if not exists skill
+(
+  id   text primary key,
+  name text not null unique
+);
+
+create table if not exists skill_capability
+(
+  skill_id      text    not null,
+  capability_id text    not null,
+  importance    integer not null,
+
+  foreign key (skill_id) references skill (id) on delete restrict,
+  foreign key (capability_id) references capability (id) on delete restrict,
+  primary key (skill_id, capability_id)
+);
+
+-- @changeset 9
+create table if not exists target
+(
+  id                           text primary key,
+  name                         text    not null unique,
+  description                  text    null,
+  skill_id                     text    not null,
+  weekly_commitment_in_minutes integer not null,
+  motivation                   text    not null,
+  trade_offs                   text    not null,
+
+  foreign key (skill_id) references skill (id) on delete restrict
 );

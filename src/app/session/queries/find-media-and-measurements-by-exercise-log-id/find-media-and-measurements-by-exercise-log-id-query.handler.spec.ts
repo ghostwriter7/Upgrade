@@ -1,7 +1,7 @@
 import { FindMediaAndMeasurementsByExerciseLogIdQueryHandler } from '@session/queries/find-media-and-measurements-by-exercise-log-id/find-media-and-measurements-by-exercise-log-id-query.handler';
 import { TestBed } from '@angular/core/testing';
 import { MediaRepository } from '@persistence/repository/media.repository';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 import { Mock } from 'vitest';
 import { AngleMeasurement } from '@domain/model/measurement.model';
 import {

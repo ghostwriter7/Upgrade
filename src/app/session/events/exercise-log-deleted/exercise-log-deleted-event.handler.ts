@@ -3,12 +3,10 @@ import { EventHandler } from '@common/routers/event/event-handler.interface';
 import { ExerciseLogDeletedEvent } from './exercise-log-deleted.event';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { Constructor } from '@common/types/constructor.type';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
 
 @Injectable()
 export class ExerciseLogDeletedEventHandler implements EventHandler<ExerciseLogDeletedEvent> {
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
-  private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
 
   public appliesTo(): Constructor<ExerciseLogDeletedEvent> {
     return ExerciseLogDeletedEvent;
@@ -16,6 +14,5 @@ export class ExerciseLogDeletedEventHandler implements EventHandler<ExerciseLogD
 
   public handle({ exerciseLog }: ExerciseLogDeletedEvent): void {
     this.exerciseLogRepository.deleteLog(exerciseLog.id);
-    this.angleMeasurementRepository.deleteAllByExerciseLogId(exerciseLog.id);
   }
 }

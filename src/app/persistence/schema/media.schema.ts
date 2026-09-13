@@ -6,7 +6,6 @@ export const ExerciseMediaSchema = z.object({
   exerciseId: z.string(),
   exerciseLogId: IdSchema,
   mimeType: z.enum(['image/jpeg']),
-  createdAt: z.iso.datetime(),
   width: z.number(),
   height: z.number(),
 });

@@ -1,16 +1,16 @@
 import { GenericRepository } from './generic.repository';
 import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Injectable } from '@angular/core';
-import { ExerciseSetDto, ExerciseSetSchema } from '../schema/set.schema';
+import { ExerciseSetSchema } from '../schema/set.schema';
 
 @Injectable({ providedIn: 'root' })
-export class SetRepository extends GenericRepository<ExerciseSetDto> {
+export class SetRepository extends GenericRepository {
   constructor() {
     super();
   }
 
   public async getAllByExerciseLogId(exerciseLogId: string): Promise<ExerciseSet[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `
      select id, set_index as "index", exercise_log_id as exerciseLogId, type, data
      from exercise_set where exercise_log_id = :exerciseLogId;
@@ -22,7 +22,7 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
   }
 
   public async getAllBySessionId(sessionId: string): Promise<ExerciseSet[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `
         select es.id, es.set_index as "index", es.exercise_log_id as exerciseLogId, es.type, es.data
         from exercise_set es
@@ -35,7 +35,7 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
   }
 
   public async getAllBeExerciseId(exerciseId: string): Promise<ExerciseSet[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `
           select es.id, es.set_index as "index", es.exercise_log_id as exerciseLogId, es.type, es.data
           from exercise_set es
@@ -48,15 +48,15 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
   }
 
   public deleteAllSets(): Promise<void> {
-    return this.database.execute('delete from exercise_set');
+    return super.execute('delete from exercise_set');
   }
 
   public deleteSet(setId: string): Promise<void> {
-    return this.database.execute('delete from exercise_set where id = :setId', { setId });
+    return super.execute('delete from exercise_set where id = :setId', { setId });
   }
 
   public async updateSet(set: ExerciseSet): Promise<void> {
-    return this.database.execute(
+    return super.execute(
       `update exercise_set
       set data = :data where id = :id`,
       { data: JSON.stringify(set.data), id: set.id },
@@ -64,7 +64,7 @@ export class SetRepository extends GenericRepository<ExerciseSetDto> {
   }
 
   public async createSet(set: ExerciseSet): Promise<void> {
-    return this.database.execute(
+    return super.execute(
       `insert into exercise_set (id, exercise_log_id, set_index, type, data)
       values (:id, :exerciseLogId, :index, :type, :data)`,
       {

@@ -4,7 +4,7 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
 import { MediaRepository } from '@persistence/repository/media.repository';
 import { SessionDto } from '@persistence/schema/session.schema';

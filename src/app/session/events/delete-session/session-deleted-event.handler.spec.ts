@@ -7,7 +7,7 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { MediaRepository } from '@persistence/repository/media.repository';
 import { SessionRepository } from '@persistence/repository/session.repository';
 import { Router } from '@angular/router';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 
 describe('SessionDeletedEventHandler', () => {
   let exerciseLogRepositoryMock: { deleteAllBySessionId: Mock };

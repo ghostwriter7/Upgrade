@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Session } from '@domain/model/session/session.model';
 import { GenericRepository } from './generic.repository';
-import { SessionDto, SessionSchema } from '../schema/session.schema';
+import { SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
 import { DateHelper } from '@common/helper/date.helper';
 
@@ -26,25 +26,25 @@ const SQL_GET_ALL_SESSIONS_FOR_RANGE = `select s.id          as                 
                                         group by s.id, s.started_at, s.finished_at, s.rpe;`;
 
 @Injectable({ providedIn: 'root' })
-export class SessionRepository extends GenericRepository<SessionDto> {
+export class SessionRepository extends GenericRepository {
   constructor() {
     super();
   }
 
   public async getAllSessions(): Promise<Session[]> {
-    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS);
+    const results = await super.queryMany(SQL_GET_ALL_SESSIONS);
     return this.toDomain(results);
   }
 
   public deleteAllSessions(): Promise<void> {
-    return this.database.execute(`delete from session;`);
+    return super.execute(`delete from session;`);
   }
 
   public async getSessionsForRange(
     startDate: Temporal.PlainDateTime,
     endDate: Temporal.PlainDateTime,
   ): Promise<Session[]> {
-    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
+    const results = await super.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
       startDate: startDate.toString(),
       endDate: endDate.toString(),
     });
@@ -58,7 +58,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     const startDate = new Temporal.PlainDate(year, month, 1);
     const endDate = startDate.add({ months: 1 });
 
-    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
+    const results = await super.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
       startDate: startDate.toString(),
       endDate: endDate.toString(),
     });
@@ -79,7 +79,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
     const startOfDay = startOfDayZDT.toInstant().toString();
     const endOfDay = endOfDayZDT.toInstant().toString();
 
-    const results = await this.database.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
+    const results = await super.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
       startOfDay,
       endOfDay,
     });
@@ -88,7 +88,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
   }
 
   public async save(session: Session): Promise<void> {
-    return this.database.execute(
+    return super.execute(
       `insert into session (id, started_at, finished_at, rpe) values (:id, :startedAt, :finishedAt, :rpe)`,
       {
         id: session.uuid,
@@ -100,7 +100,7 @@ export class SessionRepository extends GenericRepository<SessionDto> {
   }
 
   public async deleteById(sessionId: string): Promise<void> {
-    return this.database.execute(`delete from session where id = :sessionId`, {
+    return super.execute(`delete from session where id = :sessionId`, {
       sessionId,
     });
   }

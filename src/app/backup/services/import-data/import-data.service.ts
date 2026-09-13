@@ -10,7 +10,7 @@ import { ExerciseLogSchema } from '@persistence/schema/exercise-log.schema';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 import { MediaRepository } from '@persistence/repository/media.repository';
 import { AngleMeasurement } from '@domain/model/measurement.model';
 import { AngleMeasurementSchema } from '@persistence/schema/angle-measurement.schema';

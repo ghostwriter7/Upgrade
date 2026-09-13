@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 import { Mock } from 'vitest';
 import { AngleMeasurementCapturedEventHandler } from '@session/events/angle-measurement-captured/angle-measurement-captured-event.handler';
 import { AngleMeasurementCapturedEvent } from '@session/events/angle-measurement-captured/angle-measurement-captured.event';
@@ -37,6 +37,8 @@ describe('AngleMeasurementCapturedEventHandler', () => {
 
     handler.handle(event);
 
-    expect(angleMeasurementRepositoryMock.saveMeasurement).toHaveBeenCalledWith(event.angleMeasurement);
+    expect(angleMeasurementRepositoryMock.saveMeasurement).toHaveBeenCalledWith(
+      event.angleMeasurement,
+    );
   });
 });

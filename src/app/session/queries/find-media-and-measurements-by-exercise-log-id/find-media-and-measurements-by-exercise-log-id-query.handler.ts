@@ -6,7 +6,7 @@ import {
 import { QueryHandler, QueryResult } from '@common/routers/query/query-handler.interface';
 import { Constructor } from '@common/types/constructor.type';
 import { MediaRepository } from '@persistence/repository/media.repository';
-import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement/angle-measurement.repository';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 import { AngleMeasurement } from '@domain/model/measurement.model';
 
 @Injectable()
@@ -34,8 +34,7 @@ export class FindMediaAndMeasurementsByExerciseLogIdQueryHandler implements Quer
     }, new Map<string, AngleMeasurement>());
 
     return exerciseMedia.map(
-      (media) =>
-        new ExerciseMediaWithMeasurements(media, measurementIndex.get(media.id)),
+      (media) => new ExerciseMediaWithMeasurements(media, measurementIndex.get(media.id)),
     );
   }
 }

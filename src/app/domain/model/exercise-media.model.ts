@@ -1,5 +1,4 @@
 import { createNanoId } from '@common/function/create-uuid.function';
-import { DateHelper } from '@common/helper/date.helper';
 
 export class ExerciseMedia {
   constructor(
@@ -8,7 +7,6 @@ export class ExerciseMedia {
     public readonly exerciseLogId: string,
     public readonly size: Size,
     public readonly mimeType: 'image/jpeg' = 'image/jpeg',
-    public readonly createdAt: Temporal.Instant = Temporal.Now.instant(),
   ) {}
 
   public static newImage(
@@ -23,7 +21,6 @@ export class ExerciseMedia {
       exerciseLogId,
       new Size(width, height),
       'image/jpeg',
-      DateHelper.now(),
     );
   }
 }

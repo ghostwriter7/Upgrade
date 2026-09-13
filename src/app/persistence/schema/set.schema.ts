@@ -1,14 +1,12 @@
 import * as z from 'zod';
 import { IdSchema } from './id.schema';
+import { json } from '@persistence/schema/json.schema';
 
 const BaseSetSchema = z.object({
   id: IdSchema.optional(),
   exerciseLogId: IdSchema,
   index: z.number(),
 });
-
-const json = <T extends z.ZodType>(schema: T) =>
-  z.preprocess((value) => (typeof value === 'string' ? JSON.parse(value) : value), schema);
 
 const IsoSetSchema = BaseSetSchema.extend({
   data: json(

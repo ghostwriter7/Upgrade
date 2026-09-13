@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
-import { ExerciseMediaDto, ExerciseMediaSchema } from '../schema/media.schema';
+import { ExerciseMediaSchema } from '../schema/media.schema';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
 
 @Injectable({ providedIn: 'root' })
-export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
+export class MediaRepository extends GenericRepository {
   constructor() {
     super();
   }
 
   public async findAllByExerciseLogId(exerciseLogId: string): Promise<ExerciseMedia[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `
       select id,
       exercise_id as exerciseId,
@@ -29,7 +29,7 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
   }
 
   public save(media: ExerciseMedia): Promise<void> {
-    return this.database.execute(
+    return super.execute(
       `insert into media (id, exercise_id, exercise_log_id, mime_type, created_at, width, height)
             values (:id, :exerciseId, :exerciseLogId, :mimeType, :createdAt, :width, :height)`,
       {
@@ -45,11 +45,11 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
   }
 
   public deleteMedia(mediaId: string): Promise<void> {
-    return this.database.execute(`delete from media where id = :mediaId`, { mediaId });
+    return super.execute(`delete from media where id = :mediaId`, { mediaId });
   }
 
   public async getAllMedia(): Promise<ExerciseMedia[]> {
-    const results = await this.database.queryMany(`
+    const results = await super.queryMany(`
       select id,
              exercise_id     as exerciseId,
              exercise_log_id as exerciseLogId,
@@ -62,7 +62,7 @@ export class MediaRepository extends GenericRepository<ExerciseMediaDto> {
   }
 
   public deleteAllMedia(): Promise<void> {
-    return this.database.execute(`delete from media`);
+    return super.execute(`delete from media`);
   }
 
   private toDomain(results: unknown[]): ExerciseMedia[] {

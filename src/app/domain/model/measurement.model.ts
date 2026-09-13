@@ -1,33 +1,22 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
 import { createNanoId } from '@common/function/create-uuid.function';
-import { DateHelper } from '@common/helper/date.helper';
 
 export class AngleMeasurement {
   constructor(
     public readonly id: string,
     public readonly mediaId: string,
-    public readonly exerciseId: string,
     public readonly exerciseLogId: string,
     public readonly angle: number,
     public readonly landmarks: Landmark[],
-    public readonly createdAt: Temporal.Instant = DateHelper.now(),
   ) {}
 
   public static new(
     mediaId: string,
-    exerciseId: string,
     exerciseLogId: string,
     degrees: number,
     landmarks: Landmark[],
   ): AngleMeasurement {
-    return new AngleMeasurement(
-      createNanoId(),
-      mediaId,
-      exerciseId,
-      exerciseLogId,
-      degrees,
-      landmarks,
-    );
+    return new AngleMeasurement(createNanoId(), mediaId, exerciseLogId, degrees, landmarks);
   }
 }
 

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GenericRepository } from './generic.repository';
-import { ExerciseLogDto, ExerciseLogSchema } from '../schema/exercise-log.schema';
+import { ExerciseLogSchema } from '../schema/exercise-log.schema';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
 @Injectable({ providedIn: 'root' })
-export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
+export class ExerciseLogRepository extends GenericRepository {
   constructor() {
     super();
   }
@@ -14,7 +14,7 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
     exerciseId: string,
     limit = 1,
   ): Promise<ExerciseLog[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `
       select id,
              exercise_id as exerciseId,
@@ -32,7 +32,7 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async findLogById(exerciseLogId: string): Promise<ExerciseLog | undefined> {
-    const result = await this.database.queryOne(
+    const result = await this.queryOne(
       `select id,
        exercise_id as exerciseId,
        session_id as sessionId,
@@ -46,7 +46,7 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async getAllLogsByExerciseId(exerciseId: string): Promise<ExerciseLog[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `select id,
        exercise_id as exerciseId,
        session_id as sessionId,
@@ -59,7 +59,7 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async getAllLogsBySessionId(sessionId: string): Promise<ExerciseLog[]> {
-    const results = await this.database.queryMany(
+    const results = await super.queryMany(
       `select id,
        exercise_id as exerciseId,
        session_id as sessionId,
@@ -72,7 +72,7 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async getAllLogs(): Promise<ExerciseLog[]> {
-    const results = await this.database.queryMany(`select id,
+    const results = await super.queryMany(`select id,
        exercise_id as exerciseId,
        session_id as sessionId,
        notes,
@@ -82,11 +82,11 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async deleteAllLogs(): Promise<void> {
-    return this.database.execute('delete from exercise_log;');
+    return super.execute('delete from exercise_log;');
   }
 
   public async saveLog(entity: ExerciseLog): Promise<void> {
-    return this.database.execute(
+    return super.execute(
       `
         insert into exercise_log (exercise_id, session_id, notes, log_index, created_at)
         values (:exerciseId, :sessionId, :notes, :logIndex, :createdAt);`,
@@ -101,7 +101,7 @@ export class ExerciseLogRepository extends GenericRepository<ExerciseLogDto> {
   }
 
   public async deleteLog(id: string): Promise<void> {
-    return this.database.execute('delete from exercise_log where id = :id;', { id });
+    return super.execute('delete from exercise_log where id = :id;', { id });
   }
 
   private toDomain(results: unknown[]): ExerciseLog[] {
