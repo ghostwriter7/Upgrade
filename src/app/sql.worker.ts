@@ -1,9 +1,9 @@
 /// <reference lib="webworker" />
 import sqlite3InitModule, {
-  BindingSpec,
+  type BindingSpec,
   type OpfsDatabase,
   type Sqlite3Static,
-  SqlValue,
+  type SqlValue,
 } from '@sqlite.org/sqlite-wasm';
 import { ExecuteBatchRequest, RequestType } from '@infrastructure/sql-request.interface';
 // @ts-ignore

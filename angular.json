@@ -37,6 +37,11 @@
                 "glob": "sqlite3-opfs-async-proxy.js",
                 "input": "node_modules/@sqlite.org/sqlite-wasm/dist",
                 "output": "/"
+              },
+              {
+                "glob": "index.mjs",
+                "input": "node_modules/@sqlite.org/sqlite-wasm/dist",
+                "output": "/"
               }
             ],
             "styles": ["src/material-theme.scss", "src/styles.css"],
