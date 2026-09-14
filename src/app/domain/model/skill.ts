@@ -1,18 +1,11 @@
-import { CapabilityId } from '@store/capabilities.const';
-import { Skills } from '@domain/enum/skill-tag.enum';
 
 export interface Skill {
-  id: Skills;
+  id: string;
   name: string;
   capabilities: SkillCapability[];
 }
 
 export interface SkillCapability {
-  capabilityId: CapabilityId;
+  capabilityId: string;
   importance: number;
 }
-
-export const capability = (capabilityId: CapabilityId, importance: number): SkillCapability => ({
-  capabilityId,
-  importance,
-});

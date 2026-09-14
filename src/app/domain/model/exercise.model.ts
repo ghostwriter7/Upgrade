@@ -1,7 +1,5 @@
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
-import { CapabilityId } from '@store/capabilities.const';
-import { Skills } from '@domain/enum/skill-tag.enum';
 
 export interface Exercise {
   id: string;
@@ -16,12 +14,10 @@ export interface Exercise {
     lastPerformedHoursAgo?: number;
   };
 
-  skillScore: {
-    [skill in Skills]?: number;
-  };
+  skillScore: Record<string, number>;
 }
 
 export interface ExerciseCapability {
-  capabilityId: CapabilityId;
+  capabilityId: string;
   weight: number;
 }

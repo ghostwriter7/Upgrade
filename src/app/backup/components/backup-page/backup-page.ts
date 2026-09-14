@@ -25,6 +25,10 @@ export default class BackupPage {
     this.performOperation(() => this.importDataService.importData());
   }
 
+  protected importDb(): void {
+    this.performOperation(() => this.importDataService.importDb());
+  }
+
   private async performOperation(operation: () => Promise<void>): Promise<void> {
     this.loading.set(true);
     this.error.set(null);

@@ -1,8 +1,7 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
 import { Exercise, ExerciseCapability } from '@domain/model/exercise.model';
-import { CapabilityId } from '@store/capabilities.const';
 
-const capability = (capabilityId: CapabilityId, weight: number): ExerciseCapability => ({
+const capability = (capabilityId: string, weight: number): ExerciseCapability => ({
   capabilityId,
   weight,
 });

@@ -10,7 +10,6 @@ import { Exercise } from '@domain/model/exercise.model';
 import { exercises } from './exercises.const';
 import { computed, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
-import { CapabilityId } from '@store/capabilities.const';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { DateHelper } from '@common/helper/date.helper';
 import { SkillStore } from '@store/skill.store';
@@ -114,7 +113,7 @@ function findSupportingExercises(skill: Skill, exercises: Exercise[]): Exercise[
   const capabilityIds = new Set(skill.capabilities.map((capability) => capability.capabilityId));
   const importanceByCapabilityId = skill.capabilities.reduce(
     (index, { capabilityId, importance }) => ({ ...index, [capabilityId]: importance }),
-    {} as Record<CapabilityId, number>,
+    {} as Record<string, number>,
   );
   return exercises
     .filter((exercise) =>
@@ -130,7 +129,7 @@ function findSupportingExercises(skill: Skill, exercises: Exercise[]): Exercise[
 
 function computeScore(
   exercise: Exercise,
-  importanceByCapabilityId: Record<CapabilityId, number>,
+  importanceByCapabilityId: Record<string, number>,
 ): number {
   return (
     exercise.capabilities?.reduce(
