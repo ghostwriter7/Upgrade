@@ -72,10 +72,6 @@ export class SetRepository extends GenericRepository {
     return this.toDomain(results);
   }
 
-  public deleteAll(): Promise<void> {
-    return super.execute('delete from exercise_set');
-  }
-
   public deleteById(setId: string): Promise<void> {
     return super.execute('delete from exercise_set where id = :setId', { setId });
   }

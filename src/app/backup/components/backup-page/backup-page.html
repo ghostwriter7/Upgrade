@@ -17,21 +17,4 @@
   <div data-testid="backup-error-message" class="error-message">
     {{ error }}
   </div>
-} @else if (backupSummary(); as summary) {
-  <mat-card class="backup-summary-card">
-    <mat-card-header>
-
-      <mat-card-title>Backup summary</mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-      <div class="summary-grid">
-        <span>Sessions</span><span>{{ summary.totalSessions }}</span>
-        <span>Sets</span><span>{{ summary.totalSets }}</span>
-        <span>Exercise logs</span><span>{{ summary.totalExerciseLogs }}</span>
-        <span>Angles</span><span>{{ summary.totalAngleMeasurements }}</span>
-        <span>Media</span><span>{{ summary.totalMedia }}</span>
-      </div>
-    </mat-card-content>
-  </mat-card>
 }

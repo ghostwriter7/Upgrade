@@ -22,10 +22,6 @@ export class SessionRepository extends GenericRepository {
     super();
   }
 
-  public deleteAllSessions(): Promise<void> {
-    return super.execute(`delete from session;`);
-  }
-
   public async getSessionsForRange(
     startDate: Temporal.PlainDateTime,
     endDate: Temporal.PlainDateTime,

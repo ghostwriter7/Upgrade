@@ -2,20 +2,22 @@ import { inject, Injectable } from '@angular/core';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { CaptureProgressCommand } from './capture-progress.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '@common/routers/event/event-bus';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
-import { MediaCapturedEvent } from '../../events/media-captured/media-captured.event';
 import { Constructor } from '@common/types/constructor.type';
 import { AngleMeasurement, Landmark } from '@domain/model/measurement.model';
 import { ExerciseStore } from '@store/exercises.store';
-import { AngleMeasurementCapturedEvent } from '@session/events/angle-measurement-captured/angle-measurement-captured.event';
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
+import { MediaRepository } from '@persistence/repository/media.repository';
+import { FileService } from '@common/service/file/file.service';
+import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 
 @Injectable()
 export class CaptureProgressCommandHandler implements CommandHandler<CaptureProgressCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
   private readonly exerciseStore = inject(ExerciseStore);
+  private readonly mediaRepository = inject(MediaRepository);
+  private readonly fileService = inject(FileService);
+  private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
 
   public appliesTo(): Constructor<CaptureProgressCommand> {
     return CaptureProgressCommand;
@@ -25,7 +27,9 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
     const exerciseLogId = this.findExerciseLogId(exerciseId);
 
     const media = ExerciseMedia.newImage(exerciseId, exerciseLogId, width, height);
-    this.eventBus.publish(new MediaCapturedEvent(media, image));
+    this.mediaRepository.save(media);
+    const fileName = `${media.exerciseId}-${media.id}.jpeg`;
+    this.fileService.persist(fileName, image);
 
     if (points && angle) {
       const measurementDefinition = this.findMeasurementDefinition(exerciseId);
@@ -44,7 +48,7 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
           : points.map((point) => new Landmark(point)),
       );
 
-      this.eventBus.publish(new AngleMeasurementCapturedEvent(angleMeasurement));
+      this.angleMeasurementRepository.save(angleMeasurement);
     }
   }
 

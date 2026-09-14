@@ -4,7 +4,6 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { routes } from './app.routes';
 import { provideServiceWorker } from '@angular/service-worker';
 import { CommandHandlerProvider } from '@session/commands/command-handler.provider';
-import { EventHandlerProvider } from '@session/events/event-handler.provider';
 import { QueryHandlerProvider } from '@session/queries/query-handler.provider';
 import { MAT_ICON_DEFAULT_OPTIONS } from '@angular/material/icon';
 
@@ -17,7 +16,6 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     ...CommandHandlerProvider.forRoot(),
-    ...EventHandlerProvider.forRoot(),
     ...QueryHandlerProvider.forRoot(),
     {
       provide: MAT_ICON_DEFAULT_OPTIONS,

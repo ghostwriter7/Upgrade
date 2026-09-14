@@ -26,7 +26,7 @@ export class DeleteExerciseCommandHandler implements CommandHandler<DeleteExerci
     } = session.removeExerciseLog(exerciseId);
 
     this.sessionStateHolder.set(updatedSession);
-    this.exerciseLogRepository.deleteLog(removedLog.id);
+    this.exerciseLogRepository.deleteById(removedLog.id);
     this.exerciseLogRepository.updateLogs(reIndexedLogs);
   }
 }

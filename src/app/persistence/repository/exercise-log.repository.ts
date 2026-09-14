@@ -119,37 +119,7 @@ export class ExerciseLogRepository extends GenericRepository {
     return this.toDomain(results);
   }
 
-  public async getAllLogs(): Promise<ExerciseLog[]> {
-    const results = await super.queryMany(`select id,
-       exercise_id as exerciseId,
-       session_id as sessionId,
-       notes,
-       log_index as "index",
-       created_at as createdAt from exercise_log;`);
-    return this.toDomain(results);
-  }
-
-  public async deleteAllLogs(): Promise<void> {
-    return super.execute('delete from exercise_log;');
-  }
-
-  public async saveLog(entity: ExerciseLog): Promise<void> {
-    return super.execute(
-      `
-        insert into exercise_log (id, exercise_id, session_id, notes, log_index, created_at)
-        values (:id, :exerciseId, :sessionId, :notes, :logIndex, :createdAt);`,
-      {
-        id: entity.id,
-        exerciseId: entity.exerciseId,
-        sessionId: entity.sessionId,
-        notes: entity.notes,
-        logIndex: entity.index,
-        createdAt: entity.createdAt.toString({ smallestUnit: 'seconds' }),
-      },
-    );
-  }
-
-  public async deleteLog(id: string): Promise<void> {
+  public async deleteById(id: string): Promise<void> {
     return super.execute('delete from exercise_log where id = :id;', { id });
   }
 

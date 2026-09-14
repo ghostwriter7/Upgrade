@@ -42,26 +42,6 @@ export class MediaRepository extends GenericRepository {
     );
   }
 
-  public deleteMedia(mediaId: string): Promise<void> {
-    return super.execute(`delete from media where id = :mediaId`, { mediaId });
-  }
-
-  public async getAllMedia(): Promise<ExerciseMedia[]> {
-    const results = await super.queryMany(`
-      select id,
-             exercise_id     as exerciseId,
-             exercise_log_id as exerciseLogId,
-             mime_type       as mimeType,
-             width,
-             height
-      from media;`);
-    return this.toDomain(results);
-  }
-
-  public deleteAllMedia(): Promise<void> {
-    return super.execute(`delete from media`);
-  }
-
   private toDomain(results: unknown[]): ExerciseMedia[] {
     return Iterator.from(results)
       .map((entry) => ExerciseMediaSchema.parse(entry))

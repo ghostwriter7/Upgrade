@@ -4,23 +4,9 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { AngleMeasurementRepository } from '@persistence/repository/angle-measurement.repository';
 import { MediaRepository } from '@persistence/repository/media.repository';
-import { SessionDto } from '@persistence/schema/session.schema';
-import { ExerciseSetDto } from '@persistence/schema/set.schema';
-import { ExerciseLogDto } from '@persistence/schema/exercise-log.schema';
-import { AngleMeasurementDto } from '@persistence/schema/angle-measurement.schema';
-import { BackupSummary } from '@backup/interfaces/summary.interface';
-import { ExerciseMediaDto } from '@persistence/schema/media.schema';
 import { ZipService } from '@common/service/zip/zip.service';
 import { FileService } from '@common/service/file/file.service';
 import { Database } from '@infrastructure/database';
-
-interface ExportData {
-  sessions: SessionDto[];
-  sets: ExerciseSetDto[];
-  exerciseLogs: ExerciseLogDto[];
-  angleMeasurements?: AngleMeasurementDto[];
-  media?: ExerciseMediaDto[];
-}
 
 @Injectable({ providedIn: 'root' })
 export class ExportDataService {
@@ -52,8 +38,8 @@ export class ExportDataService {
     await writableStream.close();
   }
 
-  public async exportData(): Promise<BackupSummary> {
-    return null as unknown as BackupSummary;
+  public async exportData(): Promise<void> {
+    return;
     // const [sessions, exerciseLogs, angleMeasurements, media] = await Promise.all([
     //   this.sessionRepository.getAllSessions(),
     //   this.exerciseLogRepository.getAllLogs(),
