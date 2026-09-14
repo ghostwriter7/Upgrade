@@ -14,5 +14,3 @@ export const TargetSchema = z.object({
   tradeOffs: json(z.array(StatementSchema)),
   weeklyCommitmentInMinutes: z.number(),
 });
-
-export type TargetDto = z.infer<typeof TargetSchema>;

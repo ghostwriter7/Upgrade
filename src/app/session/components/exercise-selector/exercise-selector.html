@@ -55,7 +55,7 @@
             }
           </span>
           <span class="title">{{ exercise.name }}</span>
-          <span class="last-performed">          {{ exercise.stats?.lastPerformedHoursAgo | printHours }}</span>
+          <span class="last-performed">          {{ exercise.stats.lastPerformedHoursAgo | printHours }}</span>
         </div>
       </mat-list-option>
     }

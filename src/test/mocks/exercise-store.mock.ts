@@ -5,6 +5,10 @@ const drill = (id: string, name: string): Exercise => ({
   id,
   name,
   skillScore: {},
+  stats: {
+    lastPerformedAt: null,
+    lastPerformedHoursAgo: null,
+  },
 });
 
 export const createExerciseStoreMock = () => ({

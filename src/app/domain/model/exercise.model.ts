@@ -7,7 +7,7 @@ export interface Exercise {
   measurementDefinition?: AngleMeasurementDefinition;
   capabilities?: ExerciseCapability[];
 
-  stats?: {
+  stats: {
     lastPerformedAt: Temporal.Instant | null;
     lastPerformedHoursAgo: number | null;
   };

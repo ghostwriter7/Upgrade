@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'printHours',
 })
 export class PrintHoursPipe implements PipeTransform {
-  public transform(value?: number): string {
+  public transform(value: number | null): string {
     if (!value) return 'Never';
 
     if (value < 24) return `${value}h ago`;
