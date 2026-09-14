@@ -5,7 +5,7 @@ import sqlite3InitModule, {
   type Sqlite3Static,
   SqlValue,
 } from '@sqlite.org/sqlite-wasm';
-import { RequestType } from '@infrastructure/sql-request.interface';
+import { ExecuteBatchRequest, RequestType } from '@infrastructure/sql-request.interface';
 // @ts-ignore
 import changelog from './changelog.sql' with { type: 'text' };
 
@@ -54,10 +54,11 @@ function handleRequest(data: RequestType): void {
   } else if (data.type === 'import-db') {
     importDatabase(data.bytes);
     postMessage({ id: data.id, type: 'success' });
+  } else if (data.type === 'execute-batch') {
+    executeBatch(data);
+    postMessage({ id: data.id, type: 'success' });
   }
 }
-
-
 
 const start = async (sqlite3: Sqlite3Static) => {
   console.log('Running SQLite3 version', sqlite3.version.libVersion);
@@ -148,6 +149,7 @@ function formatParams(params?: BindingSpec): BindingSpec {
 
   return Object.fromEntries(Object.entries(params).map(([key, value]) => [`:${key}`, value]));
 }
+
 async function importDatabase(bytes: ArrayBuffer): Promise<void> {
   db?.close();
   db = null;
@@ -156,3 +158,17 @@ async function importDatabase(bytes: ArrayBuffer): Promise<void> {
   db = new sqlite3!.oo1.OpfsDb(dbPath);
 }
 
+function executeBatch(data: ExecuteBatchRequest): void {
+  db?.transaction((db) => {
+    const ps = db.prepare(data.sql);
+    try {
+      for (const params of data.params) {
+        ps.bind(formatParams(params));
+        ps.step();
+        ps.reset(true);
+      }
+    } finally {
+      ps.finalize();
+    }
+  });
+}

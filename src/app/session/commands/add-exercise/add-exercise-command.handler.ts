@@ -1,15 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { AddExerciseCommand } from './add-exercise.command';
-import { EventBus } from '@common/routers/event/event-bus';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { ExerciseLogCreatedEvent } from '../../events/exercise-log-created/exercise-log-created.event';
-import { Constructor } from '@angular/cdk/schematics';
+import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
+import { Constructor } from '@common/types/constructor.type';
 
 @Injectable()
 export class AddExerciseCommandHandler implements CommandHandler<AddExerciseCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
+  private readonly exerciseLogRepository = inject(ExerciseLogRepository);
 
   public appliesTo(): Constructor<AddExerciseCommand> {
     return AddExerciseCommand;
@@ -24,9 +23,7 @@ export class AddExerciseCommandHandler implements CommandHandler<AddExerciseComm
       const { session: updatedSession, addedLogs } = session.addExerciseLogs(exerciseIds);
       this.sessionStateHolder.set(updatedSession);
 
-      addedLogs.forEach((exerciseLog) =>
-        this.eventBus.publish(new ExerciseLogCreatedEvent(exerciseLog)),
-      );
+      this.exerciseLogRepository.saveLogs(addedLogs);
     }
   }
 }

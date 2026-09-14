@@ -1,5 +1,6 @@
 import { SqlResponse } from './sql-response.type';
 import {
+  ExecuteBatchRequest,
   ExecuteRequest,
   ExportDbRequest,
   QueryRequest,
@@ -57,6 +58,14 @@ export class Database {
 
   public execute(sql: string, params?: BindingSpec): Promise<void> {
     return this.sendRequest({ sql, params, type: 'execute' } as ExecuteRequest) as Promise<void>;
+  }
+
+  public executeBatch(sql: string, params: BindingSpec[]): Promise<void> {
+    return this.sendRequest({
+      sql,
+      params,
+      type: 'execute-batch',
+    } as ExecuteBatchRequest) as Promise<void>;
   }
 
   private sendRequest(request: Omit<RequestType, 'id'>): Promise<unknown> {

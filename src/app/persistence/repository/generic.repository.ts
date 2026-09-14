@@ -16,4 +16,8 @@ export abstract class GenericRepository {
   protected async execute(query: string, params?: BindingSpec): Promise<void> {
     return this.database.execute(query, params);
   }
+
+  protected async executeBatch(query: string, params: BindingSpec[]): Promise<void> {
+    return this.database.executeBatch(query, params);
+  }
 }

@@ -10,6 +10,43 @@ export class ExerciseLogRepository extends GenericRepository {
     super();
   }
 
+  public async updateLogs(logs: ExerciseLog[]): Promise<void> {
+    const sql = `update exercise_log set notes = :notes, log_index = :logIndex where id = :id`;
+    const params = logs.map((log) => ({ notes: log.notes, logIndex: log.index, id: log.id }));
+    return this.database.executeBatch(sql, params);
+  }
+
+  public async saveLogs(logs: ExerciseLog[]): Promise<void> {
+    if (logs.length === 0) {
+      return;
+    }
+
+    const values = logs
+      .map(
+        (_, index) =>
+          `(:id${index}, :exerciseId${index}, :sessionId${index}, :notes${index}, :logIndex${index}, :createdAt${index})`,
+      )
+      .join(', ');
+
+    const params = Object.fromEntries(
+      logs.flatMap((entity, index) => [
+        [`id${index}`, entity.id],
+        [`exerciseId${index}`, entity.exerciseId],
+        [`sessionId${index}`, entity.sessionId],
+        [`notes${index}`, entity.notes],
+        [`logIndex${index}`, entity.index],
+        [`createdAt${index}`, entity.createdAt.toString({ smallestUnit: 'seconds' })],
+      ]),
+    );
+
+    return super.execute(
+      `
+        insert into exercise_log (id, exercise_id, session_id, notes, log_index, created_at)
+        values ${values};`,
+      params,
+    );
+  }
+
   public async findLatestExerciseLogsByExerciseId(
     exerciseId: string,
     limit = 1,
