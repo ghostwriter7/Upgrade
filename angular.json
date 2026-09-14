@@ -34,12 +34,12 @@
                 "output": "/"
               },
               {
-                "glob": "sqlite3-opfs-async-proxy.js",
-                "input": "node_modules/@sqlite.org/sqlite-wasm/dist",
+                "glob": "**/*.js",
+                "input": "./node_modules/@sqlite.org/sqlite-wasm/dist",
                 "output": "/"
               },
               {
-                "glob": "index.mjs",
+                "glob": "sqlite3-opfs-async-proxy.js",
                 "input": "node_modules/@sqlite.org/sqlite-wasm/dist",
                 "output": "/"
               }
