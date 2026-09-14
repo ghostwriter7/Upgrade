@@ -35,6 +35,28 @@ export class TargetRepository extends GenericRepository {
     );
   }
 
+  public update(target: Target): Promise<void> {
+    return super.execute(
+      `update target
+       set name                         = :name,
+           description                  = :description,
+           skill_id                     = :skillId,
+           weekly_commitment_in_minutes = :weeklyCommitmentInMinutes,
+           motivation                   = :motivation,
+           trade_offs                   = :tradeOffs
+       where id = :id`,
+      {
+        id: target.id,
+        name: target.name,
+        description: target.description,
+        skillId: target.skillId,
+        weeklyCommitmentInMinutes: target.weeklyCommitmentInMinutes,
+        motivation: JSON.stringify(target.motivation),
+        tradeOffs: JSON.stringify(target.tradeOffs),
+      },
+    );
+  }
+
   public deleteById(targetId: string): Promise<void> {
     return super.execute(`delete from target where id = :id`, { id: targetId });
   }

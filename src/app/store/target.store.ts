@@ -42,6 +42,8 @@ export const TargetStore = signalStore(
       const edited = store.editedTarget();
       const target = createTarget(edited, targetResult);
 
+      const isEdit = store.targets().some((t) => t.id === target.id);
+
       patchState(store, (state) => ({
         ...state,
         showForm: false,
@@ -54,7 +56,11 @@ export const TargetStore = signalStore(
         ).sort((a, b) => a.name.localeCompare(b.name)),
       }));
 
-      targetRepository.save(target);
+      if (isEdit) {
+        targetRepository.update(target);
+      } else {
+        targetRepository.save(target);
+      }
     },
 
     initEdit: (target: Target) =>
