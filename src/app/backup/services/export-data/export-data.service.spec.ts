@@ -64,15 +64,15 @@ describe('ExportDataService', async () => {
   const sessions = [Session.createEmpty(), Session.createEmpty()];
 
   const exerciseLogs = [
-    new ExerciseLog(sessions[0].uuid, chinUpId),
-    new ExerciseLog(sessions[1].uuid, pullUpId),
+    new ExerciseLog(sessions[0].id, chinUpId),
+    new ExerciseLog(sessions[1].id, pullUpId),
   ];
 
   const sets = [
-    bwSet(0, 5, { sessionId: sessions[0].uuid, exerciseId: chinUpId }),
-    bwSet(1, 5, { sessionId: sessions[0].uuid, exerciseId: chinUpId }),
-    bwSet(0, 3, { sessionId: sessions[1].uuid, exerciseId: pullUpId }),
-    bwSet(1, 3, { sessionId: sessions[1].uuid, exerciseId: pullUpId }),
+    bwSet(0, 5, { sessionId: sessions[0].id, exerciseId: chinUpId }),
+    bwSet(1, 5, { sessionId: sessions[0].id, exerciseId: chinUpId }),
+    bwSet(0, 3, { sessionId: sessions[1].id, exerciseId: pullUpId }),
+    bwSet(1, 3, { sessionId: sessions[1].id, exerciseId: pullUpId }),
   ];
 
   const blackPixelBlob = new Blob(

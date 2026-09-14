@@ -5,7 +5,7 @@ import { SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
 import { DateHelper } from '@common/helper/date.helper';
 
-const SQL_GET_ALL_SESSIONS = `select s.id          as                 uuid,
+const SQL_GET_ALL_SESSIONS = `select s.id,
                                       s.started_at  as                 startedAt,
                                       s.finished_at as                 finishedAt,
                                       s.rpe,
@@ -14,7 +14,7 @@ const SQL_GET_ALL_SESSIONS = `select s.id          as                 uuid,
                                         left join exercise_log el on el.session_id = s.id
                                group by s.id, s.started_at, s.finished_at, s.rpe;`;
 
-const SQL_GET_ALL_SESSIONS_FOR_RANGE = `select s.id          as                 uuid,
+const SQL_GET_ALL_SESSIONS_FOR_RANGE = `select s.id,
                                                s.started_at  as                 startedAt,
                                                s.finished_at as                 finishedAt,
                                                s.rpe,
@@ -91,7 +91,7 @@ export class SessionRepository extends GenericRepository {
     return super.execute(
       `insert into session (id, started_at, finished_at, rpe) values (:id, :startedAt, :finishedAt, :rpe)`,
       {
-        id: session.uuid,
+        id: session.id,
         startedAt: session.startedAt.toString({ smallestUnit: 'second' }),
         finishedAt: session.finishedAt?.toString({ smallestUnit: 'second' }) ?? null,
         rpe: session.rpe ?? null,

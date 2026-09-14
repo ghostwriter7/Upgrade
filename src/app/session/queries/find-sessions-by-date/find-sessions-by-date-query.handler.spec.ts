@@ -46,7 +46,7 @@ describe('FindSessionsByDateQueryHandler', () => {
     type: 'bodyweight',
   });
 
-  const assertSessionId = (actual: Session, expected: string) => expect(actual.uuid).toBe(expected);
+  const assertSessionId = (actual: Session, expected: string) => expect(actual.id).toBe(expected);
 
   const assertExerciseLogs = (
     actual: ExerciseLog[],
@@ -84,21 +84,21 @@ describe('FindSessionsByDateQueryHandler', () => {
     const sessionB = Session.createEmpty();
     sessionRepositoryMock.findAllByDate.mockResolvedValue([sessionA, sessionB]);
 
-    const logOneForA = log(sessionA.uuid, 'chin-ups', 2);
-    const logTwoForA = log(sessionA.uuid, 'pull-ups', 0);
-    const logThreeForA = log(sessionA.uuid, 'l-sit', 1);
+    const logOneForA = log(sessionA.id, 'chin-ups', 2);
+    const logTwoForA = log(sessionA.id, 'pull-ups', 0);
+    const logThreeForA = log(sessionA.id, 'l-sit', 1);
 
-    const logOneForB = log(sessionB.uuid, 'back-squats', 1);
-    const logTwoForB = log(sessionB.uuid, 'push-ups', 0);
+    const logOneForB = log(sessionB.id, 'back-squats', 1);
+    const logTwoForB = log(sessionB.id, 'push-ups', 0);
 
     exerciseLogRepositoryMock.getAllLogsBySessionId
       .mockResolvedValueOnce([logOneForA, logTwoForA, logThreeForA])
       .mockResolvedValueOnce([logOneForB, logTwoForB]);
 
-    const chinUpSets = [1, 0, 2].map((index) => set(sessionA.uuid, 'chin-ups', index));
-    const pullUpSets = [1, 0].map((index) => set(sessionA.uuid, 'pull-ups', index));
-    const backSquatSets = [0, 1, 2].map((index) => set(sessionB.uuid, 'back-squats', index));
-    const pushUpSets = [4, 3, 1, 0, 2].map((index) => set(sessionB.uuid, 'push-ups', index));
+    const chinUpSets = [1, 0, 2].map((index) => set(sessionA.id, 'chin-ups', index));
+    const pullUpSets = [1, 0].map((index) => set(sessionA.id, 'pull-ups', index));
+    const backSquatSets = [0, 1, 2].map((index) => set(sessionB.id, 'back-squats', index));
+    const pushUpSets = [4, 3, 1, 0, 2].map((index) => set(sessionB.id, 'push-ups', index));
 
     setRepositoryMock.getAllBySessionId
       .mockResolvedValueOnce([...chinUpSets, ...pullUpSets])
@@ -109,28 +109,22 @@ describe('FindSessionsByDateQueryHandler', () => {
     expect(sessionRepositoryMock.findAllByDate).toHaveBeenCalledExactlyOnceWith(query.date);
 
     expect(exerciseLogRepositoryMock.getAllLogsBySessionId).toHaveBeenCalledTimes(2);
-    expect(exerciseLogRepositoryMock.getAllLogsBySessionId).toHaveBeenNthCalledWith(
-      1,
-      sessionA.uuid,
-    );
-    expect(exerciseLogRepositoryMock.getAllLogsBySessionId).toHaveBeenNthCalledWith(
-      2,
-      sessionB.uuid,
-    );
+    expect(exerciseLogRepositoryMock.getAllLogsBySessionId).toHaveBeenNthCalledWith(1, sessionA.id);
+    expect(exerciseLogRepositoryMock.getAllLogsBySessionId).toHaveBeenNthCalledWith(2, sessionB.id);
 
     expect(setRepositoryMock.getAllBySessionId).toHaveBeenCalledTimes(2);
-    expect(setRepositoryMock.getAllBySessionId).toHaveBeenNthCalledWith(1, sessionA.uuid);
-    expect(setRepositoryMock.getAllBySessionId).toHaveBeenNthCalledWith(2, sessionB.uuid);
+    expect(setRepositoryMock.getAllBySessionId).toHaveBeenNthCalledWith(1, sessionA.id);
+    expect(setRepositoryMock.getAllBySessionId).toHaveBeenNthCalledWith(2, sessionB.id);
 
     expect(sessions.length).toBe(2);
 
     const [actualSessionA, actualSessionB] = sessions;
-    assertSessionId(actualSessionA, sessionA.uuid);
-    assertSessionId(actualSessionB, sessionB.uuid);
+    assertSessionId(actualSessionA, sessionA.id);
+    assertSessionId(actualSessionB, sessionB.id);
 
     assertExerciseLogs(
       actualSessionA.exerciseLogs,
-      sessionA.uuid,
+      sessionA.id,
       { sets: pullUpSets, exerciseId: 'pull-ups' },
       { sets: [], exerciseId: 'l-sit' },
       { sets: chinUpSets, exerciseId: 'chin-ups' },
@@ -138,7 +132,7 @@ describe('FindSessionsByDateQueryHandler', () => {
 
     assertExerciseLogs(
       actualSessionB.exerciseLogs,
-      sessionB.uuid,
+      sessionB.id,
       { sets: pushUpSets, exerciseId: 'push-ups' },
       { sets: backSquatSets, exerciseId: 'back-squats' },
     );

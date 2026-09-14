@@ -44,7 +44,7 @@ describe('DeleteSessionCommandHandler', () => {
     expect(sessionStore.delete).toHaveBeenCalledExactlyOnceWith(command.session);
     expect(eventBus.publish).toHaveBeenCalledExactlyOnceWith(
       new SessionDeletedEvent(
-        command.session.uuid,
+        command.session.id,
         command.session.exerciseLogs.map((log) => log.id),
       ),
     );

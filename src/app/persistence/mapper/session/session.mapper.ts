@@ -19,7 +19,7 @@ export class SessionMapper implements Mapper<Session, SessionDto> {
 
   public toDto(session: Session): SessionDto {
     return {
-      uuid: session.uuid,
+      uuid: session.id,
       startedAt: session.startedAt.toString({ smallestUnit: 'second' }),
       finishedAt: session.finishedAt
         ? session.finishedAt.toString({ smallestUnit: 'second' })

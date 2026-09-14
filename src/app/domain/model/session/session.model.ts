@@ -26,7 +26,7 @@ export class Session {
   public exerciseIds: string[] = [];
   public rpe: number | null = null;
 
-  constructor(public readonly uuid: string) {}
+  constructor(public readonly id: string) {}
 
   public get dayOfMonth(): number {
     return DateHelper.toLocal(this.startedAt).day;
@@ -48,7 +48,7 @@ export class Session {
    * Performs a shallow clone of the session, creating a new instance with the same properties.
    */
   public clone(): Session {
-    const session = new Session(this.uuid);
+    const session = new Session(this.id);
     session.startedAt = this.startedAt;
     session.finishedAt = this.finishedAt;
     session.exerciseLogs = [...this.exerciseLogs.map((exercise) => exercise.clone())];
@@ -70,7 +70,7 @@ export class Session {
 
     const clone = this.clone();
 
-    const log = new ExerciseLog(clone.uuid, exerciseId).withIndex(clone.exerciseLogs.length);
+    const log = new ExerciseLog(clone.id, exerciseId).withIndex(clone.exerciseLogs.length);
     clone.exerciseLogs = [...clone.exerciseLogs, log];
     clone.exerciseIds = [...clone.exerciseIds, exerciseId];
 
@@ -92,7 +92,7 @@ export class Session {
     const clone = this.clone();
     let index = clone.exerciseLogs.length;
     const addedLogs: ExerciseLog[] = exerciseIds.reduce(
-      (logs, exerciseId) => [...logs, new ExerciseLog(clone.uuid, exerciseId).withIndex(index++)],
+      (logs, exerciseId) => [...logs, new ExerciseLog(clone.id, exerciseId).withIndex(index++)],
       [] as ExerciseLog[],
     );
 

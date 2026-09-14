@@ -54,7 +54,7 @@ export const SessionStore = signalStore(
         targetCounts[dateIndex] = [...(targetCounts[dateIndex] || []), session];
       } else {
         targetCounts[dateIndex] = (targetCounts[dateIndex] || []).filter(
-          (s) => s.uuid !== session.uuid,
+          (s) => s.id !== session.id,
         );
       }
 
@@ -89,7 +89,7 @@ export const SessionStore = signalStore(
         const sessionsByDate = { ...store.sessionsByDate() };
         const thisDateSessions = sessionsByDate[dateId] || [];
 
-        const existingIndex = thisDateSessions.findIndex(({ uuid }) => uuid === session.uuid);
+        const existingIndex = thisDateSessions.findIndex(({ id }) => id === session.id);
         if (existingIndex === -1) {
           sessionsByDate[dateId] = [...thisDateSessions, session];
           patchState(store, (state) => ({
@@ -106,9 +106,7 @@ export const SessionStore = signalStore(
       delete: (session: Session) => {
         const dateId = session.isoDate;
         const sessionsByDate = { ...store.sessionsByDate() };
-        sessionsByDate[dateId] = sessionsByDate[dateId]?.filter(
-          ({ uuid }) => uuid !== session.uuid,
-        );
+        sessionsByDate[dateId] = sessionsByDate[dateId]?.filter(({ id }) => id !== session.id);
 
         patchState(store, (state) => ({
           ...state,

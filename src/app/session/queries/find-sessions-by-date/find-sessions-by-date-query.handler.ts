@@ -23,7 +23,7 @@ export class FindSessionsByDateQueryHandler implements QueryHandler<FindSessions
 
     if (!sessions.length) return [];
 
-    const sessionIds = sessions.map(({ uuid }) => uuid);
+    const sessionIds = sessions.map(({ id }) => id);
     const exerciseLogPromises = Promise.all(
       sessionIds.map((id) => this.exerciseLogRepository.getAllLogsBySessionId(id)),
     );

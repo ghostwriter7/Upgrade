@@ -78,7 +78,7 @@ describe('ImportDataService', () => {
 
   const sessionMatcher = (session: Session) =>
     expect.objectContaining({
-      uuid: session.uuid,
+      uuid: session.id,
     });
 
   const exerciseLogMatcher = (exerciseLog: ExerciseLog) =>
@@ -92,14 +92,14 @@ describe('ImportDataService', () => {
   const pullUpsId = createNanoId();
   const sessions = [Session.createEmpty(), Session.createEmpty()];
   const exerciseLogs = [
-    new ExerciseLog(sessions[0].uuid, chinUpsId),
-    new ExerciseLog(sessions[0].uuid, pullUpsId),
+    new ExerciseLog(sessions[0].id, chinUpsId),
+    new ExerciseLog(sessions[0].id, pullUpsId),
   ];
   const sets = [
-    bwSet(0, 5, { sessionId: sessions[0].uuid, exerciseId: chinUpsId }),
-    bwSet(1, 5, { sessionId: sessions[0].uuid, exerciseId: chinUpsId }),
-    bwSet(0, 3, { sessionId: sessions[1].uuid, exerciseId: pullUpsId }),
-    bwSet(1, 3, { sessionId: sessions[1].uuid, exerciseId: pullUpsId }),
+    bwSet(0, 5, { sessionId: sessions[0].id, exerciseId: chinUpsId }),
+    bwSet(1, 5, { sessionId: sessions[0].id, exerciseId: chinUpsId }),
+    bwSet(0, 3, { sessionId: sessions[1].id, exerciseId: pullUpsId }),
+    bwSet(1, 3, { sessionId: sessions[1].id, exerciseId: pullUpsId }),
   ];
   const blackPixelBlob = new Blob(
     [

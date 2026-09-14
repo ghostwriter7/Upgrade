@@ -16,7 +16,7 @@ describe('Session', () => {
     const session = Session.createEmpty();
 
     const diffInMs = Math.abs(now.epochMilliseconds - session.startedAt.epochMilliseconds);
-    expect(session.uuid).toBeTypeOf('string');
+    expect(session.id).toBeTypeOf('string');
     expect(diffInMs).toBeLessThan(100);
   });
 
@@ -47,7 +47,7 @@ describe('Session', () => {
 
     it('should return false when there is at least one set associated with at least one exercise', () => {
       const session = sessionWithExercises('chin-ups', 'pull-ups', 'dips');
-      session.addSet(bwSet(0, 5, { sessionId: session.uuid, exerciseId: 'dips' }));
+      session.addSet(bwSet(0, 5, { sessionId: session.id, exerciseId: 'dips' }));
 
       expect(session.isEmpty).toEqual(false);
     });
@@ -67,7 +67,7 @@ describe('Session', () => {
 
       const { session: updatedSession, addedLog } = session.addExerciseLog('chin-ups');
 
-      const matcher = logMatcher(session.uuid, 'chin-ups', 0);
+      const matcher = logMatcher(session.id, 'chin-ups', 0);
       expect(updatedSession.exerciseLogs).toEqual(expect.arrayContaining([matcher]));
       expect(updatedSession.exerciseIds).toEqual(['chin-ups']);
       expect(addedLog).toEqual(matcher);
@@ -79,7 +79,7 @@ describe('Session', () => {
       const { session: updatedSession, addedLog } = session.addExerciseLog('pull-ups');
 
       expect(updatedSession.exerciseLogs.length).toBe(3);
-      const matcher = logMatcher(session.uuid, 'pull-ups', 2);
+      const matcher = logMatcher(session.id, 'pull-ups', 2);
       expect(updatedSession.exerciseLogs).toEqual(
         expect.arrayContaining([session.exerciseLogs[0], session.exerciseLogs[1], matcher]),
       );
@@ -115,9 +115,9 @@ describe('Session', () => {
       ]);
 
       const expectedLogs = [
-        logMatcher(session.uuid, 'chin-ups', 0),
-        logMatcher(session.uuid, 'front-splits', 1),
-        logMatcher(session.uuid, 'deadlifts', 2),
+        logMatcher(session.id, 'chin-ups', 0),
+        logMatcher(session.id, 'front-splits', 1),
+        logMatcher(session.id, 'deadlifts', 2),
       ];
       expect(updatedSession.exerciseIds).toEqual(['chin-ups', 'front-splits', 'deadlifts']);
       expect(updatedSession.exerciseLogs.length).toBe(3);
@@ -134,8 +134,8 @@ describe('Session', () => {
       ]);
 
       const expectedAddedLogs = [
-        logMatcher(session.uuid, 'l-sit', 2),
-        logMatcher(session.uuid, 'side-splits', 3),
+        logMatcher(session.id, 'l-sit', 2),
+        logMatcher(session.id, 'side-splits', 3),
       ];
       const expectedLogs = [session.exerciseLogs[0], session.exerciseLogs[1], ...expectedAddedLogs];
       expect(updatedSession.exerciseLogs.length).toBe(4);

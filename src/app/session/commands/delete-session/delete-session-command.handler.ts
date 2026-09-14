@@ -22,7 +22,7 @@ export class DeleteSessionCommandHandler implements CommandHandler<DeleteSession
     this.sessionStateHolder.set(null);
     this.eventBus.publish(
       new SessionDeletedEvent(
-        session.uuid,
+        session.id,
         session.exerciseLogs.map(({ id }) => id),
       ),
     );

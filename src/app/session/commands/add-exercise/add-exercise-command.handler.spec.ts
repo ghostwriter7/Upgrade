@@ -1,4 +1,4 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, Mock, test, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { AddExerciseCommandHandler } from './add-exercise-command.handler';
@@ -51,7 +51,7 @@ describe('AddExerciseCommandHandler', () => {
     const matcher = (exerciseId: string) =>
       new ExerciseLogCreatedEvent(
         expect.objectContaining({
-          sessionId: session.uuid,
+          sessionId: session.id,
           exerciseId,
           id: expect.any(String),
         }),

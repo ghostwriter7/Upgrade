@@ -1,7 +1,7 @@
 @if (loading()) {
   <app-loader />
 } @else {
-  @for (session of sessions(); track session.uuid) {
+  @for (session of sessions(); track session.id) {
     <app-session-view [session]="session" />
   } @empty {
     <output data-testid="session-list-empty-message" class="empty-sessions" aria-live="polite">
