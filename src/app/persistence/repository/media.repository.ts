@@ -17,7 +17,6 @@ export class MediaRepository extends GenericRepository {
       exercise_id as exerciseId,
       exercise_log_id as exerciseLogId,
       mime_type as mimeType,
-      created_at as createdAt,
       width,
       height
       from media where exercise_log_id = :exerciseLogId
@@ -30,14 +29,13 @@ export class MediaRepository extends GenericRepository {
 
   public save(media: ExerciseMedia): Promise<void> {
     return super.execute(
-      `insert into media (id, exercise_id, exercise_log_id, mime_type, created_at, width, height)
-            values (:id, :exerciseId, :exerciseLogId, :mimeType, :createdAt, :width, :height)`,
+      `insert into media (id, exercise_id, exercise_log_id, mime_type, width, height)
+            values (:id, :exerciseId, :exerciseLogId, :mimeType, :width, :height)`,
       {
         id: media.id,
         exerciseId: media.exerciseId,
         exerciseLogId: media.exerciseLogId,
         mimeType: media.mimeType,
-        createdAt: media.createdAt.toString(),
         width: media.size.width,
         height: media.size.height,
       },
@@ -54,7 +52,6 @@ export class MediaRepository extends GenericRepository {
              exercise_id     as exerciseId,
              exercise_log_id as exerciseLogId,
              mime_type       as mimeType,
-             created_at      as createdAt,
              width,
              height
       from media;`);

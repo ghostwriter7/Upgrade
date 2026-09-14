@@ -22,8 +22,13 @@ export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand>
 
     if (!session) throw new Error('Session not found');
 
-    const exercise = session.getExerciseById(exerciseId);
-    const set = SetDataMapper.toDomain(setData, exerciseId, session.uuid, exercise.sets.length);
+    const exerciseLog = session.getExerciseById(exerciseId);
+    const set = SetDataMapper.toDomain(
+      setData,
+      exerciseId,
+      exerciseLog.id,
+      exerciseLog.sets.length,
+    );
     set.id = createNanoId();
 
     this.sessionStateHolder.set(session.addSet(set));

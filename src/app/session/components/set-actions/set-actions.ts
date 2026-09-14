@@ -35,7 +35,7 @@ export class SetActions {
         const updatedSet = SetDataMapper.toDomain(
           setData,
           set.exerciseId,
-          set.sessionId,
+          set.exerciseLogId,
           set.index,
         );
         updatedSet.id = this.set().id;

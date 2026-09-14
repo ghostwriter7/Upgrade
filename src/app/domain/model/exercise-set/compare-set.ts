@@ -11,12 +11,18 @@ export function compareSet(a: ExerciseSet, b: ExerciseSet): boolean {
 
   switch (a.type) {
     case 'bodyweight':
-      return a.reps === (b as BodyweightSet).reps;
+      return a.data.reps === (b as BodyweightSet).data.reps;
     case 'weight':
-      return a.reps === (b as WeightedSet).reps && a.weight === (b as WeightedSet).weight;
+      return (
+        a.data.reps === (b as WeightedSet).data.reps &&
+        a.data.weight === (b as WeightedSet).data.weight
+      );
     case 'iso':
-      return a.duration === (b as IsoSet).duration && a.weight === (b as IsoSet).weight;
+      return (
+        a.data.duration === (b as IsoSet).data.duration &&
+        a.data.weight === (b as IsoSet).data.weight
+      );
     case 'duration':
-      return a.duration === (b as DurationSet).duration;
+      return a.data.duration === (b as DurationSet).data.duration;
   }
 }

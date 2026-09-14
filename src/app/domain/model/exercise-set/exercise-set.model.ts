@@ -6,6 +6,7 @@ export type ExerciseSet = BodyweightSet | WeightedSet | IsoSet | DurationSet;
 export interface BaseSet {
   id?: string;
   exerciseLogId: string;
+  exerciseId: string;
   index: number;
 }
 

@@ -17,44 +17,44 @@ export class SetDataMapper {
   public static toDomain(
     { type, weight, reps, duration }: SetData,
     exerciseId: string,
-    sessionId: string,
+    exerciseLogId: string,
     index: number = 0,
   ): ExerciseSet {
     const commonSet = {
       exerciseId,
-      sessionId,
+      exerciseLogId,
       index,
       type,
     };
 
     switch (type) {
       case 'bodyweight':
-        return { ...commonSet, reps } as BodyweightSet;
+        return { ...commonSet, data: { reps } } as BodyweightSet;
       case 'weight':
-        return { ...commonSet, reps, weight } as WeightedSet;
+        return { ...commonSet, data: { reps, weight } } as WeightedSet;
       case 'iso':
-        return { ...commonSet, duration, weight } as IsoSet;
+        return { ...commonSet, data: { duration, weight } } as IsoSet;
       case 'duration':
-        return { ...commonSet, duration } as DurationSet;
+        return { ...commonSet, data: { duration } } as DurationSet;
     }
   }
 
   public static toDto(exerciseSet: ExerciseSet): SetData {
-    const { type } = exerciseSet;
+    const { type, data } = exerciseSet;
     switch (type) {
       case 'bodyweight':
-        return { ...emptySetData, reps: exerciseSet.reps, type };
+        return { ...emptySetData, reps: data.reps, type };
       case 'weight':
-        return { ...emptySetData, reps: exerciseSet.reps, weight: exerciseSet.weight, type };
+        return { ...emptySetData, reps: data.reps, weight: data.weight, type };
       case 'iso':
         return {
           ...emptySetData,
-          duration: exerciseSet.duration,
-          weight: exerciseSet.weight ?? 0,
+          duration: data.duration,
+          weight: data.weight ?? 0,
           type,
         };
       case 'duration':
-        return { ...emptySetData, duration: exerciseSet.duration, type };
+        return { ...emptySetData, duration: data.duration, type };
     }
   }
 }

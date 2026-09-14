@@ -12,9 +12,16 @@ export class SetRepository extends GenericRepository {
   public async getAllByExerciseLogId(exerciseLogId: string): Promise<ExerciseSet[]> {
     const results = await super.queryMany(
       `
-     select id, set_index as "index", exercise_log_id as exerciseLogId, type, data
-     from exercise_set where exercise_log_id = :exerciseLogId;
-    `,
+          select es.id,
+                 es.set_index       as "index",
+                 es.exercise_log_id as exerciseLogId,
+                 es.type,
+                 es.data,
+                 el.exercise_id     as exerciseId
+          from exercise_set es
+                   left join exercise_log el on es.exercise_log_id = el.id
+          where es.exercise_log_id = :exerciseLogId;
+      `,
       { exerciseLogId },
     );
 
@@ -24,10 +31,15 @@ export class SetRepository extends GenericRepository {
   public async getAllBySessionId(sessionId: string): Promise<ExerciseSet[]> {
     const results = await super.queryMany(
       `
-        select es.id, es.set_index as "index", es.exercise_log_id as exerciseLogId, es.type, es.data
-        from exercise_set es
-               left join exercise_log el on es.exercise_log_id = el.id
-        where el.session_id = :sessionId;
+          select es.id,
+                 es.set_index       as "index",
+                 es.exercise_log_id as exerciseLogId,
+                 es.type,
+                 es.data,
+                 el.exercise_id     as exerciseId
+          from exercise_set es
+                   left join exercise_log el on es.exercise_log_id = el.id
+          where el.session_id = :sessionId;
       `,
       { sessionId },
     );
@@ -37,7 +49,12 @@ export class SetRepository extends GenericRepository {
   public async getAllBeExerciseId(exerciseId: string): Promise<ExerciseSet[]> {
     const results = await super.queryMany(
       `
-          select es.id, es.set_index as "index", es.exercise_log_id as exerciseLogId, es.type, es.data
+          select es.id,
+                 es.set_index       as "index",
+                 es.exercise_log_id as exerciseLogId,
+                 es.type,
+                 es.data,
+                 el.exercise_id     as exerciseId
           from exercise_set es
                    left join exercise_log el on es.exercise_log_id = el.id
           where el.exercise_id = :exerciseId;

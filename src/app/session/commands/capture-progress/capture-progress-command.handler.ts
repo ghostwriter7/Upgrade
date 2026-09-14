@@ -35,7 +35,6 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
 
       const angleMeasurement = AngleMeasurement.new(
         media.id,
-        exerciseId,
         exerciseLogId,
         angle,
         measurementDefinition

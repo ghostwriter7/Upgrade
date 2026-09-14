@@ -5,6 +5,7 @@ import { json } from '@persistence/schema/json.schema';
 const BaseSetSchema = z.object({
   id: IdSchema.optional(),
   exerciseLogId: IdSchema,
+  exerciseId: z.string(),
   index: z.number(),
 });
 

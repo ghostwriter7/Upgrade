@@ -9,7 +9,7 @@ function createTarget(edited: Target | null, targetResult: TargetResult): Target
   if (edited) {
     return { ...edited, ...targetResult };
   }
-  return { ...targetResult, id: createNanoId(), createdAt: Temporal.Now.instant() };
+  return { ...targetResult, id: createNanoId() };
 }
 
 interface State {

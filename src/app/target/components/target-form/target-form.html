@@ -42,28 +42,6 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline">
-    <mat-label>Priority</mat-label>
-    <mat-select [formField]="form.priority!">
-      @for (option of priorityOptions; track option.value) {
-        <mat-option [value]="option.value">{{ option.label }}</mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Status</mat-label>
-    <mat-select [formField]="form.status">
-      @for (option of statusOptions; track option.value) {
-        <mat-option [value]="option.value">{{ option.label }}</mat-option>
-      }
-    </mat-select>
-
-    @if (form.status().touched() && form.status().invalid()) {
-      <mat-error>Status is required</mat-error>
-    }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
     <mat-label>Weekly commitment</mat-label>
     <input
       [formField]="form.weeklyCommitmentInMinutes"
@@ -78,13 +56,6 @@
     form.weeklyCommitmentInMinutes().invalid()) {
       <mat-error>Enter a value between 0 and 10080</mat-error>
     }
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Target date</mat-label>
-    <input matInput [matDatepicker]="targetDatePicker" [formField]="form.targetDate">
-    <mat-datepicker-toggle matIconSuffix [for]="targetDatePicker" />
-    <mat-datepicker #targetDatePicker />
   </mat-form-field>
 
   <mat-divider />

@@ -22,11 +22,11 @@ export class FindExerciseLogsByExerciseIdQueryHandler implements QueryHandler<Fi
       this.setRepository.getAllBeExerciseId(exerciseId),
     ]);
 
-    const setsBySessionId = Object.groupBy(sets, (set) => set.sessionId);
+    const setsByExerciseLogId = Object.groupBy(sets, (set) => set.exerciseLogId);
 
     return logs
       .map((log) => {
-        const logSets = setsBySessionId[log.sessionId] ?? [];
+        const logSets = setsByExerciseLogId[log.id] ?? [];
         logSets.sort((a, b) => a.index - b.index);
         return log.withSets(logSets);
       })

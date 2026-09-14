@@ -5,23 +5,24 @@ import {
   WeightedSet,
 } from '@domain/model/exercise-set/exercise-set.model';
 import { createNanoId } from '@common/function/create-uuid.function';
+
 const defaultParams = {
-  sessionId: 'sessionId',
+  exerciseLogId: 'exerciseLogId',
   exerciseId: 'exerciseId',
 };
 
 const commonSet = (
   params: typeof defaultParams,
-): Pick<ExerciseSet, 'id' | 'exerciseId' | 'sessionId'> => ({
+): Pick<ExerciseSet, 'id' | 'exerciseLogId' | 'exerciseId'> => ({
   id: createNanoId(),
-  sessionId: params.sessionId,
+  exerciseLogId: params.exerciseLogId,
   exerciseId: params.exerciseId,
 });
 
 export const bwSet = (index: number, reps: number, params = defaultParams): BodyweightSet => ({
   ...commonSet(params),
   index,
-  reps,
+  data: { reps },
   type: 'bodyweight',
 });
 
@@ -33,8 +34,7 @@ export const isoSet = (
 ): IsoSet => ({
   ...commonSet(params),
   index,
-  duration,
-  weight,
+  data: { duration, weight },
   type: 'iso',
 });
 
@@ -46,7 +46,6 @@ export const weightSet = (
 ): WeightedSet => ({
   ...commonSet(params),
   index,
-  reps,
-  weight,
+  data: { reps, weight },
   type: 'weight',
 });

@@ -12,21 +12,14 @@ import {
 
 import { MatButton } from '@angular/material/button';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import {
-  MatDatepicker,
-  MatDatepickerInput,
-  MatDatepickerToggle,
-} from '@angular/material/datepicker';
-import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { SkillStore } from '@store/skill.store';
 import { MatDivider } from '@angular/material/list';
-import { Motivation, Target, TargetPriority, TargetStatus } from '@domain/model/target';
+import { Motivation, Target } from '@domain/model/target';
 import { TargetResult } from './target-result';
-import { PriorityOptions } from '../../consts/priority-options';
-import { StatusOptions } from '../../consts/status-options';
 
 interface StatementFormValue {
   statement: string;
@@ -35,17 +28,9 @@ interface StatementFormValue {
 interface TargetFormValue {
   name: string;
   description: string;
-
   skillId: string | null;
-
-  priority: TargetPriority;
-  status: TargetStatus;
-
-  targetDate: Date | null;
-
   motivation: StatementFormValue[];
   tradeOffs: StatementFormValue[];
-
   weeklyCommitmentInMinutes: number;
 }
 
@@ -53,9 +38,6 @@ interface TargetFormValue {
   selector: 'app-target-form',
   imports: [
     MatButton,
-    MatDatepicker,
-    MatDatepickerInput,
-    MatDatepickerToggle,
     MatError,
     MatFormField,
     MatHint,
@@ -63,7 +45,6 @@ interface TargetFormValue {
     MatLabel,
     MatOption,
     MatSelect,
-    MatSuffix,
     FormField,
     FormsModule,
     MatDivider,
@@ -77,9 +58,6 @@ export class TargetForm {
 
   public readonly saved = output<TargetResult>();
   public readonly cancelled = output<void>();
-
-  protected readonly priorityOptions = PriorityOptions;
-  protected readonly statusOptions = StatusOptions;
 
   private readonly skillStore = inject(SkillStore);
   protected readonly skillOptions = computed(() =>
@@ -97,8 +75,6 @@ export class TargetForm {
     maxLength(path.description, 1000);
 
     required(path.skillId);
-
-    required(path.status);
 
     required(path.weeklyCommitmentInMinutes);
     min(path.weeklyCommitmentInMinutes, 0);
@@ -188,18 +164,10 @@ export class TargetForm {
 
       this.saved.emit({
         name: value.name.trim(),
-        description: this.optionalString(value.description),
-
+        description: this.nullableString(value.description),
         skillId,
-
-        priority: value.priority,
-        status: value.status,
-
-        targetDate: this.toPlainDate(value.targetDate),
-
         motivation: this.toStatements(value.motivation),
         tradeOffs: this.toStatements(value.tradeOffs),
-
         weeklyCommitmentInMinutes: value.weeklyCommitmentInMinutes,
       });
     });
@@ -213,17 +181,9 @@ export class TargetForm {
     return {
       name: '',
       description: '',
-
       skillId: null,
-
-      priority: 'unprioritized',
-      status: 'reviewing',
-
-      targetDate: null,
-
       motivation: [{ statement: '' }],
       tradeOffs: [{ statement: '' }],
-
       weeklyCommitmentInMinutes: 60,
     };
   }
@@ -232,36 +192,22 @@ export class TargetForm {
     return {
       name: target.name,
       description: target.description ?? '',
-
       skillId: target.skillId,
-
-      priority: target.priority,
-      status: target.status,
-
-      targetDate: /* target.targetDate  ?? */ null,
-
       motivation: target.motivation.length > 0 ? target.motivation : [{ statement: '' }],
       tradeOffs: target.tradeOffs.length > 0 ? target.tradeOffs : [{ statement: '' }],
-
       weeklyCommitmentInMinutes: target.weeklyCommitmentInMinutes,
     };
   }
 
-  private optionalString(value: string): string | undefined {
+  private nullableString(value: string): string | null {
     const trimmed = value.trim();
 
-    return trimmed.length > 0 ? trimmed : undefined;
+    return trimmed.length > 0 ? trimmed : null;
   }
 
   private toStatements(values: StatementFormValue[]): Motivation[] {
     return values
       .map((value) => ({ statement: value.statement.trim() }))
       .filter((value) => value.statement.length > 0);
-  }
-
-  private toPlainDate(targetDate: Date | null): Temporal.Instant | undefined {
-    if (!targetDate) return undefined;
-
-    return targetDate.toTemporalInstant();
   }
 }

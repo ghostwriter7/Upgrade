@@ -1,22 +1,20 @@
 -- @changeset 1
 create table if not exists session
 (
-  id  text primary key,
+  id         text primary key,
   started_at text not null,
   finished_at text null,
-  rpe real null
+  rpe        real null
 );
 
 create index session_started_at_idx on session (started_at);
 
--- @changeset 2
 create table if not exists exercise
 (
   id text primary key,
   name text not null unique
 );
 
--- @changeset 3
 create table if not exists exercise_log
 (
   id         text primary key,
@@ -29,7 +27,6 @@ create table if not exists exercise_log
   foreign key (session_id) references session (id) on delete cascade
 );
 
--- @changeset 4
 create table if not exists exercise_set
 (
   id text primary key,
@@ -41,7 +38,6 @@ create table if not exists exercise_set
   constraint uq_exercise_set_log_idx unique (exercise_log_id, set_index)
 );
 
--- @changeset 5
 create table if not exists media
 (
   id              text primary key,
@@ -55,7 +51,6 @@ create table if not exists media
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade
 );
 
--- @changeset 6
 create table if not exists angle_measurement
 (
   id              text primary key,
@@ -68,14 +63,12 @@ create table if not exists angle_measurement
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade
 );
 
--- @changeset 7
 create table if not exists capability
 (
   id   text primary key,
   name text not null unique
 );
 
--- @changeset 8
 create table if not exists skill
 (
   id   text primary key,
@@ -93,7 +86,17 @@ create table if not exists skill_capability
   primary key (skill_id, capability_id)
 );
 
--- @changeset 9
+create table if not exists exercise_capability
+(
+  exercise_id   text    not null,
+  capability_id text    not null,
+  weight        integer not null,
+
+  foreign key (exercise_id) references exercise (id) on delete restrict,
+  foreign key (capability_id) references capability (id) on delete restrict,
+  primary key (exercise_id, capability_id)
+);
+
 create table if not exists target
 (
   id                           text primary key,

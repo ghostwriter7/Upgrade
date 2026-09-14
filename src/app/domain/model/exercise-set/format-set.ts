@@ -1,19 +1,19 @@
 import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 
-export function formatSet(set: ExerciseSet): string {
-  switch (set.type) {
+export function formatSet({ type, data }: ExerciseSet): string {
+  switch (type) {
     case 'bodyweight':
-      return `${set.reps}`;
+      return `${data.reps}`;
     case 'weight':
-      return `${set.reps} + ${set.weight} kg`;
+      return `${data.reps} + ${data.weight} kg`;
     case 'iso': {
-      if (set.weight) {
-        return `${set.duration}s + ${set.weight} kg`;
+      if (data.weight) {
+        return `${data.duration}s + ${data.weight} kg`;
       }
-      return `${set.duration}s`;
+      return `${data.duration}s`;
     }
     case 'duration': {
-      const { hours, minutes } = Temporal.Duration.from({ seconds: set.duration });
+      const { hours, minutes } = Temporal.Duration.from({ seconds: data.duration });
       if (hours) return `${hours}h ${minutes}m`;
       return `${minutes}m`;
     }

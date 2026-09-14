@@ -24,9 +24,7 @@ export class TargetSummary implements OnInit {
   private readonly exerciseStore = inject(ExerciseStore);
   private readonly sessionRepository = inject(SessionRepository);
 
-  protected readonly activeTargets = computed(() =>
-    this.targetStore.targets().filter((target) => target.status === 'active'),
-  );
+  protected readonly activeTargets = this.targetStore.targets;
   protected readonly hasActiveTargets = computed(() => !!this.activeTargets().length);
 
   protected readonly decoratedTargets = linkedSignal<TargetViewModel[]>(() => this.activeTargets());
