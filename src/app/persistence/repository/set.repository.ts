@@ -3,6 +3,14 @@ import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Injectable } from '@angular/core';
 import { ExerciseSetSchema } from '../schema/set.schema';
 
+const UPDATE_SQL = `update exercise_set set data = :data, set_index = :index where id = :id`;
+
+const toUpdateParam = (set: ExerciseSet) => ({
+  data: JSON.stringify(set.data),
+  id: set.id,
+  index: set.index,
+});
+
 @Injectable({ providedIn: 'root' })
 export class SetRepository extends GenericRepository {
   constructor() {
@@ -72,12 +80,13 @@ export class SetRepository extends GenericRepository {
     return super.execute('delete from exercise_set where id = :setId', { setId });
   }
 
+  public async updateMany(sets: ExerciseSet[]): Promise<void> {
+    if (sets.length) return;
+    return this.database.executeBatch(UPDATE_SQL, sets.map(toUpdateParam));
+  }
+
   public async update(set: ExerciseSet): Promise<void> {
-    return super.execute(
-      `update exercise_set
-      set data = :data where id = :id`,
-      { data: JSON.stringify(set.data), id: set.id },
-    );
+    return super.execute(UPDATE_SQL, toUpdateParam(set));
   }
 
   public async save(set: ExerciseSet): Promise<void> {

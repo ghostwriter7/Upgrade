@@ -2,15 +2,13 @@ import { CommandHandler } from '@common/routers/command/command-handler.interfac
 import { inject, Injectable } from '@angular/core';
 import { DeleteSetCommand } from './delete-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '@common/routers/event/event-bus';
-import { SetUpdatedEvent } from '../../events/set-updated/set-updated.event';
-import { SetDeletedEvent } from '../../events/set-deleted/set-deleted.event';
 import { Constructor } from '@angular/cdk/schematics';
+import { SetRepository } from '@persistence/repository/set.repository';
 
 @Injectable()
 export class DeleteSetCommandHandler implements CommandHandler<DeleteSetCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
+  private readonly setRepository = inject(SetRepository);
 
   public appliesTo(): Constructor<DeleteSetCommand> {
     return DeleteSetCommand;
@@ -23,12 +21,12 @@ export class DeleteSetCommandHandler implements CommandHandler<DeleteSetCommand>
 
     const id = set.id;
     if (id) {
-      this.eventBus.publish(new SetDeletedEvent(id));
+      this.setRepository.deleteById(id);
     }
 
     const affectedSets = updatedSession.getExerciseById(set.exerciseId).sets.slice(set.index);
     if (affectedSets.length) {
-      affectedSets.forEach(set => this.eventBus.publish(new SetUpdatedEvent(set)));
+      this.setRepository.updateMany(affectedSets);
     }
 
     this.sessionStateHolder.set(updatedSession);
