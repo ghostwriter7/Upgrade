@@ -8,7 +8,7 @@ import { FindSessionsByDateQuery } from '@session/queries/find-sessions-by-date/
 import { Session } from '@domain/model/session/session.model';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { BodyweightSet, ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 
 describe('FindSessionsByDateQueryHandler', () => {
   let sessionRepositoryMock: { findAllByDate: Mock };

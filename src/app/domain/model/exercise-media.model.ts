@@ -1,4 +1,4 @@
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 
 export class ExerciseMedia {
   constructor(

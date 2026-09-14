@@ -6,7 +6,7 @@ import {
   QueryRequest,
   RequestType,
 } from './sql-request.interface';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 import { Service } from '@angular/core';
 import { BindingSpec } from '@sqlite.org/sqlite-wasm';
 

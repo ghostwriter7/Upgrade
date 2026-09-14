@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { CopySetCommand } from './copy-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 import { Constructor } from '@common/types/constructor.type';
 import { SetRepository } from '@persistence/repository/set.repository';
 

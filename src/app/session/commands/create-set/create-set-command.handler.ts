@@ -3,7 +3,7 @@ import { CreateSetCommand } from './create-set.command';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { SetDataMapper } from '../../components/set-form/mapper/set-data.mapper';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 import { Constructor } from '@common/types/constructor.type';
 import { SetRepository } from '@persistence/repository/set.repository';
 

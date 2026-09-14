@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { DownloadImageCommandHandler } from '@session/commands/download-image/download-image-command.handler';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { DownloadImageCommand } from '@session/commands/download-image/download-image.command';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 
 describe('DownloadImageCommandHandler', () => {
   let exerciseLogRepository: { findLogById: Mock };

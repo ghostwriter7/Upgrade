@@ -1,5 +1,5 @@
 import { ExerciseSet } from '../exercise-set/exercise-set.model';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 import { DateHelper } from '@common/helper/date.helper';
 import { compareSet } from '@domain/model/exercise-set/compare-set';
 

@@ -1,5 +1,5 @@
 import { BodyPart } from '@domain/enum/body-part.enum';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 
 export class AngleMeasurement {
   constructor(

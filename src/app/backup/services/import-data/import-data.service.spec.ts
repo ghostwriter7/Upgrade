@@ -6,7 +6,7 @@ import { ImportDataService } from './import-data.service';
 import { Session } from '@domain/model/session/session.model';
 import { BodyweightSet } from '@domain/model/exercise-set/exercise-set.model';
 import { SessionMapper } from '@persistence/mapper/session/session.mapper';
-import { createNanoId } from '@common/function/create-uuid.function';
+import { createNanoId } from '@common/function/create-id.function';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
