@@ -13,6 +13,6 @@ export class SetDeletedEventHandler implements EventHandler<SetDeletedEvent> {
   }
 
   public handle(event: SetDeletedEvent): void {
-    this.setRepository.deleteSet(event.setId);
+    this.setRepository.deleteById(event.setId);
   }
 }

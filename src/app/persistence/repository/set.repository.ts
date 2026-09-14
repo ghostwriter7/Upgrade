@@ -64,15 +64,15 @@ export class SetRepository extends GenericRepository {
     return this.toDomain(results);
   }
 
-  public deleteAllSets(): Promise<void> {
+  public deleteAll(): Promise<void> {
     return super.execute('delete from exercise_set');
   }
 
-  public deleteSet(setId: string): Promise<void> {
+  public deleteById(setId: string): Promise<void> {
     return super.execute('delete from exercise_set where id = :setId', { setId });
   }
 
-  public async updateSet(set: ExerciseSet): Promise<void> {
+  public async update(set: ExerciseSet): Promise<void> {
     return super.execute(
       `update exercise_set
       set data = :data where id = :id`,
@@ -80,7 +80,7 @@ export class SetRepository extends GenericRepository {
     );
   }
 
-  public async createSet(set: ExerciseSet): Promise<void> {
+  public async save(set: ExerciseSet): Promise<void> {
     return super.execute(
       `insert into exercise_set (id, exercise_log_id, set_index, type, data)
       values (:id, :exerciseLogId, :index, :type, :data)`,

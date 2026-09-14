@@ -3,15 +3,14 @@ import { CreateSetCommand } from './create-set.command';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { SetDataMapper } from '../../components/set-form/mapper/set-data.mapper';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '@common/routers/event/event-bus';
-import { SetCreatedEvent } from '../../events/set-created/set-created.event';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { Constructor } from '@common/types/constructor.type';
+import { SetRepository } from '@persistence/repository/set.repository';
 
 @Injectable()
 export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
+  private readonly setRepository = inject(SetRepository);
 
   public appliesTo(): Constructor<CreateSetCommand> {
     return CreateSetCommand;
@@ -32,6 +31,6 @@ export class CreateSetCommandHandler implements CommandHandler<CreateSetCommand>
     set.id = createNanoId();
 
     this.sessionStateHolder.set(session.addSet(set));
-    this.eventBus.publish(new SetCreatedEvent(set));
+    this.setRepository.save(set);
   }
 }

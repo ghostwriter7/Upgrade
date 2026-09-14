@@ -84,7 +84,7 @@ export class ImportDataService {
 
     await Promise.all([
       ...sessions.map((session) => this.sessionRepository.save(session)),
-      ...sets.map((set) => this.setRepository.updateSet(set)),
+      ...sets.map((set) => this.setRepository.update(set)),
       ...exerciseLogs.map((exerciseLog) => this.exerciseLogRepository.saveLog(exerciseLog)),
       ...angleMeasurements.map((angleMeasurement) =>
         this.angleMeasurementRepository.saveMeasurement(angleMeasurement),
@@ -177,7 +177,7 @@ export class ImportDataService {
   private clearResources(): Promise<void[]> {
     return Promise.all([
       this.sessionRepository.deleteAllSessions(),
-      this.setRepository.deleteAllSets(),
+      this.setRepository.deleteAll(),
       this.exerciseLogRepository.deleteAllLogs(),
       this.angleMeasurementRepository.deleteAllMeasurements(),
       this.mediaRepository.deleteAllMedia(),

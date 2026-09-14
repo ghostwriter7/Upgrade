@@ -13,6 +13,6 @@ export class SetUpdatedEventHandler implements EventHandler<SetUpdatedEvent> {
   }
 
   public handle(event: SetUpdatedEvent): void {
-    this.setRepository.updateSet(event.set);
+    this.setRepository.update(event.set);
   }
 }

@@ -2,15 +2,14 @@ import { inject, Injectable } from '@angular/core';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { CopySetCommand } from './copy-set.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '@common/routers/event/event-bus';
-import { SetCreatedEvent } from '../../events/set-created/set-created.event';
 import { createNanoId } from '@common/function/create-uuid.function';
 import { Constructor } from '@common/types/constructor.type';
+import { SetRepository } from '@persistence/repository/set.repository';
 
 @Injectable()
 export class CopySetCommandHandler implements CommandHandler<CopySetCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
+  private readonly setRepository = inject(SetRepository);
 
   public appliesTo(): Constructor<CopySetCommand> {
     return CopySetCommand;
@@ -25,7 +24,7 @@ export class CopySetCommandHandler implements CommandHandler<CopySetCommand> {
     const copiedSet = exercise.cloneSetAtIndex(set.index);
     copiedSet.id = createNanoId();
 
-    this.eventBus.publish(new SetCreatedEvent(copiedSet));
+    this.setRepository.save(copiedSet);
 
     this.sessionStateHolder.set(session.addSet(copiedSet));
   }
