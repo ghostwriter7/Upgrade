@@ -5,7 +5,7 @@ import { computed, inject } from '@angular/core';
 import { Database } from '@infrastructure/database';
 import {
   CapabilitySchema,
-  SKillCapabilitySchema,
+  SkillCapabilitySchema,
   SkillSchema,
 } from '@persistence/schema/skill.schema';
 
@@ -39,8 +39,21 @@ export const SkillStore = signalStore(
         ),
       ]);
 
+      const capabilityIndex = capabilities
+        .map((capability) => CapabilitySchema.parse(capability))
+        .reduce(
+          (lookup, capability) => {
+            lookup[capability.id] = capability;
+            return lookup;
+          },
+          {} as Record<string, CapabilityDefinition>,
+        );
+
       const capabilitiesBySkillId = Object.groupBy(
-        skillCapabilities.map((sc) => SKillCapabilitySchema.parse(sc)),
+        skillCapabilities.map((sc) => {
+          const skillCapability = SkillCapabilitySchema.parse(sc);
+          return { ...skillCapability, label: capabilityIndex[skillCapability.capabilityId].name };
+        }),
         (sc) => sc.skillId,
       );
 
@@ -50,7 +63,12 @@ export const SkillStore = signalStore(
         skills: skills
           .map((result) => {
             const skill = SkillSchema.parse(result);
-            return { ...skill, capabilities: capabilitiesBySkillId[skill.id] ?? [] };
+            return {
+              ...skill,
+              capabilities:
+                capabilitiesBySkillId[skill.id]?.toSorted((a, b) => b.importance - a.importance) ??
+                [],
+            };
           })
           .toSorted((a, b) => a.name.localeCompare(b.name)),
       }));

@@ -7,5 +7,6 @@ export interface Skill {
 
 export interface SkillCapability {
   capabilityId: string;
+  label: string;
   importance: number;
 }

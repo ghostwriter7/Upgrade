@@ -5,7 +5,7 @@ export const SkillSchema = z.object({
   name: z.string(),
 });
 
-export const SKillCapabilitySchema = z.object({
+export const SkillCapabilitySchema = z.object({
   skillId: z.string(),
   capabilityId: z.string(),
   importance: z.number(),

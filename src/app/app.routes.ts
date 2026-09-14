@@ -48,4 +48,8 @@ export const routes: Routes = [
     path: 'skills',
     loadComponent: () => import('./skill/components/skill-page/skill-page'),
   },
+  {
+    path: 'skills/:skillId',
+    loadComponent: () => import('./skill/components/skill-details/skill-details'),
+  },
 ];

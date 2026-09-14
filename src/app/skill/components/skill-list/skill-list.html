@@ -1,0 +1,7 @@
+<mat-action-list>
+  @for (skill of skills(); track skill.id) {
+    <button mat-list-item (click)="showDetails(skill)">{{ skill.name }}</button>
+  } @empty {
+    <p>No skills found</p>
+  }
+</mat-action-list>
