@@ -5,15 +5,6 @@ import { SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
 import { DateHelper } from '@common/helper/date.helper';
 
-const SQL_GET_ALL_SESSIONS = `select s.id,
-                                      s.started_at  as                 startedAt,
-                                      s.finished_at as                 finishedAt,
-                                      s.rpe,
-                                      json_group_array(el.exercise_id) filter (where el.exercise_id is not null) as exerciseIds
-                               from session s
-                                        left join exercise_log el on el.session_id = s.id
-                               group by s.id, s.started_at, s.finished_at, s.rpe;`;
-
 const SQL_GET_ALL_SESSIONS_FOR_RANGE = `select s.id,
                                                s.started_at  as                 startedAt,
                                                s.finished_at as                 finishedAt,
@@ -29,11 +20,6 @@ const SQL_GET_ALL_SESSIONS_FOR_RANGE = `select s.id,
 export class SessionRepository extends GenericRepository {
   constructor() {
     super();
-  }
-
-  public async getAllSessions(): Promise<Session[]> {
-    const results = await super.queryMany(SQL_GET_ALL_SESSIONS);
-    return this.toDomain(results);
   }
 
   public deleteAllSessions(): Promise<void> {
@@ -76,12 +62,12 @@ export class SessionRepository extends GenericRepository {
   public async findAllByDate(date: Temporal.ZonedDateTime): Promise<Session[]> {
     const startOfDayZDT = date.startOfDay();
     const endOfDayZDT = startOfDayZDT.add({ days: 1 });
-    const startOfDay = startOfDayZDT.toInstant().toString();
-    const endOfDay = endOfDayZDT.toInstant().toString();
+    const startDate = startOfDayZDT.toInstant().toString();
+    const endDate = endOfDayZDT.toInstant().toString();
 
     const results = await super.queryMany(SQL_GET_ALL_SESSIONS_FOR_RANGE, {
-      startOfDay,
-      endOfDay,
+      startDate,
+      endDate,
     });
 
     return this.toDomain(results);

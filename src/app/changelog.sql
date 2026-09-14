@@ -17,26 +17,31 @@ create table if not exists exercise
 
 create table if not exists exercise_log
 (
-  id         text primary key,
-  exercise_id integer not null,
-  session_id  integer not null,
+  id          text primary key,
+  exercise_id text    not null,
+  session_id  text    not null,
   notes       text    null,
-  log_index  integer not null,
-  created_at text    not null,
+  log_index   integer not null,
+  created_at  text    not null,
   foreign key (exercise_id) references exercise (id) on delete restrict,
   foreign key (session_id) references session (id) on delete cascade
 );
 
+create index exercise_log_session_idx on exercise_log (session_id);
+create index exercise_log_exercise_idx on exercise_log (exercise_id);
+
 create table if not exists exercise_set
 (
-  id text primary key,
+  id              text primary key,
   set_index       integer not null,
-  exercise_log_id integer not null,
+  exercise_log_id text not null,
   type            text    not null,
   data            text    not null,
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade,
   constraint uq_exercise_set_log_idx unique (exercise_log_id, set_index)
 );
+
+create index exercise_set_log_idx on exercise_set (exercise_log_id);
 
 create table if not exists media
 (
@@ -51,6 +56,9 @@ create table if not exists media
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade
 );
 
+create index media_log_idx on media (exercise_log_id);
+create index media_exercise_idx on media (exercise_id);
+
 create table if not exists angle_measurement
 (
   id              text primary key,
@@ -62,6 +70,9 @@ create table if not exists angle_measurement
   foreign key (media_id) references media (id) on delete cascade,
   foreign key (exercise_log_id) references exercise_log (id) on delete cascade
 );
+
+create index angle_measurement_log_idx on angle_measurement (exercise_log_id);
+create index angle_measurement_media_idx on angle_measurement (media_id);
 
 create table if not exists capability
 (

@@ -10,6 +10,7 @@ import { RequestType } from '@infrastructure/sql-request.interface';
 import changelog from './changelog.sql' with { type: 'text' };
 
 const databaseName = 'upgradedb';
+const dbPath = `/${databaseName}.sqlite3`;
 
 let sqlite3: Sqlite3Static | null = null;
 let db: OpfsDatabase | null = null;
@@ -45,17 +46,21 @@ function handleRequest(data: RequestType): void {
     const result = queryMany(db!, data.sql, data.params);
     postMessage({ id: data.id, type: 'success', result });
   } else if (data.type === 'query-one') {
-    const result = db!.selectObject(data.sql, data.params);
+    const result = db!.selectObject(data.sql, formatParams(data.params));
     postMessage({ id: data.id, type: 'success', result });
   } else if (data.type === 'execute') {
     execute(db!, data.sql, data.params);
     postMessage({ id: data.id, type: 'success' });
+  } else if (data.type === 'import-db') {
+    importDatabase(data.bytes);
+    postMessage({ id: data.id, type: 'success' });
   }
 }
 
+
+
 const start = async (sqlite3: Sqlite3Static) => {
   console.log('Running SQLite3 version', sqlite3.version.libVersion);
-  const filename = `${databaseName}.sqlite3`;
 
   // try {
   //   // TODO Remove it once schema migration is complete
@@ -63,7 +68,7 @@ const start = async (sqlite3: Sqlite3Static) => {
   //   await root.removeEntry(filename);
   // } catch (err) {}
 
-  db = new sqlite3.oo1.OpfsDb(filename, 'wc');
+  db = new sqlite3.oo1.OpfsDb(dbPath, 'wc');
   console.log(`Created persisted database at ${db.filename}`);
   applyMigrations(db);
 };
@@ -142,3 +147,11 @@ function formatParams(params?: BindingSpec): BindingSpec {
 
   return Object.fromEntries(Object.entries(params).map(([key, value]) => [`:${key}`, value]));
 }
+async function importDatabase(bytes: ArrayBuffer): Promise<void> {
+  db?.close();
+  db = null;
+  const array = new Uint8Array(bytes);
+  await sqlite3!.oo1.OpfsDb.importDb(dbPath, array);
+  db = new sqlite3!.oo1.OpfsDb(dbPath);
+}
+

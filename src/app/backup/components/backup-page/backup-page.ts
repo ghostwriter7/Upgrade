@@ -32,6 +32,18 @@ export default class BackupPage {
     }
   }
 
+  protected async importDatabase(): Promise<void> {
+    this.loading.set(true);
+    this.error.set(null);
+    try {
+      await this.importDataService.importDatabase();
+    } catch (error) {
+      this.error.set(error);
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
   protected exportData(): void {
     this.performOperation(() => this.exportDataService.exportData());
   }

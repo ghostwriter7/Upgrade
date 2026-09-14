@@ -21,6 +21,7 @@ import { ExerciseMediaMapper } from '@persistence/mapper/exercise-media.mapper';
 import { BackupSummary } from '@backup/interfaces/summary.interface';
 import { ZipService } from '@common/service/zip/zip.service';
 import { FileService } from '@common/service/file/file.service';
+import { Database } from '@infrastructure/database';
 
 @Injectable({ providedIn: 'root' })
 export class ImportDataService {
@@ -31,6 +32,25 @@ export class ImportDataService {
   private readonly mediaRepository = inject(MediaRepository);
   private readonly zipService = inject(ZipService);
   private readonly fileService = inject(FileService);
+  private readonly database = inject(Database);
+
+  public async importDatabase(): Promise<void> {
+    const [handle] = await window.showOpenFilePicker({
+      types: [
+        {
+          description: 'Upgrade DB',
+          accept: {
+            'application/octet-stream': ['.sqlite3'],
+          },
+        },
+      ],
+    });
+
+    const file = await handle.getFile();
+    const bytes = await file.arrayBuffer();
+
+    await this.database.import(bytes);
+  }
 
   public async importData(): Promise<BackupSummary> {
     const [handle] = await window.showOpenFilePicker({

@@ -27,6 +27,16 @@ export class Database {
     this.worker.onerror = (event: ErrorEvent) => this.handleWorkerError(event);
   }
 
+  public import(bytes: ArrayBuffer): Promise<unknown> {
+    const id = createNanoId();
+
+    return new Promise((resolve, reject) => {
+      this.pending.set(id, { resolve, reject });
+
+      this.worker.postMessage({ id, type: 'import-db', bytes }, [bytes]);
+    });
+  }
+
   public export(): Promise<Uint8Array<ArrayBuffer>> {
     return this.sendRequest({ type: 'export-db' } as ExportDbRequest) as Promise<
       Uint8Array<ArrayBuffer>

@@ -2,7 +2,7 @@ import type { BindingSpec } from '@sqlite.org/sqlite-wasm';
 
 export interface Request {
   id: string;
-  type: 'query' | 'query-one' | 'execute' | 'export-db';
+  type: 'query' | 'query-one' | 'execute' | 'export-db' | 'import-db';
 }
 
 interface SqlRequest extends Request {
@@ -22,4 +22,9 @@ export interface ExportDbRequest extends Request {
   type: 'export-db';
 }
 
-export type RequestType = QueryRequest | ExecuteRequest | ExportDbRequest;
+export interface ImportDbRequest extends Request {
+  type: 'import-db';
+  bytes: ArrayBuffer;
+}
+
+export type RequestType = QueryRequest | ExecuteRequest | ExportDbRequest | ImportDbRequest;
