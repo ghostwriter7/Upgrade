@@ -9,24 +9,6 @@ export class ImportDataService {
   private readonly fileService = inject(FileService);
   private readonly database = inject(Database);
 
-  public async importDatabase(): Promise<void> {
-    const [handle] = await window.showOpenFilePicker({
-      types: [
-        {
-          description: 'Upgrade DB',
-          accept: {
-            'application/octet-stream': ['.sqlite3'],
-          },
-        },
-      ],
-    });
-
-    const file = await handle.getFile();
-    const bytes = await file.arrayBuffer();
-
-    await this.database.import(bytes);
-  }
-
   public async importData(): Promise<void> {
     const [handle] = await window.showOpenFilePicker({
       types: [
@@ -39,7 +21,7 @@ export class ImportDataService {
       ],
     });
     const zipContent = await this.zipService.unzip(await handle.getFile());
-
+    await this.database.import(zipContent['upgradedb.sqlite3'].buffer);
     await this.handleImages(zipContent);
   }
 

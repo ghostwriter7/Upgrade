@@ -10,6 +10,22 @@ export class MediaRepository extends GenericRepository {
     super();
   }
 
+  public async getAll(): Promise<ExerciseMedia[]> {
+    const results = await super.queryMany(
+      `
+      select id,
+      exercise_id as exerciseId,
+      exercise_log_id as exerciseLogId,
+      mime_type as mimeType,
+      width,
+      height
+      from media;
+    `,
+    );
+
+    return this.toDomain(results);
+  }
+
   public async findAllByExerciseLogId(exerciseLogId: string): Promise<ExerciseMedia[]> {
     const results = await super.queryMany(
       `
