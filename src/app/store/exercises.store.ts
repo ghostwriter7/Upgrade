@@ -7,12 +7,12 @@ import {
   withState,
 } from '@ngrx/signals';
 import { Exercise } from '@domain/model/exercise.model';
-import { exercises } from './exercises.const';
-import { computed, inject } from '@angular/core';
+import { computed, effect, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
-import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { DateHelper } from '@common/helper/date.helper';
 import { SkillStore } from '@store/skill.store';
+import { Database } from '@infrastructure/database';
+import { ExerciseCapabilitySchema, ExerciseSchema } from '@persistence/schema/skill.schema';
 
 interface State {
   activeSkill: Skill | undefined;
@@ -26,23 +26,7 @@ const initialState: State = {
 
 export const ExerciseStore = signalStore(
   { providedIn: 'root' },
-  withState((skillStore = inject(SkillStore)) => {
-    const skills = skillStore.skills();
-
-    return {
-      ...initialState,
-      allExercises: exercises.map((exercise) => ({
-        ...exercise,
-        skillScore: skills.reduce(
-          (skillScore, skill) => ({
-            ...skillScore,
-            [skill.id]: calculateSkillScore(exercise, skill),
-          }),
-          {},
-        ),
-      })) as Exercise[],
-    };
-  }),
+  withState(initialState),
   withComputed((store) => ({
     exercises: computed(() => {
       const skill = store.activeSkill();
@@ -72,39 +56,67 @@ export const ExerciseStore = signalStore(
         .toSorted((a, b) => a.name.localeCompare(b.name));
     },
   })),
-  withHooks((store, exerciseLogRepository = inject(ExerciseLogRepository)) => ({
+  withHooks((store, database = inject(Database), skillStore = inject(SkillStore)) => ({
     onInit: async () => {
-      const allExercises = store.allExercises();
-      const exerciseIds = allExercises.map(({ id }) => id);
+      effect(() => {
+        const skills = skillStore.skills();
+        patchState(store, (state) => ({
+          ...state,
+          allExercises: state.allExercises.map((exercise) => ({
+            ...exercise,
+            skillScore: skills.reduce(
+              (skillScore, skill) => ({
+                ...skillScore,
+                [skill.id]: calculateSkillScore(exercise, skill),
+              }),
+              {},
+            ),
+          })),
+        }));
+      });
 
-      const latestLogs = await Promise.all(
-        exerciseIds.map((id) => exerciseLogRepository.findLatestExerciseLogsByExerciseId(id)),
-      );
-
-      const lastDateByExerciseId = latestLogs
-        .filter((log) => !!log.length)
-        .reduce(
-          (index, [{ exerciseId, createdAt }]) => ({ ...index, [exerciseId]: createdAt }),
-          {} as Record<string, Temporal.Instant>,
-        );
+      const [exercises, exerciseCapabilities] = await Promise.all([
+        database.queryMany(`select e.id, e.name, max(el.created_at) as lastPerformedAt
+                              from exercise e
+                                     left join exercise_log el on e.id = el.exercise_id
+                              group by e.id, e.name
+          `),
+        database.queryMany(
+          'select exercise_id as exerciseId, capability_id as capabilityId, weight from exercise_capability',
+        ),
+      ]);
 
       const now = DateHelper.now();
 
-      patchState(store, {
-        allExercises: allExercises.map((exercise) => {
-          const lastPerformedAt = lastDateByExerciseId[exercise.id];
+      const capabilitiesByExerciseId = Object.groupBy(
+        exerciseCapabilities.map((ec) => ExerciseCapabilitySchema.parse(ec)),
+        (ec) => ec.exerciseId,
+      );
+
+      const allExercises = Iterator.from(exercises)
+        .map((e) => ExerciseSchema.parse(e))
+        .map((exercise) => {
+          const capabilities = capabilitiesByExerciseId[exercise.id] ?? [];
+          const lastPerformedAt = exercise.lastPerformedAt
+            ? DateHelper.from(exercise.lastPerformedAt)
+            : null;
           const lastPerformedHoursAgo = lastPerformedAt
             ? lastPerformedAt.until(now).round({ largestUnit: 'hours' }).hours
-            : 0;
+            : null;
+
           return {
             ...exercise,
+            skillScore: {},
+            capabilities,
             stats: {
               lastPerformedAt,
               lastPerformedHoursAgo,
             },
           };
-        }),
-      });
+        })
+        .toArray();
+
+      patchState(store, { allExercises });
     },
   })),
 );

@@ -43,16 +43,17 @@ export const SkillStore = signalStore(
         skillCapabilities.map((sc) => SKillCapabilitySchema.parse(sc)),
         (sc) => sc.skillId,
       );
+
       patchState(store, (state) => ({
         ...state,
         capabilities: capabilities.map((capability) => CapabilitySchema.parse(capability)),
-        skills: skills.map((result) => {
-          const skill = SkillSchema.parse(result);
-          return { ...skill, capabilities: capabilitiesBySkillId[skill.id] ?? [] };
-        }),
+        skills: skills
+          .map((result) => {
+            const skill = SkillSchema.parse(result);
+            return { ...skill, capabilities: capabilitiesBySkillId[skill.id] ?? [] };
+          })
+          .toSorted((a, b) => a.name.localeCompare(b.name)),
       }));
-
-      debugger;
     },
   })),
 );

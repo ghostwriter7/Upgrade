@@ -1,5 +1,4 @@
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
-import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 
 export interface Exercise {
   id: string;
@@ -7,11 +6,10 @@ export interface Exercise {
 
   measurementDefinition?: AngleMeasurementDefinition;
   capabilities?: ExerciseCapability[];
-  supportedSetTypes: ExerciseSetType[];
 
   stats?: {
-    lastPerformedAt?: Temporal.Instant;
-    lastPerformedHoursAgo?: number;
+    lastPerformedAt: Temporal.Instant | null;
+    lastPerformedHoursAgo: number | null;
   };
 
   skillScore: Record<string, number>;

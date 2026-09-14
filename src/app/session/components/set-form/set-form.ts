@@ -60,12 +60,10 @@ export class SetForm implements FormValueControl<SetData> {
     });
   });
   protected readonly setTypeOptions = computed(() => {
-    const { supportedSetTypes } = this.exerciseStore.getExerciseById(this.exerciseId())!;
-
-    return supportedSetTypes.map((value) => ({
-      value,
-      label: setTypeToLabel[value],
-      testId: `set-form-type-${value}`,
+    return Object.entries(setTypeToLabel).map(([key, label]) => ({
+      value: key,
+      label,
+      testId: `set-form-type-${key}`,
     }));
   });
   protected readonly durations = computed(() => {
@@ -118,9 +116,5 @@ export class SetForm implements FormValueControl<SetData> {
 
   protected updateDuration(duration: number): void {
     this.value.update((model) => ({ ...model, duration: model.duration + duration }));
-  }
-
-  private update(value: Partial<SetData>) {
-    this.value.update((model) => ({ ...model, ...value }));
   }
 }

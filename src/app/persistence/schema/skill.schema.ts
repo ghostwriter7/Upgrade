@@ -16,6 +16,14 @@ export const CapabilitySchema = z.object({
   name: z.string(),
 });
 
-export type SkillDto = z.infer<typeof SkillSchema>;
-export type CapabilityDto = z.infer<typeof CapabilitySchema>;
-export type SkillCapabilityDto = z.infer<typeof SKillCapabilitySchema>;
+export const ExerciseSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  lastPerformedAt: z.iso.datetime().nullable(),
+});
+
+export const ExerciseCapabilitySchema = z.object({
+  exerciseId: z.string(),
+  capabilityId: z.string(),
+  weight: z.number(),
+});
