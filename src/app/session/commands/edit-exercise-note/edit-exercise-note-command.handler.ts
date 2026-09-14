@@ -2,14 +2,13 @@ import { inject, Injectable } from '@angular/core';
 import { CommandHandler } from '@common/routers/command/command-handler.interface';
 import { EditExerciseNoteCommand } from './edit-exercise-note.command';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
-import { EventBus } from '@common/routers/event/event-bus';
-import { ExerciseLogUpdatedEvent } from '../../events/exercise-log-updated/exercise-log-updated.event';
 import { Constructor } from '@common/types/constructor.type';
+import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 
 @Injectable()
 export class EditExerciseNoteCommandHandler implements CommandHandler<EditExerciseNoteCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
+  private readonly exerciseLogRepository = inject(ExerciseLogRepository);
 
   public appliesTo(): Constructor<EditExerciseNoteCommand> {
     return EditExerciseNoteCommand;
@@ -24,6 +23,6 @@ export class EditExerciseNoteCommandHandler implements CommandHandler<EditExerci
     this.sessionStateHolder.set(updatedSession);
 
     const updatedExerciseLog = updatedSession.getExerciseById(exerciseId);
-    this.eventBus.publish(new ExerciseLogUpdatedEvent(updatedExerciseLog));
+    this.exerciseLogRepository.update(updatedExerciseLog);
   }
 }

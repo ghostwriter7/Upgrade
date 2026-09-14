@@ -4,6 +4,14 @@ import { ExerciseLogSchema } from '../schema/exercise-log.schema';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 
+const UPDATE_SQL = `update exercise_log set notes = :notes, log_index = :logIndex where id = :id`;
+
+const toUpdateLogParams = (log: ExerciseLog) => ({
+  notes: log.notes,
+  logIndex: log.index,
+  id: log.id,
+});
+
 @Injectable({ providedIn: 'root' })
 export class ExerciseLogRepository extends GenericRepository {
   constructor() {
@@ -11,9 +19,12 @@ export class ExerciseLogRepository extends GenericRepository {
   }
 
   public async updateLogs(logs: ExerciseLog[]): Promise<void> {
-    const sql = `update exercise_log set notes = :notes, log_index = :logIndex where id = :id`;
-    const params = logs.map((log) => ({ notes: log.notes, logIndex: log.index, id: log.id }));
-    return this.database.executeBatch(sql, params);
+    const params = logs.map((log) => toUpdateLogParams(log));
+    return this.database.executeBatch(UPDATE_SQL, params);
+  }
+
+  public async update(log: ExerciseLog): Promise<void> {
+    return this.database.execute(UPDATE_SQL, toUpdateLogParams(log));
   }
 
   public async saveLogs(logs: ExerciseLog[]): Promise<void> {
