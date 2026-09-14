@@ -44,4 +44,8 @@ export const routes: Routes = [
     path: 'targets',
     loadComponent: () => import('./target/components/target-page/target-page'),
   },
+  {
+    path: 'skills',
+    loadComponent: () => import('./skill/components/skill-page/skill-page'),
+  },
 ];

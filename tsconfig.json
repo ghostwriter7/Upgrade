@@ -28,7 +28,8 @@
       "@test/*": ["./src/test/*"],
       "@form/*": ["./src/app/form/*"],
       "@target/*": ["./src/app/target/*"],
-      "@infrastructure/*": ["./src/app/infrastructure/*"]
+      "@infrastructure/*": ["./src/app/infrastructure/*"],
+      "@skill/*": ["./src/app/skill/*"]
     }
   },
   "angularCompilerOptions": {

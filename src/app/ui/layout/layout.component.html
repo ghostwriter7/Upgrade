@@ -10,10 +10,10 @@
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list (click)="drawer.toggle()">
       <a mat-list-item routerLink="/">Home</a>
+      <a mat-list-item routerLink="/skills">Skills</a>
       <a mat-list-item routerLink="/exercises">Exercises</a>
       <a mat-list-item routerLink="/backup">Backup</a>
       <a mat-list-item routerLink="/targets">Targets</a>
-
 
       @if (storageEstimate(); as estimate) {
         <div class="storage">
