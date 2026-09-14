@@ -59,7 +59,7 @@ function handleRequest(data: RequestType): void {
     postMessage({ id: data.id, type: 'success' });
   }
 }
-console.log(crossOriginIsolated);
+
 const start = async (sqlite3: Sqlite3Static) => {
   console.log('Running SQLite3 version', sqlite3.version.libVersion);
 
