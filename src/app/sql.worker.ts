@@ -70,6 +70,7 @@ const start = async (sqlite3: Sqlite3Static) => {
 
   db = new sqlite3.oo1.OpfsDb(dbPath, 'wc');
   console.log(`Created persisted database at ${db.filename}`);
+  db.exec('PRAGMA foreign_keys = ON;');
   applyMigrations(db);
 };
 

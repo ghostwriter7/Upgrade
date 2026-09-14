@@ -88,9 +88,10 @@ export class ExerciseLogRepository extends GenericRepository {
   public async saveLog(entity: ExerciseLog): Promise<void> {
     return super.execute(
       `
-        insert into exercise_log (exercise_id, session_id, notes, log_index, created_at)
-        values (:exerciseId, :sessionId, :notes, :logIndex, :createdAt);`,
+        insert into exercise_log (id, exercise_id, session_id, notes, log_index, created_at)
+        values (:id, :exerciseId, :sessionId, :notes, :logIndex, :createdAt);`,
       {
+        id: entity.id,
         exerciseId: entity.exerciseId,
         sessionId: entity.sessionId,
         notes: entity.notes,

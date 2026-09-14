@@ -85,6 +85,18 @@ export class SessionRepository extends GenericRepository {
     );
   }
 
+  public async update(session: Session): Promise<void> {
+    return super.execute(
+      `update session set started_at = :startedAt, finished_at = :finishedAt, rpe = :rpe where id = :id`,
+      {
+        id: session.id,
+        startedAt: session.startedAt.toString({ smallestUnit: 'second' }),
+        finishedAt: session.finishedAt?.toString({ smallestUnit: 'second' }) ?? null,
+        rpe: session.rpe ?? null,
+      },
+    );
+  }
+
   public async deleteById(sessionId: string): Promise<void> {
     return super.execute(`delete from session where id = :sessionId`, {
       sessionId,

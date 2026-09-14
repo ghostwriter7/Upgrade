@@ -3,13 +3,12 @@ import { CommandHandler } from '@common/routers/command/command-handler.interfac
 import { UpdateSessionRpeCommand } from '@session/commands/update-session-rpe/update-session-rpe.command';
 import { Constructor } from '@angular/cdk/schematics';
 import { SessionStateHolder } from '@session/store/session-state-holder.store';
-import { EventBus } from '@common/routers/event/event-bus';
-import { SessionUpdatedEvent } from '@session/events/session-updated/session-updated.event';
+import { SessionRepository } from '@persistence/repository/session.repository';
 
 @Injectable()
 export class UpdateSessionRpeCommandHandler implements CommandHandler<UpdateSessionRpeCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly eventBus = inject(EventBus);
+  private readonly sessionRepository = inject(SessionRepository);
 
   public appliesTo(): Constructor<UpdateSessionRpeCommand> {
     return UpdateSessionRpeCommand;
@@ -21,7 +20,7 @@ export class UpdateSessionRpeCommandHandler implements CommandHandler<UpdateSess
     if (session) {
       const updated = session.withRpe(rpe);
       this.sessionStateHolder.set(updated);
-      this.eventBus.publish(new SessionUpdatedEvent(updated));
+      this.sessionRepository.update(updated);
     }
   }
 }
