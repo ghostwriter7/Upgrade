@@ -41,6 +41,10 @@ export const routes: Routes = [
     loadComponent: () => import('./exercises/components/exercise-editor/exercise-editor'),
   },
   {
+    path: 'exercises/edit/:id',
+    loadComponent: () => import('./exercises/components/exercise-editor/exercise-editor'),
+  },
+  {
     path: 'exercises/:id',
     loadComponent: () => import('./exercises/components/exercise-view/exercise-view'),
   },
