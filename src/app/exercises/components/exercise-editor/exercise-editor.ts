@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { form, FormField, minLength, required, validate } from '@angular/forms/signals';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { ExerciseStore } from '@store/exercises.store';
@@ -11,6 +11,11 @@ import { SetType } from '@domain/enum/set-type.enum';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
+
+interface DrillModel {
+  name: string;
+  unitsOfMeasurement: ExerciseSetType[];
+}
 
 @Component({
   selector: 'app-exercise-editor',
@@ -32,6 +37,14 @@ import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
   },
 })
 export default class ExerciseEditor {
+  public readonly id = input<string>();
+
+  protected readonly isEdit = computed(() => !!this.id());
+  protected readonly originalDrill = computed(() =>
+    this.exerciseStore.allExercises().find((exercise) => exercise.id === this.id()),
+  );
+  protected readonly originalName = computed(() => this.originalDrill()?.name);
+
   private readonly exerciseStore = inject(ExerciseStore);
   private readonly router = inject(Router);
 
@@ -39,9 +52,9 @@ export default class ExerciseEditor {
     .map(([key, value]) => ({ value: key, label: value }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
-  private readonly model = signal({
+  private readonly model = signal<DrillModel>({
     name: '',
-    unitsOfMeasurement: [] as ExerciseSetType[],
+    unitsOfMeasurement: [],
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
@@ -50,6 +63,9 @@ export default class ExerciseEditor {
 
     validate(schemaPath.name, ({ value }) => {
       const name = value().toLowerCase();
+      const originalName = this.originalName()?.toLowerCase();
+
+      if (name === originalName) return null;
 
       if (this.exerciseStore.existsByName(name)) {
         return {
@@ -61,13 +77,37 @@ export default class ExerciseEditor {
     });
   });
 
+  constructor() {
+    const ref = effect(() => {
+      if (this.isEdit()) {
+        const drill = this.originalDrill();
+
+        if (drill) {
+          this.model.set({
+            name: drill.name,
+            unitsOfMeasurement: drill.unitsOfMeasurement ?? [],
+          });
+          ref.destroy();
+        }
+      }
+    });
+  }
+
   protected save(): void {
     if (this.form().invalid()) return;
 
-    const { name, unitsOfMeasurement } = this.model();
-    const drill: NewExercise = { name, id: createNanoId(), unitsOfMeasurement };
+    const isEdit = !!this.id();
 
-    this.exerciseStore.save(drill);
+    const id = this.id() ?? createNanoId();
+
+    const { name, unitsOfMeasurement } = this.model();
+    const drill: NewExercise = { name, id, unitsOfMeasurement };
+
+    if (isEdit) {
+      this.exerciseStore.update(drill);
+    } else {
+      this.exerciseStore.save(drill);
+    }
 
     this.router.navigate(['/exercises']);
   }

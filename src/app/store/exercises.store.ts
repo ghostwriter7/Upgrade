@@ -79,6 +79,18 @@ export const ExerciseStore = signalStore(
       }));
       drillRepository.save(drill);
     },
+
+    update: (drill: NewExercise) => {
+      const drillIndex = store.allExercises().findIndex((d) => d.id === drill.id);
+      const existingDrill = store.allExercises()[drillIndex];
+      const updatedDrill = { ...existingDrill, ...drill };
+
+      patchState(store, (state) => ({
+        ...state,
+        allExercises: state.allExercises.with(drillIndex, updatedDrill),
+      }));
+      drillRepository.update(drill);
+    },
   })),
   withHooks((store, database = inject(Database), skillStore = inject(SkillStore)) => ({
     onInit: async () => {

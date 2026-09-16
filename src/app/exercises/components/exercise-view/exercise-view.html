@@ -1,7 +1,17 @@
 @if (loading()) {
   <app-loader />
 } @else {
+  <header class="header">
+    <button matFab extended [routerLink]="['/exercises', 'edit', id()]">
+      <mat-icon>edit</mat-icon>
+      Edit
+    </button>
+  </header>
+
   <div class="logs">
+    <h3>History</h3>
+    <mat-divider />
+
     @for (log of logs.value(); track log.sessionId) {
       <mat-card>
         <mat-card-header>
