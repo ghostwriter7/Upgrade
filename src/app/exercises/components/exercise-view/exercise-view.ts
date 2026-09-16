@@ -5,6 +5,10 @@ import { Loader } from '@ui/loader/loader';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
 import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
+import { MatDivider } from '@angular/material/list';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-exercise-view',
@@ -15,6 +19,10 @@ import { ProgressGallery } from '@session/components/progress-gallery/progress-g
     ProgressGallery,
     MatCardContent,
     MatCardHeader,
+    MatDivider,
+    MatFabButton,
+    MatIcon,
+    RouterLink,
   ],
   templateUrl: './exercise-view.html',
   styleUrl: './exercise-view.css',
@@ -30,6 +38,4 @@ export default class ExerciseView {
   });
 
   protected readonly loading = this.logs.isLoading;
-
-
 }
