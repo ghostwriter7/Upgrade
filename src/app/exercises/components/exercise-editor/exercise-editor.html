@@ -13,6 +13,19 @@
     </mat-form-field>
   </section>
 
+  <section class="section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Supported Units Of Measurement</mat-label>
+      <mat-select multiple [formField]="form.unitsOfMeasurement">
+        @for (unitOfMeasurement of unitsOfMeasurements; track unitOfMeasurement.value) {
+          <mat-option [value]="unitOfMeasurement.value">
+            {{ unitOfMeasurement.label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+  </section>
 
 </main>
 <footer class="actions">

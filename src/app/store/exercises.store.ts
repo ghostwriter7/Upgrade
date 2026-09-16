@@ -100,7 +100,7 @@ export const ExerciseStore = signalStore(
       });
 
       const [exercises, exerciseCapabilities] = await Promise.all([
-        database.queryMany(`select e.id, e.name, max(el.created_at) as lastPerformedAt
+        database.queryMany(`select e.id, e.name, e.units_of_measurement as unitsOfMeasurement, max(el.created_at) as lastPerformedAt
                               from exercise e
                                      left join exercise_log el on e.id = el.exercise_id
                               group by e.id, e.name

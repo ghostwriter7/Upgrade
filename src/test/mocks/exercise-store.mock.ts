@@ -5,6 +5,7 @@ const drill = (id: string, name: string): Exercise => ({
   id,
   name,
   skillScore: {},
+  unitsOfMeasurement: null,
   stats: {
     lastPerformedAt: null,
     lastPerformedHoursAgo: null,

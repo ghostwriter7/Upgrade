@@ -11,15 +11,11 @@ import {
   required,
   validate,
 } from '@angular/forms/signals';
-import {
-  durationOptions,
-  repOptions,
-  setTypeToLabel,
-  weightOptions,
-} from './set-form-options.const';
+import { durationOptions, repOptions, weightOptions } from './set-form-options.const';
 import { SetData } from './set-data.interface';
 import { ExerciseStore } from '@store/exercises.store';
-import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
+import { ExerciseSetType, ExerciseSetTypes } from '@domain/model/exercise-set/exercise-set.model';
+import { SetType } from '@domain/enum/set-type.enum';
 
 @Component({
   selector: 'app-set-form',
@@ -60,11 +56,17 @@ export class SetForm implements FormValueControl<SetData> {
     });
   });
   protected readonly setTypeOptions = computed(() => {
-    return Object.entries(setTypeToLabel).map(([key, label]) => ({
-      value: key,
-      label,
-      testId: `set-form-type-${key}`,
-    }));
+    const drill = this.exerciseStore.getExerciseById(this.exerciseId())!;
+    const unitsOfMeasurement = drill.unitsOfMeasurement ?? ExerciseSetTypes;
+
+    return Iterator.from(Object.entries(SetType))
+      .filter(([key]) => unitsOfMeasurement.includes(key as ExerciseSetType))
+      .map(([key, label]) => ({
+        value: key,
+        label,
+        testId: `set-form-type-${key}`,
+      }))
+      .toArray();
   });
   protected readonly durations = computed(() => {
     const { duration } = this.value();

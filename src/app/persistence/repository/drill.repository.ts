@@ -9,9 +9,15 @@ export class DrillRepository extends GenericRepository {
   }
 
   public save(drill: NewExercise): Promise<void> {
-    return this.database.execute(`insert into exercise (id, name) values (:id, :name)`, {
-      id: drill.id,
-      name: drill.name,
-    });
+    return this.database.execute(
+      `insert into exercise (id, name, units_of_measurement) values (:id, :name, :unitsOfMeasurement)`,
+      {
+        id: drill.id,
+        name: drill.name,
+        unitsOfMeasurement: drill.unitsOfMeasurement
+          ? JSON.stringify(drill.unitsOfMeasurement)
+          : null,
+      },
+    );
   }
 }

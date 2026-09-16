@@ -1,8 +1,11 @@
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
+import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 
 export interface Exercise {
   id: string;
   name: string;
+
+  unitsOfMeasurement: ExerciseSetType[] | null;
 
   measurementDefinition?: AngleMeasurementDefinition;
   capabilities?: ExerciseCapability[];
@@ -20,4 +23,4 @@ export interface ExerciseCapability {
   weight: number;
 }
 
-export type NewExercise = Pick<Exercise, 'name' | 'id'>;
+export type NewExercise = Pick<Exercise, 'name' | 'id' | 'unitsOfMeasurement'>;
