@@ -2,14 +2,15 @@ import { Component, inject, signal } from '@angular/core';
 import { form, FormField, required, validate } from '@angular/forms/signals';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { ExerciseStore } from '@store/exercises.store';
-import { MatButton } from '@angular/material/button';
+import { MatFabButton } from '@angular/material/button';
 import { createNanoId } from '@common/function/create-id.function';
 import { NewExercise } from '@domain/model/exercise.model';
 import { Router } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-exercise-editor',
-  imports: [MatFormField, MatInput, MatLabel, FormField, MatButton, MatError],
+  imports: [MatFormField, MatInput, MatLabel, FormField, MatError, MatFabButton, MatIcon],
   templateUrl: './exercise-editor.html',
   styleUrl: './exercise-editor.css',
   host: {
@@ -48,6 +49,10 @@ export default class ExerciseEditor {
 
     this.exerciseStore.save(drill);
 
+    this.router.navigate(['/exercises']);
+  }
+
+  protected cancel(): void {
     this.router.navigate(['/exercises']);
   }
 }

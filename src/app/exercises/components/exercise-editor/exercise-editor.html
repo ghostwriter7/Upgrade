@@ -12,7 +12,16 @@
       }
     </mat-form-field>
   </section>
+
+
 </main>
 <footer class="actions">
-  <button matButton="filled" type="submit" [disabled]="form().invalid()" (click)="save()">Save Drill</button>
+  <button matFab extended class="info" type="button" (click)="cancel()">
+    <mat-icon>cancel</mat-icon>
+    Cancel
+  </button>
+  <button matFab extended type="submit" [disabled]="form().invalid()" (click)="save()">
+    <mat-icon>save</mat-icon>
+    Save Drill
+  </button>
 </footer>
