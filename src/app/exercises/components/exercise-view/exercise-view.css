@@ -8,6 +8,12 @@
   justify-content: flex-end;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--space-3);
+}
+
 .logs {
   display: flex;
   flex-direction: column;

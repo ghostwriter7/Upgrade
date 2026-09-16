@@ -8,6 +8,6 @@ export class ExerciseNamePipe implements PipeTransform {
   private readonly exerciseStore = inject(ExerciseStore);
 
   public transform(exerciseId: string): string {
-    return this.exerciseStore.getExerciseById(exerciseId)?.name ?? 'Unknown Exercise';
+    return this.exerciseStore.exerciseById()[exerciseId]?.name ?? 'Unknown Exercise';
   }
 }

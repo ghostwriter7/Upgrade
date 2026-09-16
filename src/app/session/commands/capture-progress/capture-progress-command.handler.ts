@@ -61,7 +61,7 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
   }
 
   private findMeasurementDefinition(exerciseId: string): AngleMeasurementDefinition | undefined {
-    const exercise = this.exerciseStore.getExerciseById(exerciseId);
+    const exercise = this.exerciseStore.exerciseById()[exerciseId];
     if (!exercise) throw new Error(`Exercise with ID ${exerciseId} not found`);
 
     return exercise.measurementDefinition;

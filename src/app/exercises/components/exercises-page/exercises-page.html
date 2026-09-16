@@ -1,4 +1,9 @@
-<button class="full-width" matButton="filled" routerLink="/exercises/new">Create Exercise</button>
+<button class="full-width" matFab extended routerLink="/exercises/new">
+  <mat-icon>add</mat-icon>
+  Create Exercise
+</button>
+
+<mat-divider />
 
 <app-exercise-dropdown (exerciseSelected)="onExerciseSelected($event)" />
 <app-exercises-list (exerciseSelected)="onExerciseSelected($event)" />

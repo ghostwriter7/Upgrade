@@ -38,12 +38,20 @@ export const ExerciseStore = signalStore(
     exerciseNames: computed(
       () => new Set(store.allExercises().map((exercise) => exercise.name.toLowerCase())),
     ),
+    exerciseById: computed(() =>
+      store.allExercises().reduce(
+        (lookup, exercise) => {
+          lookup[exercise.id] = exercise;
+          return lookup;
+        },
+        {} as Record<string, Exercise>,
+      ),
+    ),
   })),
   withMethods((store, drillRepository = inject(DrillRepository)) => ({
     existsByName: (name: string) => store.exerciseNames().has(name),
 
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
-    getExerciseById: (id: string) => store.exercises().find((exercise) => exercise.id === id),
 
     getExercisesForSkill: (skill: Skill): Exercise[] =>
       findSupportingExercises(skill, store.allExercises()),
