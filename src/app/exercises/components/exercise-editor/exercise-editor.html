@@ -1,0 +1,18 @@
+<header>
+  <h2>Drill Editor</h2>
+</header>
+<main class="form">
+  <section class="section">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput [formField]="form.name" placeholder="e.g. Pull Up" autocomplete="off" />
+
+      @if (form.name().invalid()) {
+        <mat-error>{{ form.name().errors()[0].message }}</mat-error>
+      }
+    </mat-form-field>
+  </section>
+</main>
+<footer class="actions">
+  <button matButton="filled" type="submit" [disabled]="form().invalid()" (click)="save()">Save Drill</button>
+</footer>

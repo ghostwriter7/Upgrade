@@ -19,3 +19,5 @@ export interface ExerciseCapability {
   capabilityId: string;
   weight: number;
 }
+
+export type NewExercise = Pick<Exercise, 'name' | 'id'>;

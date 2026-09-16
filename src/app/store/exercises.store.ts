@@ -6,13 +6,14 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Exercise } from '@domain/model/exercise.model';
+import { Exercise, NewExercise } from '@domain/model/exercise.model';
 import { computed, effect, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
 import { DateHelper } from '@common/helper/date.helper';
 import { SkillStore } from '@store/skill.store';
 import { Database } from '@infrastructure/database';
 import { ExerciseCapabilitySchema, ExerciseSchema } from '@persistence/schema/skill.schema';
+import { DrillRepository } from '@persistence/repository/drill.repository';
 
 interface State {
   activeSkill: Skill | undefined;
@@ -34,8 +35,13 @@ export const ExerciseStore = signalStore(
 
       return findSupportingExercises(skill, store.allExercises());
     }),
+    exerciseNames: computed(
+      () => new Set(store.allExercises().map((exercise) => exercise.name.toLowerCase())),
+    ),
   })),
-  withMethods((store) => ({
+  withMethods((store, drillRepository = inject(DrillRepository)) => ({
+    existsByName: (name: string) => store.exerciseNames().has(name),
+
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
     getExerciseById: (id: string) => store.exercises().find((exercise) => exercise.id === id),
 
@@ -54,6 +60,24 @@ export const ExerciseStore = signalStore(
           return true;
         })
         .toSorted((a, b) => a.name.localeCompare(b.name));
+    },
+
+    save: (drill: NewExercise) => {
+      patchState(store, (state) => ({
+        ...state,
+        allExercises: [
+          ...state.allExercises,
+          {
+            ...drill,
+            stats: {
+              lastPerformedAt: null,
+              lastPerformedHoursAgo: null,
+            },
+            skillScore: {},
+          },
+        ].toSorted((a, b) => a.name.localeCompare(b.name)),
+      }));
+      drillRepository.save(drill);
     },
   })),
   withHooks((store, database = inject(Database), skillStore = inject(SkillStore)) => ({
