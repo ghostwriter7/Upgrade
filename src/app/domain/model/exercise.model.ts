@@ -6,6 +6,7 @@ export interface Exercise {
   name: string;
 
   unitsOfMeasurement: ExerciseSetType[] | null;
+  isFavourite: boolean;
 
   measurementDefinition?: AngleMeasurementDefinition;
   capabilities?: ExerciseCapability[];
@@ -23,4 +24,7 @@ export interface ExerciseCapability {
   weight: number;
 }
 
-export type NewExercise = Pick<Exercise, 'name' | 'id' | 'unitsOfMeasurement'>;
+export type UpsertExercisePayload = Pick<
+  Exercise,
+  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite'
+>;

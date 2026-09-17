@@ -124,3 +124,7 @@ create table if not exists target
 -- @changeset 2
 alter table exercise
   add column units_of_measurement text null;
+
+-- @changeset 3
+alter table exercise
+  add column is_favourite boolean not null default false;

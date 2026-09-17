@@ -4,17 +4,19 @@ import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/in
 import { ExerciseStore } from '@store/exercises.store';
 import { MatFabButton } from '@angular/material/button';
 import { createNanoId } from '@common/function/create-id.function';
-import { NewExercise } from '@domain/model/exercise.model';
+import { UpsertExercisePayload } from '@domain/model/exercise.model';
 import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { SetType } from '@domain/enum/set-type.enum';
 import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 interface DrillModel {
   name: string;
   unitsOfMeasurement: ExerciseSetType[];
+  isFavourite: boolean;
 }
 
 @Component({
@@ -29,6 +31,7 @@ interface DrillModel {
     MatIcon,
     MatOption,
     MatSelect,
+    MatCheckbox,
   ],
   templateUrl: './exercise-editor.html',
   styleUrl: './exercise-editor.css',
@@ -55,6 +58,7 @@ export default class ExerciseEditor {
   private readonly model = signal<DrillModel>({
     name: '',
     unitsOfMeasurement: [],
+    isFavourite: false,
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
@@ -86,6 +90,7 @@ export default class ExerciseEditor {
           this.model.set({
             name: drill.name,
             unitsOfMeasurement: drill.unitsOfMeasurement ?? [],
+            isFavourite: drill.isFavourite,
           });
           ref.destroy();
         }
@@ -100,8 +105,8 @@ export default class ExerciseEditor {
 
     const id = this.id() ?? createNanoId();
 
-    const { name, unitsOfMeasurement } = this.model();
-    const drill: NewExercise = { name, id, unitsOfMeasurement };
+    const { name, unitsOfMeasurement, isFavourite } = this.model();
+    const drill: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite };
 
     if (isEdit) {
       this.exerciseStore.update(drill);

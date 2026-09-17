@@ -12,6 +12,11 @@
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{ exercise().name }}</mat-card-title>
+
+        @if (exercise().isFavourite) {
+          <mat-icon class="ml-auto">star</mat-icon>
+        }
+
       </mat-card-header>
       <mat-card-content>
 

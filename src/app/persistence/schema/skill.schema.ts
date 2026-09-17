@@ -23,6 +23,7 @@ export const ExerciseSchema = z.object({
   name: z.string(),
   lastPerformedAt: z.iso.datetime().nullable(),
   unitsOfMeasurement: json(z.array(z.enum(ExerciseSetTypes)).nullable()),
+  isFavourite: z.preprocess((val) => val === 1, z.boolean()),
 });
 
 export const ExerciseCapabilitySchema = z.object({

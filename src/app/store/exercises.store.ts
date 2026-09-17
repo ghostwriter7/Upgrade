@@ -6,7 +6,7 @@ import {
   withMethods,
   withState,
 } from '@ngrx/signals';
-import { Exercise, NewExercise } from '@domain/model/exercise.model';
+import { Exercise, UpsertExercisePayload } from '@domain/model/exercise.model';
 import { computed, effect, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
 import { DateHelper } from '@common/helper/date.helper';
@@ -70,7 +70,7 @@ export const ExerciseStore = signalStore(
         .toSorted((a, b) => a.name.localeCompare(b.name));
     },
 
-    save: (drill: NewExercise) => {
+    save: (drill: UpsertExercisePayload) => {
       patchState(store, (state) => ({
         ...state,
         allExercises: [
@@ -88,7 +88,7 @@ export const ExerciseStore = signalStore(
       drillRepository.save(drill);
     },
 
-    update: (drill: NewExercise) => {
+    update: (drill: UpsertExercisePayload) => {
       const drillIndex = store.allExercises().findIndex((d) => d.id === drill.id);
       const existingDrill = store.allExercises()[drillIndex];
       const updatedDrill = { ...existingDrill, ...drill };
@@ -120,7 +120,7 @@ export const ExerciseStore = signalStore(
       });
 
       const [exercises, exerciseCapabilities] = await Promise.all([
-        database.queryMany(`select e.id, e.name, e.units_of_measurement as unitsOfMeasurement, max(el.created_at) as lastPerformedAt
+        database.queryMany(`select e.id, e.name, e.units_of_measurement as unitsOfMeasurement, e.is_favourite as isFavourite, max(el.created_at) as lastPerformedAt
                               from exercise e
                                      left join exercise_log el on e.id = el.exercise_id
                               group by e.id, e.name
