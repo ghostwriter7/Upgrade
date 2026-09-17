@@ -4,9 +4,6 @@
 <button data-testid="backup-import-data-btn" class="info" matButton [disabled]="loading()" (click)="importData()">
   Import Data
 </button>
-<button data-testid="backup-import-data-btn" class="info" matButton [disabled]="loading()" (click)="importDb()">
-  Import DB
-</button>
 
 @if (loading()) {
   <app-loader data-testid="backup-loader" />
