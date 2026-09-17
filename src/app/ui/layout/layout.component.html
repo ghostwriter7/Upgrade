@@ -9,11 +9,38 @@
   >
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list (click)="drawer.toggle()">
-      <a mat-list-item routerLink="/">Home</a>
-      <a mat-list-item routerLink="/skills">Skills</a>
-      <a mat-list-item routerLink="/exercises">Exercises</a>
-      <a mat-list-item routerLink="/backup">Backup</a>
-      <a mat-list-item routerLink="/targets">Targets</a>
+      <a mat-list-item routerLink="/">
+        <mat-icon matListItemIcon>home</mat-icon>
+        <span matListItemTitle>Home</span>
+      </a>
+
+      <mat-divider />
+
+      <h4 matSubheader>Library</h4>
+
+      <a mat-list-item routerLink="/skills">
+        <mat-icon matListItemIcon>emoji_events</mat-icon>
+        <span matListItemTitle>Skills</span>
+      </a>
+
+      <a mat-list-item routerLink="/exercises">
+        <mat-icon matListItemIcon>fitness_center</mat-icon>
+        <span matListItemTitle>Exercises</span>
+      </a>
+
+      <a mat-list-item routerLink="/targets">
+        <mat-icon matListItemIcon>track_changes</mat-icon>
+        <span matListItemTitle>Targets</span>
+      </a>
+
+      <mat-divider />
+
+      <h4 matSubheader>Settings</h4>
+
+      <a mat-list-item routerLink="/backup">
+        <mat-icon matListItemIcon>backup</mat-icon>
+        <span matListItemTitle>Backup</span>
+      </a>
 
       @if (storageEstimate(); as estimate) {
         <div class="storage">
