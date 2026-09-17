@@ -12,6 +12,7 @@ import { Session } from '@domain/model/session/session.model';
 import {
   MatDivider,
   MatListOption,
+  MatListSubheaderCssMatStyler,
   MatSelectionList,
   MatSelectionListChange,
 } from '@angular/material/list';
@@ -38,6 +39,7 @@ import { MatChip } from '@angular/material/chips';
     MatDivider,
     MatChip,
     PercentPipe,
+    MatListSubheaderCssMatStyler,
   ],
   templateUrl: './exercise-selector.html',
   styleUrl: './exercise-selector.css',
@@ -65,7 +67,7 @@ export class ExerciseSelector {
   private readonly activeExerciseIds = new Set(
     this.data.session.exerciseLogs.map(({ exerciseId }) => exerciseId),
   );
-  protected readonly availableExercises = computed(() => {
+  private readonly availableExercises = computed(() => {
     const selectedSkills = this.skillOptions().filter((o) => o.isSelected);
 
     const drills = (
@@ -93,6 +95,13 @@ export class ExerciseSelector {
       return 0;
     });
   });
+
+  protected readonly exercises = computed(() =>
+    Object.groupBy(this.availableExercises(), (exercise) =>
+      exercise.isFavourite ? 'favourite' : 'remaining',
+    ),
+  );
+
   protected readonly showFilters = signal(false);
   protected readonly showSorting = signal(false);
   protected readonly sortOptions = signal([
