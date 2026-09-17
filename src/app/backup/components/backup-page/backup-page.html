@@ -1,7 +1,9 @@
-<button data-testid="backup-export-data-btn" class="info" matButton [disabled]="loading()" (click)="exportData()">
+<button data-testid="backup-export-data-btn" class="info" matFab extended [disabled]="loading()" (click)="exportData()">
+  <mat-icon>file_export</mat-icon>
   Export Data
 </button>
-<button data-testid="backup-import-data-btn" class="info" matButton [disabled]="loading()" (click)="importData()">
+<button data-testid="backup-import-data-btn" class="info" matFab extended [disabled]="loading()" (click)="importData()">
+  <mat-icon>upload</mat-icon>
   Import Data
 </button>
 

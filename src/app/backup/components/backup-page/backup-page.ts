@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { MatFabButton } from '@angular/material/button';
 import { ExportDataService } from '../../services/export-data/export-data.service';
 import { Loader } from '@ui/loader/loader';
 import { ImportDataService } from '../../services/import-data/import-data.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-backup-page',
-  imports: [MatButton, Loader],
+  imports: [Loader, MatFabButton, MatIcon],
   templateUrl: './backup-page.html',
   styleUrl: './backup-page.css',
 })
