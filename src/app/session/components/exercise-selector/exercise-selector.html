@@ -67,11 +67,11 @@
           </div>
         </mat-list-option>
       }
-    }
 
-    @if (favourite.length) {
+      <mat-divider />
       <div mat-subheader>Remaining</div>
     }
+
     @for (exercise of remaining; track exercise.id) {
       <mat-list-option togglePosition="after" [value]="exercise.id">
         <div class="option">

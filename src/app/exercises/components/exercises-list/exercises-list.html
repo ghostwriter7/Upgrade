@@ -1,5 +1,19 @@
 <mat-action-list>
-  @for (exercise of exercises(); track exercise.id) {
+
+  @if (hasFavouriteExercises()) {
+    <div mat-subheader>
+      <mat-icon>star</mat-icon>
+      Favourite
+    </div>
+    @for (exercise of favouriteExercises(); track exercise.id) {
+      <button mat-list-item (click)="exerciseSelected.emit(exercise.id)">{{ exercise.name }}</button>
+    }
+
+    <mat-divider />
+    <div mat-subheader>All</div>
+  }
+
+  @for (exercise of remainingExercises(); track exercise.id) {
     <button mat-list-item (click)="exerciseSelected.emit(exercise.id)">{{ exercise.name }}</button>
   }
 </mat-action-list>
