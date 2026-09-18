@@ -35,6 +35,7 @@ export class GetInitialSetForExerciseIdQueryHandler implements QueryHandler<GetI
       if (set) return SetDataMapper.toDto(set);
     }
 
-    return { ...DEFAULT_SET_DATA, type: 'bodyweight' };
+    const exercise = this.exerciseStore.exerciseById()[payload.exerciseId];
+    return { ...DEFAULT_SET_DATA, type: exercise.unitsOfMeasurement?.[0] ?? 'bodyweight' };
   }
 }
