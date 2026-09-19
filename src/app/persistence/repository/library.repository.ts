@@ -28,11 +28,12 @@ export class LibraryRepository extends Repository {
   public async getAllSkills(): Promise<SkillDto[]> {
     const results = await this.database.queryMany(`select s.id,
                                                           s.name,
+                                                          s.is_favourite as isFavourite,
                                                           json_group_array(se.exercise_id)
                                                                            filter (where se.exercise_id is not null) as exerciseIds
                                                    from skill s
                                                           left join skill_exercise se on s.id = se.skill_id
-                                                   group by s.id, s.name
+                                                   group by s.id, s.name, s.is_favourite
                                                    order by s.name;
     `);
     return results.map((r) => SkillSchema.parse(r));
@@ -64,8 +65,8 @@ export class LibraryRepository extends Repository {
   ): Promise<void> {
     const requests: ExecuteManyRequestsPayload = [
       {
-        sql: `update skill set name = :name where id = :id`,
-        params: { id: skill.id, name: skill.name },
+        sql: `update skill set name = :name, is_favourite = :isFavourite where id = :id`,
+        params: { id: skill.id, name: skill.name, isFavourite: skill.isFavourite },
       },
     ];
 
@@ -91,8 +92,8 @@ export class LibraryRepository extends Repository {
   public saveSkill(skill: Skill): Promise<void> {
     const requests: ExecuteManyRequestsPayload = [
       {
-        sql: `insert into skill (id, name) values (:id, :name)`,
-        params: { id: skill.id, name: skill.name },
+        sql: `insert into skill (id, name, is_favourite) values (:id, :name, :isFavourite)`,
+        params: { id: skill.id, name: skill.name, isFavourite: skill.isFavourite },
       },
     ];
 

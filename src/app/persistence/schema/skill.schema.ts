@@ -6,6 +6,7 @@ export const SkillSchema = z.object({
   id: z.string(),
   name: z.string(),
   exerciseIds: json(z.array(z.string())),
+  isFavourite: z.preprocess((value) => value === 1, z.boolean()),
 });
 
 export const ExerciseSchema = z.object({

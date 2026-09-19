@@ -1,7 +1,30 @@
 <mat-action-list>
-  @for (skill of skills(); track skill.id) {
+  @let groupedSkills = skills();
+
+  @if (groupedSkills.favourite.length) {
+    <div mat-subheader class="flex-container">
+      <mat-icon>star</mat-icon>
+      Favourite
+    </div>
+
+    @for (skill of groupedSkills.favourite; track skill.id) {
+      <button mat-list-item (click)="showDetails(skill)">{{ skill.name }}</button>
+    }
+
+    <mat-divider />
+
+    <div mat-subheader class="flex-container">
+      <mat-icon>trophy</mat-icon>
+      Regular
+    </div>
+  }
+
+  @for (skill of groupedSkills.regular; track skill.id) {
     <button mat-list-item (click)="showDetails(skill)">{{ skill.name }}</button>
-  } @empty {
+  }
+
+  @if (hasNoSkills()) {
     <p>No skills found</p>
   }
+
 </mat-action-list>

@@ -111,3 +111,7 @@ create table if not exists skill_exercise
   foreign key (skill_id) references skill (id) on delete restrict,
   foreign key (exercise_id) references exercise (id) on delete restrict
 );
+
+-- @changeset 5
+alter table skill
+  add column is_favourite boolean not null default false;
