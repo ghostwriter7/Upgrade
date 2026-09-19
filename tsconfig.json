@@ -29,7 +29,7 @@
       "@form/*": ["./src/app/form/*"],
       "@target/*": ["./src/app/target/*"],
       "@infrastructure/*": ["./src/app/infrastructure/*"],
-      "@skill/*": ["./src/app/skill/*"]
+      "@library/*": ["./src/app/library/*"]
     }
   },
   "angularCompilerOptions": {

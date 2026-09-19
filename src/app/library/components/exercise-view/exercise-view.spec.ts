@@ -13,9 +13,7 @@ describe('ExerciseView', () => {
     queryBus = { execute: vi.fn() };
     await TestBed.configureTestingModule({
       imports: [ExerciseView],
-      providers: [
-        { provide: QueryBus, useValue: queryBus }
-      ]
+      providers: [{ provide: QueryBus, useValue: queryBus }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExerciseView);

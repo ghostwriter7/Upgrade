@@ -34,19 +34,19 @@ export const routes: Routes = [
   },
   {
     path: 'exercises',
-    loadComponent: () => import('./exercises/components/exercises-page/exercises-page'),
+    loadComponent: () => import('./library/components/exercises-page/exercises-page'),
   },
   {
     path: 'exercises/new',
-    loadComponent: () => import('./exercises/components/exercise-editor/exercise-editor'),
+    loadComponent: () => import('./library/components/exercise-editor/exercise-editor'),
   },
   {
     path: 'exercises/edit/:id',
-    loadComponent: () => import('./exercises/components/exercise-editor/exercise-editor'),
+    loadComponent: () => import('./library/components/exercise-editor/exercise-editor'),
   },
   {
     path: 'exercises/:id',
-    loadComponent: () => import('./exercises/components/exercise-view/exercise-view'),
+    loadComponent: () => import('./library/components/exercise-view/exercise-view'),
   },
   {
     path: 'targets',
@@ -54,18 +54,18 @@ export const routes: Routes = [
   },
   {
     path: 'skills',
-    loadComponent: () => import('./skill/components/skill-page/skill-page'),
+    loadComponent: () => import('./library/components/skill-page/skill-page'),
   },
   {
     path: 'skills/new',
-    loadComponent: () => import('./skill/components/skill-form/skill-form'),
+    loadComponent: () => import('./library/components/skill-form/skill-form'),
   },
   {
     path: 'skills/edit/:skillId',
-    loadComponent: () => import('./skill/components/skill-form/skill-form'),
+    loadComponent: () => import('./library/components/skill-form/skill-form'),
   },
   {
     path: 'skills/:skillId',
-    loadComponent: () => import('./skill/components/skill-details/skill-details'),
+    loadComponent: () => import('./library/components/skill-details/skill-details'),
   },
 ];
