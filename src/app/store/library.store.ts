@@ -134,7 +134,6 @@ export const LibraryStore = signalStore(
               lastPerformedAt: null,
               lastPerformedHoursAgo: null,
             },
-            skillScore: {},
           },
         ].toSorted((a, b) => a.name.localeCompare(b.name)),
       }));
@@ -197,7 +196,6 @@ export const LibraryStore = signalStore(
 
         return {
           ...exercise,
-          skillScore: {},
           stats: {
             lastPerformedAt,
             lastPerformedHoursAgo,

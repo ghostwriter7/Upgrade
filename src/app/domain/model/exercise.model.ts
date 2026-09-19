@@ -15,8 +15,6 @@ export interface Exercise {
     lastPerformedAt: Temporal.Instant | null;
     lastPerformedHoursAgo: number | null;
   };
-
-  skillScore: Record<string, number>;
 }
 
 export type UpsertExercisePayload = Pick<

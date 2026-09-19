@@ -18,8 +18,7 @@ import {
 } from '@angular/material/list';
 import { PrintHoursPipe } from '@ui/pipes/print-hours-pipe';
 import { MatIcon } from '@angular/material/icon';
-import { NgClass, PercentPipe } from '@angular/common';
-import { MatChip } from '@angular/material/chips';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-exercise-selector',
@@ -36,8 +35,6 @@ import { MatChip } from '@angular/material/chips';
     MatIcon,
     NgClass,
     MatDivider,
-    MatChip,
-    PercentPipe,
     MatListSubheaderCssMatStyler,
   ],
   templateUrl: './exercise-selector.html',
@@ -49,11 +46,6 @@ import { MatChip } from '@angular/material/chips';
 export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
   private readonly libraryStore = inject(LibraryStore);
-
-  protected readonly activeSkill = computed(() => {
-    const activeSkills = this.skillOptions().filter((s) => s.isSelected);
-    return activeSkills.length === 1 ? activeSkills[0] : undefined;
-  });
 
   protected readonly skillOptions = linkedSignal(() =>
     this.libraryStore
@@ -79,16 +71,12 @@ export class ExerciseSelector {
     if (!activeSort) return drills;
     const order = this.sortDirection() === 'ASC' ? 1 : -1;
 
-    const activeSkill = this.activeSkill()?.skill?.id;
     return drills.sort((a, b) => {
       if (activeSort === 'alphabetical') return order * a.name.localeCompare(b.name);
       if (activeSort === 'last-performed-at') {
         const lastPerformedAtA = a.stats?.lastPerformedAt?.epochMilliseconds ?? 0;
         const lastPerformedAtB = b.stats?.lastPerformedAt?.epochMilliseconds ?? 0;
         return order * (lastPerformedAtA - lastPerformedAtB);
-      }
-      if (activeSort === 'skill-score') {
-        return order * ((a.skillScore[activeSkill!] ?? 0) - (b.skillScore[activeSkill!] ?? 0));
       }
       return 0;
     });
@@ -103,9 +91,8 @@ export class ExerciseSelector {
   protected readonly showFilters = signal(false);
   protected readonly showSorting = signal(false);
   protected readonly sortOptions = signal([
-    { icon: 'sort_by_alpha', id: 'alphabetical', active: false },
+    { icon: 'sort_by_alpha', id: 'alphabetical', active: true },
     { icon: 'history', id: 'last-performed-at', active: false },
-    { icon: 'sports_score', id: 'skill-score', active: true },
   ]);
   protected readonly sortDirection = signal<'ASC' | 'DESC'>('DESC');
   protected readonly sortDirectionIcon = computed(() =>

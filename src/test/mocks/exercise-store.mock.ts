@@ -4,7 +4,6 @@ import { Exercise } from '@domain/model/exercise.model';
 const drill = (id: string, name: string): Exercise => ({
   id,
   name,
-  skillScore: {},
   unitsOfMeasurement: null,
   stats: {
     lastPerformedAt: null,
