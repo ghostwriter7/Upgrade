@@ -7,7 +7,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { Exercise, UpsertExercisePayload } from '@domain/model/exercise.model';
-import { computed, effect, inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
 import { DateHelper } from '@common/helper/date.helper';
 import { SkillStore } from '@store/skill.store';
@@ -114,16 +114,6 @@ export const ExerciseStore = signalStore(
       drillRepository = inject(DrillRepository),
     ) => ({
       onInit: async () => {
-        effect(() => {
-          const skills = skillStore.skills();
-          patchState(store, (state) => ({
-            ...state,
-            allExercises: state.allExercises.map((exercise) => ({
-              ...exercise,
-            })),
-          }));
-        });
-
         const exercises = await drillRepository.getAll();
 
         const now = DateHelper.now();
@@ -153,7 +143,3 @@ export const ExerciseStore = signalStore(
     }),
   ),
 );
-
-function findSupportingExercises(skill: Skill, exercises: Exercise[]): Exercise[] {
-  return exercises.filter((exercise) => exercise.skillIds?.includes(skill.id));
-}

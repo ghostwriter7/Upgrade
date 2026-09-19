@@ -18,17 +18,33 @@
         }
 
       </mat-card-header>
-      <mat-card-content>
+      <mat-card-content class="metadata">
 
-        <h3>Units Of Measurement</h3>
-        <mat-chip-set>
+        <section class="section">
+          <h3>Units Of Measurement</h3>
+          <mat-chip-set>
 
-          @for (unit of exercise().unitsOfMeasurement; track unit) {
-            <mat-chip>{{ unit }}</mat-chip>
-          } @empty {
-            <mat-chip>All</mat-chip>
-          }
-        </mat-chip-set>
+            @for (unit of exercise().unitsOfMeasurement; track unit) {
+              <mat-chip>{{ unit }}</mat-chip>
+            } @empty {
+              <mat-chip>All</mat-chip>
+            }
+          </mat-chip-set>
+        </section>
+
+
+        <mat-divider />
+
+        <section class="section"><h3>Skills</h3>
+          <mat-chip-set>
+
+            @for (skillName of exercise().skills; track skillName) {
+              <mat-chip>{{ skillName }}</mat-chip>
+            } @empty {
+              <mat-chip>None</mat-chip>
+            }
+          </mat-chip-set>
+        </section>
 
       </mat-card-content>
     </mat-card>

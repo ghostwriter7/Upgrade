@@ -73,8 +73,9 @@ export class DrillRepository extends GenericRepository {
 
     if (removedSkillIds.length) {
       requests.push({
-        sql: 'delete from skill_exercise where skill_id in (:skillIds) and exercise_id = :exerciseId',
-        params: { skillIds: removedSkillIds.join(','), exerciseId: exerciseId },
+        sql: 'delete from skill_exercise where skill_id = :skillId and exercise_id = :exerciseId',
+        batch: true,
+        params: removedSkillIds.map((skillId) => ({ skillId, exerciseId })),
       });
     }
 

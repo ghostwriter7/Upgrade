@@ -7,7 +7,7 @@ export interface Exercise {
 
   unitsOfMeasurement: ExerciseSetType[] | null;
   isFavourite: boolean;
-  skillIds: string[] | null;
+  skillIds: string[];
 
   measurementDefinition?: AngleMeasurementDefinition;
 
