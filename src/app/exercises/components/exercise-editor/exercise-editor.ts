@@ -14,7 +14,7 @@ import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
 
-interface DrillModel {
+interface ExerciseModel {
   name: string;
   unitsOfMeasurement: ExerciseSetType[];
   isFavourite: boolean;
@@ -46,10 +46,10 @@ export default class ExerciseEditor {
   public readonly id = input<string>();
 
   protected readonly isEdit = computed(() => !!this.id());
-  protected readonly originalDrill = computed(() =>
+  protected readonly originalExercise = computed(() =>
     this.libraryStore.exercises().find((exercise) => exercise.id === this.id()),
   );
-  protected readonly originalName = computed(() => this.originalDrill()?.name);
+  protected readonly originalName = computed(() => this.originalExercise()?.name);
 
   private readonly libraryStore = inject(LibraryStore);
   protected readonly skills = this.libraryStore.skills;
@@ -60,7 +60,7 @@ export default class ExerciseEditor {
     .map(([key, value]) => ({ value: key, label: value }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
-  private readonly model = signal<DrillModel>({
+  private readonly model = signal<ExerciseModel>({
     name: '',
     unitsOfMeasurement: [],
     isFavourite: false,
@@ -80,7 +80,7 @@ export default class ExerciseEditor {
       if (this.libraryStore.existsByName(name)) {
         return {
           kind: 'duplicate',
-          message: 'Drill already exists',
+          message: 'Exercise already exists',
         };
       }
       return null;
@@ -90,14 +90,14 @@ export default class ExerciseEditor {
   constructor() {
     const ref = effect(() => {
       if (this.isEdit()) {
-        const drill = this.originalDrill();
+        const exercise = this.originalExercise();
 
-        if (drill) {
+        if (exercise) {
           this.model.set({
-            name: drill.name,
-            unitsOfMeasurement: drill.unitsOfMeasurement ?? [],
-            isFavourite: drill.isFavourite,
-            skillIds: drill.skillIds ?? [],
+            name: exercise.name,
+            unitsOfMeasurement: exercise.unitsOfMeasurement ?? [],
+            isFavourite: exercise.isFavourite,
+            skillIds: exercise.skillIds ?? [],
           });
           ref.destroy();
         }
@@ -113,12 +113,12 @@ export default class ExerciseEditor {
     const id = this.id() ?? createNanoId();
 
     const { name, unitsOfMeasurement, isFavourite, skillIds } = this.model();
-    const drill: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, skillIds };
+    const exercise: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, skillIds };
 
     if (isEdit) {
-      this.libraryStore.updateDrill(drill);
+      this.libraryStore.updateExercise(exercise);
     } else {
-      this.libraryStore.saveDrill(drill);
+      this.libraryStore.saveExercise(exercise);
     }
 
     this.router.navigate(['/exercises']);

@@ -15,17 +15,17 @@
 
     <div class="section-header">
       <div>
-        <h2>Drills</h2>
-        <p>Drills that develop the skill.</p>
+        <h2>Exercises</h2>
+        <p>Exercises that develop the skill.</p>
       </div>
 
     </div>
 
-    <div class="drills">
-      <mat-selection-list [formField]="form.drillIds">
-        @for (drill of drills(); track drill.name) {
-          <mat-list-option togglePosition="after" [value]="drill.id">
-            <span matListItemTitle>{{ drill.name }}</span>
+    <div class="exercises">
+      <mat-selection-list [formField]="form.exerciseIds">
+        @for (exercise of exercises(); track exercise.name) {
+          <mat-list-option togglePosition="after" [value]="exercise.id">
+            <span matListItemTitle>{{ exercise.name }}</span>
           </mat-list-option>
         }
       </mat-selection-list>

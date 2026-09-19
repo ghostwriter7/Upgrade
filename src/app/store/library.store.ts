@@ -105,31 +105,31 @@ export const LibraryStore = signalStore(
 
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
 
-    getDrillsForSkills: (skills: Skill[]): Exercise[] => {
-      const drills = skills.flatMap((skill) => store.exerciseBySkillId().get(skill.id) ?? []);
+    getExercisesForSkills: (skills: Skill[]): Exercise[] => {
+      const exercises = skills.flatMap((skill) => store.exerciseBySkillId().get(skill.id) ?? []);
       const seen = new Set<string>();
-      return drills
-        .filter((drill) => {
-          if (seen.has(drill.id)) return false;
-          seen.add(drill.id);
+      return exercises
+        .filter((exercise) => {
+          if (seen.has(exercise.id)) return false;
+          seen.add(exercise.id);
           return true;
         })
         .toSorted((a, b) => a.name.localeCompare(b.name));
     },
 
-    saveDrill: (drill: UpsertExercisePayload) => {
-      const skillIds = new Set(drill.skillIds ?? []);
+    saveExercise: (exercise: UpsertExercisePayload) => {
+      const skillIds = new Set(exercise.skillIds ?? []);
       patchState(store, (state) => ({
         ...state,
         skills: state.skills.map((skill) =>
           skillIds.has(skill.id)
-            ? { ...skill, exerciseIds: [...skill.exerciseIds, drill.id] }
+            ? { ...skill, exerciseIds: [...skill.exerciseIds, exercise.id] }
             : skill,
         ),
         exercises: [
           ...state.exercises,
           {
-            ...drill,
+            ...exercise,
             stats: {
               lastPerformedAt: null,
               lastPerformedHoursAgo: null,
@@ -137,25 +137,25 @@ export const LibraryStore = signalStore(
           },
         ].toSorted((a, b) => a.name.localeCompare(b.name)),
       }));
-      libraryRepository.saveDrill(drill);
+      libraryRepository.saveExercise(exercise);
     },
 
-    updateDrill: (drill: UpsertExercisePayload) => {
-      const drillIndex = store.exercises().findIndex((d) => d.id === drill.id);
-      const existingDrill = store.exercises()[drillIndex];
-      const updatedDrill = { ...existingDrill, ...drill };
+    updateExercise: (exercise: UpsertExercisePayload) => {
+      const exerciseIndex = store.exercises().findIndex((d) => d.id === exercise.id);
+      const existingExercise = store.exercises()[exerciseIndex];
+      const updatedExercise = { ...existingExercise, ...exercise };
 
       const removedSkillIds =
-        existingDrill.skillIds?.filter((id) => !drill.skillIds?.includes(id)) ?? [];
+        existingExercise.skillIds?.filter((id) => !exercise.skillIds?.includes(id)) ?? [];
       const addedSkillIds =
-        drill.skillIds?.filter((id) => !existingDrill.skillIds?.includes(id)) ?? [];
+        exercise.skillIds?.filter((id) => !existingExercise.skillIds?.includes(id)) ?? [];
 
       const skills = [...store.skills()];
 
       if (removedSkillIds.length) {
         skills.forEach((skill) => {
           if (removedSkillIds.includes(skill.id)) {
-            skill.exerciseIds = skill.exerciseIds.filter((id) => id !== drill.id);
+            skill.exerciseIds = skill.exerciseIds.filter((id) => id !== exercise.id);
           }
         });
       }
@@ -163,7 +163,7 @@ export const LibraryStore = signalStore(
       if (addedSkillIds.length) {
         skills.forEach((skill) => {
           if (addedSkillIds.includes(skill.id)) {
-            skill.exerciseIds = [...skill.exerciseIds, drill.id];
+            skill.exerciseIds = [...skill.exerciseIds, exercise.id];
           }
         });
       }
@@ -171,22 +171,20 @@ export const LibraryStore = signalStore(
       patchState(store, (state) => ({
         ...state,
         skills,
-        exercises: state.exercises.with(drillIndex, updatedDrill),
+        exercises: state.exercises.with(exerciseIndex, updatedExercise),
       }));
-      libraryRepository.updateDrill(drill, removedSkillIds, addedSkillIds);
+      libraryRepository.updateExercise(exercise, removedSkillIds, addedSkillIds);
     },
   })),
-  withHooks((store, drillRepository = inject(LibraryRepository)) => ({
+  withHooks((store, libraryRepository = inject(LibraryRepository)) => ({
     onInit: async () => {
-      drillRepository.getAllSkills().then((skills) => {
+      libraryRepository.getAllSkills().then((skills) => {
         patchState(store, (state) => ({ ...state, skills }));
       });
 
-      const drills = await drillRepository.getAllDrills();
-
       const now = DateHelper.now();
 
-      const exercises = drills.map((exercise) => {
+      const exercises = (await libraryRepository.getAllExercises()).map((exercise) => {
         const lastPerformedAt = exercise.lastPerformedAt
           ? DateHelper.from(exercise.lastPerformedAt)
           : null;

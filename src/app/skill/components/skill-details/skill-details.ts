@@ -34,7 +34,7 @@ export default class SkillDetails {
   private readonly libraryStore = inject(LibraryStore);
 
   protected readonly skill = computed(() => this.libraryStore.skillsById()[this.skillId()]);
-  protected readonly drills = computed(
+  protected readonly exercises = computed(
     () => this.libraryStore.exerciseBySkillId().get(this.skillId()) ?? [],
   );
 }

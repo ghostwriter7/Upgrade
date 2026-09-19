@@ -1,7 +1,7 @@
 import { signal, WritableSignal } from '@angular/core';
 import { Exercise } from '@domain/model/exercise.model';
 
-const drill = (id: string, name: string): Exercise => ({
+const exercise = (id: string, name: string): Exercise => ({
   id,
   name,
   unitsOfMeasurement: null,
@@ -15,11 +15,11 @@ const drill = (id: string, name: string): Exercise => ({
 
 export const createExerciseStoreMock = () => ({
   exercises: signal([
-    drill('back-squats', 'Back Squats'),
-    drill('chin-ups', 'Chin Ups'),
-    drill('l-sit', 'L-Sit'),
-    drill('pull-ups', 'Pull Ups'),
-    drill('side-split', 'Side Split'),
+    exercise('back-squats', 'Back Squats'),
+    exercise('chin-ups', 'Chin Ups'),
+    exercise('l-sit', 'L-Sit'),
+    exercise('pull-ups', 'Pull Ups'),
+    exercise('side-split', 'Side Split'),
   ]),
 });
 

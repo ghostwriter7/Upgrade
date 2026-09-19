@@ -35,18 +35,18 @@ export default class SkillForm {
 
   protected readonly model = signal<{
     name: string;
-    drillIds: string[];
+    exerciseIds: string[];
   }>({
     name: '',
-    drillIds: [],
+    exerciseIds: [],
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
-    minLength(schemaPath.drillIds, 1);
+    minLength(schemaPath.exerciseIds, 1);
     required(schemaPath.name);
   });
 
-  protected readonly drills = this.libraryStore.exercises;
+  protected readonly exercises = this.libraryStore.exercises;
 
   constructor() {
     effect(() => {
@@ -57,7 +57,7 @@ export default class SkillForm {
 
         this.model.set({
           name: skill.name,
-          drillIds:
+          exerciseIds:
             this.libraryStore
               .exerciseBySkillId()
               .get(skillId)
@@ -70,12 +70,12 @@ export default class SkillForm {
   protected save(): void {
     if (this.form().invalid()) return;
 
-    const { name, drillIds } = this.form().value();
+    const { name, exerciseIds } = this.form().value();
 
     const skill = {
       name,
       id: this.skillId() ?? createNanoId(),
-      exerciseIds: drillIds,
+      exerciseIds,
     };
 
     if (this.skillId()) {

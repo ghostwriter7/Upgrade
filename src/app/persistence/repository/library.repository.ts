@@ -10,11 +10,13 @@ import {
 } from '@persistence/schema/skill.schema';
 import { Skill } from '@domain/model/skill';
 
-const toPayload = (drill: UpsertExercisePayload) => ({
-  id: drill.id,
-  name: drill.name,
-  unitsOfMeasurement: drill.unitsOfMeasurement ? JSON.stringify(drill.unitsOfMeasurement) : null,
-  isFavourite: drill.isFavourite,
+const toPayload = (exercise: UpsertExercisePayload) => ({
+  id: exercise.id,
+  name: exercise.name,
+  unitsOfMeasurement: exercise.unitsOfMeasurement
+    ? JSON.stringify(exercise.unitsOfMeasurement)
+    : null,
+  isFavourite: exercise.isFavourite,
 });
 
 @Service()
@@ -36,7 +38,7 @@ export class LibraryRepository extends Repository {
     return results.map((r) => SkillSchema.parse(r));
   }
 
-  public async getAllDrills(): Promise<ExerciseDto[]> {
+  public async getAllExercises(): Promise<ExerciseDto[]> {
     const results = await this.database.queryMany(`select e.id,
                                                           e.name,
                                                           e.units_of_measurement as unitsOfMeasurement,
@@ -105,16 +107,16 @@ export class LibraryRepository extends Repository {
     return this.database.executeMany(requests);
   }
 
-  public saveDrill(drill: UpsertExercisePayload): Promise<void> {
+  public saveExercise(exercise: UpsertExercisePayload): Promise<void> {
     const requests: ExecuteManyRequestsPayload = [
       {
         sql: `insert into exercise (id, name, units_of_measurement, is_favourite) values (:id, :name, :unitsOfMeasurement, :isFavourite)`,
-        params: toPayload(drill),
+        params: toPayload(exercise),
       },
     ];
 
-    const skillIds = drill.skillIds;
-    const exerciseId = drill.id;
+    const skillIds = exercise.skillIds;
+    const exerciseId = exercise.id;
     if (skillIds?.length) {
       requests.push({
         sql: 'insert into skill_exercise (skill_id, exercise_id) values (:skillId, :exerciseId)',
@@ -126,19 +128,19 @@ export class LibraryRepository extends Repository {
     return this.database.executeMany(requests);
   }
 
-  public updateDrill(
-    drill: UpsertExercisePayload,
+  public updateExercise(
+    exercise: UpsertExercisePayload,
     removedSkillIds: string[],
     addedSkillIds: string[],
   ): Promise<void> {
     const requests: ExecuteManyRequestsPayload = [
       {
         sql: `update exercise set name = :name, units_of_measurement = :unitsOfMeasurement, is_favourite = :isFavourite where id = :id`,
-        params: toPayload(drill),
+        params: toPayload(exercise),
       },
     ];
 
-    const exerciseId = drill.id;
+    const exerciseId = exercise.id;
 
     if (removedSkillIds.length) {
       requests.push({

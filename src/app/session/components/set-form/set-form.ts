@@ -56,8 +56,8 @@ export class SetForm implements FormValueControl<SetData> {
     });
   });
   protected readonly setTypeOptions = computed(() => {
-    const drill = this.libraryStore.exerciseById()[this.exerciseId()]!;
-    const unitsOfMeasurement = drill.unitsOfMeasurement ?? ExerciseSetTypes;
+    const exercise = this.libraryStore.exerciseById()[this.exerciseId()]!;
+    const unitsOfMeasurement = exercise.unitsOfMeasurement ?? ExerciseSetTypes;
 
     return Iterator.from(Object.entries(SetType))
       .filter(([key]) => unitsOfMeasurement.includes(key as ExerciseSetType))

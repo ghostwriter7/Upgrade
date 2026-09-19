@@ -60,18 +60,18 @@ export class ExerciseSelector {
   private readonly availableExercises = computed(() => {
     const selectedSkills = this.skillOptions().filter((o) => o.isSelected);
 
-    const drills = (
+    const exercises = (
       selectedSkills.length === 0
         ? this.libraryStore.activeExercises()
-        : this.libraryStore.getDrillsForSkills(selectedSkills.map((o) => o.skill))
+        : this.libraryStore.getExercisesForSkills(selectedSkills.map((o) => o.skill))
     ).filter(({ id }) => !this.activeExerciseIds.has(id));
 
     const activeSort = this.sortOptions().find((option) => option.active)?.id;
 
-    if (!activeSort) return drills;
+    if (!activeSort) return exercises;
     const order = this.sortDirection() === 'ASC' ? 1 : -1;
 
-    return drills.sort((a, b) => {
+    return exercises.sort((a, b) => {
       if (activeSort === 'alphabetical') return order * a.name.localeCompare(b.name);
       if (activeSort === 'last-performed-at') {
         const lastPerformedAtA = a.stats?.lastPerformedAt?.epochMilliseconds ?? 0;

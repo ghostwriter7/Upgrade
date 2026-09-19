@@ -37,12 +37,12 @@ export class TargetSummary implements OnInit {
         /*
           1. Each Target corresponds to a Skill
           2. Each Skill has dependencies (capabilities).
-          3. Each Session consists of drills that develop capabilities
+          3. Each Session consists of exercises that develop capabilities
           4. For Each Target, I need to check what sessions have contributed to it
           5. Once I know the sessions, I can compute their total duration (completedAt - startedAt)
           6. Then I can complete the percentage of the weekly commitment
 
-          7. In the next iteration, I can check the sessions more granularly (not every drill contributes, so only a slice of a session is valuable)
+          7. In the next iteration, I can check the sessions more granularly (not every exercise contributes, so only a slice of a session is valuable)
          */
 
         const decoratedTargets: TargetViewModel[] = this.activeTargets().map((target) => {
