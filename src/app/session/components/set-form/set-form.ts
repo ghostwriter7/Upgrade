@@ -13,7 +13,7 @@ import {
 } from '@angular/forms/signals';
 import { durationOptions, repOptions, weightOptions } from './set-form-options.const';
 import { SetData } from './set-data.interface';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { ExerciseSetType, ExerciseSetTypes } from '@domain/model/exercise-set/exercise-set.model';
 import { SetType } from '@domain/enum/set-type.enum';
 
@@ -29,7 +29,7 @@ export class SetForm implements FormValueControl<SetData> {
 
   public readonly isInvalid = computed(() => this.setForm().invalid());
 
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
   private static readonly TIME_SET_TYPES = ['iso', 'duration'] as ExerciseSetType[];
   private static readonly NO_WEIGHT_SET_TYPES = ['bodyweight', 'duration'] as ExerciseSetType[];
 
@@ -56,7 +56,7 @@ export class SetForm implements FormValueControl<SetData> {
     });
   });
   protected readonly setTypeOptions = computed(() => {
-    const drill = this.exerciseStore.exerciseById()[this.exerciseId()]!;
+    const drill = this.libraryStore.exerciseById()[this.exerciseId()]!;
     const unitsOfMeasurement = drill.unitsOfMeasurement ?? ExerciseSetTypes;
 
     return Iterator.from(Object.entries(SetType))

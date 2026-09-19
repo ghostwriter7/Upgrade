@@ -9,7 +9,7 @@ import { MatDivider } from '@angular/material/list';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { SetType } from '@domain/enum/set-type.enum';
 import { MatChip, MatChipSet } from '@angular/material/chips';
 
@@ -36,10 +36,10 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
 export default class ExerciseView {
   public id = input.required<string>();
 
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
   protected readonly exercise = computed(() => {
-    const exercise = this.exerciseStore.exerciseById()[this.id()];
-    const skillsById = this.exerciseStore.skillsById();
+    const exercise = this.libraryStore.exerciseById()[this.id()];
+    const skillsById = this.libraryStore.skillsById();
     return {
       ...exercise,
       unitsOfMeasurement: (exercise.unitsOfMeasurement ?? []).map((unit) => SetType[unit]),

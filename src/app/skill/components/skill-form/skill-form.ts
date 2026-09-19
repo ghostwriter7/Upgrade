@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { form, FormField, minLength, required } from '@angular/forms/signals';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { MatDivider, MatListOption, MatSelectionList } from '@angular/material/list';
 import { MatFabButton } from '@angular/material/button';
@@ -27,7 +27,7 @@ import { MatIcon } from '@angular/material/icon';
   },
 })
 export default class SkillForm {
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
 
   protected readonly model = signal<{
     name: string;
@@ -42,7 +42,7 @@ export default class SkillForm {
     required(schemaPath.name);
   });
 
-  protected readonly drills = this.exerciseStore.exercises;
+  protected readonly drills = this.libraryStore.exercises;
 
   protected save(): void {
     if (this.form().invalid()) return;
@@ -54,6 +54,6 @@ export default class SkillForm {
       id: createNanoId(),
     };
 
-    this.exerciseStore.saveSkill(skill, drillIds);
+    this.libraryStore.saveSkill(skill, drillIds);
   }
 }

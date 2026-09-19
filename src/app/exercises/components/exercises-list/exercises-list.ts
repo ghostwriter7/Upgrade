@@ -1,5 +1,5 @@
 import { Component, computed, inject, output } from '@angular/core';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import {
   MatActionList,
   MatDivider,
@@ -16,7 +16,7 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class ExercisesList {
   public exerciseSelected = output<string>();
-  private readonly store = inject(ExerciseStore);
+  private readonly store = inject(LibraryStore);
 
   protected readonly exercises = computed(() =>
     Object.groupBy(this.store.activeExercises(), (exercise) =>

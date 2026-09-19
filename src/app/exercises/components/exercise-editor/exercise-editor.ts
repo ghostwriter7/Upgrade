@@ -1,7 +1,7 @@
 import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { form, FormField, minLength, required, validate } from '@angular/forms/signals';
 import { MatError, MatFormField, MatInput, MatLabel } from '@angular/material/input';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { MatFabButton } from '@angular/material/button';
 import { createNanoId } from '@common/function/create-id.function';
 import { UpsertExercisePayload } from '@domain/model/exercise.model';
@@ -47,12 +47,12 @@ export default class ExerciseEditor {
 
   protected readonly isEdit = computed(() => !!this.id());
   protected readonly originalDrill = computed(() =>
-    this.exerciseStore.exercises().find((exercise) => exercise.id === this.id()),
+    this.libraryStore.exercises().find((exercise) => exercise.id === this.id()),
   );
   protected readonly originalName = computed(() => this.originalDrill()?.name);
 
-  private readonly exerciseStore = inject(ExerciseStore);
-  protected readonly skills = this.exerciseStore.skills;
+  private readonly libraryStore = inject(LibraryStore);
+  protected readonly skills = this.libraryStore.skills;
 
   private readonly router = inject(Router);
 
@@ -77,7 +77,7 @@ export default class ExerciseEditor {
 
       if (name === originalName) return null;
 
-      if (this.exerciseStore.existsByName(name)) {
+      if (this.libraryStore.existsByName(name)) {
         return {
           kind: 'duplicate',
           message: 'Drill already exists',
@@ -116,9 +116,9 @@ export default class ExerciseEditor {
     const drill: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, skillIds };
 
     if (isEdit) {
-      this.exerciseStore.update(drill);
+      this.libraryStore.update(drill);
     } else {
-      this.exerciseStore.saveDrill(drill);
+      this.libraryStore.saveDrill(drill);
     }
 
     this.router.navigate(['/exercises']);

@@ -1,4 +1,4 @@
-import { describe, test, vi, Mock } from 'vitest';
+import { describe, Mock, test, vi } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CaptureProgressCommandHandler } from './capture-progress-command.handler';
@@ -7,7 +7,6 @@ import { CaptureProgressCommand } from './capture-progress.command';
 import { Session } from '@domain/model/session/session.model';
 import { MediaCapturedEvent } from '../../events/media-captured/media-captured.event';
 import { Landmark, Point } from '@domain/model/measurement.model';
-import { ExerciseStore } from '@store/exercises.store';
 import { Exercise } from '@domain/model/exercise.model';
 import { BodyPart } from '@domain/enum/body-part.enum';
 import { AngleMeasurementCapturedEvent } from '@session/events/angle-measurement-captured/angle-measurement-captured.event';
@@ -49,7 +48,7 @@ describe('CaptureProgressCommandHandler', () => {
     sessionStateHolder.session.mockReturnValueOnce(session);
     const exerciseLogId = session.getExerciseById(exerciseId).id;
 
-    const exercise = new Exercise(exerciseId, 'Any Exercise', [],'Any Description');
+    const exercise = new Exercise(exerciseId, 'Any Exercise', [], 'Any Description');
     exercise.measurementDefinition = {
       landmarks: [BodyPart.RightAnkle, BodyPart.PelvisCenter, BodyPart.LeftAnkle],
     };

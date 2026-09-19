@@ -1,6 +1,6 @@
 import { Component, computed, forwardRef, inject, input, signal } from '@angular/core';
 import { MatActionList, MatDivider, MatList, MatListItem } from '@angular/material/list';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ExerciseNamePipe } from '@ui/pipes/exercise-name-pipe';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -31,12 +31,12 @@ import { MatIcon } from '@angular/material/icon';
 export class ExercisesControl implements ControlValueAccessor {
   public excludedExerciseIds = input<Set<string>>(new Set());
 
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
   protected readonly selectedIds = signal<string[]>([]);
   protected readonly disabled = signal(false);
 
   protected readonly visibleExercises = computed(() =>
-    this.exerciseStore
+    this.libraryStore
       .activeExercises()
       .filter(({ id }) => !this.excludedExerciseIds().has(id) && !this.selectedIds().includes(id)),
   );

@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExerciseDropdown } from './exercise-dropdown';
 import { createExerciseStoreMock, ExerciseStoreMock } from '@test/mocks/exercise-store.mock';
-import { ExerciseStore } from '@store/exercises.store';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatAutocompleteHarness } from '@angular/material/autocomplete/testing';

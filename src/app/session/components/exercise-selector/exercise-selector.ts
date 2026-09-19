@@ -7,7 +7,7 @@ import {
   MatDialogContent,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { Session } from '@domain/model/session/session.model';
 import {
   MatDivider,
@@ -48,7 +48,7 @@ import { MatChip } from '@angular/material/chips';
 })
 export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
 
   protected readonly activeSkill = computed(() => {
     const activeSkills = this.skillOptions().filter((s) => s.isSelected);
@@ -56,9 +56,9 @@ export class ExerciseSelector {
   });
 
   protected readonly skillOptions = linkedSignal(() =>
-    this.exerciseStore
+    this.libraryStore
       .skills()
-      .map((skill) => ({ skill, isSelected: this.exerciseStore.activeSkill() === skill })),
+      .map((skill) => ({ skill, isSelected: this.libraryStore.activeSkill() === skill })),
   );
   protected readonly hasNoneSelected = computed(() => this.selectedExerciseIds().length === 0);
   protected readonly selectedExerciseIds = signal<string[]>([]);
@@ -70,8 +70,8 @@ export class ExerciseSelector {
 
     const drills = (
       selectedSkills.length === 0
-        ? this.exerciseStore.activeExercises()
-        : this.exerciseStore.getDrillsForSkills(selectedSkills.map((o) => o.skill))
+        ? this.libraryStore.activeExercises()
+        : this.libraryStore.getDrillsForSkills(selectedSkills.map((o) => o.skill))
     ).filter(({ id }) => !this.activeExerciseIds.has(id));
 
     const activeSort = this.sortOptions().find((option) => option.active)?.id;

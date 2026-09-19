@@ -7,7 +7,6 @@ import { GetInitialSetForExerciseIdQuery } from '@session/queries/get-initial-se
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { weightSet } from '@test/fixtures/exercise-set.fixtures';
 import { DEFAULT_SET_DATA } from '@session/queries/get-initial-set-for-exercise-id/default-set-data.const';
-import { ExerciseStore } from '@store/exercises.store';
 
 describe('GetInitialSetForExerciseIdQueryHandler', () => {
   let setRepositoryMock: { getAllBySessionIdAndExerciseId: Mock };

@@ -63,7 +63,7 @@ Upgrade is a single‑page Angular app for logging flexibility/mobility training
 ## Architecture and code organization
 - `src/app/domain`: domain models (Session, Exercise, ExerciseSet).
 - `src/app/store`: state management using `@ngrx/signals`.
-  - `ExerciseStore` holds the static exercise catalog.
+  - `LibraryStore` holds the static exercise catalog.
   - `SessionStore` manages active date, session cache, and calendar counts.
 - `src/app/persistence`: IndexedDB repository layer + Zod schema + mappers.
 - `src/app/home`: home page and calendar UI.

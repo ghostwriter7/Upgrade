@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExercisesList } from './exercises-list';
-import { ExerciseStore } from '@store/exercises.store';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatActionListHarness } from '@angular/material/list/testing';

@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { Loader } from '@ui/loader/loader';
 import { MatDivider } from '@angular/material/list';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 
 @Component({
   selector: 'app-skill-details',
@@ -16,7 +16,7 @@ import { ExerciseStore } from '@store/exercises.store';
 export default class SkillDetails {
   public skillId = input.required<string>();
 
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
 
-  protected readonly skill = computed(() => this.exerciseStore.skillsById()[this.skillId()]);
+  protected readonly skill = computed(() => this.libraryStore.skillsById()[this.skillId()]);
 }

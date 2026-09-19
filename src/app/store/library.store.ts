@@ -25,7 +25,7 @@ const initialState: State = {
   skills: [],
 };
 
-export const ExerciseStore = signalStore(
+export const LibraryStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({

@@ -2,7 +2,7 @@ import { Component, computed, inject, linkedSignal, OnInit } from '@angular/core
 import { TargetStore } from '@store/target.store';
 import { WeekProgress } from '@home/components/week-progress/week-progress';
 import { SessionRepository } from '@persistence/repository/session.repository';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { Target } from '@domain/model/target';
 import { MatChip } from '@angular/material/chips';
 import { MatIcon } from '@angular/material/icon';
@@ -19,7 +19,7 @@ interface TargetViewModel extends Target {
 })
 export class TargetSummary implements OnInit {
   private readonly targetStore = inject(TargetStore);
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
   private readonly sessionRepository = inject(SessionRepository);
 
   protected readonly activeTargets = this.targetStore.targets;
@@ -48,7 +48,7 @@ export class TargetSummary implements OnInit {
         const decoratedTargets: TargetViewModel[] = this.activeTargets().map((target) => {
           const { skillId } = target;
 
-          const exercises = this.exerciseStore.exerciseBySkillId().get(skillId) ?? [];
+          const exercises = this.libraryStore.exerciseBySkillId().get(skillId) ?? [];
           const exerciseIds = new Set(exercises.map((e) => e.id));
 
           const contributingSessions = sessions.filter((s) =>

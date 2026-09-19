@@ -6,13 +6,13 @@ import { SetRepository } from '@persistence/repository/set.repository';
 import { ExerciseLogRepository } from '@persistence/repository/exercise-log.repository';
 import { SetDataMapper } from '@session/components/set-form/mapper/set-data.mapper';
 import { DEFAULT_SET_DATA } from '@session/queries/get-initial-set-for-exercise-id/default-set-data.const';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 
 @Injectable()
 export class GetInitialSetForExerciseIdQueryHandler implements QueryHandler<GetInitialSetForExerciseIdQuery> {
   private readonly setRepository = inject(SetRepository);
   private readonly exerciseLogRepository = inject(ExerciseLogRepository);
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
 
   private static readonly SEARCH_DEPTH = 5;
 
@@ -35,7 +35,7 @@ export class GetInitialSetForExerciseIdQueryHandler implements QueryHandler<GetI
       if (set) return SetDataMapper.toDto(set);
     }
 
-    const exercise = this.exerciseStore.exerciseById()[payload.exerciseId];
+    const exercise = this.libraryStore.exerciseById()[payload.exerciseId];
     return { ...DEFAULT_SET_DATA, type: exercise.unitsOfMeasurement?.[0] ?? 'bodyweight' };
   }
 }

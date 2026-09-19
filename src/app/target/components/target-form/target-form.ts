@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
 import { MatDivider } from '@angular/material/list';
 import { Motivation, Target } from '@domain/model/target';
 import { TargetResult } from './target-result';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 
 interface StatementFormValue {
   statement: string;
@@ -59,10 +59,10 @@ export class TargetForm {
   public readonly saved = output<TargetResult>();
   public readonly cancelled = output<void>();
 
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
 
   protected readonly skillOptions = computed(() =>
-    this.exerciseStore.skills().map((skill) => ({
+    this.libraryStore.skills().map((skill) => ({
       value: skill.id,
       label: skill.name,
     })),

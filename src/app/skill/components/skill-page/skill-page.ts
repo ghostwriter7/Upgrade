@@ -3,7 +3,7 @@ import { SkillList } from '@skill/components/skill-list/skill-list';
 import { MatFabButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 
 @Component({
   selector: 'app-skill-page',
@@ -15,7 +15,7 @@ import { ExerciseStore } from '@store/exercises.store';
   },
 })
 export default class SkillPage {
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
 
-  protected readonly skills = this.exerciseStore.skills;
+  protected readonly skills = this.libraryStore.skills;
 }

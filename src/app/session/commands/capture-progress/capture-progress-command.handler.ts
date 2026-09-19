@@ -5,7 +5,7 @@ import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { Constructor } from '@common/types/constructor.type';
 import { AngleMeasurement, Landmark } from '@domain/model/measurement.model';
-import { ExerciseStore } from '@store/exercises.store';
+import { LibraryStore } from '@store/library.store';
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
 import { MediaRepository } from '@persistence/repository/media.repository';
 import { FileService } from '@common/service/file/file.service';
@@ -14,7 +14,7 @@ import { AngleMeasurementRepository } from '@persistence/repository/angle-measur
 @Injectable()
 export class CaptureProgressCommandHandler implements CommandHandler<CaptureProgressCommand> {
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly exerciseStore = inject(ExerciseStore);
+  private readonly libraryStore = inject(LibraryStore);
   private readonly mediaRepository = inject(MediaRepository);
   private readonly fileService = inject(FileService);
   private readonly angleMeasurementRepository = inject(AngleMeasurementRepository);
@@ -61,7 +61,7 @@ export class CaptureProgressCommandHandler implements CommandHandler<CaptureProg
   }
 
   private findMeasurementDefinition(exerciseId: string): AngleMeasurementDefinition | undefined {
-    const exercise = this.exerciseStore.exerciseById()[exerciseId];
+    const exercise = this.libraryStore.exerciseById()[exerciseId];
     if (!exercise) throw new Error(`Exercise with ID ${exerciseId} not found`);
 
     return exercise.measurementDefinition;

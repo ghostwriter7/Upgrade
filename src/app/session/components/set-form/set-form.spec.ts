@@ -7,7 +7,6 @@ import { HarnessLoader } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonToggleGroupHarness } from '@angular/material/button-toggle/testing';
 import { Mock } from 'vitest';
-import { ExerciseStore } from '@store/exercises.store';
 
 describe('SetForm', () => {
   let component: SetForm;
