@@ -1,12 +1,21 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { Loader } from '@ui/loader/loader';
-import { MatDivider } from '@angular/material/list';
+import { MatDivider, MatList, MatListItem } from '@angular/material/list';
 import { LibraryStore } from '@store/library.store';
 
 @Component({
   selector: 'app-skill-details',
-  imports: [MatCard, MatCardTitle, MatCardHeader, Loader, MatCardContent, MatDivider],
+  imports: [
+    MatCard,
+    MatCardTitle,
+    MatCardHeader,
+    Loader,
+    MatCardContent,
+    MatDivider,
+    MatList,
+    MatListItem,
+  ],
   templateUrl: './skill-details.html',
   styleUrl: './skill-details.css',
   host: {
@@ -19,4 +28,7 @@ export default class SkillDetails {
   private readonly libraryStore = inject(LibraryStore);
 
   protected readonly skill = computed(() => this.libraryStore.skillsById()[this.skillId()]);
+  protected readonly drills = computed(
+    () => this.libraryStore.exerciseBySkillId().get(this.skillId()) ?? [],
+  );
 }

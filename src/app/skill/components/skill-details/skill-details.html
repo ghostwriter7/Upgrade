@@ -9,14 +9,13 @@
       <h3>Drills</h3>
       <mat-divider />
 
-      <!--      <mat-list>-->
-      <!--        @for (capability of value.capabilities; track capability.capabilityId) {-->
-      <!--          <mat-list-item>-->
-      <!--            {{ capability.label }}-->
-      <!--            <app-lozenge>{{ capability.importance }}</app-lozenge>-->
-      <!--          </mat-list-item>-->
-      <!--        }-->
-      <!--      </mat-list>-->
+      <mat-list>
+        @for (drill of drills(); track drill.id) {
+          <mat-list-item>
+            {{ drill.name }}
+          </mat-list-item>
+        }
+      </mat-list>
 
     </mat-card-content>
   </mat-card>
