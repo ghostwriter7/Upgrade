@@ -1,8 +1,13 @@
 @let value = skill();
 @if (value) {
   <mat-card>
-    <mat-card-header>
+    <mat-card-header class="header">
       <mat-card-title>{{ value.name }}</mat-card-title>
+
+      <button matFab extended [routerLink]="['/skills', 'edit', value.id]">
+        <mat-icon>edit</mat-icon>
+        Edit
+      </button>
     </mat-card-header>
 
     <mat-card-content>

@@ -116,7 +116,7 @@ export default class ExerciseEditor {
     const drill: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, skillIds };
 
     if (isEdit) {
-      this.libraryStore.update(drill);
+      this.libraryStore.updateDrill(drill);
     } else {
       this.libraryStore.saveDrill(drill);
     }

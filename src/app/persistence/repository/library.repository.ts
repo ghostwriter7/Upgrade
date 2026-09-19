@@ -24,7 +24,15 @@ export class LibraryRepository extends Repository {
   }
 
   public async getAllSkills(): Promise<SkillDto[]> {
-    const results = await this.database.queryMany(`select id, name from skill`);
+    const results = await this.database.queryMany(`select s.id,
+                                                          s.name,
+                                                          json_group_array(se.exercise_id)
+                                                                           filter (where se.exercise_id is not null) as exerciseIds
+                                                   from skill s
+                                                          left join skill_exercise se on s.id = se.skill_id
+                                                   group by s.id, s.name
+                                                   order by s.name;
+    `);
     return results.map((r) => SkillSchema.parse(r));
   }
 
@@ -47,7 +55,38 @@ export class LibraryRepository extends Repository {
     return results.map((r) => ExerciseSchema.parse(r));
   }
 
-  public saveSkill(skill: Skill, exerciseIds: string[]): Promise<void> {
+  public updateSkill(
+    skill: Skill,
+    removedExerciseIds: Set<string>,
+    addedExerciseIds: Set<string>,
+  ): Promise<void> {
+    const requests: ExecuteManyRequestsPayload = [
+      {
+        sql: `update skill set name = :name where id = :id`,
+        params: { id: skill.id, name: skill.name },
+      },
+    ];
+
+    if (removedExerciseIds.size) {
+      requests.push({
+        sql: `delete from skill_exercise where skill_id = :skillId and exercise_id = :exerciseId`,
+        batch: true,
+        params: [...removedExerciseIds].map((exerciseId) => ({ skillId: skill.id, exerciseId })),
+      });
+    }
+
+    if (addedExerciseIds.size) {
+      requests.push({
+        sql: `insert into skill_exercise (skill_id, exercise_id) values (:skillId, :exerciseId)`,
+        batch: true,
+        params: [...addedExerciseIds].map((exerciseId) => ({ skillId: skill.id, exerciseId })),
+      });
+    }
+
+    return this.database.executeMany(requests);
+  }
+
+  public saveSkill(skill: Skill): Promise<void> {
     const requests: ExecuteManyRequestsPayload = [
       {
         sql: `insert into skill (id, name) values (:id, :name)`,
@@ -55,11 +94,11 @@ export class LibraryRepository extends Repository {
       },
     ];
 
-    if (exerciseIds.length) {
+    if (skill.exerciseIds.length) {
       requests.push({
         sql: `insert into skill_exercise (skill_id, exercise_id) values (:skillId, :exerciseId)`,
         batch: true,
-        params: exerciseIds.map((exerciseId) => ({ skillId: skill.id, exerciseId })),
+        params: skill.exerciseIds.map((exerciseId) => ({ skillId: skill.id, exerciseId })),
       });
     }
 

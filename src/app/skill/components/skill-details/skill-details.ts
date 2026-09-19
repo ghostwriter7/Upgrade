@@ -3,6 +3,9 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
 import { Loader } from '@ui/loader/loader';
 import { MatDivider, MatList, MatListItem } from '@angular/material/list';
 import { LibraryStore } from '@store/library.store';
+import { MatFabButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-skill-details',
@@ -15,6 +18,9 @@ import { LibraryStore } from '@store/library.store';
     MatDivider,
     MatList,
     MatListItem,
+    MatFabButton,
+    MatIcon,
+    RouterLink,
   ],
   templateUrl: './skill-details.html',
   styleUrl: './skill-details.css',

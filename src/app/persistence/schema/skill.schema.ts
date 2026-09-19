@@ -5,6 +5,7 @@ import { ExerciseSetTypes } from '@domain/model/exercise-set/exercise-set.model'
 export const SkillSchema = z.object({
   id: z.string(),
   name: z.string(),
+  exerciseIds: json(z.array(z.string())),
 });
 
 export const ExerciseSchema = z.object({

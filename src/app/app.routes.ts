@@ -61,6 +61,10 @@ export const routes: Routes = [
     loadComponent: () => import('./skill/components/skill-form/skill-form'),
   },
   {
+    path: 'skills/edit/:skillId',
+    loadComponent: () => import('./skill/components/skill-form/skill-form'),
+  },
+  {
     path: 'skills/:skillId',
     loadComponent: () => import('./skill/components/skill-details/skill-details'),
   },
