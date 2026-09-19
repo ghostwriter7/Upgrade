@@ -38,8 +38,8 @@
         <section class="section"><h3>Skills</h3>
           <mat-chip-set>
 
-            @for (skillName of exercise().skills; track skillName) {
-              <mat-chip>{{ skillName }}</mat-chip>
+            @for (skill of exercise().skills; track skill.id) {
+              <mat-chip [routerLink]="['/skills', skill.id]">{{ skill.name }}</mat-chip>
             } @empty {
               <mat-chip>None</mat-chip>
             }
