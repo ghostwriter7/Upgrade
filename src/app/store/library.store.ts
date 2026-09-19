@@ -10,8 +10,7 @@ import { Exercise, UpsertExercisePayload } from '@domain/model/exercise.model';
 import { computed, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
 import { DateHelper } from '@common/helper/date.helper';
-import { DrillRepository } from '@persistence/repository/drill.repository';
-import { SkillRepository } from '@persistence/repository/skill.repository';
+import { LibraryRepository } from '@persistence/repository/library.repository';
 
 interface State {
   activeSkill: Skill | undefined;
@@ -60,11 +59,23 @@ export const LibraryStore = signalStore(
       ),
     ),
   })),
-  withMethods((store, drillRepository = inject(DrillRepository)) => ({
+  withMethods((store, libraryRepository = inject(LibraryRepository)) => ({
     existsByName: (name: string) => store.exerciseNames().has(name),
 
     saveSkill: (skill: Skill, exerciseIds: string[]) => {
-      // patchState()
+      const ids = new Set(exerciseIds);
+
+      patchState(store, (state) => ({
+        ...state,
+        skills: [...state.skills, skill].sort((a, b) => a.name.localeCompare(b.name)),
+        exercises: state.exercises.map((exercise) =>
+          ids.has(exercise.id)
+            ? { ...exercise, skillIds: [...exercise.skillIds, skill.id] }
+            : exercise,
+        ),
+      }));
+
+      libraryRepository.saveSkill(skill, exerciseIds);
     },
 
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
@@ -96,7 +107,7 @@ export const LibraryStore = signalStore(
           },
         ].toSorted((a, b) => a.name.localeCompare(b.name)),
       }));
-      drillRepository.save(drill);
+      libraryRepository.saveDrill(drill);
     },
 
     update: (drill: UpsertExercisePayload) => {
@@ -113,47 +124,41 @@ export const LibraryStore = signalStore(
         ...state,
         exercises: state.exercises.with(drillIndex, updatedDrill),
       }));
-      drillRepository.update(drill, removedSkillIds, addedSkillIds);
+      libraryRepository.updateDrill(drill, removedSkillIds, addedSkillIds);
     },
   })),
-  withHooks(
-    (
-      store,
-      drillRepository = inject(DrillRepository),
-      skillRepository = inject(SkillRepository),
-    ) => ({
-      onInit: async () => {
-        skillRepository.getAll().then((skills) => {
-          patchState(store, (state) => ({
-            ...state,
-            skills: skills.toSorted((a, b) => a.name.localeCompare(b.name)),
-          }));
-        });
+  withHooks((store, drillRepository = inject(LibraryRepository)) => ({
+    onInit: async () => {
+      drillRepository.getAllSkills().then((skills) => {
+        patchState(store, (state) => ({
+          ...state,
+          skills: skills.toSorted((a, b) => a.name.localeCompare(b.name)),
+        }));
+      });
 
-        const drills = await drillRepository.getAll();
+      const drills = await drillRepository.getAllDrills();
 
-        const now = DateHelper.now();
+      const now = DateHelper.now();
 
-        const exercises = drills.map((exercise) => {
-          const lastPerformedAt = exercise.lastPerformedAt
-            ? DateHelper.from(exercise.lastPerformedAt)
-            : null;
-          const lastPerformedHoursAgo = lastPerformedAt
-            ? lastPerformedAt.until(now).round({ largestUnit: 'hours' }).hours
-            : null;
+      const exercises = drills.map((exercise) => {
+        const lastPerformedAt = exercise.lastPerformedAt
+          ? DateHelper.from(exercise.lastPerformedAt)
+          : null;
+        const lastPerformedHoursAgo = lastPerformedAt
+          ? lastPerformedAt.until(now).round({ largestUnit: 'hours' }).hours
+          : null;
 
-          return {
-            ...exercise,
-            skillScore: {},
-            stats: {
-              lastPerformedAt,
-              lastPerformedHoursAgo,
-            },
-          };
-        });
+        return {
+          ...exercise,
+          skillScore: {},
+          stats: {
+            lastPerformedAt,
+            lastPerformedHoursAgo,
+          },
+        };
+      });
 
-        patchState(store, { exercises });
-      },
-    }),
-  ),
+      patchState(store, { exercises });
+    },
+  })),
 );
