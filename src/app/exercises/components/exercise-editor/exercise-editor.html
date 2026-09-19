@@ -25,7 +25,18 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-checkbox [formField]="form.isFavourite">Favourite</mat-checkbox>
+    <div class="is-favourite">
+      <mat-checkbox [formField]="form.isFavourite">Favourite</mat-checkbox>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Skills</mat-label>
+      <mat-select [formField]="form.skillIds" multiple>
+        @for (skill of skills(); track skill.id) {
+          <mat-option [value]="skill.id">{{ skill.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
   </section>
 
 </main>

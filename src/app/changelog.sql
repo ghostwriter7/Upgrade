@@ -74,38 +74,10 @@ create table if not exists angle_measurement
 create index angle_measurement_log_idx on angle_measurement (exercise_log_id);
 create index angle_measurement_media_idx on angle_measurement (media_id);
 
-create table if not exists capability
-(
-  id   text primary key,
-  name text not null unique
-);
-
 create table if not exists skill
 (
   id   text primary key,
   name text not null unique
-);
-
-create table if not exists skill_capability
-(
-  skill_id      text    not null,
-  capability_id text    not null,
-  importance    integer not null,
-
-  foreign key (skill_id) references skill (id) on delete restrict,
-  foreign key (capability_id) references capability (id) on delete restrict,
-  primary key (skill_id, capability_id)
-);
-
-create table if not exists exercise_capability
-(
-  exercise_id   text    not null,
-  capability_id text    not null,
-  weight        integer not null,
-
-  foreign key (exercise_id) references exercise (id) on delete restrict,
-  foreign key (capability_id) references capability (id) on delete restrict,
-  primary key (exercise_id, capability_id)
 );
 
 create table if not exists target
@@ -128,3 +100,14 @@ alter table exercise
 -- @changeset 3
 alter table exercise
   add column is_favourite boolean not null default false;
+
+-- @changeset 4
+create table if not exists skill_exercise
+(
+  skill_id    text not null,
+  exercise_id text not null,
+
+  primary key (skill_id, exercise_id),
+  foreign key (skill_id) references skill (id) on delete restrict,
+  foreign key (exercise_id) references exercise (id) on delete restrict
+);

@@ -5,7 +5,12 @@ import sqlite3InitModule, {
   type Sqlite3Static,
   type SqlValue,
 } from '@sqlite.org/sqlite-wasm';
-import { ExecuteBatchRequest, RequestType } from '@infrastructure/sql-request.interface';
+import {
+  ExecuteBatchRequest,
+  ExecuteBatchRequestPayload,
+  ExecuteManyRequest,
+  RequestType,
+} from '@infrastructure/sql-request.interface';
 // @ts-ignore
 import changelog from './changelog.sql' with { type: 'text' };
 
@@ -15,6 +20,8 @@ const dbPath = `/${databaseName}.sqlite3`;
 let sqlite3: Sqlite3Static | null = null;
 let db: OpfsDatabase | null = null;
 const requests: RequestType[] = [];
+
+const now = Date.now();
 
 addEventListener('message', ({ data }: MessageEvent<RequestType>) => {
   if (!db) {
@@ -48,31 +55,29 @@ function handleRequest(data: RequestType): void {
   } else if (data.type === 'query-one') {
     const result = db!.selectObject(data.sql, formatParams(data.params));
     postMessage({ id: data.id, type: 'success', result });
-  } else if (data.type === 'execute') {
-    execute(db!, data.sql, data.params);
-    postMessage({ id: data.id, type: 'success' });
   } else if (data.type === 'import-db') {
     importDatabase(data.bytes);
     postMessage({ id: data.id, type: 'success' });
+  } else if (data.type === 'execute') {
+    execute(db!, data.sql, data.params);
+    postMessage({ id: data.id, type: 'success' });
   } else if (data.type === 'execute-batch') {
     executeBatch(data);
+    postMessage({ id: data.id, type: 'success' });
+  } else if (data.type === 'execute-many') {
+    executeMany(db!, data);
     postMessage({ id: data.id, type: 'success' });
   }
 }
 
 const start = async (sqlite3: Sqlite3Static) => {
   console.log('Running SQLite3 version', sqlite3.version.libVersion);
-
-  // try {
-  //   // TODO Remove it once schema migration is complete
-  //   const root = await navigator.storage.getDirectory();
-  //   await root.removeEntry(filename);
-  // } catch (err) {}
-
   db = new sqlite3.oo1.OpfsDb(dbPath, 'wc');
   console.log(`Created persisted database at ${db.filename}`);
   db.exec('PRAGMA foreign_keys = ON;');
   applyMigrations(db);
+
+  console.log(`Initialization took ${Date.now() - now}ms`);
 };
 
 const initializeSqlLite = async () => {
@@ -172,3 +177,33 @@ function executeBatch(data: ExecuteBatchRequest): void {
     }
   });
 }
+
+function executeMany(db: OpfsDatabase, request: ExecuteManyRequest): void {
+  db.transaction((db) => {
+    for (const data of request.requests) {
+      const ps = db.prepare(data.sql);
+
+      try {
+        if (isExecuteBatchRequestPayload(data)) {
+          for (const params of data.params) {
+            ps.bind(formatParams(params));
+            ps.step();
+            ps.reset(true);
+          }
+        } else {
+          if (data.params) {
+            ps.bind(formatParams(data.params));
+          }
+
+          ps.stepFinalize();
+        }
+      } catch (error) {
+        ps.finalize();
+        throw error;
+      }
+    }
+  });
+}
+
+const isExecuteBatchRequestPayload = (data: unknown): data is ExecuteBatchRequestPayload =>
+  (data as ExecuteBatchRequestPayload).batch;

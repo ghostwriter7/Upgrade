@@ -12,11 +12,14 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { FormsModule } from '@angular/forms';
+import { SkillStore } from '@store/skill.store';
 
 interface DrillModel {
   name: string;
   unitsOfMeasurement: ExerciseSetType[];
   isFavourite: boolean;
+  skillIds: string[];
 }
 
 @Component({
@@ -32,6 +35,7 @@ interface DrillModel {
     MatOption,
     MatSelect,
     MatCheckbox,
+    FormsModule,
   ],
   templateUrl: './exercise-editor.html',
   styleUrl: './exercise-editor.css',
@@ -49,6 +53,9 @@ export default class ExerciseEditor {
   protected readonly originalName = computed(() => this.originalDrill()?.name);
 
   private readonly exerciseStore = inject(ExerciseStore);
+  private readonly skillStore = inject(SkillStore);
+  protected readonly skills = this.skillStore.skills;
+
   private readonly router = inject(Router);
 
   protected readonly unitsOfMeasurements = Object.entries(SetType)
@@ -59,6 +66,7 @@ export default class ExerciseEditor {
     name: '',
     unitsOfMeasurement: [],
     isFavourite: false,
+    skillIds: [],
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
@@ -91,6 +99,7 @@ export default class ExerciseEditor {
             name: drill.name,
             unitsOfMeasurement: drill.unitsOfMeasurement ?? [],
             isFavourite: drill.isFavourite,
+            skillIds: drill.skillIds ?? [],
           });
           ref.destroy();
         }
@@ -105,8 +114,8 @@ export default class ExerciseEditor {
 
     const id = this.id() ?? createNanoId();
 
-    const { name, unitsOfMeasurement, isFavourite } = this.model();
-    const drill: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite };
+    const { name, unitsOfMeasurement, isFavourite, skillIds } = this.model();
+    const drill: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, skillIds };
 
     if (isEdit) {
       this.exerciseStore.update(drill);

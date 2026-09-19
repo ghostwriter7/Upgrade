@@ -7,9 +7,9 @@ export interface Exercise {
 
   unitsOfMeasurement: ExerciseSetType[] | null;
   isFavourite: boolean;
+  skillIds: string[] | null;
 
   measurementDefinition?: AngleMeasurementDefinition;
-  capabilities?: ExerciseCapability[];
 
   stats: {
     lastPerformedAt: Temporal.Instant | null;
@@ -19,12 +19,7 @@ export interface Exercise {
   skillScore: Record<string, number>;
 }
 
-export interface ExerciseCapability {
-  capabilityId: string;
-  weight: number;
-}
-
 export type UpsertExercisePayload = Pick<
   Exercise,
-  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite'
+  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite' | 'skillIds'
 >;

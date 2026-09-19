@@ -2,7 +2,14 @@ import type { BindingSpec } from '@sqlite.org/sqlite-wasm';
 
 export interface Request {
   id: string;
-  type: 'query' | 'query-one' | 'execute' | 'execute-batch' | 'export-db' | 'import-db';
+  type:
+    | 'query'
+    | 'query-one'
+    | 'execute'
+    | 'execute-batch'
+    | 'execute-many'
+    | 'export-db'
+    | 'import-db';
 }
 
 interface SqlRequest extends Request {
@@ -24,6 +31,11 @@ export interface ExecuteBatchRequest extends Request {
   params: BindingSpec[];
 }
 
+export interface ExecuteManyRequest extends Request {
+  type: 'execute-many';
+  requests: ExecuteManyRequestsPayload;
+}
+
 export interface ExportDbRequest extends Request {
   type: 'export-db';
 }
@@ -38,4 +50,9 @@ export type RequestType =
   | ExecuteRequest
   | ExecuteBatchRequest
   | ExportDbRequest
+  | ExecuteManyRequest
   | ImportDbRequest;
+
+export type ExecuteRequestPayload = { sql: string; params?: BindingSpec };
+export type ExecuteBatchRequestPayload = { sql: string; batch: boolean; params: BindingSpec[] };
+export type ExecuteManyRequestsPayload = (ExecuteRequestPayload | ExecuteBatchRequestPayload)[];

@@ -52,7 +52,7 @@ export class TargetSummary implements OnInit {
 
           const skill = this.skillStore.skillsById()[skillId];
 
-          const exercises = this.exerciseStore.getExercisesForSkill(skill);
+          const exercises = this.exerciseStore.exerciseBySkillId().get(skill.id) ?? [];
           const exerciseIds = new Set(exercises.map((e) => e.id));
 
           const contributingSessions = sessions.filter((s) =>
