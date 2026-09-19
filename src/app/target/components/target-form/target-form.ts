@@ -16,10 +16,10 @@ import { MatError, MatFormField, MatHint, MatLabel } from '@angular/material/for
 import { MatInput } from '@angular/material/input';
 import { MatOption, MatSelect } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
-import { SkillStore } from '@store/skill.store';
 import { MatDivider } from '@angular/material/list';
 import { Motivation, Target } from '@domain/model/target';
 import { TargetResult } from './target-result';
+import { ExerciseStore } from '@store/exercises.store';
 
 interface StatementFormValue {
   statement: string;
@@ -59,9 +59,10 @@ export class TargetForm {
   public readonly saved = output<TargetResult>();
   public readonly cancelled = output<void>();
 
-  private readonly skillStore = inject(SkillStore);
+  private readonly exerciseStore = inject(ExerciseStore);
+
   protected readonly skillOptions = computed(() =>
-    this.skillStore.skills().map((skill) => ({
+    this.exerciseStore.skills().map((skill) => ({
       value: skill.id,
       label: skill.name,
     })),

@@ -31,10 +31,10 @@ export class ExerciseDropdown {
     const { exercise } = this.model();
     const filter = exercise ? this.displayExercise(exercise)?.toLowerCase() : null;
 
-    if (!filter) return this.exerciseStore.exercises();
+    if (!filter) return this.exerciseStore.activeExercises();
 
     return this.exerciseStore
-      .exercises()
+      .activeExercises()
       .filter((exercise) => exercise.name.toLowerCase().includes(filter));
   });
 

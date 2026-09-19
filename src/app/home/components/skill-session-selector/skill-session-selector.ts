@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { SkillStore } from '@store/skill.store';
 import { MatMiniFabButton } from '@angular/material/button';
 import { Skill } from '@domain/model/skill';
 import { Router } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { ExerciseStore } from '@store/exercises.store';
 
 @Component({
   selector: 'app-skill-session-selector',
@@ -12,10 +12,10 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './skill-session-selector.css',
 })
 export class SkillSessionSelector {
-  private readonly skillStore = inject(SkillStore);
+  private readonly exerciseStore = inject(ExerciseStore);
   private readonly router = inject(Router);
 
-  protected readonly skills = this.skillStore.skills;
+  protected readonly skills = this.exerciseStore.skills;
   protected initSession(skill: Skill): void {
     this.router.navigate(['session', 'new'], { queryParams: { skill: skill.id } });
   }

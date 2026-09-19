@@ -10,18 +10,19 @@ import { Exercise, UpsertExercisePayload } from '@domain/model/exercise.model';
 import { computed, inject } from '@angular/core';
 import { Skill } from '@domain/model/skill';
 import { DateHelper } from '@common/helper/date.helper';
-import { SkillStore } from '@store/skill.store';
-import { Database } from '@infrastructure/database';
 import { DrillRepository } from '@persistence/repository/drill.repository';
+import { SkillRepository } from '@persistence/repository/skill.repository';
 
 interface State {
   activeSkill: Skill | undefined;
-  allExercises: Exercise[];
+  exercises: Exercise[];
+  skills: Skill[];
 }
 
 const initialState: State = {
   activeSkill: undefined,
-  allExercises: [],
+  exercises: [],
+  skills: [],
 };
 
 export const ExerciseStore = signalStore(
@@ -29,23 +30,28 @@ export const ExerciseStore = signalStore(
   withState(initialState),
   withComputed((store) => ({
     exerciseBySkillId: computed(() =>
-      store.allExercises().reduce((lookup, exercise) => {
+      store.exercises().reduce((lookup, exercise) => {
         exercise.skillIds?.forEach((skillId) => lookup.getOrInsert(skillId, []).push(exercise));
         return lookup;
       }, new Map<string, Exercise[]>()),
     ),
+    skillsById: computed(() =>
+      store
+        .skills()
+        .reduce((index, skill) => ({ ...index, [skill.id]: skill }), {} as Record<string, Skill>),
+    ),
   })),
   withComputed((store) => ({
-    exercises: computed(() => {
+    activeExercises: computed(() => {
       const skill = store.activeSkill();
-      if (!skill) return store.allExercises();
+      if (!skill) return store.exercises();
       return store.exerciseBySkillId().get(skill.id) ?? [];
     }),
     exerciseNames: computed(
-      () => new Set(store.allExercises().map((exercise) => exercise.name.toLowerCase())),
+      () => new Set(store.exercises().map((exercise) => exercise.name.toLowerCase())),
     ),
     exerciseById: computed(() =>
-      store.allExercises().reduce(
+      store.exercises().reduce(
         (lookup, exercise) => {
           lookup[exercise.id] = exercise;
           return lookup;
@@ -56,6 +62,10 @@ export const ExerciseStore = signalStore(
   })),
   withMethods((store, drillRepository = inject(DrillRepository)) => ({
     existsByName: (name: string) => store.exerciseNames().has(name),
+
+    saveSkill: (skill: Skill, exerciseIds: string[]) => {
+      // patchState()
+    },
 
     setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
 
@@ -71,11 +81,11 @@ export const ExerciseStore = signalStore(
         .toSorted((a, b) => a.name.localeCompare(b.name));
     },
 
-    save: (drill: UpsertExercisePayload) => {
+    saveDrill: (drill: UpsertExercisePayload) => {
       patchState(store, (state) => ({
         ...state,
-        allExercises: [
-          ...state.allExercises,
+        exercises: [
+          ...state.exercises,
           {
             ...drill,
             stats: {
@@ -90,8 +100,8 @@ export const ExerciseStore = signalStore(
     },
 
     update: (drill: UpsertExercisePayload) => {
-      const drillIndex = store.allExercises().findIndex((d) => d.id === drill.id);
-      const existingDrill = store.allExercises()[drillIndex];
+      const drillIndex = store.exercises().findIndex((d) => d.id === drill.id);
+      const existingDrill = store.exercises()[drillIndex];
       const updatedDrill = { ...existingDrill, ...drill };
 
       const removedSkillIds =
@@ -101,7 +111,7 @@ export const ExerciseStore = signalStore(
 
       patchState(store, (state) => ({
         ...state,
-        allExercises: state.allExercises.with(drillIndex, updatedDrill),
+        exercises: state.exercises.with(drillIndex, updatedDrill),
       }));
       drillRepository.update(drill, removedSkillIds, addedSkillIds);
     },
@@ -109,36 +119,40 @@ export const ExerciseStore = signalStore(
   withHooks(
     (
       store,
-      database = inject(Database),
-      skillStore = inject(SkillStore),
       drillRepository = inject(DrillRepository),
+      skillRepository = inject(SkillRepository),
     ) => ({
       onInit: async () => {
-        const exercises = await drillRepository.getAll();
+        skillRepository.getAll().then((skills) => {
+          patchState(store, (state) => ({
+            ...state,
+            skills: skills.toSorted((a, b) => a.name.localeCompare(b.name)),
+          }));
+        });
+
+        const drills = await drillRepository.getAll();
 
         const now = DateHelper.now();
 
-        const allExercises = Iterator.from(exercises)
-          .map((exercise) => {
-            const lastPerformedAt = exercise.lastPerformedAt
-              ? DateHelper.from(exercise.lastPerformedAt)
-              : null;
-            const lastPerformedHoursAgo = lastPerformedAt
-              ? lastPerformedAt.until(now).round({ largestUnit: 'hours' }).hours
-              : null;
+        const exercises = drills.map((exercise) => {
+          const lastPerformedAt = exercise.lastPerformedAt
+            ? DateHelper.from(exercise.lastPerformedAt)
+            : null;
+          const lastPerformedHoursAgo = lastPerformedAt
+            ? lastPerformedAt.until(now).round({ largestUnit: 'hours' }).hours
+            : null;
 
-            return {
-              ...exercise,
-              skillScore: {},
-              stats: {
-                lastPerformedAt,
-                lastPerformedHoursAgo,
-              },
-            };
-          })
-          .toArray();
+          return {
+            ...exercise,
+            skillScore: {},
+            stats: {
+              lastPerformedAt,
+              lastPerformedHoursAgo,
+            },
+          };
+        });
 
-        patchState(store, { allExercises });
+        patchState(store, { exercises });
       },
     }),
   ),

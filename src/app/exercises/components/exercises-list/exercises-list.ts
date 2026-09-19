@@ -19,7 +19,7 @@ export class ExercisesList {
   private readonly store = inject(ExerciseStore);
 
   protected readonly exercises = computed(() =>
-    Object.groupBy(this.store.exercises(), (exercise) =>
+    Object.groupBy(this.store.activeExercises(), (exercise) =>
       exercise.isFavourite ? 'favourite' : 'remaining',
     ),
   );

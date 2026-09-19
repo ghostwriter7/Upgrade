@@ -1,9 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { SkillList } from '@skill/components/skill-list/skill-list';
-import { SkillStore } from '@store/skill.store';
 import { MatFabButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
+import { ExerciseStore } from '@store/exercises.store';
 
 @Component({
   selector: 'app-skill-page',
@@ -15,7 +15,7 @@ import { MatIcon } from '@angular/material/icon';
   },
 })
 export default class SkillPage {
-  private readonly skillStore = inject(SkillStore);
+  private readonly exerciseStore = inject(ExerciseStore);
 
-  protected readonly skills = this.skillStore.skills;
+  protected readonly skills = this.exerciseStore.skills;
 }

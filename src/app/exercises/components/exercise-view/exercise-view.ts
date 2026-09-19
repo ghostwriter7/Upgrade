@@ -12,7 +12,6 @@ import { RouterLink } from '@angular/router';
 import { ExerciseStore } from '@store/exercises.store';
 import { SetType } from '@domain/enum/set-type.enum';
 import { MatChip, MatChipSet } from '@angular/material/chips';
-import { SkillStore } from '@store/skill.store';
 
 @Component({
   selector: 'app-exercise-view',
@@ -38,10 +37,9 @@ export default class ExerciseView {
   public id = input.required<string>();
 
   private readonly exerciseStore = inject(ExerciseStore);
-  private readonly skillStore = inject(SkillStore);
   protected readonly exercise = computed(() => {
     const exercise = this.exerciseStore.exerciseById()[this.id()];
-    const skillsById = this.skillStore.skillsById();
+    const skillsById = this.exerciseStore.skillsById();
     return {
       ...exercise,
       unitsOfMeasurement: (exercise.unitsOfMeasurement ?? []).map((unit) => SetType[unit]),

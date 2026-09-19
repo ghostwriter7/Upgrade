@@ -13,7 +13,6 @@ import { MatSelect } from '@angular/material/select';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
-import { SkillStore } from '@store/skill.store';
 
 interface DrillModel {
   name: string;
@@ -48,13 +47,12 @@ export default class ExerciseEditor {
 
   protected readonly isEdit = computed(() => !!this.id());
   protected readonly originalDrill = computed(() =>
-    this.exerciseStore.allExercises().find((exercise) => exercise.id === this.id()),
+    this.exerciseStore.exercises().find((exercise) => exercise.id === this.id()),
   );
   protected readonly originalName = computed(() => this.originalDrill()?.name);
 
   private readonly exerciseStore = inject(ExerciseStore);
-  private readonly skillStore = inject(SkillStore);
-  protected readonly skills = this.skillStore.skills;
+  protected readonly skills = this.exerciseStore.skills;
 
   private readonly router = inject(Router);
 
@@ -120,7 +118,7 @@ export default class ExerciseEditor {
     if (isEdit) {
       this.exerciseStore.update(drill);
     } else {
-      this.exerciseStore.save(drill);
+      this.exerciseStore.saveDrill(drill);
     }
 
     this.router.navigate(['/exercises']);

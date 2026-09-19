@@ -37,7 +37,7 @@ export class ExercisesControl implements ControlValueAccessor {
 
   protected readonly visibleExercises = computed(() =>
     this.exerciseStore
-      .exercises()
+      .activeExercises()
       .filter(({ id }) => !this.excludedExerciseIds().has(id) && !this.selectedIds().includes(id)),
   );
   private onChange?: (value: string[]) => void;

@@ -18,7 +18,6 @@ import {
 } from '@angular/material/list';
 import { PrintHoursPipe } from '@ui/pipes/print-hours-pipe';
 import { MatIcon } from '@angular/material/icon';
-import { SkillStore } from '@store/skill.store';
 import { NgClass, PercentPipe } from '@angular/common';
 import { MatChip } from '@angular/material/chips';
 
@@ -50,7 +49,6 @@ import { MatChip } from '@angular/material/chips';
 export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
   private readonly exerciseStore = inject(ExerciseStore);
-  private readonly skillStore = inject(SkillStore);
 
   protected readonly activeSkill = computed(() => {
     const activeSkills = this.skillOptions().filter((s) => s.isSelected);
@@ -58,7 +56,7 @@ export class ExerciseSelector {
   });
 
   protected readonly skillOptions = linkedSignal(() =>
-    this.skillStore
+    this.exerciseStore
       .skills()
       .map((skill) => ({ skill, isSelected: this.exerciseStore.activeSkill() === skill })),
   );
@@ -72,7 +70,7 @@ export class ExerciseSelector {
 
     const drills = (
       selectedSkills.length === 0
-        ? this.exerciseStore.exercises()
+        ? this.exerciseStore.activeExercises()
         : this.exerciseStore.getDrillsForSkills(selectedSkills.map((o) => o.skill))
     ).filter(({ id }) => !this.activeExerciseIds.has(id));
 

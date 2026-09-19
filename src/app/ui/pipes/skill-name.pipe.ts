@@ -1,13 +1,13 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
-import { SkillStore } from '@store/skill.store';
+import { ExerciseStore } from '@store/exercises.store';
 
 @Pipe({
   name: 'skillName',
 })
 export class SkillNamePipe implements PipeTransform {
-  private readonly skillStore = inject(SkillStore);
+  private readonly exerciseStore = inject(ExerciseStore);
 
   public transform(skillId: string): string {
-    return this.skillStore.skillsById()[skillId]?.name ?? 'Unknown Skill';
+    return this.exerciseStore.skillsById()[skillId]?.name ?? 'Unknown Skill';
   }
 }
