@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { Database } from '@infrastructure/database';
 import { BindingSpec } from '@sqlite.org/sqlite-wasm';
 
-export abstract class GenericRepository {
+export abstract class Repository {
   protected readonly database = inject(Database);
 
   protected async queryMany(query: string, params?: BindingSpec): Promise<unknown[]> {

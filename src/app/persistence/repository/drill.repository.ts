@@ -1,5 +1,5 @@
 import { Service } from '@angular/core';
-import { GenericRepository } from '@persistence/repository/generic.repository';
+import { Repository } from '@persistence/repository/repository';
 import { UpsertExercisePayload } from '@domain/model/exercise.model';
 import { ExecuteManyRequestsPayload } from '@infrastructure/sql-request.interface';
 import { ExerciseDto, ExerciseSchema } from '@persistence/schema/skill.schema';
@@ -12,7 +12,7 @@ const toPayload = (drill: UpsertExercisePayload) => ({
 });
 
 @Service()
-export class DrillRepository extends GenericRepository {
+export class DrillRepository extends Repository {
   constructor() {
     super();
   }

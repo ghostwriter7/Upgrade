@@ -1,4 +1,4 @@
-import { GenericRepository } from './generic.repository';
+import { Repository } from './repository';
 import { ExerciseSet } from '@domain/model/exercise-set/exercise-set.model';
 import { Injectable } from '@angular/core';
 import { ExerciseSetSchema } from '../schema/set.schema';
@@ -12,7 +12,7 @@ const toUpdateParam = (set: ExerciseSet) => ({
 });
 
 @Injectable({ providedIn: 'root' })
-export class SetRepository extends GenericRepository {
+export class SetRepository extends Repository {
   constructor() {
     super();
   }

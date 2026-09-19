@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GenericRepository } from '@persistence/repository/generic.repository';
+import { Repository } from '@persistence/repository/repository';
 import { AngleMeasurementSchema } from '@persistence/schema/angle-measurement.schema';
 import { AngleMeasurement } from '@domain/model/measurement.model';
 import { AngleMeasurementMapper } from '@persistence/mapper/angle-measurement/angle-measurement.mapper';
 
 @Injectable({ providedIn: 'root' })
-export class AngleMeasurementRepository extends GenericRepository {
+export class AngleMeasurementRepository extends Repository {
   public save(measurement: AngleMeasurement): Promise<void> {
     return super.execute(
       `

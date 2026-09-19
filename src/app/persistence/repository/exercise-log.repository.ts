@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { GenericRepository } from './generic.repository';
+import { Repository } from './repository';
 import { ExerciseLogSchema } from '../schema/exercise-log.schema';
 import { ExerciseLogMapper } from '@persistence/mapper/exercise-log/exercise-log.mapper';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
@@ -13,7 +13,7 @@ const toUpdateLogParams = (log: ExerciseLog) => ({
 });
 
 @Injectable({ providedIn: 'root' })
-export class ExerciseLogRepository extends GenericRepository {
+export class ExerciseLogRepository extends Repository {
   constructor() {
     super();
   }

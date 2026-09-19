@@ -7,17 +7,6 @@ export const SkillSchema = z.object({
   name: z.string(),
 });
 
-export const SkillCapabilitySchema = z.object({
-  skillId: z.string(),
-  capabilityId: z.string(),
-  importance: z.number(),
-});
-
-export const CapabilitySchema = z.object({
-  id: z.string(),
-  name: z.string(),
-});
-
 export const ExerciseSchema = z.object({
   id: z.string(),
   name: z.string(),
@@ -28,3 +17,4 @@ export const ExerciseSchema = z.object({
 });
 
 export type ExerciseDto = z.infer<typeof ExerciseSchema>;
+export type SkillDto = z.infer<typeof SkillSchema>;

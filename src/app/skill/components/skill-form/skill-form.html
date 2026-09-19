@@ -1,0 +1,45 @@
+<div class="skill-form">
+
+  <section class="section">
+    <h2>Skill</h2>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput [formField]="form.name" placeholder="e.g. Front Split" autocomplete="off" />
+    </mat-form-field>
+  </section>
+
+  <mat-divider />
+
+  <section class="section">
+
+    <div class="section-header">
+      <div>
+        <h2>Drills</h2>
+        <p>Drills that develop the skill.</p>
+      </div>
+
+    </div>
+
+    <div class="drills">
+      <mat-selection-list [formField]="form.drillIds">
+        @for (drill of drills(); track drill.name) {
+          <mat-list-option togglePosition="after" [value]="drill.id">
+            <span matListItemTitle>{{ drill.name }}</span>
+          </mat-list-option>
+        }
+      </mat-selection-list>
+    </div>
+
+  </section>
+
+  <div class="form-actions">
+
+    <button matFab extended type="submit" [disabled]="form().invalid()" (click)="save()">
+      <mat-icon>save</mat-icon>
+      Save skill
+    </button>
+
+  </div>
+
+</div>

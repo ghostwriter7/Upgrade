@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { GenericRepository } from './generic.repository';
+import { Repository } from './repository';
 import { ExerciseMediaSchema } from '../schema/media.schema';
 import { ExerciseMedia } from '@domain/model/exercise-media.model';
 import { ExerciseMediaMapper } from '../mapper/exercise-media.mapper';
 
 @Injectable({ providedIn: 'root' })
-export class MediaRepository extends GenericRepository {
+export class MediaRepository extends Repository {
   constructor() {
     super();
   }

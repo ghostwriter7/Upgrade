@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Session } from '@domain/model/session/session.model';
-import { GenericRepository } from './generic.repository';
+import { Repository } from './repository';
 import { SessionSchema } from '../schema/session.schema';
 import { SessionMapper } from '../mapper/session/session.mapper';
 import { DateHelper } from '@common/helper/date.helper';
@@ -17,7 +17,7 @@ const SQL_GET_ALL_SESSIONS_FOR_RANGE = `select s.id,
                                         group by s.id, s.started_at, s.finished_at, s.rpe;`;
 
 @Injectable({ providedIn: 'root' })
-export class SessionRepository extends GenericRepository {
+export class SessionRepository extends Repository {
   constructor() {
     super();
   }

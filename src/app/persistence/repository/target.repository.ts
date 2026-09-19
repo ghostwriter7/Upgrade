@@ -1,10 +1,10 @@
 import { Service } from '@angular/core';
-import { GenericRepository } from '@persistence/repository/generic.repository';
+import { Repository } from '@persistence/repository/repository';
 import { TargetSchema } from '@persistence/schema/target.schema';
 import { Target } from '@domain/model/target';
 
 @Service()
-export class TargetRepository extends GenericRepository {
+export class TargetRepository extends Repository {
   constructor() {
     super();
   }

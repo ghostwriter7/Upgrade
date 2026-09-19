@@ -1,0 +1,41 @@
+.skill-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  width: 100%;
+  overflow: hidden;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+
+  p {
+    margin: 4px 0 0;
+    opacity: 0.7;
+    font: var(--mat-sys-body-small);
+  }
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.drills {
+  overflow-y: auto;
+  max-height: 250px;
+}
+
+.form-actions {
+  position: fixed;
+  bottom: var(--space-2);
+  right: var(--space-2);
+}
