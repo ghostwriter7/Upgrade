@@ -1,13 +1,21 @@
 @let value = skill();
+<header class="actions">
+  <button matFab extended [routerLink]="['/skills', 'edit', value.id]">
+    <mat-icon>edit</mat-icon>
+    Edit
+  </button>
+</header>
+
 @if (value) {
   <mat-card>
     <mat-card-header class="header">
       <mat-card-title>{{ value.name }}</mat-card-title>
 
-      <button matFab extended [routerLink]="['/skills', 'edit', value.id]">
-        <mat-icon>edit</mat-icon>
-        Edit
-      </button>
+      @if (value.isFavourite) {
+        <mat-icon class="ml-auto">star</mat-icon>
+      }
+
+
     </mat-card-header>
 
     <mat-card-content>

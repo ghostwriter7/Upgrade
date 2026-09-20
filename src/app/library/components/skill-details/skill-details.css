@@ -1,4 +1,14 @@
+:host {
+  gap: var(--space-3);
+}
+
 .header {
   align-items: center;
   justify-content: space-between;
 }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
