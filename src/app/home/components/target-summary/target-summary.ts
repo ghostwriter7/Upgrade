@@ -1,21 +1,16 @@
-import { Component, computed, inject, linkedSignal, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { TargetStore } from '@store/target.store';
 import { WeekProgress } from '@home/components/week-progress/week-progress';
 import { SessionRepository } from '@persistence/repository/session.repository';
 import { LibraryStore } from '@store/library.store';
-import { Target } from '@domain/model/target';
 import { MatChip } from '@angular/material/chips';
-import { MatIcon } from '@angular/material/icon';
-
-interface TargetViewModel extends Target {
-  completionPercentage?: number;
-}
+import { Session } from '@domain/model/session/session.model';
 
 @Component({
   selector: 'app-target-summary',
   templateUrl: './target-summary.html',
   styleUrl: './target-summary.css',
-  imports: [WeekProgress, MatChip, MatIcon],
+  imports: [WeekProgress, MatChip],
 })
 export class TargetSummary implements OnInit {
   private readonly targetStore = inject(TargetStore);
@@ -25,7 +20,34 @@ export class TargetSummary implements OnInit {
   protected readonly activeTargets = this.targetStore.targets;
   protected readonly hasActiveTargets = computed(() => !!this.activeTargets().length);
 
-  protected readonly decoratedTargets = linkedSignal<TargetViewModel[]>(() => this.activeTargets());
+  private readonly relevantSessions = signal<Session[]>([]);
+
+  protected readonly decoratedTargets = computed(() => {
+    const sessions = this.relevantSessions();
+    const skillsById = this.libraryStore.skillsById();
+
+    return this.activeTargets().map((target) => {
+      const { skillId } = target;
+
+      const exercises = this.libraryStore.exerciseBySkillId().get(skillId) ?? [];
+      const exerciseIds = new Set(exercises.map((e) => e.id));
+
+      const contributingSessions = sessions.filter((s) =>
+        s.exerciseIds?.some((id) => exerciseIds.has(id)),
+      );
+
+      const totalDuration = contributingSessions
+        .filter((s) => s.finishedAt !== null)
+        .map((s) => s.finishedAt!.since(s.startedAt, { largestUnit: 'minutes' }))
+        .reduce((total, duration) => total + duration.minutes, 0);
+
+      return {
+        ...target,
+        skillName: skillsById[target.skillId]?.name,
+        completionPercentage: Math.round((totalDuration / target.weeklyCommitmentInMinutes) * 100),
+      };
+    });
+  });
 
   public ngOnInit(): void {
     const now = Temporal.Now.zonedDateTimeISO(Temporal.Now.timeZoneId());
@@ -33,42 +55,6 @@ export class TargetSummary implements OnInit {
 
     this.sessionRepository
       .getSessionsForRange(weekStart.toPlainDateTime(), now.toPlainDateTime())
-      .then((sessions) => {
-        /*
-          1. Each Target corresponds to a Skill
-          2. Each Skill has dependencies (capabilities).
-          3. Each Session consists of exercises that develop capabilities
-          4. For Each Target, I need to check what sessions have contributed to it
-          5. Once I know the sessions, I can compute their total duration (completedAt - startedAt)
-          6. Then I can complete the percentage of the weekly commitment
-
-          7. In the next iteration, I can check the sessions more granularly (not every exercise contributes, so only a slice of a session is valuable)
-         */
-
-        const decoratedTargets: TargetViewModel[] = this.activeTargets().map((target) => {
-          const { skillId } = target;
-
-          const exercises = this.libraryStore.exerciseBySkillId().get(skillId) ?? [];
-          const exerciseIds = new Set(exercises.map((e) => e.id));
-
-          const contributingSessions = sessions.filter((s) =>
-            s.exerciseIds?.some((id) => exerciseIds.has(id)),
-          );
-
-          const totalDuration = contributingSessions
-            .filter((s) => s.finishedAt !== null)
-            .map((s) => s.finishedAt!.since(s.startedAt, { largestUnit: 'minutes' }))
-            .reduce((total, duration) => total + duration.minutes, 0);
-
-          return {
-            ...target,
-            completionPercentage: Math.round(
-              (totalDuration / target.weeklyCommitmentInMinutes) * 100,
-            ),
-          };
-        });
-
-        this.decoratedTargets.set(decoratedTargets);
-      });
+      .then((sessions) => this.relevantSessions.set(sessions));
   }
 }

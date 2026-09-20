@@ -1,11 +1,10 @@
 @if (hasActiveTargets()) {
   <app-week-progress />
 
-
   @for (target of decoratedTargets(); track target.id) {
     <mat-chip class="lozenge" [style.--progress]="target.completionPercentage">
       <div class="summary">
-        <mat-icon [svgIcon]="target.skillId" />
+        {{ target.skillName }} -
         {{ target.completionPercentage }}%
       </div>
     </mat-chip>
