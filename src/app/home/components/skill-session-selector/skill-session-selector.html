@@ -1,7 +1,30 @@
-<div class="slider">
-  @for (skill of skills(); track skill.id) {
-    <button matMiniFab (click)="initSession(skill)">
-      <mat-icon [svgIcon]="skill.id" />
+<div class="flex-container">
+  <button data-testid="home-create-session-btn" class="flex-grow" matFab extended routerLink="/session/new">
+    <mat-icon>swords</mat-icon>
+    Start Session
+  </button>
+
+  @if (hasRemainingSkills()) {
+    <button matMiniFab [matMenuTriggerFor]="menu" aria-label="Menu with remaining skills">
+      <mat-icon>more_vert</mat-icon>
     </button>
+    <mat-menu #menu="matMenu">
+      @for (skill of remainingSkills(); track skill.id) {
+        <button mat-menu-item (click)="initSession(skill)">
+          {{ skill.name }}
+        </button>
+      }
+    </mat-menu>
   }
+
 </div>
+
+@if (hasFavouriteSkills()) {
+  <div class="slider">
+    @for (skill of favouriteSkills(); track skill.id) {
+      <button matButton="filled" (click)="initSession(skill)">
+        {{ skill.name }}
+      </button>
+    }
+  </div>
+}
