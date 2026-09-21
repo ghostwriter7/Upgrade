@@ -37,11 +37,15 @@
 
   <div class="form-actions">
 
+    <button matFab extended type="button" class="info" [routerLink]="['/skills', skillId()]">
+      <mat-icon>close</mat-icon>
+      Cancel
+    </button>
+
     <button matFab extended type="submit" [disabled]="form().invalid()" (click)="save()">
       <mat-icon>save</mat-icon>
       Save skill
     </button>
 
   </div>
-
 </div>

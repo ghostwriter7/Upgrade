@@ -6,7 +6,7 @@ import { MatDivider, MatListOption, MatSelectionList } from '@angular/material/l
 import { MatFabButton } from '@angular/material/button';
 import { createNanoId } from '@common/function/create-id.function';
 import { MatIcon } from '@angular/material/icon';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatCheckbox } from '@angular/material/checkbox';
 
 interface SkillModel {
@@ -28,6 +28,7 @@ interface SkillModel {
     MatFabButton,
     MatIcon,
     MatCheckbox,
+    RouterLink,
   ],
   templateUrl: './skill-form.html',
   styleUrl: './skill-form.css',
