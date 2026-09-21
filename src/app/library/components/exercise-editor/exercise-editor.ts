@@ -5,7 +5,7 @@ import { LibraryStore } from '@store/library.store';
 import { MatFabButton } from '@angular/material/button';
 import { createNanoId } from '@common/function/create-id.function';
 import { UpsertExercisePayload } from '@domain/model/exercise.model';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatIcon } from '@angular/material/icon';
 import { SetType } from '@domain/enum/set-type.enum';
 import { MatOption } from '@angular/material/core';
@@ -35,6 +35,7 @@ interface ExerciseModel {
     MatSelect,
     MatCheckbox,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './exercise-editor.html',
   styleUrl: './exercise-editor.css',
@@ -121,10 +122,6 @@ export default class ExerciseEditor {
       this.libraryStore.saveExercise(exercise);
     }
 
-    this.router.navigate(['/exercises']);
-  }
-
-  protected cancel(): void {
     this.router.navigate(['/exercises']);
   }
 }

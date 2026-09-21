@@ -39,7 +39,7 @@
 
 </main>
 <footer class="actions">
-  <button matFab extended class="info" type="button" (click)="cancel()">
+  <button matFab extended class="info" type="button" [routerLink]="['/exercises', id()]">
     <mat-icon>cancel</mat-icon>
     Cancel
   </button>

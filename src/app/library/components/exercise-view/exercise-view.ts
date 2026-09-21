@@ -32,6 +32,9 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
   ],
   templateUrl: './exercise-view.html',
   styleUrl: './exercise-view.css',
+  host: {
+    class: 'page',
+  },
 })
 export default class ExerciseView {
   public id = input.required<string>();
