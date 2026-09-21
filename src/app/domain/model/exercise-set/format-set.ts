@@ -13,7 +13,7 @@ export function formatSet({ type, data }: ExerciseSet): string {
       return `${data.duration}s`;
     }
     case 'duration': {
-      const { hours, minutes } = Temporal.Duration.from({ seconds: data.duration });
+      const { hours, minutes } = Temporal.Duration.from({ minutes: data.duration });
       if (hours) return `${hours}h ${minutes}m`;
       return `${minutes}m`;
     }

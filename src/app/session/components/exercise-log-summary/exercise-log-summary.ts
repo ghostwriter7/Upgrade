@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { Lozenge } from '@ui/lozenge/lozenge';
 import { formatSet } from '@domain/model/exercise-set/format-set';
@@ -8,7 +8,6 @@ import { formatSet } from '@domain/model/exercise-set/format-set';
   imports: [Lozenge],
   templateUrl: './exercise-log-summary.html',
   styleUrl: './exercise-log-summary.css',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExerciseLogSummary {
   public exerciseLog = input.required<ExerciseLog>();
@@ -18,6 +17,9 @@ export class ExerciseLogSummary {
     if (log.isEmpty) return [];
 
     const sets = log.sets;
+
+    if (sets.length === 1) return [formatSet(sets[0])];
+
     if (log.hasAllEqualSets()) return [`${sets.length} x ${formatSet(sets[0])}`];
 
     return sets.map((set) => formatSet(set));

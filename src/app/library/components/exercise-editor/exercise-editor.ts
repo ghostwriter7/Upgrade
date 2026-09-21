@@ -122,6 +122,6 @@ export default class ExerciseEditor {
       this.libraryStore.saveExercise(exercise);
     }
 
-    this.router.navigate(['/exercises']);
+    this.router.navigate(['/exercises', id]);
   }
 }
