@@ -8,10 +8,11 @@ import { ProgressGallery } from '@session/components/progress-gallery/progress-g
 import { MatDivider } from '@angular/material/list';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LibraryStore } from '@store/library.store';
 import { SetType } from '@domain/enum/set-type.enum';
 import { MatChip, MatChipSet } from '@angular/material/chips';
+import { Confirm } from '@ui/confirm/confirm';
 
 @Component({
   selector: 'app-exercise-view',
@@ -29,6 +30,7 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
     MatCardTitle,
     MatChipSet,
     MatChip,
+    Confirm,
   ],
   templateUrl: './exercise-view.html',
   styleUrl: './exercise-view.css',
@@ -40,8 +42,14 @@ export default class ExerciseView {
   public id = input.required<string>();
 
   private readonly libraryStore = inject(LibraryStore);
+  protected readonly confirmDeleteMessage = computed(
+    () => `Are you sure you want to permanently delete "${this.exercise()?.name}"?`,
+  );
   protected readonly exercise = computed(() => {
     const exercise = this.libraryStore.exerciseById()[this.id()];
+
+    if (!exercise) return null;
+
     const skillsById = this.libraryStore.skillsById();
     return {
       ...exercise,
@@ -59,5 +67,12 @@ export default class ExerciseView {
     loader: ({ params }) => this.queryBus.execute(new FindExerciseLogsByExerciseIdQuery(params.id)),
   });
 
-  protected readonly loading = this.logs.isLoading;
+  protected readonly loading = computed(() => this.logs.isLoading() || !this.exercise());
+  protected readonly hasNoLogs = computed(() => !this.loading() && this.logs.value()?.length === 0);
+  private readonly router = inject(Router);
+
+  protected deleteExercise(): void {
+    this.libraryStore.deleteExercise(this.exercise()!);
+    this.router.navigate(['/exercises']);
+  }
 }

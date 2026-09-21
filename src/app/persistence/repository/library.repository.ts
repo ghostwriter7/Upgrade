@@ -165,4 +165,8 @@ export class LibraryRepository extends Repository {
   public deleteSkillById(id: string): Promise<void> {
     return this.database.execute('delete from skill where id = :id', { id });
   }
+
+  public deleteExerciseById(id: string): Promise<void> {
+    return this.database.execute('delete from exercise where id = :id', { id });
+  }
 }

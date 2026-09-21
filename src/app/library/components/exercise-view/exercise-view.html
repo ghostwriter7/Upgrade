@@ -1,7 +1,15 @@
 @if (loading()) {
   <app-loader />
-} @else {
+} @else if (exercise(); as exercise) {
   <header class="header">
+
+    @if (hasNoLogs()) {
+      <button matFab extended class="danger" commandfor="confirm" command="show-modal">
+        <mat-icon>delete</mat-icon>
+        Delete
+      </button>
+    }
+
     <button matFab extended [routerLink]="['/exercises', 'edit', id()]">
       <mat-icon>edit</mat-icon>
       Edit
@@ -11,9 +19,9 @@
   <main class="main">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ exercise().name }}</mat-card-title>
+        <mat-card-title>{{ exercise.name }}</mat-card-title>
 
-        @if (exercise().isFavourite) {
+        @if (exercise.isFavourite) {
           <mat-icon class="ml-auto">star</mat-icon>
         }
 
@@ -24,7 +32,7 @@
           <h3>Units Of Measurement</h3>
           <mat-chip-set>
 
-            @for (unit of exercise().unitsOfMeasurement; track unit) {
+            @for (unit of exercise.unitsOfMeasurement; track unit) {
               <mat-chip>{{ unit }}</mat-chip>
             } @empty {
               <mat-chip>All</mat-chip>
@@ -38,7 +46,7 @@
         <section class="section"><h3>Skills</h3>
           <mat-chip-set>
 
-            @for (skill of exercise().skills; track skill.id) {
+            @for (skill of exercise.skills; track skill.id) {
               <mat-chip [routerLink]="['/skills', skill.id]">{{ skill.name }}</mat-chip>
             } @empty {
               <mat-chip>None</mat-chip>
@@ -82,3 +90,5 @@
     </button>
   </footer>
 }
+
+<app-confirm title="Confirm" [message]="confirmDeleteMessage()" (confirm)="deleteExercise()" />

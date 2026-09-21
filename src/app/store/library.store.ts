@@ -190,6 +190,25 @@ export const LibraryStore = signalStore(
         exercises: [...state.exercises],
       }));
     },
+
+    deleteExercise: (exercise: Pick<Exercise, 'id' | 'skillIds'>): void => {
+      libraryRepository.deleteExerciseById(exercise.id);
+
+      if (exercise.skillIds.length) {
+        const skillsById = store.skillsById();
+        exercise.skillIds.forEach((id) => {
+          skillsById[id].exerciseIds = skillsById[id].exerciseIds.filter(
+            (id) => id !== exercise.id,
+          );
+        });
+      }
+
+      patchState(store, (state) => ({
+        ...state,
+        skills: [...state.skills],
+        exercises: state.exercises.filter((e) => e.id !== exercise.id),
+      }));
+    },
   })),
   withHooks((store, libraryRepository = inject(LibraryRepository)) => ({
     onInit: async () => {
