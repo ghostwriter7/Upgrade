@@ -4,8 +4,8 @@
   @for (target of decoratedTargets(); track target.id) {
     <mat-chip class="lozenge" [style.--progress]="target.completionPercentage">
       <div class="summary">
-        {{ target.skillName }} -
-        {{ target.completionPercentage }}%
+        {{ target.name }} -
+        {{ target.completionPercentage }}% ({{ target.totalDuration }} / {{ target.desiredDuration }})
       </div>
     </mat-chip>
   }

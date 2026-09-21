@@ -44,6 +44,8 @@ export class TargetSummary implements OnInit {
       return {
         ...target,
         skillName: skillsById[target.skillId]?.name,
+        totalDuration: this.stringifyDurationInMinutes(totalDuration),
+        desiredDuration: this.stringifyDurationInMinutes(target.weeklyCommitmentInMinutes),
         completionPercentage: Math.round((totalDuration / target.weeklyCommitmentInMinutes) * 100),
       };
     });
@@ -56,5 +58,16 @@ export class TargetSummary implements OnInit {
     this.sessionRepository
       .getSessionsForRange(weekStart.toPlainDateTime(), now.toPlainDateTime())
       .then((sessions) => this.relevantSessions.set(sessions));
+  }
+
+  private stringifyDurationInMinutes(value: number): string {
+    const hours = Math.floor(value / 60);
+    const minutes = value % 60;
+
+    if (hours && minutes) {
+      return `${hours}h ${minutes}m`;
+    }
+
+    return minutes ? `${minutes}m` : `${hours}h`;
   }
 }
