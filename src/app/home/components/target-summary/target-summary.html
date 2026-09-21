@@ -1,11 +1,19 @@
 @if (hasActiveTargets()) {
   <app-week-progress />
 
+  @if (globalSummary(); as summary) {
+    <mat-chip class="lozenge" [style.--progress]="summary.completionPercentage">
+      <div class="summary">
+        {{ summary.completionPercentage }}% ({{ summary.totalDuration }} / {{ summary.desiredDuration }})
+      </div>
+    </mat-chip>
+  }
+
   @for (target of decoratedTargets(); track target.id) {
     <mat-chip class="lozenge" [style.--progress]="target.completionPercentage">
       <div class="summary">
         {{ target.name }} -
-        {{ target.completionPercentage }}% ({{ target.totalDuration }} / {{ target.desiredDuration }})
+        {{ target.completionPercentage }}% ({{ target.totalDurationValue }} / {{ target.desiredDuration }})
       </div>
     </mat-chip>
   }

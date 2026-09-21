@@ -19,7 +19,26 @@ export class TargetSummary implements OnInit {
 
   protected readonly activeTargets = this.targetStore.targets;
   protected readonly hasActiveTargets = computed(() => !!this.activeTargets().length);
+  protected readonly globalSummary = computed(() => {
+    const targets = this.decoratedTargets();
 
+    if (targets.length) {
+      const totalDuration = targets.reduce((acc, target) => acc + target.totalDuration, 0);
+      const desiredDuration = targets.reduce(
+        (acc, target) => acc + target.weeklyCommitmentInMinutes,
+        0,
+      );
+      const completionPercentage = Math.round((totalDuration / desiredDuration) * 100);
+
+      return {
+        totalDuration: this.stringifyDurationInMinutes(totalDuration),
+        desiredDuration: this.stringifyDurationInMinutes(desiredDuration),
+        completionPercentage,
+      };
+    }
+
+    return null;
+  });
   private readonly relevantSessions = signal<Session[]>([]);
 
   protected readonly decoratedTargets = computed(() => {
@@ -44,7 +63,8 @@ export class TargetSummary implements OnInit {
       return {
         ...target,
         skillName: skillsById[target.skillId]?.name,
-        totalDuration: this.stringifyDurationInMinutes(totalDuration),
+        totalDuration,
+        totalDurationValue: this.stringifyDurationInMinutes(totalDuration),
         desiredDuration: this.stringifyDurationInMinutes(target.weeklyCommitmentInMinutes),
         completionPercentage: Math.round((totalDuration / target.weeklyCommitmentInMinutes) * 100),
       };
