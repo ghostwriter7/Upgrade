@@ -115,3 +115,22 @@ create table if not exists skill_exercise
 -- @changeset 5
 alter table skill
   add column is_favourite boolean not null default false;
+
+-- @changeset 6
+pragma foreign_keys = off;
+alter table skill_exercise
+  rename to skill_exercise_old;
+create table if not exists skill_exercise
+(
+  skill_id    text not null,
+  exercise_id text not null,
+
+  primary key (skill_id, exercise_id),
+  foreign key (skill_id) references skill (id) on delete cascade,
+  foreign key (exercise_id) references exercise (id) on delete cascade
+);
+insert into skill_exercise (skill_id, exercise_id)
+select skill_id, exercise_id
+from skill_exercise_old;
+drop table skill_exercise_old;
+pragma foreign_keys = on;

@@ -1,0 +1,14 @@
+dialog {
+  border: 0;
+  background: transparent;
+
+  &::backdrop {
+    backdrop-filter: blur(3px);
+  }
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}

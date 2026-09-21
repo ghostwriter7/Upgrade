@@ -161,4 +161,8 @@ export class LibraryRepository extends Repository {
 
     return this.database.executeMany(requests);
   }
+
+  public deleteSkillById(id: string): Promise<void> {
+    return this.database.execute('delete from skill where id = :id', { id });
+  }
 }

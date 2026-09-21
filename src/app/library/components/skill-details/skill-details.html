@@ -1,6 +1,11 @@
 @let value = skill();
 <header class="actions">
-  <button matFab extended [routerLink]="['/skills', 'edit', value.id]">
+  <button matFab extended class="danger" commandfor="confirm" command="show-modal">
+    <mat-icon>delete</mat-icon>
+    Delete
+  </button>
+
+  <button matFab extended [routerLink]="['/skills', 'edit', value?.id]">
     <mat-icon>edit</mat-icon>
     Edit
   </button>
@@ -52,3 +57,6 @@
     Exercises
   </button>
 </footer>
+
+<app-confirm title="Confirm" [message]="confirmDeleteMessage()" (confirm)="deleteSkill()" />
+

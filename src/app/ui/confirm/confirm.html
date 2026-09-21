@@ -1,0 +1,20 @@
+<dialog id="confirm">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ title() }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <p>{{ message() }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button matFab extended class="danger" commandfor="confirm" command="close" (click)="confirm.emit()">
+        <mat-icon>check</mat-icon>
+        Yes
+      </button>
+      <button matFab extended class="info" commandfor="confirm" command="close">
+        <mat-icon>close</mat-icon>
+        No
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</dialog>

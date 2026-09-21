@@ -5,7 +5,8 @@ import { MatDivider, MatList, MatListItem } from '@angular/material/list';
 import { LibraryStore } from '@store/library.store';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Confirm } from '@ui/confirm/confirm';
 
 @Component({
   selector: 'app-skill-details',
@@ -21,6 +22,7 @@ import { RouterLink } from '@angular/router';
     MatFabButton,
     MatIcon,
     RouterLink,
+    Confirm,
   ],
   templateUrl: './skill-details.html',
   styleUrl: './skill-details.css',
@@ -34,7 +36,16 @@ export default class SkillDetails {
   private readonly libraryStore = inject(LibraryStore);
 
   protected readonly skill = computed(() => this.libraryStore.skillsById()[this.skillId()]);
+  protected readonly confirmDeleteMessage = computed(
+    () => `Are you sure you want to permanently delete "${this.skill()?.name}"?`,
+  );
   protected readonly exercises = computed(
     () => this.libraryStore.exerciseBySkillId().get(this.skillId()) ?? [],
   );
+  private readonly router = inject(Router);
+
+  protected deleteSkill(): void {
+    this.libraryStore.deleteSkill(this.skill());
+    this.router.navigate(['/skills']);
+  }
 }

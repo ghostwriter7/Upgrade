@@ -54,7 +54,9 @@ export default class ExerciseEditor {
 
   private readonly libraryStore = inject(LibraryStore);
   protected readonly skills = this.libraryStore.skills;
-
+  protected readonly navigateBackUrl = computed(() =>
+    this.id() ? ['/exercises', this.id()] : ['/exercises'],
+  );
   private readonly router = inject(Router);
 
   protected readonly unitsOfMeasurements = Object.entries(SetType)

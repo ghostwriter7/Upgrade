@@ -175,6 +175,21 @@ export const LibraryStore = signalStore(
       }));
       libraryRepository.updateExercise(exercise, removedSkillIds, addedSkillIds);
     },
+
+    deleteSkill: (skill: Skill): void => {
+      libraryRepository.deleteSkillById(skill.id);
+
+      const exercises = store.exerciseBySkillId().get(skill.id) ?? [];
+      exercises.forEach(
+        (exercise) => (exercise.skillIds = exercise.skillIds.filter((id) => id !== skill.id)),
+      );
+
+      patchState(store, (state) => ({
+        ...state,
+        skills: state.skills.filter((s) => s.id !== skill.id),
+        exercises: [...state.exercises],
+      }));
+    },
   })),
   withHooks((store, libraryRepository = inject(LibraryRepository)) => ({
     onInit: async () => {
