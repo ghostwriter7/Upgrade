@@ -10,10 +10,10 @@
     <div class="skill-filters">
       @for (option of skillOptions(); track option.skill.id) {
         <button
-          matMiniFab
+          matButton
           [ngClass]="{ success: option.isSelected, info: !option.isSelected }"
           (click)="toggleSkill($index)">
-          <mat-icon [svgIcon]="option.skill.id" />
+          {{ option.skill.name }}
         </button>
       }
     </div>
