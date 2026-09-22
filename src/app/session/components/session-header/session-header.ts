@@ -1,5 +1,4 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Session } from '@domain/model/session/session.model';
 import { DateHelper } from '@common/helper/date.helper';
@@ -12,10 +11,19 @@ import { SessionHeaderMenu } from '@session/components/session-header-menu/sessi
 import { Constructor } from '@common/types/constructor.type';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RpeInput } from '@session/components/rpe-input/rpe-input';
+import { MatChip, MatChipAvatar, MatChipSet } from '@angular/material/chips';
 
 @Component({
   selector: 'app-session-header',
-  imports: [MatFabButton, MatIcon, SessionHeaderMenu, ReactiveFormsModule, RpeInput],
+  imports: [
+    MatIcon,
+    SessionHeaderMenu,
+    ReactiveFormsModule,
+    MatChipAvatar,
+    RpeInput,
+    MatChipSet,
+    MatChip,
+  ],
   templateUrl: './session-header.html',
   providers: [DialogService],
   styleUrl: './session-header.css',

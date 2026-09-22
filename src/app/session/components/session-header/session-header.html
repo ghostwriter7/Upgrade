@@ -1,30 +1,32 @@
 <header>
   <div class="row">
-    <button
-      [attr.data-testid]="testIds.startedAt"
-      matFab extended
-      [class.no-events]="isNonEditable()"
-      (click)="editStartedAt()">
-      <mat-icon>access_time</mat-icon>
-      <span [attr.data-testid]="testIds.startedAtValue">{{ startedAt() }}</span>
-    </button>
-    @if (finishedAt(); as finishedAt) {
-      <button
-        [attr.data-testid]="testIds.finishedAt"
-        matFab extended
+    <mat-chip-set>
+      <mat-chip
+        [attr.data-testid]="testIds.startedAt"
         [class.no-events]="isNonEditable()"
-        (click)="editFinishedAt()">
-        <mat-icon>access_time_filled</mat-icon>
-        <span [attr.data-testid]="testIds.finishedAtValue">{{ finishedAt }}</span>
-      </button>
-    }
-    @if (duration(); as duration) {
-      <span
-        class="metadata">
-        <mat-icon>hourglass_empty</mat-icon>
-        <span [attr.data-testid]="testIds.duration">{{ duration }}</span>
-      </span>
-    }
+        (click)="editStartedAt()"
+      >
+        <mat-icon matChipAvatar>access_time</mat-icon>
+        <span [attr.data-testid]="testIds.startedAtValue">{{ startedAt() }}</span>
+      </mat-chip>
+      @if (finishedAt(); as finishedAt) {
+        <mat-chip
+          [attr.data-testid]="testIds.finishedAt"
+          [class.no-events]="isNonEditable()"
+          (click)="editFinishedAt()"
+        >
+          <mat-icon matChipAvatar>access_time_filled</mat-icon>
+          <span [attr.data-testid]="testIds.finishedAtValue">{{ finishedAt }}</span>
+        </mat-chip>
+      }
+      @if (duration(); as duration) {
+        <mat-chip>
+          <mat-icon matChipAvatar>hourglass_empty</mat-icon>
+          <span [attr.data-testid]="testIds.duration">{{ duration }}</span>
+        </mat-chip>
+      }
+
+    </mat-chip-set>
 
     <app-session-header-menu [session]="session()" [isNew]="isNew()" />
   </div>
