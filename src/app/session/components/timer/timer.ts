@@ -50,7 +50,7 @@ export class Timer {
       .map(pad)
       .join(':');
   });
-  private readonly isRunning = linkedSignal(this.autoPlay);
+  protected readonly isRunning = linkedSignal(this.autoPlay);
   protected readonly duration = model(0);
   protected readonly toggleIcon = computed(() =>
     this.isExpanded() ? 'collapse_all' : 'expand_all',

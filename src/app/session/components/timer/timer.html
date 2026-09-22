@@ -1,19 +1,25 @@
 <mat-card class="card">
   <mat-card-content class="card-content">
     <div class="content">
-      <span data-testid="timer-display" [class.large]="isDurationTimerRunning()"
-            class="display-value">{{ displayValue() }}</span>
+      <span
+        data-testid="timer-display"
+        class="display-value"
+        [class.large]="isDurationTimerRunning()">
+        {{ displayValue() }}
+      </span>
 
       @if (controlsVisible()) {
         <div data-testid="timer-actions" class="actions">
+          @if (!isRunning()) {
           <button data-testid="timer-start" class="success" matMiniFab (click)="start()">
             <mat-icon>play_arrow</mat-icon>
           </button>
-
-          <button data-testid="timer-pause" class="info" matMiniFab (click)="pause()">
-            <mat-icon>pause</mat-icon>
-          </button>
-
+          }
+          @if (isRunning()) {
+            <button data-testid="timer-pause" class="info" matMiniFab (click)="pause()">
+              <mat-icon>pause</mat-icon>
+            </button>
+          }
           <button data-testid="timer-clear" class="danger" matMiniFab (click)="reset()">
             <mat-icon>clear</mat-icon>
           </button>
