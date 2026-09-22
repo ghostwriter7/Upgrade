@@ -17,6 +17,7 @@ export class CreateSessionCommandHandler implements CommandHandler<CreateSession
 
   public handle(command: CreateSessionCommand): void {
     const session = Session.createEmpty();
+    session.skillId = command.skillId;
     this.sessionStateHolder.set(session);
     this.sessionRepository.save(session);
   }

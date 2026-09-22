@@ -8,8 +8,6 @@ import { SessionStore } from '@store/session/session.store';
 import { DialogService } from '@common/service/dialog/dialog.service';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { CreateSessionCommand } from '../../commands/create-session/create-session-command';
-import { LibraryStore } from '@store/library.store';
-import { Skill } from '@domain/model/skill';
 
 @Component({
   selector: 'app-session-editor',
@@ -20,21 +18,17 @@ import { Skill } from '@domain/model/skill';
 })
 export default class SessionEditor implements OnInit, OnDestroy {
   public isNew = input(false);
-  public skill = input<Skill | undefined, string | undefined>(undefined, {
-    transform: (skillId) => (skillId ? this.libraryStore.skillsById()[skillId] : undefined),
-  });
+  public skillId = input<string>();
 
   private readonly sessionStateHolder = inject(SessionStateHolder);
-  private readonly libraryStore = inject(LibraryStore);
   private readonly sessionStore = inject(SessionStore);
   private readonly commandBus = inject(CommandBus);
 
   protected readonly session = this.sessionStateHolder.session;
 
   public ngOnInit(): void {
-    this.libraryStore.setActiveSkill(this.skill());
     if (this.isNew()) {
-      this.commandBus.dispatch(new CreateSessionCommand());
+      this.commandBus.dispatch(new CreateSessionCommand(this.skillId()));
     }
   }
 
@@ -44,6 +38,5 @@ export default class SessionEditor implements OnInit, OnDestroy {
       this.sessionStore.updateCache(session);
       if (!this.isNew()) this.sessionStateHolder.set(null);
     }
-    this.libraryStore.setActiveSkill(undefined);
   }
 }

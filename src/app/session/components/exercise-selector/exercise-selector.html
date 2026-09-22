@@ -6,18 +6,14 @@
   <button matMiniFab (click)="toggleSorting()">
     <mat-icon>sort</mat-icon>
   </button>
-  @if (showFilters()) {
     <div class="skill-filters">
-      @for (option of skillOptions(); track option.skill.id) {
-        <button
-          matButton
-          [ngClass]="{ success: option.isSelected, info: !option.isSelected }"
-          (click)="toggleSkill($index)">
-          {{ option.skill.name }}
-        </button>
-      }
+      <mat-chip-listbox [value]="activeSkill()" [hideSingleSelectionIndicator]="true" [multiple]="false"
+                        aria-label="Skill selection" (change)="handleSkillChange($event)">
+        @for (option of skillOptions(); track option.id) {
+          <mat-chip-option [value]="option.id">{{ option.name }}</mat-chip-option>
+        }
+      </mat-chip-listbox>
     </div>
-  }
 
   @if (showFilters() && showSorting()) {
     <mat-divider class="full-width" />

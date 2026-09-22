@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -10,7 +10,6 @@ import { DialogService } from '@common/service/dialog/dialog.service';
 import { AddExerciseCommand } from '../../commands/add-exercise/add-exercise.command';
 
 @Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-session-actions',
   imports: [MatFabButton, MatIcon],
   templateUrl: './session-actions.html',

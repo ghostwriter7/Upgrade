@@ -28,18 +28,12 @@ export class SkillSessionSelector {
   private readonly libraryStore = inject(LibraryStore);
   private readonly router = inject(Router);
 
-  protected readonly skills = this.libraryStore.skills;
-
-  protected readonly favouriteSkills = computed(() =>
-    this.libraryStore.skills().filter((skill) => skill.isFavourite),
-  );
-  protected readonly remainingSkills = computed(() =>
-    this.libraryStore.skills().filter((skill) => !skill.isFavourite),
-  );
+  protected readonly favouriteSkills = this.libraryStore.favouriteSkillsWithExercises;
+  protected readonly remainingSkills = this.libraryStore.remainingSkillsWithExercises;
   protected readonly hasRemainingSkills = computed(() => this.remainingSkills().length > 0);
   protected readonly hasFavouriteSkills = computed(() => this.favouriteSkills().length > 0);
 
   protected initSession(skill: Skill): void {
-    this.router.navigate(['session', 'new'], { queryParams: { skill: skill.id } });
+    this.router.navigate(['session', 'new'], { queryParams: { skillId: skill.id } });
   }
 }

@@ -13,16 +13,18 @@ import { DateHelper } from '@common/helper/date.helper';
 import { LibraryRepository } from '@persistence/repository/library.repository';
 
 interface State {
-  activeSkill: Skill | undefined;
   exercises: Exercise[];
   skills: Skill[];
 }
 
 const initialState: State = {
-  activeSkill: undefined,
   exercises: [],
   skills: [],
 };
+
+function isSkillWithExercises(skill: Skill): boolean {
+  return skill.exerciseIds.length > 0;
+}
 
 export const LibraryStore = signalStore(
   { providedIn: 'root' },
@@ -34,6 +36,8 @@ export const LibraryStore = signalStore(
         return lookup;
       }, new Map<string, Exercise[]>()),
     ),
+    favouriteSkills: computed(() => store.skills().filter((skill) => skill.isFavourite)),
+    remainingSkills: computed(() => store.skills().filter((skill) => !skill.isFavourite)),
     skillsById: computed(() =>
       store
         .skills()
@@ -41,11 +45,12 @@ export const LibraryStore = signalStore(
     ),
   })),
   withComputed((store) => ({
-    activeExercises: computed(() => {
-      const skill = store.activeSkill();
-      if (!skill) return store.exercises();
-      return store.exerciseBySkillId().get(skill.id) ?? [];
-    }),
+    favouriteSkillsWithExercises: computed(() =>
+      store.favouriteSkills().filter(isSkillWithExercises),
+    ),
+    remainingSkillsWithExercises: computed(() =>
+      store.remainingSkills().filter(isSkillWithExercises),
+    ),
     exerciseNames: computed(
       () => new Set(store.exercises().map((exercise) => exercise.name.toLowerCase())),
     ),
@@ -101,20 +106,6 @@ export const LibraryStore = signalStore(
       }));
 
       libraryRepository.saveSkill(skill);
-    },
-
-    setActiveSkill: (activeSkill: Skill | undefined) => patchState(store, { activeSkill }),
-
-    getExercisesForSkills: (skills: Skill[]): Exercise[] => {
-      const exercises = skills.flatMap((skill) => store.exerciseBySkillId().get(skill.id) ?? []);
-      const seen = new Set<string>();
-      return exercises
-        .filter((exercise) => {
-          if (seen.has(exercise.id)) return false;
-          seen.add(exercise.id);
-          return true;
-        })
-        .toSorted((a, b) => a.name.localeCompare(b.name));
     },
 
     saveExercise: (exercise: UpsertExercisePayload) => {
