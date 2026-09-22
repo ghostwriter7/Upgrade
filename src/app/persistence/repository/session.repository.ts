@@ -69,7 +69,7 @@ export class SessionRepository extends Repository {
     return this.toDomain(results);
   }
 
-  public async save(session: Session): Promise<void> {
+  public save(session: Session): Promise<void> {
     return super.execute(
       `insert into session (id, started_at, finished_at, rpe) values (:id, :startedAt, :finishedAt, :rpe)`,
       {

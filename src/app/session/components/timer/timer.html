@@ -1,21 +1,46 @@
 <mat-card class="card">
-  <mat-card-content class="content">
-    <span data-testid="timer-display" class="display-value">{{ displayValue() }}</span>
+  <mat-card-content class="card-content">
+    <div class="content">
+      <span data-testid="timer-display" [class.large]="isDurationTimerRunning()"
+            class="display-value">{{ displayValue() }}</span>
 
-    @if (showControls()) {
-      <div data-testid="timer-actions" class="actions">
-        <button data-testid="timer-start" class="success" matMiniFab (click)="start()">
-          <mat-icon>play_arrow</mat-icon>
-        </button>
+      @if (controlsVisible()) {
+        <div data-testid="timer-actions" class="actions">
+          <button data-testid="timer-start" class="success" matMiniFab (click)="start()">
+            <mat-icon>play_arrow</mat-icon>
+          </button>
 
-        <button data-testid="timer-pause" class="info" matMiniFab (click)="pause()">
-          <mat-icon>pause</mat-icon>
-        </button>
+          <button data-testid="timer-pause" class="info" matMiniFab (click)="pause()">
+            <mat-icon>pause</mat-icon>
+          </button>
 
-        <button data-testid="timer-clear" class="danger" matMiniFab (click)="reset()">
-          <mat-icon>clear</mat-icon>
-        </button>
-      </div>
+          <button data-testid="timer-clear" class="danger" matMiniFab (click)="reset()">
+            <mat-icon>clear</mat-icon>
+          </button>
+
+          <button matMiniFab (click)="toggle()">
+            <mat-icon>{{ toggleIcon() }}</mat-icon>
+          </button>
+        </div>
+      }
+    </div>
+
+    @if (isDurationTimerRunning()) {
+      <button matFab extended class="info" (click)="cancelDurationTimer()">
+        <mat-icon>cancel</mat-icon>
+        Cancel
+      </button>
+    } @else {
+      <mat-form-field>
+        <mat-label>Duration</mat-label>
+        <input matInput [(ngModel)]="duration" type="number" />
+      </mat-form-field>
+
+      <button matFab extended (click)="startDurationTimer()">
+        <mat-icon>check</mat-icon>
+        Start
+      </button>
     }
+
   </mat-card-content>
 </mat-card>

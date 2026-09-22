@@ -1,12 +1,29 @@
 :host {
   position: fixed;
-  bottom: var(--space-2);
-  left: var(--space-2);
-  right: var(--space-2);
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  transform: translateY(calc(50svh - 76px));
+  transition: transform .2s ease-in-out;
+  min-height: 50svh;
+  background: var(--mat-sys-surface-container-low);
+
+  &.expanded {
+    transform: translateY(0);
+  }
 }
 
 .card {
+  border-radius: 0;
   width: 100%;
+}
+
+.card-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-5);
+  min-height: 50svh;
 }
 
 .content {
@@ -28,4 +45,10 @@
   font: var(--mat-sys-display-small);
   box-shadow: var(--mat-sys-shadow);
   padding-inline: var(--space-4);
+
+  &.large {
+    width: 100%;
+    font: var(--mat-sys-display-large);
+    text-align: center;
+  }
 }
