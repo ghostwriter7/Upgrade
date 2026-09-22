@@ -19,6 +19,7 @@ import { ExerciseCardActions } from '../exercise-card-actions/exercise-card-acti
 import { ExerciseLog } from '@domain/model/exercise-log/exercise-log.model';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
 import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-exercise-card',
@@ -34,6 +35,7 @@ import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exe
     ExerciseCardActions,
     ProgressGallery,
     ExerciseLogSummary,
+    RouterLink,
   ],
   templateUrl: './exercise-card.html',
   styleUrl: './exercise-card.css',
@@ -51,6 +53,9 @@ export class ExerciseCard {
     };
   });
 
+  protected readonly link = computed(() =>
+    this.isEditable() ? null : ['/exercises', this.exerciseLog().exerciseId],
+  );
   protected readonly displayActions = signal(false);
   private readonly header = viewChild.required(MatCardHeader, { read: ElementRef });
   private readonly eventService = inject(EventService);

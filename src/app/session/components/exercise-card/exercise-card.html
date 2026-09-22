@@ -3,7 +3,7 @@
   <mat-card-header
     [attr.data-testid]="ids.exerciseCardHeader" class="exercise-header"
     (click)="activateActions()">
-    <mat-card-title>{{ exerciseLog().exerciseId | exerciseName }}</mat-card-title>
+    <mat-card-title [routerLink]="link()">{{ exerciseLog().exerciseId | exerciseName }}</mat-card-title>
 
     @if (displayActions()) {
       <app-exercise-card-actions [exerciseLog]="exerciseLog()" [isNonDeletable]="isNonDeletable()" />
