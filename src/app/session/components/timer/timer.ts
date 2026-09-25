@@ -30,7 +30,7 @@ export class Timer {
   public autoPlay = input(false);
 
   protected readonly controlsVisible = computed(
-    () => this.showControls() && !this.isDurationTimerRunning(),
+    () => this.showControls() && !this.isCountDown(),
   );
   private readonly timer = signal(0);
 
@@ -43,7 +43,7 @@ export class Timer {
       largestUnit: 'hours',
     });
     return (
-      this.isDurationTimerRunning()
+      this.isCountDown()
         ? [hours, minutes, seconds, Math.floor(milliseconds / 10)]
         : [hours, minutes, seconds]
     )
@@ -56,7 +56,7 @@ export class Timer {
     this.isExpanded() ? 'collapse_all' : 'expand_all',
   );
   private readonly direction = signal<1 | -1>(1);
-  protected readonly isDurationTimerRunning = signal(false);
+  protected readonly isCountDown = signal(false);
 
   constructor() {
     let intervalId: number | undefined;
@@ -65,7 +65,7 @@ export class Timer {
 
       if (intervalId) clearInterval(intervalId);
 
-      const timeout = this.isDurationTimerRunning() ? 10 : 1000;
+      const timeout = this.isCountDown() ? 10 : 1000;
       const direction = this.direction();
       intervalId = setInterval(
         () => this.timer.update((current) => current + direction * timeout),
@@ -97,12 +97,13 @@ export class Timer {
   }
 
   protected async startDurationTimer(): Promise<void> {
-    if (this.isDurationTimerRunning()) return;
+    if (this.isCountDown()) return;
 
+    this.isRunning.set(false);
     const durationMs = this.duration() * 1000;
     if (!durationMs) return;
 
-    this.isDurationTimerRunning.set(true);
+    this.isCountDown.set(true);
 
     this.direction.set(-1);
     this.timer.set(durationMs);
@@ -135,12 +136,12 @@ export class Timer {
     this.isRunning.set(false);
     this.timer.set(0);
     this.direction.set(1);
-    this.isDurationTimerRunning.set(false);
+    this.isCountDown.set(false);
   }
 
   private async sleepUnlessCancelled(value: number): Promise<boolean> {
     await new Promise((resolve) => setTimeout(resolve, value));
-    return this.isDurationTimerRunning();
+    return this.isCountDown();
   }
 
   private getBeep(): (frequency?: number, durationMs?: number, volume?: number) => void {

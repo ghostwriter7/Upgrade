@@ -4,7 +4,7 @@
       <span
         data-testid="timer-display"
         class="display-value"
-        [class.large]="isDurationTimerRunning()">
+        [class.large]="isCountDown()">
         {{ displayValue() }}
       </span>
 
@@ -31,7 +31,7 @@
       }
     </div>
 
-    @if (isDurationTimerRunning()) {
+    @if (isCountDown()) {
       <button matFab extended class="info" (click)="cancelDurationTimer()">
         <mat-icon>cancel</mat-icon>
         Cancel
