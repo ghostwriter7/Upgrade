@@ -3,6 +3,7 @@
   bottom: 0;
   left: 0;
   right: 0;
+  z-index: 1000;
 
   transform: translateY(calc(50svh - 76px));
   transition: transform .2s ease-in-out;
@@ -11,6 +12,15 @@
 
   &.expanded {
     transform: translateY(0);
+  }
+
+  &.no-controls {
+    min-height: unset;
+    transform: unset;
+
+    .card-content {
+      min-height: unset;
+    }
   }
 }
 

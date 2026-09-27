@@ -31,21 +31,23 @@
       }
     </div>
 
-    @if (isCountDown()) {
-      <button matFab extended class="info" (click)="cancelDurationTimer()">
-        <mat-icon>cancel</mat-icon>
-        Cancel
-      </button>
-    } @else {
-      <mat-form-field>
-        <mat-label>Duration</mat-label>
-        <input matInput [(ngModel)]="duration" type="number" />
-      </mat-form-field>
+    @if (showControls()) {
+      @if (isCountDown()) {
+        <button matFab extended class="info" (click)="cancelDurationTimer()">
+          <mat-icon>cancel</mat-icon>
+          Cancel
+        </button>
+      } @else {
+        <mat-form-field>
+          <mat-label>Duration</mat-label>
+          <input matInput [(ngModel)]="duration" type="number" />
+        </mat-form-field>
 
-      <button matFab extended (click)="startDurationTimer()">
-        <mat-icon>check</mat-icon>
-        Start
-      </button>
+        <button matFab extended (click)="startDurationTimer()">
+          <mat-icon>check</mat-icon>
+          Start
+        </button>
+      }
     }
 
   </mat-card-content>

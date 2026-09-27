@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './timer.css',
   host: {
     '[class.expanded]': 'isExpanded()',
+    '[class.no-controls]': '!showControls()',
   },
 })
 export class Timer {
