@@ -3,6 +3,7 @@ export interface Dont {
   title: string;
   createdAt: Temporal.Instant;
   failures: Temporal.Instant[];
+  streak: number;
 }
 
 export type CreateDontRequest = Pick<Dont, 'title'>;

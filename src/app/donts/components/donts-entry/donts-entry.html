@@ -1,7 +1,7 @@
 <div class="entry">
-  <span class="title">Late-night scrolling</span>
+  <span class="title">{{ dont().title }}</span>
 
-  <span class="streak">3 day streak</span>
+  <span class="streak">{{ dont().streak }} day streak</span>
 
   <div class="week-view">
     <span class="label">M</span>
@@ -21,5 +21,5 @@
     <span class="dot"></span>
   </div>
 
-  <button matButton="outlined"  class="action">Log slip</button>
+  <button matButton="outlined" class="action" (click)="logSlip()">Log slip</button>
 </div>

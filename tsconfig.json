@@ -29,7 +29,8 @@
       "@form/*": ["./src/app/form/*"],
       "@target/*": ["./src/app/target/*"],
       "@infrastructure/*": ["./src/app/infrastructure/*"],
-      "@library/*": ["./src/app/library/*"]
+      "@library/*": ["./src/app/library/*"],
+      "@donts/*": ["./src/app/donts/*"],
     }
   },
   "angularCompilerOptions": {
