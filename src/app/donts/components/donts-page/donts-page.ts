@@ -3,8 +3,6 @@ import { DontsHeader } from '../donts-header/donts-header';
 import { DontsStats } from '../donts-stats/donts-stats';
 import { DontsEntry } from '../donts-entry/donts-entry';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
-import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { DontsForm } from '../donts-form/donts-form';
 
