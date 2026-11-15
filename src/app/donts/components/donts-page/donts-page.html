@@ -1,4 +1,6 @@
 <app-donts-header />
 <app-donts-stats />
 <app-donts-entry />
-<button matButton="outlined" class="full-width">New Don't</button>
+<button matButton="outlined" class="full-width" (click)="form.show()">New Don't</button>
+
+<app-donts-form (create)="onCreateNew($event)" #form />

@@ -1,0 +1,17 @@
+<dialog class="dialog" id="new-dont-dialog" #dialog>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>New Don't</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput id="title" [(ngModel)]="value" type="text" />
+      </mat-form-field>
+    </mat-card-content>
+    <mat-card-actions>
+      <button matButton (click)="cancel()">Cancel</button>
+      <button matButton="filled" [disabled]="isInvalid()" (click)="confirm()">Confirm</button>
+    </mat-card-actions>
+  </mat-card>
+</dialog>
