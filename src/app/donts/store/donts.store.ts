@@ -108,6 +108,26 @@ export const DontsStore = signalStore(
           week: getWeek(dont, now),
           streak: calculateStreak(dont, now),
         }))
+    }),
+
+    weekSlipCount: computed(() => {
+      const now = Temporal.Now.plainDateISO(TIME_ZONE);
+      const monday = now.subtract({ days: now.dayOfWeek - 1 });
+
+      return store.donts()
+        .reduce((total, currentDont) => {
+          const slips = currentDont.failures;
+          for (let i = slips.length - 1; i >= 0; i--) {
+            const slip = slips[i].toZonedDateTimeISO(TIME_ZONE).toPlainDate();
+            if (Temporal.PlainDate.compare(slip, monday) >= 0) {
+              total++;
+            } else {
+              break;
+            }
+          }
+
+          return total;
+        }, 0);
     })
   })),
 
