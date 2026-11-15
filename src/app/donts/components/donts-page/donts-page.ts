@@ -8,5 +8,8 @@ import { DontsEntry } from '../donts-entry/donts-entry';
   imports: [DontsHeader, DontsStats, DontsEntry],
   templateUrl: './donts-page.html',
   styleUrl: './donts-page.css',
+  host: {
+    class: 'page'
+  }
 })
 export default class DontsPage {}
