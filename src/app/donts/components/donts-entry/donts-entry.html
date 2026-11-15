@@ -12,13 +12,9 @@
     <span class="label">S</span>
     <span class="label">S</span>
 
-    <span class="dot success"></span>
-    <span class="dot success"></span>
-    <span class="dot failure"></span>
-    <span class="dot success"></span>
-    <span class="dot success"></span>
-    <span class="dot"></span>
-    <span class="dot"></span>
+    @for (dayStatus of dont().week; track $index) {
+      <span class="dot" [ngClass]="dayStatus"></span>
+    }
   </div>
 
   <button matButton="outlined" class="action" (click)="logSlip()">Log slip</button>

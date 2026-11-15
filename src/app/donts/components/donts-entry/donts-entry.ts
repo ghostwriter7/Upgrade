@@ -1,16 +1,17 @@
 import { Component, inject, input } from '@angular/core';
 import { MatButton } from '@angular/material/button';
-import { Dont } from '../../model/dont.interface';
+import { UiDont } from '../../model/dont.interface';
 import { DontsStore } from '@donts/store/donts.store';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-donts-entry',
-  imports: [MatButton],
+  imports: [MatButton, NgClass],
   templateUrl: './donts-entry.html',
   styleUrl: './donts-entry.css',
 })
 export class DontsEntry {
-  public dont = input.required<Dont>();
+  public dont = input.required<UiDont>();
 
   private readonly dontsStore = inject(DontsStore);
 

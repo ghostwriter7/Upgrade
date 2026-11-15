@@ -18,7 +18,7 @@ import { DontsStore } from '../../store/donts.store';
 })
 export default class DontsPage {
   private readonly dontsStore = inject(DontsStore);
-  protected readonly donts = this.dontsStore.donts;
+  protected readonly donts = this.dontsStore.uiDonts;
 
   protected onCreateNew(title: string): void {
     this.dontsStore.create({ title });

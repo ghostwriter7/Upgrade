@@ -1,6 +1,20 @@
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
-import { CreateDontRequest, Dont, UpdateDontRequest } from '../model/dont.interface';
+import {
+  patchState,
+  signalStore,
+  withComputed,
+  withHooks,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
+import {
+  CreateDontRequest,
+  DayStatus,
+  Dont,
+  UiDont,
+  UpdateDontRequest,
+} from '../model/dont.interface';
 import { createNanoId } from '@common/function/create-id.function';
+import { computed } from '@angular/core';
 
 interface State {
   donts: Dont[];
@@ -40,28 +54,42 @@ function persist(donts: Dont[]): void {
   localStorage.setItem(key, JSON.stringify(donts.map(toDto)));
 }
 
-function restore(): Dont[] {
+const TIME_ZONE = 'Europe/Warsaw';
+
+function toDate(instant: Temporal.Instant): Temporal.PlainDate {
+  return instant.toZonedDateTimeISO(TIME_ZONE).toPlainDate();
+}
+
+function calculateStreak(
+  dont: Omit<Dont, 'streak'>,
+  now = Temporal.Now.plainDateISO(TIME_ZONE),
+): number {
+  const start = dont.failures.at(-1) ?? dont.createdAt;
+  return toDate(start).until(now, { largestUnit: 'day' }).days;
+}
+
+function getWeek(dont: Pick<Dont, 'createdAt' | 'failures'>, now = Temporal.Now.plainDateISO(TIME_ZONE)): DayStatus[] {
+  const monday = now.subtract({ days: now.dayOfWeek - 1 });
+
+  const slipDates = new Set(dont.failures.map((s) => toDate(s).toString()));
+  const createdAt = toDate(dont.createdAt);
+
+  return Array.from({ length: 7 }).map((_, index) => {
+    const currentDate = monday.add({ days: index });
+
+    if (Temporal.PlainDate.compare(currentDate, createdAt) < 0) return 'inactive';
+    if (Temporal.PlainDate.compare(currentDate, now) > 0) return 'future';
+
+    if (slipDates.has(currentDate.toString())) return 'failure';
+
+    return 'success';
+  });
+}
+
+function restore(): UiDont[] {
   const json = localStorage.getItem(key);
   if (json) {
-    const now = Temporal.Now.instant();
-    return Iterator.from(JSON.parse(json))
-      .map((entry) => toModel(entry as Dto))
-      .map((dont) => {
-        const lastFailure = dont.failures.at(-1);
-
-        if (!lastFailure) {
-          return {
-            ...dont,
-            streak: dont.createdAt.until(now).days,
-          };
-        }
-
-        return {
-          ...dont,
-          streak: lastFailure.until(now).days,
-        };
-      })
-      .toArray();
+    return JSON.parse(json).map(toModel)
   }
   return [];
 }
@@ -69,6 +97,19 @@ function restore(): Dont[] {
 export const DontsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
+
+  withComputed((store) => ({
+    uiDonts: computed(() => {
+      const now = Temporal.Now.plainDateISO(TIME_ZONE);
+
+      return store.donts()
+        .map((dont) => ({
+          ...dont,
+          week: getWeek(dont, now),
+          streak: calculateStreak(dont, now),
+        }))
+    })
+  })),
 
   withMethods((store) => {
     const getIndex = (id: string): number => store.donts().findIndex((dont) => dont.id === id);
@@ -80,7 +121,6 @@ export const DontsStore = signalStore(
           const existing = store.donts()[index];
           const updated = {
             ...existing,
-            streak: 0,
             failures: [...existing.failures, Temporal.Now.instant()],
           };
           patchState(store, (state) => ({
@@ -95,12 +135,12 @@ export const DontsStore = signalStore(
         const isExisting = store.donts().some((dont) => dont.title === title);
 
         if (!isExisting) {
+          const createdAt = Temporal.Now.instant();
           const dont: Dont = {
             id: createNanoId(),
             title,
-            createdAt: Temporal.Now.instant(),
+            createdAt,
             failures: [],
-            streak: 0,
           };
           patchState(store, (state) => ({
             ...state,
@@ -140,6 +180,6 @@ export const DontsStore = signalStore(
     onInit: () => {
       const donts = restore();
       patchState(store, { donts });
-    }
-  }))
+    },
+  })),
 );
