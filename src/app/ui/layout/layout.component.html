@@ -42,6 +42,15 @@
         <span matListItemTitle>Backup</span>
       </a>
 
+      <mat-divider />
+
+      <h4 matSubheader>Experimental</h4>
+
+      <a mat-list-item routerLink="/donts">
+        <mat-icon matListItemIcon>do_not_touch</mat-icon>
+        <span matListItemTitle>Don'ts</span>
+      </a>
+
       @if (storageEstimate(); as estimate) {
         <div class="storage">
           <span>Storage: </span>
