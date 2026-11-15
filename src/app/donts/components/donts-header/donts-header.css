@@ -1,0 +1,10 @@
+.subtitle {
+  font: var(--mat-sys-body-small);
+  margin: var(--space-1);
+  color: var(--mat-sys-secondary);
+}
+
+.header {
+  margin: var(--space-1);
+  font: var(--mat-sys-headline-medium);
+}
