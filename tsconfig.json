@@ -30,7 +30,7 @@
       "@target/*": ["./src/app/target/*"],
       "@infrastructure/*": ["./src/app/infrastructure/*"],
       "@library/*": ["./src/app/library/*"],
-      "@donts/*": ["./src/app/donts/*"],
+      "@habits/*": ["./src/app/habits/*"]
     }
   },
   "angularCompilerOptions": {

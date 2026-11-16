@@ -1,11 +1,12 @@
-import { Component, computed, ElementRef, model, output, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, output, signal, viewChild } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/material/card';
 import { MatFormField, MatInput, MatLabel } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-donts-form',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-habit-form',
   imports: [
     MatButton,
     MatCard,
@@ -18,10 +19,10 @@ import { FormsModule } from '@angular/forms';
     MatLabel,
     FormsModule,
   ],
-  templateUrl: './donts-form.html',
-  styleUrl: './donts-form.css',
+  templateUrl: './habit-form.html',
+  styleUrl: './habit-form.css',
 })
-export class DontsForm {
+export class HabitForm {
   public create = output<string>();
 
   protected readonly value = signal('');

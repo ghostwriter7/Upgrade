@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DontsStats } from './donts-stats';
+import { HabitHeader } from './habit-header';
 
-describe('DontsStats', () => {
-  let component: DontsStats;
-  let fixture: ComponentFixture<DontsStats>;
+describe('HabitHeader', () => {
+  let component: HabitHeader;
+  let fixture: ComponentFixture<HabitHeader>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DontsStats],
+      imports: [HabitHeader],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DontsStats);
+    fixture = TestBed.createComponent(HabitHeader);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

@@ -7,21 +7,21 @@ import {
   withState,
 } from '@ngrx/signals';
 import {
-  CreateDontRequest,
+  CreateHabitRequest,
   DayStatus,
-  Dont,
-  UiDont,
-  UpdateDontRequest,
-} from '../model/dont.interface';
+  Habit,
+  UiHabit,
+  UpdateHabitRequest,
+} from '../model/habit.interface';
 import { createNanoId } from '@common/function/create-id.function';
 import { computed } from '@angular/core';
 
 interface State {
-  donts: Dont[];
+  habits: Habit[];
 }
 
 const initialState: State = {
-  donts: [],
+  habits: [],
 };
 
 interface Dto {
@@ -31,16 +31,16 @@ interface Dto {
   failures: number[];
 }
 
-function toDto(dont: Dont): Dto {
+function toDto(habit: Habit): Dto {
   return {
-    id: dont.id,
-    title: dont.title,
-    createdAt: dont.createdAt.epochMilliseconds,
-    failures: dont.failures.map((failure) => failure.epochMilliseconds),
+    id: habit.id,
+    title: habit.title,
+    createdAt: habit.createdAt.epochMilliseconds,
+    failures: habit.failures.map((failure) => failure.epochMilliseconds),
   };
 }
 
-function toModel(dto: Dto): Omit<Dont, 'streak'> {
+function toModel(dto: Dto): Omit<Habit, 'streak'> {
   return {
     id: dto.id,
     title: dto.title,
@@ -50,8 +50,8 @@ function toModel(dto: Dto): Omit<Dont, 'streak'> {
 }
 
 const key = 'donts';
-function persist(donts: Dont[]): void {
-  localStorage.setItem(key, JSON.stringify(donts.map(toDto)));
+function persist(habits: Habit[]): void {
+  localStorage.setItem(key, JSON.stringify(habits.map(toDto)));
 }
 
 const TIME_ZONE = 'Europe/Warsaw';
@@ -61,18 +61,18 @@ function toDate(instant: Temporal.Instant): Temporal.PlainDate {
 }
 
 function calculateStreak(
-  dont: Omit<Dont, 'streak'>,
+  habit: Omit<Habit, 'streak'>,
   now = Temporal.Now.plainDateISO(TIME_ZONE),
 ): number {
-  const start = dont.failures.at(-1) ?? dont.createdAt;
+  const start = habit.failures.at(-1) ?? habit.createdAt;
   return toDate(start).until(now, { largestUnit: 'day' }).days;
 }
 
-function getWeek(dont: Pick<Dont, 'createdAt' | 'failures'>, now = Temporal.Now.plainDateISO(TIME_ZONE)): DayStatus[] {
+function getWeek(habit: Pick<Habit, 'createdAt' | 'failures'>, now = Temporal.Now.plainDateISO(TIME_ZONE)): DayStatus[] {
   const monday = now.subtract({ days: now.dayOfWeek - 1 });
 
-  const slipDates = new Set(dont.failures.map((s) => toDate(s).toString()));
-  const createdAt = toDate(dont.createdAt);
+  const slipDates = new Set(habit.failures.map((s) => toDate(s).toString()));
+  const createdAt = toDate(habit.createdAt);
 
   return Array.from({ length: 7 }).map((_, index) => {
     const currentDate = monday.add({ days: index });
@@ -86,37 +86,37 @@ function getWeek(dont: Pick<Dont, 'createdAt' | 'failures'>, now = Temporal.Now.
   });
 }
 
-function restore(): UiDont[] {
+function restore(): UiHabit[] {
   const json = localStorage.getItem(key);
   if (json) {
-    return JSON.parse(json).map(toModel)
+    return JSON.parse(json).map(toModel);
   }
   return [];
 }
 
-export const DontsStore = signalStore(
+export const HabitStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
 
   withComputed((store) => ({
-    uiDonts: computed(() => {
+    uiHabits: computed(() => {
       const now = Temporal.Now.plainDateISO(TIME_ZONE);
 
-      return store.donts()
-        .map((dont) => ({
-          ...dont,
-          week: getWeek(dont, now),
-          streak: calculateStreak(dont, now),
-        }))
+      return store.habits()
+        .map((habit) => ({
+          ...habit,
+          week: getWeek(habit, now),
+          streak: calculateStreak(habit, now),
+        }));
     }),
 
     weekSlipCount: computed(() => {
       const now = Temporal.Now.plainDateISO(TIME_ZONE);
       const monday = now.subtract({ days: now.dayOfWeek - 1 });
 
-      return store.donts()
-        .reduce((total, currentDont) => {
-          const slips = currentDont.failures;
+      return store.habits()
+        .reduce((total, currentHabit) => {
+          const slips = currentHabit.failures;
           for (let i = slips.length - 1; i >= 0; i--) {
             const slip = slips[i].toZonedDateTimeISO(TIME_ZONE).toPlainDate();
             if (Temporal.PlainDate.compare(slip, monday) >= 0) {
@@ -128,35 +128,35 @@ export const DontsStore = signalStore(
 
           return total;
         }, 0);
-    })
+    }),
   })),
 
   withMethods((store) => {
-    const getIndex = (id: string): number => store.donts().findIndex((dont) => dont.id === id);
+    const getIndex = (id: string): number => store.habits().findIndex((habit) => habit.id === id);
 
     return {
       logSlip: (id: string) => {
         const index = getIndex(id);
         if (index !== -1) {
-          const existing = store.donts()[index];
+          const existing = store.habits()[index];
           const updated = {
             ...existing,
             failures: [...existing.failures, Temporal.Now.instant()],
           };
           patchState(store, (state) => ({
             ...state,
-            donts: state.donts.with(index, updated),
+            habits: state.habits.with(index, updated),
           }));
-          persist(store.donts());
+          persist(store.habits());
         }
       },
 
-      create: ({ title }: CreateDontRequest) => {
-        const isExisting = store.donts().some((dont) => dont.title === title);
+      create: ({ title }: CreateHabitRequest) => {
+        const isExisting = store.habits().some((habit) => habit.title === title);
 
         if (!isExisting) {
           const createdAt = Temporal.Now.instant();
-          const dont: Dont = {
+          const habit: Habit = {
             id: createNanoId(),
             title,
             createdAt,
@@ -164,33 +164,33 @@ export const DontsStore = signalStore(
           };
           patchState(store, (state) => ({
             ...state,
-            donts: [...state.donts, dont],
+            habits: [...state.habits, habit],
           }));
-          persist(store.donts());
+          persist(store.habits());
         }
       },
 
       delete: (id: string) => {
         patchState(store, (state) => ({
           ...state,
-          donts: state.donts.filter((dont) => dont.id !== id),
+          habits: state.habits.filter((habit) => habit.id !== id),
         }));
-        persist(store.donts());
+        persist(store.habits());
       },
 
-      update: ({ id, title }: UpdateDontRequest) => {
+      update: ({ id, title }: UpdateHabitRequest) => {
         const index = getIndex(id);
 
         if (index !== -1) {
-          const updated: Dont = {
-            ...store.donts()[index],
+          const updated: Habit = {
+            ...store.habits()[index],
             title,
           };
           patchState(store, (state) => ({
             ...state,
-            donts: state.donts.with(index, updated),
+            habits: state.habits.with(index, updated),
           }));
-          persist(store.donts());
+          persist(store.habits());
         }
       },
     };
@@ -198,8 +198,8 @@ export const DontsStore = signalStore(
 
   withHooks((store) => ({
     onInit: () => {
-      const donts = restore();
-      patchState(store, { donts });
+      const habits = restore();
+      patchState(store, { habits });
     },
   })),
 );

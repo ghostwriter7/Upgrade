@@ -1,0 +1,8 @@
+<app-habit-header />
+<app-habit-stats />
+@for (habit of habits(); track habit.id) {
+  <app-habit-entry [habit]="habit" />
+}
+<button matButton="outlined" class="full-width" (click)="form.show()">New Habit</button>
+
+<app-habit-form (create)="onCreateNew($event)" #form />

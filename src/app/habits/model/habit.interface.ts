@@ -1,17 +1,17 @@
-export interface Dont {
+export interface Habit {
   id: string;
   title: string;
   createdAt: Temporal.Instant;
   failures: Temporal.Instant[];
 }
 
-export type CreateDontRequest = Pick<Dont, 'title'>;
+export type CreateHabitRequest = Pick<Habit, 'title'>;
 
-export type UpdateDontRequest = Pick<Dont, 'id' | 'title'>;
+export type UpdateHabitRequest = Pick<Habit, 'id' | 'title'>;
 
 export type DayStatus = 'success' | 'failure' | 'future' | 'inactive';
 
-export interface UiDont extends Dont {
+export interface UiHabit extends Habit {
   streak: number;
   week: DayStatus[];
 }

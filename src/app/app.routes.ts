@@ -70,6 +70,6 @@ export const routes: Routes = [
   },
   {
     path: 'habits',
-    loadComponent: () => import('./donts/components/donts-page/donts-page'),
+    loadComponent: () => import('./habits/components/habit-page/habit-page'),
   }
 ];

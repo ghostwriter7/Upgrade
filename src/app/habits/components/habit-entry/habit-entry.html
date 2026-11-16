@@ -1,7 +1,7 @@
 <div class="entry">
-  <span class="title">{{ dont().title }}</span>
+  <span class="title">{{ habit().title }}</span>
 
-  <span class="streak">{{ dont().streak }} day streak</span>
+  <span class="streak">{{ habit().streak }} day streak</span>
 
   <div class="week-view">
     <span class="label">M</span>
@@ -12,8 +12,8 @@
     <span class="label">S</span>
     <span class="label">S</span>
 
-    @for (dayStatus of dont().week; track $index) {
-      <span class="dot" [ngClass]="dayStatus"></span>
+    @for (dayStatus of habit().week; track $index) {
+      <span class="dot" [class]="dayStatus"></span>
     }
   </div>
 
