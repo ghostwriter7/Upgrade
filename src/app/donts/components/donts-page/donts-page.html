@@ -3,6 +3,6 @@
 @for (dont of donts(); track dont.id) {
   <app-donts-entry [dont]="dont" />
 }
-<button matButton="outlined" class="full-width" (click)="form.show()">New Don't</button>
+<button matButton="outlined" class="full-width" (click)="form.show()">New Habit</button>
 
 <app-donts-form (create)="onCreateNew($event)" #form />

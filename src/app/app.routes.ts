@@ -69,7 +69,7 @@ export const routes: Routes = [
     loadComponent: () => import('./library/components/skill-details/skill-details'),
   },
   {
-    path: 'donts',
+    path: 'habits',
     loadComponent: () => import('./donts/components/donts-page/donts-page'),
   }
 ];
