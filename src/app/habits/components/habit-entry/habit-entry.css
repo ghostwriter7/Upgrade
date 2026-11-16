@@ -44,7 +44,7 @@
   }
 
   &.future {
-    background-color: var(--mat-sys-tertiary);
+    background-color: var(--mat-sys-surface);
   }
 
   &.success {

@@ -2,11 +2,11 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FileService } from '@common/service/file/file.service';
 import { MatIcon } from '@angular/material/icon';
 import { MatRipple } from '@angular/material/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-more-page',
-  imports: [MatIcon, MatRipple, RouterLinkActive, RouterLink],
+  imports: [MatIcon, MatRipple, RouterLink],
   templateUrl: './more-page.html',
   styleUrl: './more-page.css',
   host: {
