@@ -2,7 +2,7 @@ import { patchState, signalStore, withHooks, withMethods, withState } from '@ngr
 import { inject } from '@angular/core';
 import { Target } from '@domain/model/target';
 import { TargetRepository } from '@persistence/repository/target.repository';
-import { TargetResult } from '@target/components/target-form/target-result';
+import { TargetResult } from '@library/components/target-form/target-result';
 import { createNanoId } from '@common/function/create-id.function';
 
 function createTarget(edited: Target | null, targetResult: TargetResult): Target {

@@ -5,9 +5,8 @@ import { SessionStateHolder } from '@session/store/session-state-holder.store';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'home',
     component: HomePage,
-    pathMatch: 'full',
   },
   {
     path: 'session/new',
@@ -33,43 +32,56 @@ export const routes: Routes = [
     loadComponent: () => import('./backup/components/backup-page/backup-page'),
   },
   {
-    path: 'exercises',
+    path: 'library/exercises',
     loadComponent: () => import('./library/components/exercises-page/exercises-page'),
   },
   {
-    path: 'exercises/new',
+    path: 'library/exercises/new',
     loadComponent: () => import('./library/components/exercise-editor/exercise-editor'),
   },
   {
-    path: 'exercises/edit/:id',
+    path: 'library/exercises/edit/:id',
     loadComponent: () => import('./library/components/exercise-editor/exercise-editor'),
   },
   {
-    path: 'exercises/:id',
+    path: 'library/exercises/:id',
     loadComponent: () => import('./library/components/exercise-view/exercise-view'),
   },
   {
-    path: 'targets',
-    loadComponent: () => import('./target/components/target-page/target-page'),
+    path: 'library/targets',
+    loadComponent: () => import('./library/components/target-page/target-page'),
   },
   {
-    path: 'skills',
+    path: 'library',
+    loadComponent: () => import('./library/components/library-page/library-page'),
+  },
+  {
+    path: 'library/skills',
     loadComponent: () => import('./library/components/skill-page/skill-page'),
   },
   {
-    path: 'skills/new',
+    path: 'library/skills/new',
     loadComponent: () => import('./library/components/skill-form/skill-form'),
   },
   {
-    path: 'skills/edit/:skillId',
+    path: 'library/skills/edit/:skillId',
     loadComponent: () => import('./library/components/skill-form/skill-form'),
   },
   {
-    path: 'skills/:skillId',
+    path: 'library/skills/:skillId',
     loadComponent: () => import('./library/components/skill-details/skill-details'),
   },
   {
     path: 'habits',
     loadComponent: () => import('./habits/components/habit-page/habit-page'),
-  }
+  },
+  {
+    path: 'more',
+    loadComponent: () => import('./ui/more-page/more-page'),
+  },
+  {
+    path: '',
+    redirectTo: 'home',
+    pathMatch: 'full',
+  },
 ];

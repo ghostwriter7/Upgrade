@@ -39,6 +39,6 @@ export class SkillList {
   });
 
   protected showDetails(skill: Skill): void {
-    this.router.navigate(['skills', skill.id]);
+    this.router.navigate(['library', 'skills', skill.id]);
   }
 }

@@ -1,22 +1,13 @@
-import {
-  Component,
-  computed,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Component } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
-import { map } from 'rxjs/operators';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { Content } from '../content/content';
 import { RouterLink } from '@angular/router';
 import { InstallUpdate } from '@ui/install-update/install-update';
-import { FileService } from '@common/service/file/file.service';
+import { TabBar } from '@ui/tab-bar/tab-bar';
 
 @Component({
   selector: 'app-layout',
@@ -31,30 +22,7 @@ import { FileService } from '@common/service/file/file.service';
     Content,
     RouterLink,
     InstallUpdate,
+    TabBar,
   ],
 })
-export class LayoutComponent implements OnInit {
-  private readonly breakpointObserver = inject(BreakpointObserver);
-  private readonly fileService = inject(FileService);
-
-  protected readonly storageEstimate = signal<StorageEstimate | null>(null);
-  protected readonly isHandset = toSignal(
-    this.breakpointObserver.observe(Breakpoints.Handset).pipe(map((result) => result.matches)),
-  );
-  protected readonly role = computed(() => (this.isHandset() ? 'dialog' : 'navigation'));
-  protected readonly mode = computed(() => (this.isHandset() ? 'over' : 'side'));
-  protected readonly isOpen = computed(() => !this.isHandset());
-
-  public ngOnInit(): void {
-    this.fileService.checkQuota().then(({ usage, quota }) =>
-      this.storageEstimate.set({
-        usage: toMegaBytes(usage),
-        quota: toMegaBytes(quota),
-      }),
-    );
-  }
-}
-
-function toMegaBytes(bytes: number | undefined): number {
-  return bytes ? Math.floor(bytes / 1000000) : 0;
-}
+export class LayoutComponent {}

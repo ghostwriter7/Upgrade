@@ -27,7 +27,6 @@
       "@ui/*": ["./src/app/ui/*"],
       "@test/*": ["./src/test/*"],
       "@form/*": ["./src/app/form/*"],
-      "@target/*": ["./src/app/target/*"],
       "@infrastructure/*": ["./src/app/infrastructure/*"],
       "@library/*": ["./src/app/library/*"],
       "@habits/*": ["./src/app/habits/*"]

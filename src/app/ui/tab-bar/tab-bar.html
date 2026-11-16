@@ -1,0 +1,29 @@
+<nav class="mobile-nav" aria-label="Main navigation">
+  @for (item of items; track item.path) {
+    @if (item.isHighlight) {
+        <button
+          matFab
+          [routerLink]="item.path"
+          type="button"
+          aria-label="Create new session"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+    } @else {
+      <a
+        matRipple
+        class="nav-item"
+        routerLinkActive="active"
+        [routerLink]="item.path"
+        [routerLinkActiveOptions]="options"
+        ariaCurrentWhenActive="page"
+      >
+        <span class="icon-container">
+          <mat-icon>{{ item.icon }}</mat-icon>
+        </span>
+
+        <span class="label">{{ item.label }}</span>
+      </a>
+    }
+  }
+</nav>

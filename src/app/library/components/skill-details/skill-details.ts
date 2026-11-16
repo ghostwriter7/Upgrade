@@ -46,6 +46,6 @@ export default class SkillDetails {
 
   protected deleteSkill(): void {
     this.libraryStore.deleteSkill(this.skill());
-    this.router.navigate(['/skills']);
+    this.router.navigate(['/library', 'skills']);
   }
 }

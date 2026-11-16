@@ -1,80 +1,13 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav
-    #drawer
-    class="sidenav"
-    fixedInViewport
-    [attr.role]="role()"
-    [mode]="mode()"
-    [opened]="isOpen()"
-  >
-    <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list (click)="drawer.toggle()">
-      <a mat-list-item routerLink="/">
-        <mat-icon matListItemIcon>home</mat-icon>
-        <span matListItemTitle>Home</span>
-      </a>
+<mat-toolbar>
+  <span>upgrade</span>
+  <div class="buttons">
+    <app-install-update />
+    <button data-testid="toolbar-home-link" matMiniFab aria-label="Go to home page" routerLink="/">
+      <mat-icon>home</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
 
-      <mat-divider />
+<app-content />
 
-      <h4 matSubheader>Library</h4>
-
-      <a mat-list-item routerLink="/skills">
-        <mat-icon matListItemIcon>emoji_events</mat-icon>
-        <span matListItemTitle>Skills</span>
-      </a>
-
-      <a mat-list-item routerLink="/exercises">
-        <mat-icon matListItemIcon>fitness_center</mat-icon>
-        <span matListItemTitle>Exercises</span>
-      </a>
-
-      <a mat-list-item routerLink="/targets">
-        <mat-icon matListItemIcon>track_changes</mat-icon>
-        <span matListItemTitle>Targets</span>
-      </a>
-
-      <mat-divider />
-
-      <h4 matSubheader>Settings</h4>
-
-      <a mat-list-item routerLink="/backup">
-        <mat-icon matListItemIcon>backup</mat-icon>
-        <span matListItemTitle>Backup</span>
-      </a>
-
-      <mat-divider />
-
-      <h4 matSubheader>Experimental</h4>
-
-      <a mat-list-item routerLink="/habits">
-        <mat-icon matListItemIcon>do_not_touch</mat-icon>
-        <span matListItemTitle>Habits</span>
-      </a>
-
-      @if (storageEstimate(); as estimate) {
-        <div class="storage">
-          <span>Storage: </span>
-          <span>{{ estimate.usage }} / {{ estimate.quota }} MB</span>
-        </div>
-      }
-
-    </mat-nav-list>
-  </mat-sidenav>
-  <mat-sidenav-content>
-    <mat-toolbar>
-      @if (isHandset()) {
-        <button type="button" aria-label="Toggle sidenav" matIconButton (click)="drawer.toggle()">
-          <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
-        </button>
-      }
-      <span>upgrade</span>
-      <div class="buttons">
-        <app-install-update />
-        <button data-testid="toolbar-home-link" matMiniFab aria-label="Go to home page" routerLink="/">
-          <mat-icon>home</mat-icon>
-        </button>
-      </div>
-    </mat-toolbar>
-    <app-content />
-  </mat-sidenav-content>
-</mat-sidenav-container>
+<app-tab-bar />

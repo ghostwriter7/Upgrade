@@ -10,7 +10,7 @@
       </button>
     }
 
-    <button matFab extended [routerLink]="['/exercises', 'edit', id()]">
+    <button matFab extended [routerLink]="['/library', 'exercises', 'edit', id()]">
       <mat-icon>edit</mat-icon>
       Edit
     </button>
@@ -47,7 +47,7 @@
           <mat-chip-set>
 
             @for (skill of exercise.skills; track skill.id) {
-              <mat-chip [routerLink]="['/skills', skill.id]">{{ skill.name }}</mat-chip>
+              <mat-chip [routerLink]="['/library', 'skills', skill.id]">{{ skill.name }}</mat-chip>
             } @empty {
               <mat-chip>None</mat-chip>
             }
@@ -79,12 +79,12 @@
   </main>
 
   <footer class="footer">
-    <button matFab extended [routerLink]="['/skills']">
+    <button matFab extended [routerLink]="['/library', 'skills']">
       <mat-icon>trophy</mat-icon>
       Skills
     </button>
 
-    <button matFab extended [routerLink]="['/exercises']">
+    <button matFab extended [routerLink]="['/library', 'exercises']">
       <mat-icon>fitness_center</mat-icon>
       Exercises
     </button>

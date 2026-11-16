@@ -5,7 +5,7 @@
     Delete
   </button>
 
-  <button matFab extended [routerLink]="['/skills', 'edit', value?.id]">
+  <button matFab extended [routerLink]="['/library', 'skills', 'edit', value?.id]">
     <mat-icon>edit</mat-icon>
     Edit
   </button>
@@ -32,7 +32,7 @@
 
         <mat-list>
           @for (exercise of exercises(); track exercise.id) {
-            <mat-list-item [routerLink]="['/exercises', exercise.id]">
+            <mat-list-item [routerLink]="['/library', 'exercises', exercise.id]">
               {{ exercise.name }}
             </mat-list-item>
           }
@@ -47,12 +47,12 @@
 </main>
 
 <footer class="footer">
-  <button matFab extended [routerLink]="['/skills']">
+  <button matFab extended [routerLink]="['/library', 'skills']">
     <mat-icon>trophy</mat-icon>
     Skills
   </button>
 
-  <button matFab extended [routerLink]="['/exercises']">
+  <button matFab extended [routerLink]="['/library', 'exercises']">
     <mat-icon>fitness_center</mat-icon>
     Exercises
   </button>

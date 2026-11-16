@@ -95,6 +95,6 @@ export default class SkillForm {
       this.libraryStore.saveSkill(skill);
     }
 
-    this.router.navigate(['/skills', skill.id]);
+    this.router.navigate(['/library', 'skills', skill.id]);
   }
 }

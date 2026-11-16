@@ -1,0 +1,21 @@
+<div class="links">
+  @for (item of items; track item.path) {
+    <a
+      matRipple
+      class="nav-item"
+      [routerLink]="item.path"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span class="label">{{ item.label }}</span>
+    </a>
+
+
+  }
+</div>
+
+@if (storageEstimate(); as estimate) {
+  <div class="storage">
+    <span>Storage: </span>
+    <span>{{ estimate.usage }} / {{ estimate.quota }} MB</span>
+  </div>
+}
