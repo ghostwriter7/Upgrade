@@ -1,27 +1,31 @@
 .entry {
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(2, auto);
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "title streak"
+    "week action"
+    "statistics statistics";
   gap: var(--space-3);
   padding: var(--space-3);
   background-color: var(--mat-sys-secondary-container);
   border-radius: var(--mat-sys-corner-extra-small);
-  box-shadow: var(--mat-sys-surface-container-high);
-  justify-content: space-between;
   align-items: center;
 }
 
 .title {
+  grid-area: title;
   font: var(--mat-sys-body-large);
   font-weight: 500;
 }
 
 .streak {
+  grid-area: streak;
   color: var(--mat-sys-primary);
   text-align: right;
 }
 
 .week-view {
+  grid-area: week;
   display: grid;
   grid-template-columns: repeat(7, auto);
   grid-template-rows: repeat(2, auto);
@@ -57,5 +61,34 @@
 }
 
 .action {
-  width: fit-content;
+  grid-area: action;
+}
+
+.statistics {
+  grid-area: statistics;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-2);
+  text-align: center;
+  background-color: var(--mat-sys-surface-container);
+  border-radius: var(--mat-sys-corner-extra-small);
+}
+
+.stat-value {
+  font: var(--mat-sys-title-medium);
+  color: var(--mat-sys-on-surface);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+  font: var(--mat-sys-body-small);
+  color: var(--mat-sys-on-surface-variant);
 }

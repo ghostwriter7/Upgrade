@@ -11,4 +11,5 @@ export class HabitStats {
   private readonly habitStore = inject(HabitStore);
 
   protected readonly weekSlipCount = this.habitStore.weekSlipCount;
+  protected readonly bestStreak = this.habitStore.bestStreak;
 }

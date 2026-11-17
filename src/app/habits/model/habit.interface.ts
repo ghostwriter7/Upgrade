@@ -14,4 +14,7 @@ export type DayStatus = 'success' | 'failure' | 'future' | 'inactive';
 export interface UiHabit extends Habit {
   streak: number;
   week: DayStatus[];
+  longestStreak: number;
+  totalSlips: number;
+  trackedForDays: number;
 }

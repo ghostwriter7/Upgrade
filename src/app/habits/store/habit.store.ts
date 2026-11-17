@@ -60,15 +60,37 @@ function toDate(instant: Temporal.Instant): Temporal.PlainDate {
   return instant.toZonedDateTimeISO(TIME_ZONE).toPlainDate();
 }
 
-function calculateStreak(
-  habit: Omit<Habit, 'streak'>,
-  now = Temporal.Now.plainDateISO(TIME_ZONE),
-): number {
+function calculateStreak(habit: Habit, now = Temporal.Now.plainDateISO(TIME_ZONE)): number {
   const start = habit.failures.at(-1) ?? habit.createdAt;
   return toDate(start).until(now, { largestUnit: 'day' }).days;
 }
 
-function getWeek(habit: Pick<Habit, 'createdAt' | 'failures'>, now = Temporal.Now.plainDateISO(TIME_ZONE)): DayStatus[] {
+function calculateLongestStreak(habit: Habit, now: Temporal.PlainDate): number {
+  const hasNoFailures = !habit.failures.length;
+
+  const createdAt = toDate(habit.createdAt);
+
+  if (hasNoFailures) {
+    return createdAt.until(now, { largestUnit: 'day' }).days;
+  }
+
+  const failures = [createdAt, ...habit.failures.map(toDate), now];
+  let currentMax = 0;
+
+  for (let i = 1; i < failures.length; i++) {
+    const prev = failures[i - 1];
+    const curr = failures[i];
+    const diff = prev.until(curr, { largestUnit: 'day' }).days;
+    currentMax = Math.max(currentMax, diff);
+  }
+
+  return currentMax;
+}
+
+function getWeek(
+  habit: Pick<Habit, 'createdAt' | 'failures'>,
+  now = Temporal.Now.plainDateISO(TIME_ZONE),
+): DayStatus[] {
   const monday = now.subtract({ days: now.dayOfWeek - 1 });
 
   const slipDates = new Set(habit.failures.map((s) => toDate(s).toString()));
@@ -99,36 +121,50 @@ export const HabitStore = signalStore(
   withState(initialState),
 
   withComputed((store) => ({
-    uiHabits: computed(() => {
+    uiHabits: computed<UiHabit[]>(() => {
       const now = Temporal.Now.plainDateISO(TIME_ZONE);
 
-      return store.habits()
-        .map((habit) => ({
-          ...habit,
-          week: getWeek(habit, now),
-          streak: calculateStreak(habit, now),
-        }));
+      return store.habits().map((habit) => ({
+        ...habit,
+        week: getWeek(habit, now),
+        streak: calculateStreak(habit, now),
+        trackedForDays: toDate(habit.createdAt).until(now).days,
+        totalSlips: habit.failures.length,
+        longestStreak: calculateLongestStreak(habit, now),
+      }));
     }),
 
     weekSlipCount: computed(() => {
       const now = Temporal.Now.plainDateISO(TIME_ZONE);
       const monday = now.subtract({ days: now.dayOfWeek - 1 });
 
-      return store.habits()
-        .reduce((total, currentHabit) => {
-          const slips = currentHabit.failures;
-          for (let i = slips.length - 1; i >= 0; i--) {
-            const slip = slips[i].toZonedDateTimeISO(TIME_ZONE).toPlainDate();
-            if (Temporal.PlainDate.compare(slip, monday) >= 0) {
-              total++;
-            } else {
-              break;
-            }
+      return store.habits().reduce((total, currentHabit) => {
+        const slips = currentHabit.failures;
+        for (let i = slips.length - 1; i >= 0; i--) {
+          const slip = slips[i].toZonedDateTimeISO(TIME_ZONE).toPlainDate();
+          if (Temporal.PlainDate.compare(slip, monday) >= 0) {
+            total++;
+          } else {
+            break;
           }
+        }
 
-          return total;
-        }, 0);
+        return total;
+      }, 0);
     }),
+  })),
+
+  withComputed((store) => ({
+    bestStreak: computed(() => {
+      const uiHabits = store.uiHabits();
+      let targetHabit: UiHabit | undefined = undefined;
+      for (const habit of uiHabits) {
+        if (!targetHabit || habit.longestStreak > targetHabit.longestStreak) {
+          targetHabit = habit;
+        }
+      }
+      return targetHabit ? { streak: targetHabit.longestStreak, name: targetHabit.title } : undefined;
+    })
   })),
 
   withMethods((store) => {

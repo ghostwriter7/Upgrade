@@ -17,5 +17,22 @@
     }
   </div>
 
+  <div class="statistics">
+    <div class="stat">
+      <span class="stat-value">{{ habit().longestStreak }}</span>
+      <span class="stat-label">Longest streak</span>
+    </div>
+
+    <div class="stat">
+      <span class="stat-value">{{ habit().totalSlips }}</span>
+      <span class="stat-label">Total slips</span>
+    </div>
+
+    <div class="stat">
+      <span class="stat-value">{{ habit().trackedForDays }}</span>
+      <span class="stat-label">Days tracked</span>
+    </div>
+  </div>
+
   <button matButton="outlined" class="action" (click)="logSlip()">Log slip</button>
 </div>

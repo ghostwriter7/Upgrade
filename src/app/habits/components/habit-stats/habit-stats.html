@@ -4,8 +4,10 @@
     <span class="label">slip this week</span>
   </div>
 
-  <div class="stat">
-    <span class="value">11</span>
-    <span class="label">day longest streak</span>
-  </div>
+  @if (bestStreak(); as best) {
+    <div class="stat">
+      <span class="value">{{ best.streak }} ({{ best.name }})</span>
+      <span class="label">day longest streak</span>
+    </div>
+  }
 </div>
