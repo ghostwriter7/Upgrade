@@ -32,24 +32,20 @@ export const routes: Routes = [
     loadComponent: () => import('./backup/components/backup-page/backup-page'),
   },
   {
-    path: 'library/exercises',
+    path: 'exercises',
     loadComponent: () => import('./library/components/exercises-page/exercises-page'),
   },
   {
-    path: 'library/exercises/new',
+    path: 'exercises/new',
     loadComponent: () => import('./library/components/exercise-editor/exercise-editor'),
   },
   {
-    path: 'library/exercises/edit/:id',
+    path: 'exercises/edit/:id',
     loadComponent: () => import('./library/components/exercise-editor/exercise-editor'),
   },
   {
-    path: 'library/exercises/:id',
+    path: 'exercises/:id',
     loadComponent: () => import('./library/components/exercise-view/exercise-view'),
-  },
-  {
-    path: 'library',
-    loadComponent: () => import('./library/components/library-page/library-page'),
   },
   {
     path: 'habits',

@@ -68,6 +68,6 @@ export default class ExerciseView {
 
   protected deleteExercise(): void {
     this.libraryStore.deleteExercise(this.exercise()!);
-    this.router.navigate(['/library', 'exercises']);
+    this.router.navigate(['/exercises']);
   }
 }
