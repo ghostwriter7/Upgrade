@@ -63,13 +63,6 @@
       }
     </div>
   </main>
-
-  <footer class="footer">
-    <button matFab extended [routerLink]="['/exercises']">
-      <mat-icon>fitness_center</mat-icon>
-      Exercises
-    </button>
-  </footer>
 }
 
 <app-confirm title="Confirm" [message]="confirmDeleteMessage()" (confirm)="deleteExercise()" />
