@@ -1,16 +1,4 @@
-<div class="nav">
-  <button data-testid="session-calendar-show-prev-month" matMiniFab aria-label="Show previous month"
-          (click)="showPreviousMonth()">
-    <mat-icon>chevron_left</mat-icon>
-  </button>
-
-  <span data-testid="session-calendar-month-label">{{ label() }}</span>
-
-  <button data-testid="session-calendar-show-next-month" matMiniFab aria-label="Show next month"
-          (click)="showNextMonth()">
-    <mat-icon>chevron_right</mat-icon>
-  </button>
-</div>
+<div class="header" data-testid="session-calendar-month-label">{{ label() }}</div>
 <div class="calendar">
   <div class="weekday">Mon</div>
   <div class="weekday">Tue</div>

@@ -1,12 +1,13 @@
 import { Component, computed, inject } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
-import { MatMiniFabButton } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { SessionCalendarService } from './session-calendar.service';
+import { EventService } from '@common/service/event/event.service';
+import { SwipedEvent } from '@common/events/swiped.event';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-session-calendar',
-  imports: [MatIcon, MatMiniFabButton, RouterLink],
+  imports: [RouterLink],
   templateUrl: './session-calendar.html',
   styleUrl: './session-calendar.css',
 })
@@ -19,12 +20,17 @@ export class SessionCalendar {
     this.firstDayOfMonth().toLocaleString('en-GB', { month: 'long', year: 'numeric' }),
   );
   protected readonly calendarCells = this.sessionCalendarService.$calendarCells;
+  private readonly eventService = inject(EventService);
 
-  protected showNextMonth(): void {
-    this.sessionCalendarService.showNextMonth();
-  }
-
-  protected showPreviousMonth(): void {
-    this.sessionCalendarService.showPreviousMonth();
+  constructor() {
+    this.eventService.listen(SwipedEvent)
+      .pipe(takeUntilDestroyed())
+      .subscribe((e) => {
+        if (e.direction === 'left') {
+          this.sessionCalendarService.showPreviousMonth();
+        } else {
+          this.sessionCalendarService.showNextMonth();
+        }
+      });
   }
 }

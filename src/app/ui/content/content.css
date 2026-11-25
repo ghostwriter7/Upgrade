@@ -1,3 +1,9 @@
+:host {
+  & * {
+    touch-action: pan-y pinch-zoom !important;
+  }
+}
+
 .content {
   display: flex;
   width: min(100svw, 1200px);

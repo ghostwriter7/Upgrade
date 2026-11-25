@@ -6,5 +6,8 @@ import { SessionCalendar } from '../session-calendar/session-calendar';
   imports: [SessionCalendar],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
+  host: {
+    class: 'page'
+  }
 })
 export class HomePage {}

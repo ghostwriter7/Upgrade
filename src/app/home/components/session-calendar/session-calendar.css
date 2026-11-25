@@ -1,7 +1,6 @@
-.nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.header {
+  text-align: center;
+  font: var(--mat-sys-body-large);
 }
 
 .calendar {
