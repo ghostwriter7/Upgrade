@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { MatFabButton } from '@angular/material/button';
+import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
@@ -11,7 +11,7 @@ import { AddExerciseCommand } from '../../commands/add-exercise/add-exercise.com
 
 @Component({
   selector: 'app-session-actions',
-  imports: [MatFabButton, MatIcon],
+  imports: [MatIcon, MatMiniFabButton],
   templateUrl: './session-actions.html',
   styleUrl: './session-actions.css',
 })
