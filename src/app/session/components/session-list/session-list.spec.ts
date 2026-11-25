@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SessionList } from './session-list';
 import { Component, input, signal, WritableSignal } from '@angular/core';
-import { Session } from '../../../domain/model/session/session.model';
-import { SessionStore } from '../../../store/session/session.store';
-import { Loader } from '../../../ui/loader/loader';
+import { Session } from '@domain/model/session/session.model';
+import { SessionStore } from '@store/session/session.store';
+import { Loader } from '@ui/loader/loader';
 import SessionView from '../session-view/session-view';
 
 @Component({

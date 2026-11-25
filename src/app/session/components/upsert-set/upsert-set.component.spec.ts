@@ -7,8 +7,6 @@ import { SetData } from '../set-form/set-data.interface';
 import { MatDialogHarness } from '@angular/material/dialog/testing';
 import { getButton } from '@test/harness.utils';
 
-const mockSetFormInvalid = signal(false);
-
 @Component({
   selector: 'app-set-form',
   standalone: true,
@@ -17,7 +15,6 @@ const mockSetFormInvalid = signal(false);
 class MockSetForm {
   public readonly value = input<unknown>();
   public readonly exerciseId = input<string>();
-  public readonly isInvalid = mockSetFormInvalid;
 }
 
 describe('UpsertSet', () => {
@@ -34,8 +31,6 @@ describe('UpsertSet', () => {
 
     openDialog = (data: UpsertSetDialogData) => result.openDialog(data);
   });
-
-  afterEach(() => mockSetFormInvalid.set(false))
 
   const set: SetData = {
     reps: 10,
@@ -75,7 +70,6 @@ describe('UpsertSet', () => {
   });
 
   it('should disable save button when form is invalid', async () => {
-    mockSetFormInvalid.set(true);
 
     const { dialog } = await openDialog({ set, exerciseId });
 

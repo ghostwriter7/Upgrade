@@ -48,15 +48,9 @@ export class SessionCalendarService {
 
     for (let i = 1; i <= this.numberOfDaysInMonth(); i++) {
       const sessions = sessionsByDate[i];
-      const maxRpe = sessions
-        ?.filter(({ rpe }) => rpe !== undefined)
-        .reduce((max, { rpe }) => Math.max(max, rpe as number), 0);
-      const rpeClass = maxRpe ? this.computeClass(maxRpe) : undefined;
       cells.push({
         day: i,
         hasSessions: !!sessions?.length,
-        maxRpe,
-        rpeClass,
         date: this.toDateString(year, month, i),
       });
     }
@@ -116,13 +110,5 @@ export class SessionCalendarService {
 
   private toDateString(year: number, month: number, day: number): string {
     return `${year}-${pad(month)}-${pad(day)}`;
-  }
-
-  private computeClass(rpe: number): string {
-    if (rpe < 3) return 'very-soft';
-    if (rpe < 5) return 'soft';
-    if (rpe < 7) return 'mid';
-    if (rpe < 9) return 'hard';
-    return 'very-hard';
   }
 }

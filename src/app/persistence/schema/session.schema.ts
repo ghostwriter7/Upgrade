@@ -5,7 +5,6 @@ export const SessionSchema = z.object({
   id: IdSchema,
   startedAt: z.iso.datetime(),
   finishedAt: z.iso.datetime().nullable(),
-  rpe: z.float64().max(10).min(0.5).nullable(),
   exerciseIds: z.preprocess(
     (value) => (typeof value === 'string' ? JSON.parse(value) : value),
     z.array(z.string()).default([]),

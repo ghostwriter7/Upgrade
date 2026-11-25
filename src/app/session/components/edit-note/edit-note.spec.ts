@@ -1,6 +1,6 @@
 import { EditNote } from './edit-note';
-import { OpenDialogFnResult, TestBedUtils } from '../../../../test/test-bed.utils';
-import { getButton } from '../../../../test/harness.utils';
+import { OpenDialogFnResult, TestBedUtils } from '@test/test-bed.utils';
+import { getButton } from '@test/harness.utils';
 import { HarnessLoader } from '@angular/cdk/testing';
 import { MatInputHarness } from '@angular/material/input/testing';
 

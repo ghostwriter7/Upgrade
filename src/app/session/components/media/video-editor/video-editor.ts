@@ -1,7 +1,7 @@
 import { Component, effect, ElementRef, input, OnInit, signal, viewChild } from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
 import { VideoData } from '@session/components/media/video-data.interface';
-import { MatSlider, MatSliderRangeThumb, MatSliderThumb } from '@angular/material/slider';
+import { MatSlider, MatSliderRangeThumb } from '@angular/material/slider';
 
 @Component({
   selector: 'app-video-editor',

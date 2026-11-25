@@ -4,11 +4,11 @@ import { SessionActions } from './session-actions';
 import { computed, Signal, signal, WritableSignal } from '@angular/core';
 import { Mock } from 'vitest';
 import { Router } from '@angular/router';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { SessionStateHolder } from '../../store/session-state-holder.store';
 import { CommandBus } from '@common/routers/command/command-bus';
 import { CompleteSessionCommand } from '../../commands/complete-session/complete-session.command';
-import { DialogService } from '../../../common/service/dialog/dialog.service';
+import { DialogService } from '@common/service/dialog/dialog.service';
 
 describe('SessionActions', () => {
   let fixture: ComponentFixture<SessionActions>;

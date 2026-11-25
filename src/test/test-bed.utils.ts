@@ -53,46 +53,6 @@ export class TestBedUtils {
     };
   }
 
-  public static async configureForBottomSheet(config: {
-    providers?: Provider[];
-    removeImports?: Type<unknown>[];
-    addImports?: Type<unknown>[];
-    targetComponent: Type<unknown>;
-  }): Promise<{
-    fixture: ComponentFixture<BottomSheetTestHost>;
-    rootLoader: HarnessLoader;
-    openSheet: (data: unknown) => void;
-  }> {
-    TestBed.configureTestingModule({
-      providers: config.providers ?? [],
-      imports: [BottomSheetTestHost, config.targetComponent],
-    });
-
-    TestBedUtils.overrideComponents(
-      config.targetComponent,
-      config.addImports,
-      config.removeImports,
-    );
-
-    await TestBed.compileComponents();
-
-    const fixture = TestBed.createComponent(BottomSheetTestHost);
-    const rootLoader = TestbedHarnessEnvironment.documentRootLoader(fixture);
-
-    await fixture.whenStable();
-
-    return {
-      fixture,
-      rootLoader,
-      openSheet: async (data: unknown): Promise<{ sheet: MatBottomSheetHarness }> => {
-        fixture.componentInstance.openSheet(config.targetComponent, { data });
-        fixture.detectChanges();
-
-        return { sheet: await rootLoader.getHarness(MatBottomSheetHarness) };
-      },
-    };
-  }
-
   private static overrideComponents(
     targetComponent: Type<unknown>,
     addImports: Type<unknown>[] = [],

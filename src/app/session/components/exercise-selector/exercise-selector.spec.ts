@@ -1,12 +1,12 @@
 import { signal } from '@angular/core';
 import { describe, it, expect } from 'vitest';
 import { ExerciseSelector } from './exercise-selector';
-import { Exercise } from '../../../domain/model/exercise.model';
-import { ExerciseStore } from '../../../store/exercises.store';
-import { Session } from '../../../domain/model/session/session.model';
+import { Exercise } from '@domain/model/exercise.model';
+import { Session } from '@domain/model/session/session.model';
 import { MatListOptionHarness, MatSelectionListHarness } from '@angular/material/list/testing';
-import { OpenDialogFn, TestBedUtils } from '../../../../test/test-bed.utils';
-import { getButton } from '../../../../test/harness.utils';
+import { OpenDialogFn, TestBedUtils } from '@test/test-bed.utils';
+import { getButton } from '@test/harness.utils';
+import { LibraryStore } from '@store/library.store';
 
 const chinUpId = 'chin-ups';
 const squatsId = 'back-squats';
@@ -24,7 +24,7 @@ describe('ExerciseSelector', () => {
     const results = await TestBedUtils.configureForDialog({
       providers: [
         {
-          provide: ExerciseStore,
+          provide: LibraryStore,
           useValue: {
             exercises: signal<Exercise[]>([
               new Exercise(chinUpId, 'Chin Ups'),

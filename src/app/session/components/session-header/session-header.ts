@@ -1,5 +1,4 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 import { Session } from '@domain/model/session/session.model';
 import { DateHelper } from '@common/helper/date.helper';
 import { EditTime } from '../edit-time/edit-time';
@@ -10,17 +9,13 @@ import { PatchFinishedAtCommand } from '../../commands/patch-finished-at/patch-f
 import { SessionHeaderMenu } from '@session/components/session-header-menu/session-header-menu';
 import { Constructor } from '@common/types/constructor.type';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RpeInput } from '@session/components/rpe-input/rpe-input';
-import { MatChip, MatChipAvatar, MatChipSet } from '@angular/material/chips';
+import { MatChip, MatChipSet } from '@angular/material/chips';
 
 @Component({
   selector: 'app-session-header',
   imports: [
-    MatIcon,
     SessionHeaderMenu,
     ReactiveFormsModule,
-    MatChipAvatar,
-    RpeInput,
     MatChipSet,
     MatChip,
   ],
@@ -65,7 +60,6 @@ export class SessionHeader {
 
   private readonly dialog = inject(DialogService);
   private readonly commandBus = inject(CommandBus);
-  protected readonly showRpe = computed(() => this.session().rpe || this.isEditable());
 
   protected editStartedAt(): void {
     this.editTime(this.session().startedAt, 'Edit Started At', PatchStartedAtCommand);

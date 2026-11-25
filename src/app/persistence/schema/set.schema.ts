@@ -53,5 +53,3 @@ export const ExerciseSetSchema = z.discriminatedUnion('type', [
   WeightSetSchema,
   DurationSetSchema,
 ]);
-
-export type ExerciseSetDto = z.infer<typeof ExerciseSetSchema>;

@@ -26,14 +26,10 @@
       [attr.data-testid]="cell.testId"
       [class.highlight]="cell.hasSessions"
       [class.empty]="cell.day === null"
-      [ngClass]="cell.rpeClass"
       [routerLink]="['/session', cell.date]"
     >
       @if (cell.day !== null) {
         <span class="day">{{ cell.day }}</span>
-        @if (cell.maxRpe; as rpe) {
-          <span class="rpe">{{ rpe }}</span>
-        }
       }
     </div>
   }

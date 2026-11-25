@@ -3,12 +3,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import SessionPage from './session-page';
 import { Component, input } from '@angular/core';
 import { SessionList } from '../session-list/session-list';
-import { SessionStore } from '../../../store/session/session.store';
+import { SessionStore } from '@store/session/session.store';
 import { Mock } from 'vitest';
 import { Router } from '@angular/router';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { HarnessLoader } from '@angular/cdk/testing';
-import { getButtonByTestId } from '../../../../test/harness.utils';
+import { getButtonByTestId } from '@test/harness.utils';
 
 @Component({
   selector: 'app-session-list',

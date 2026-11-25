@@ -24,7 +24,6 @@ export class Session {
   public startedAt: Temporal.Instant = DateHelper.now();
   public finishedAt: Temporal.Instant | null = null;
   public exerciseIds: string[] = [];
-  public rpe: number | null = null;
 
   constructor(public readonly id: string) {}
 
@@ -53,13 +52,6 @@ export class Session {
     session.finishedAt = this.finishedAt;
     session.exerciseLogs = [...this.exerciseLogs.map((exercise) => exercise.clone())];
     session.exerciseIds = [...this.exerciseIds];
-    session.rpe = this.rpe;
-    return session;
-  }
-
-  public withRpe(rpe: number | null = null): Session {
-    const session = this.clone();
-    session.rpe = rpe;
     return session;
   }
 

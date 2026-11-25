@@ -146,3 +146,6 @@ drop table if exists skill_capability;
 drop table if exists exercise_capability;
 drop table if exists capability;
 drop table if exists skill;
+
+-- @changeset 10
+alter table session drop column rpe;

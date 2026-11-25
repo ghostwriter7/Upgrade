@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import SessionView from './session-view';
-import { Session } from '../../../domain/model/session/session.model';
+import { Session } from '@domain/model/session/session.model';
 import { SessionHeader } from '../session-header/session-header';
 import { ExerciseCard } from '../exercise-card/exercise-card';
-import { SessionHeaderMock } from '../../../../test/mocks/session-header.mock';
-import { ExerciseCardMock } from '../../../../test/mocks/exercise-card.mock';
+import { SessionHeaderMock } from '@test/mocks/session-header.mock';
+import { ExerciseCardMock } from '@test/mocks/exercise-card.mock';
 
 describe('SessionView', () => {
   let component: SessionView;

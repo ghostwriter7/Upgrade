@@ -14,7 +14,6 @@ import { CaptureProgressCommandHandler } from '@session/commands/capture-progres
 import { DeleteSessionCommandHandler } from './delete-session/delete-session-command.handler';
 import { CreateSessionCommandHandler } from './create-session/create-session-command.handler';
 import { DownloadImageCommandHandler } from '@session/commands/download-image/download-image-command.handler';
-import { UpdateSessionRpeCommandHandler } from '@session/commands/update-session-rpe/update-session-rpe-command.handler';
 
 export class CommandHandlerProvider {
   public static forRoot(): Provider[] {
@@ -33,7 +32,6 @@ export class CommandHandlerProvider {
       EditExerciseNoteCommandHandler,
       CaptureProgressCommandHandler,
       DownloadImageCommandHandler,
-      UpdateSessionRpeCommandHandler,
     ].map((handler) => ({
       useClass: handler,
       multi: true,
