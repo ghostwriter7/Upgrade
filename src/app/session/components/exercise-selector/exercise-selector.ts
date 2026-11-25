@@ -2,7 +2,6 @@ import {
   Component,
   computed,
   inject,
-  linkedSignal,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -26,7 +25,6 @@ import {
 import { PrintHoursPipe } from '@ui/pipes/print-hours-pipe';
 import { MatIcon } from '@angular/material/icon';
 import { NgClass } from '@angular/common';
-import { MatChipListbox, MatChipListboxChange, MatChipOption } from '@angular/material/chips';
 
 @Component({
   selector: 'app-exercise-selector',
@@ -45,8 +43,6 @@ import { MatChipListbox, MatChipListboxChange, MatChipOption } from '@angular/ma
     NgClass,
     MatDivider,
     MatListSubheaderCssMatStyler,
-    MatChipOption,
-    MatChipListbox,
   ],
   templateUrl: './exercise-selector.html',
   styleUrl: './exercise-selector.css',
@@ -58,26 +54,15 @@ export class ExerciseSelector {
   private readonly data: { session: Session } = inject(MAT_DIALOG_DATA);
   private readonly libraryStore = inject(LibraryStore);
 
-  protected readonly skillOptions = computed(() => [
-    ...this.libraryStore.favouriteSkillsWithExercises(),
-    ...this.libraryStore.remainingSkillsWithExercises(),
-  ]);
-  protected readonly activeSkill = linkedSignal<string | undefined>(
-    () => this.data.session.skillId,
-  );
   protected readonly hasNoneSelected = computed(() => this.selectedExerciseIds().length === 0);
   protected readonly selectedExerciseIds = signal<string[]>([]);
   private readonly activeExerciseIds = new Set(
     this.data.session.exerciseLogs.map(({ exerciseId }) => exerciseId),
   );
   private readonly availableExercises = computed(() => {
-    const skillId = this.activeSkill();
-
-    const exercises = (
-      skillId
-        ? (this.libraryStore.exerciseBySkillId().get(skillId) ?? [])
-        : this.libraryStore.exercises()
-    ).filter(({ id }) => !this.activeExerciseIds.has(id));
+    const exercises = this.libraryStore
+      .exercises()
+      .filter(({ id }) => !this.activeExerciseIds.has(id));
 
     const activeSort = this.sortOptions().find((option) => option.active)?.id;
 
@@ -101,13 +86,12 @@ export class ExerciseSelector {
     ),
   );
 
-  protected readonly showFilters = signal(false);
   protected readonly showSorting = signal(false);
   protected readonly sortOptions = signal([
     { icon: 'sort_by_alpha', id: 'alphabetical', active: true },
     { icon: 'history', id: 'last-performed-at', active: false },
   ]);
-  protected readonly sortDirection = signal<'ASC' | 'DESC'>('DESC');
+  protected readonly sortDirection = signal<'ASC' | 'DESC'>('ASC');
   protected readonly sortDirectionIcon = computed(() =>
     this.sortDirection() === 'ASC' ? 'arrow_upward' : 'arrow_downward',
   );
@@ -116,10 +100,6 @@ export class ExerciseSelector {
     this.selectedExerciseIds.set(
       selectionListChange.source.selectedOptions.selected.map((option) => option.value),
     );
-  }
-
-  protected toggleFilters(): void {
-    this.showFilters.update((show) => !show);
   }
 
   protected toggleSorting(): void {
@@ -134,9 +114,5 @@ export class ExerciseSelector {
 
   protected toggleSortDirection(): void {
     this.sortDirection.update((dir) => (dir === 'ASC' ? 'DESC' : 'ASC'));
-  }
-
-  protected handleSkillChange({ value }: MatChipListboxChange): void {
-    this.activeSkill.set(value);
   }
 }

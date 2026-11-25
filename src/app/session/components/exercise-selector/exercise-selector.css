@@ -27,17 +27,6 @@
     max-height: unset;
   }
 
-
-  .skill-filters {
-    display: flex;
-    overflow: auto hidden;
-    gap: var(--space-3);
-
-    mat-chip {
-      min-width: fit-content;
-    }
-  }
-
   .sort-options {
     display: flex;
     flex-wrap: wrap;

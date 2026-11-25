@@ -1,21 +1,9 @@
 <header class="header">
   <h2 mat-dialog-title>Exercises</h2>
-  <button matMiniFab (click)="toggleFilters()">
-    <mat-icon>filter_list</mat-icon>
-  </button>
   <button matMiniFab (click)="toggleSorting()">
     <mat-icon>sort</mat-icon>
   </button>
-    <div class="skill-filters">
-      <mat-chip-listbox [value]="activeSkill()" [hideSingleSelectionIndicator]="true" [multiple]="false"
-                        aria-label="Skill selection" (change)="handleSkillChange($event)">
-        @for (option of skillOptions(); track option.id) {
-          <mat-chip-option [value]="option.id">{{ option.name }}</mat-chip-option>
-        }
-      </mat-chip-listbox>
-    </div>
-
-  @if (showFilters() && showSorting()) {
+  @if (showSorting()) {
     <mat-divider class="full-width" />
   }
 

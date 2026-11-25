@@ -40,20 +40,6 @@
           </mat-chip-set>
         </section>
 
-
-        <mat-divider />
-
-        <section class="section"><h3>Skills</h3>
-          <mat-chip-set>
-
-            @for (skill of exercise.skills; track skill.id) {
-              <mat-chip [routerLink]="['/library', 'skills', skill.id]">{{ skill.name }}</mat-chip>
-            } @empty {
-              <mat-chip>None</mat-chip>
-            }
-          </mat-chip-set>
-        </section>
-
       </mat-card-content>
     </mat-card>
 
@@ -79,11 +65,6 @@
   </main>
 
   <footer class="footer">
-    <button matFab extended [routerLink]="['/library', 'skills']">
-      <mat-icon>trophy</mat-icon>
-      Skills
-    </button>
-
     <button matFab extended [routerLink]="['/library', 'exercises']">
       <mat-icon>fitness_center</mat-icon>
       Exercises

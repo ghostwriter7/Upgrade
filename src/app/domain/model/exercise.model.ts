@@ -7,7 +7,6 @@ export interface Exercise {
 
   unitsOfMeasurement: ExerciseSetType[] | null;
   isFavourite: boolean;
-  skillIds: string[];
 
   measurementDefinition?: AngleMeasurementDefinition;
 
@@ -19,5 +18,5 @@ export interface Exercise {
 
 export type UpsertExercisePayload = Pick<
   Exercise,
-  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite' | 'skillIds'
+  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite'
 >;

@@ -18,7 +18,6 @@ interface ExerciseModel {
   name: string;
   unitsOfMeasurement: ExerciseSetType[];
   isFavourite: boolean;
-  skillIds: string[];
 }
 
 @Component({
@@ -53,7 +52,6 @@ export default class ExerciseEditor {
   protected readonly originalName = computed(() => this.originalExercise()?.name);
 
   private readonly libraryStore = inject(LibraryStore);
-  protected readonly skills = this.libraryStore.skills;
   protected readonly navigateBackUrl = computed(() =>
     this.id() ? ['/exercises', this.id()] : ['/exercises'],
   );
@@ -67,7 +65,6 @@ export default class ExerciseEditor {
     name: '',
     unitsOfMeasurement: [],
     isFavourite: false,
-    skillIds: [],
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
@@ -100,7 +97,6 @@ export default class ExerciseEditor {
             name: exercise.name,
             unitsOfMeasurement: exercise.unitsOfMeasurement ?? [],
             isFavourite: exercise.isFavourite,
-            skillIds: exercise.skillIds ?? [],
           });
           ref.destroy();
         }
@@ -115,8 +111,8 @@ export default class ExerciseEditor {
 
     const id = this.id() ?? createNanoId();
 
-    const { name, unitsOfMeasurement, isFavourite, skillIds } = this.model();
-    const exercise: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, skillIds };
+    const { name, unitsOfMeasurement, isFavourite } = this.model();
+    const exercise: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite };
 
     if (isEdit) {
       this.libraryStore.updateExercise(exercise);

@@ -48,28 +48,8 @@ export const routes: Routes = [
     loadComponent: () => import('./library/components/exercise-view/exercise-view'),
   },
   {
-    path: 'library/targets',
-    loadComponent: () => import('./library/components/target-page/target-page'),
-  },
-  {
     path: 'library',
     loadComponent: () => import('./library/components/library-page/library-page'),
-  },
-  {
-    path: 'library/skills',
-    loadComponent: () => import('./library/components/skill-page/skill-page'),
-  },
-  {
-    path: 'library/skills/new',
-    loadComponent: () => import('./library/components/skill-form/skill-form'),
-  },
-  {
-    path: 'library/skills/edit/:skillId',
-    loadComponent: () => import('./library/components/skill-form/skill-form'),
-  },
-  {
-    path: 'library/skills/:skillId',
-    loadComponent: () => import('./library/components/skill-details/skill-details'),
   },
   {
     path: 'habits',

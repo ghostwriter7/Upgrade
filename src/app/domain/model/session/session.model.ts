@@ -25,7 +25,6 @@ export class Session {
   public finishedAt: Temporal.Instant | null = null;
   public exerciseIds: string[] = [];
   public rpe: number | null = null;
-  public skillId?: string;
 
   constructor(public readonly id: string) {}
 

@@ -50,14 +50,9 @@ export default class ExerciseView {
 
     if (!exercise) return null;
 
-    const skillsById = this.libraryStore.skillsById();
     return {
       ...exercise,
       unitsOfMeasurement: (exercise.unitsOfMeasurement ?? []).map((unit) => SetType[unit]),
-      skills: exercise.skillIds?.map((skillId) => ({
-        name: skillsById[skillId].name,
-        id: skillId,
-      })),
     };
   });
   private readonly queryBus = inject(QueryBus);

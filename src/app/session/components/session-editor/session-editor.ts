@@ -18,7 +18,6 @@ import { CreateSessionCommand } from '../../commands/create-session/create-sessi
 })
 export default class SessionEditor implements OnInit, OnDestroy {
   public isNew = input(false);
-  public skillId = input<string>();
 
   private readonly sessionStateHolder = inject(SessionStateHolder);
   private readonly sessionStore = inject(SessionStore);
@@ -28,7 +27,7 @@ export default class SessionEditor implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     if (this.isNew()) {
-      this.commandBus.dispatch(new CreateSessionCommand(this.skillId()));
+      this.commandBus.dispatch(new CreateSessionCommand());
     }
   }
 

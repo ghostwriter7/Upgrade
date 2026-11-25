@@ -134,3 +134,15 @@ select skill_id, exercise_id
 from skill_exercise_old;
 drop table skill_exercise_old;
 pragma foreign_keys = on;
+
+-- @changeset 7
+drop table if exists skill_exercise;
+
+-- @changeset 8
+drop table if exists target;
+
+-- @changeset 9
+drop table if exists skill_capability;
+drop table if exists exercise_capability;
+drop table if exists capability;
+drop table if exists skill;
