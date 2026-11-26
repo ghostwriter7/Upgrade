@@ -37,6 +37,17 @@
         }
       </mat-select>
     </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Type</mat-label>
+      <mat-select [formField]="form.type">
+        @for (type of types; track type.value) {
+          <mat-option [value]="type.value">
+            {{ type.label }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
   </section>
 
 </main>

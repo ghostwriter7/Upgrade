@@ -13,12 +13,18 @@ import { MatSelect } from '@angular/material/select';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { FormsModule } from '@angular/forms';
+import {
+  EXERCISE_TYPE_LABELS,
+  EXERCISE_TYPES,
+  ExerciseType,
+} from '@domain/enum/exercise-types.enum';
 
 interface ExerciseModel {
   name: string;
   unitsOfMeasurement: ExerciseSetType[];
   isFavourite: boolean;
   status: 'active' | 'archived';
+  type: ExerciseType;
 }
 
 @Component({
@@ -55,6 +61,10 @@ export default class ExerciseEditor {
     { label: 'Active', value: 'active' },
     { label: 'Archived', value: 'archived' },
   ];
+  protected readonly types = EXERCISE_TYPES.map((type) => ({
+    value: type,
+    label: EXERCISE_TYPE_LABELS[type],
+  }));
   private readonly libraryStore = inject(LibraryStore);
   protected readonly navigateBackUrl = computed(() =>
     this.id() ? ['/exercises', this.id()] : ['/exercises'],
@@ -70,6 +80,7 @@ export default class ExerciseEditor {
     unitsOfMeasurement: [],
     isFavourite: false,
     status: 'active',
+    type: 'strength',
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
@@ -103,6 +114,7 @@ export default class ExerciseEditor {
             unitsOfMeasurement: exercise.unitsOfMeasurement ?? [],
             isFavourite: exercise.isFavourite,
             status: exercise.status,
+            type: exercise.type,
           });
           ref.destroy();
         }
@@ -117,8 +129,15 @@ export default class ExerciseEditor {
 
     const id = this.id() ?? createNanoId();
 
-    const { name, unitsOfMeasurement, isFavourite, status } = this.model();
-    const exercise: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, status };
+    const { name, unitsOfMeasurement, isFavourite, status, type } = this.model();
+    const exercise: UpsertExercisePayload = {
+      name,
+      id,
+      unitsOfMeasurement,
+      isFavourite,
+      status,
+      type,
+    };
 
     if (isEdit) {
       this.libraryStore.updateExercise(exercise);

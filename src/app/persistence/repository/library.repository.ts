@@ -28,8 +28,8 @@ export class LibraryRepository extends Repository {
                                                           e.units_of_measurement as unitsOfMeasurement,
                                                           e.is_favourite         as isFavourite,
                                                           e.status               as status,
+                                                          e.type                 as type,
                                                           max(el.created_at)     as lastPerformedAt
-
                                                    from exercise e
                                                             left join exercise_log el on e.id = el.exercise_id
                                                    group by e.id, e.name, e.units_of_measurement, e.is_favourite, e.status

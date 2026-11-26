@@ -152,3 +152,6 @@ alter table session drop column rpe;
 
 -- @changeset 11
 alter table exercise add column status text not null default 'active';
+
+-- @changeset 12
+alter table exercise add column type text not null default 'strength';

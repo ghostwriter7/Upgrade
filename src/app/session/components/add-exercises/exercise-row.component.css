@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  margin: 0 12px 2px;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 58px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &.selected {
+    background: var(--ae-selected-bg, #14213a);
+    border-color: var(--ae-selected-border, #2b5aa3);
+  }
+
+  &:has(input:focus-visible) {
+    outline: 2px solid var(--ae-accent, #8ea4d8);
+    outline-offset: 2px;
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.tile {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--ae-tile-strength-bg, #1a2a47);
+  color: var(--ae-tile-strength-fg, #8ea4d8);
+
+  &[data-type='isometric'] {
+    background: var(--ae-tile-isometric-bg, #14302d);
+    color: var(--ae-tile-isometric-fg, #6fd3b0);
+  }
+  &[data-type='flexibility'] {
+    background: var(--ae-tile-flexibility-bg, #2a2340);
+    color: var(--ae-tile-flexibility-fg, #b9a4f0);
+  }
+  &[data-type='skill'] {
+    background: var(--ae-tile-skill-bg, #3a3520);
+    color: var(--ae-tile-skill-fg, #e6dc4a);
+  }
+}
+
+.ic {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.text {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ae-text, #e3e6ee);
+}
+
+.name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fav {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  fill: var(--ae-fav, #e6dc4a);
+}
+
+.meta {
+  display: block;
+  margin-top: 1px;
+  font-size: 12px;
+  color: var(--ae-muted, #8b909c);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .overdue {
+    color: var(--ae-amber, #e0b24a);
+  }
+}
+
+.check {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 26px;
+  height: 26px;
+  border: 2px solid var(--ae-check-border, #4a5160);
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ae-on-accent, #0f1013);
+
+  .selected & {
+    background: var(--ae-accent, #8ea4d8);
+    border-color: var(--ae-accent, #8ea4d8);
+  }
+}

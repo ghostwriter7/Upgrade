@@ -1,5 +1,6 @@
 import { AngleMeasurementDefinition } from '@domain/interface/angle-measurement-definition.interface';
 import { ExerciseSetType } from '@domain/model/exercise-set/exercise-set.model';
+import { ExerciseType } from '@domain/enum/exercise-types.enum';
 
 export interface Exercise {
   id: string;
@@ -16,9 +17,10 @@ export interface Exercise {
   };
 
   status: 'active' | 'archived';
+  type: ExerciseType;
 }
 
 export type UpsertExercisePayload = Pick<
   Exercise,
-  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite' | 'status'
+  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite' | 'status' | 'type'
 >;

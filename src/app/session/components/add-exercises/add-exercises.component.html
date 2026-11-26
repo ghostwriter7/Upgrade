@@ -1,0 +1,203 @@
+<section class="sheet" aria-labelledby="ae-title">
+  <div class="handle" aria-hidden="true"></div>
+
+  <header class="head">
+    <div>
+      <h1 id="ae-title">Add exercises</h1>
+      <p>Select for this session</p>
+    </div>
+    <button type="button" matIconButton (click)="cancelled.emit()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </header>
+
+  <div class="search-row">
+    <div class="search">
+      <mat-icon>search</mat-icon>
+      <input
+        placeholder="Search name, type, muscle…"
+        aria-label="Search exercises"
+        autocomplete="off"
+        [value]="query()"
+        (input)="onQuery($event)"
+      />
+      @if (query()) {
+        <button type="button" matIconButton aria-label="Clear search" (click)="query.set('')">
+          <mat-icon>close</mat-icon>
+        </button>
+      }
+    </div>
+
+    @if (hasAdvancedFilters()) {
+      <button
+        type="button"
+        class="icon-btn primary big"
+        aria-label="More filters"
+        aria-controls="ae-advanced"
+        [attr.aria-expanded]="advancedOpen()"
+        (click)="advancedOpen.set(!advancedOpen())"
+      >
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4" /></svg>
+        @if (advancedCount() > 0) {
+          <span class="badge">{{ advancedCount() }}</span>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Quick filters -->
+  <div class="chips-wrap">
+    <div class="chips" role="group" aria-label="Quick filters">
+      <button type="button" class="chip" [class.on]="onlyFavourites()" [attr.aria-pressed]="onlyFavourites()" (click)="toggleFavourites()">
+        @if (onlyFavourites()) {
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+        } @else {
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.9 6.8 19.7l1-5.9L3.5 9.7l5.9-.8z" /></svg>
+        }
+        Favourites
+      </button>
+
+      <button type="button" class="chip" [class.on]="onlyRecent()" [attr.aria-pressed]="onlyRecent()" (click)="toggleRecent()">
+        @if (onlyRecent()) {
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+        } @else {
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v4h4M12 8v4l3 2" /></svg>
+        }
+        Recent
+      </button>
+
+      <button type="button" class="chip" [class.on]="onlyOverdue()" [attr.aria-pressed]="onlyOverdue()" (click)="toggleOverdue()">
+        @if (onlyOverdue()) {
+          <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+        } @else {
+          <span class="dot" aria-hidden="true"></span>
+        }
+        Overdue
+      </button>
+
+      @for (t of availableTypes(); track t) {
+        <button type="button" class="chip" [class.on]="types().has(t)" [attr.aria-pressed]="types().has(t)" (click)="toggleType(t)">
+          @if (types().has(t)) {
+            <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+          }
+          {{ typeLabels[t] }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Advanced filters (opened by the filter button) -->
+  @if (advancedOpen() && hasAdvancedFilters()) {
+    <div class="advanced" id="ae-advanced">
+      @if (availableMuscles().length > 0) {
+        <div class="adv-group" role="group" aria-labelledby="ae-adv-muscle">
+          <h3 id="ae-adv-muscle">Muscle group</h3>
+          <div class="adv-chips">
+            @for (m of availableMuscles(); track m) {
+              <button type="button" class="chip" [class.on]="muscles().has(m)" [attr.aria-pressed]="muscles().has(m)" (click)="toggleMuscle(m)">{{ m }}</button>
+            }
+          </div>
+        </div>
+      }
+      @if (availableEquipment().length > 0) {
+        <div class="adv-group" role="group" aria-labelledby="ae-adv-equipment">
+          <h3 id="ae-adv-equipment">Equipment</h3>
+          <div class="adv-chips">
+            @for (q of availableEquipment(); track q) {
+              <button type="button" class="chip" [class.on]="equipment().has(q)" [attr.aria-pressed]="equipment().has(q)" (click)="toggleEquipment(q)">{{ q }}</button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Result count + sort -->
+  <div class="sort-row">
+    <div class="count" aria-live="polite">
+      {{ resultLabel() }}
+      @if (hasActiveFilters()) {
+        · <button type="button" matButton (click)="clearFilters()">Clear filters</button>
+      }
+    </div>
+
+    <div class="sort">
+      <button type="button" matFab extended (click)="toggleSortMenu()">
+        <mat-icon>sort</mat-icon>
+        {{ sortLabel() }}
+        @if (isDescending()) {
+          <mat-icon iconPositionEnd>arrow_downward</mat-icon>
+        } @else {
+          <mat-icon iconPositionEnd>arrow_upward</mat-icon>
+        }
+      </button>
+
+      @if (sortMenuOpen()) {
+        <div class="menu-backdrop" (click)="closeMenus()"></div>
+        <div class="menu" role="menu">
+          @for (opt of sortOptions; track opt.key) {
+            <button type="button" role="menuitemradio" (click)="chooseSort(opt.key)">
+              <span>{{ opt.label }}</span>
+              @if (sortKey() === opt.key) {
+                <span class="hint">{{ sortDir() === 'asc' ? opt.asc : opt.desc }}</span>
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Grouped list -->
+  <div class="list">
+    @for (group of groups(); track group.id) {
+      <section [attr.aria-labelledby]="'ae-g-' + group.id">
+        <h2 class="group" [class.overdue]="group.overdue" [id]="'ae-g-' + group.id">
+          @if (group.overdue) {
+            <span class="dot" aria-hidden="true"></span>
+          }
+          {{ group.label }}
+          <em>{{ group.rows.length }}</em>
+        </h2>
+        @for (row of group.rows; track row.exercise.id) {
+          <app-exercise-row
+            [exercise]="row.exercise"
+            [lastDoneText]="lastDoneText(row.days)"
+            [overdue]="isOverdue(row.days)"
+            [order]="selectedOrder().get(row.exercise.id) ?? null"
+            (toggled)="toggleSelected(row.exercise.id)"
+          />
+        }
+      </section>
+    } @empty {
+      <div class="empty">
+        <p>No exercises match your search and filters.</p>
+        @if (hasActiveFilters()) {
+          <button type="button" matButton (click)="clearFilters()">Clear filters</button>
+        }
+      </div>
+    }
+  </div>
+
+  <footer class="bar">
+    <div class="summary">
+      <span class="names">
+        @if (hasAnySelected()) {
+          <strong>{{ selectedCount() }} selected</strong> · {{ selectedNames() }}
+        } @else {
+          <strong>None selected</strong>
+        }
+      </span>
+      @if (hasAnySelected()) {
+        <button type="button" matButton (click)="clearSelection()">Clear</button>
+      }
+    </div>
+    <div class="actions">
+      <button type="button" matButton (click)="cancelled.emit()">Cancel</button>
+      <button type="button" class="flex-grow" matFab extended [disabled]="!hasAnySelected()" (click)="confirm()">
+        <mat-icon>check</mat-icon>
+        {{ addLabel() }}
+      </button>
+    </div>
+  </footer>
+</section>

@@ -11,6 +11,7 @@ const exercise = (id: string, name: string): Exercise => ({
   },
   isFavourite: false,
   status: 'active',
+  type: 'strength',
 });
 
 export const createExerciseStoreMock = () => ({

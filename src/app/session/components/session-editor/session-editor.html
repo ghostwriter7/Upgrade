@@ -9,7 +9,18 @@
     />
   }
 
-  <app-session-actions />
+  <app-session-actions (showExercises)="showAddExercises.set(true)" />
 </div>
 
 <app-timer />
+
+@if (showAddExercises()) {
+  <app-add-exercises
+    [exercises]="exercises()"
+    (confirmed)="onAddExercises($event)"
+    (cancelled)="showAddExercises.set(false)"
+  />
+}
+
+<!--(confirmed)="onAdd($event)"-->
+<!--(createRequested)="openCreateForm($event)"-->
