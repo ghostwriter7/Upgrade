@@ -61,7 +61,7 @@ export class ExerciseSelector {
   );
   private readonly availableExercises = computed(() => {
     const exercises = this.libraryStore
-      .exercises()
+      .activeExercises()
       .filter(({ id }) => !this.activeExerciseIds.has(id));
 
     const activeSort = this.sortOptions().find((option) => option.active)?.id;
