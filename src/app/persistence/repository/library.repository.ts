@@ -13,6 +13,7 @@ const toPayload = (exercise: UpsertExercisePayload) => ({
     ? JSON.stringify(exercise.unitsOfMeasurement)
     : null,
   isFavourite: exercise.isFavourite,
+  status: exercise.status,
 });
 
 @Service()
@@ -26,11 +27,12 @@ export class LibraryRepository extends Repository {
                                                           e.name,
                                                           e.units_of_measurement as unitsOfMeasurement,
                                                           e.is_favourite         as isFavourite,
+                                                          e.status               as status,
                                                           max(el.created_at)     as lastPerformedAt
 
                                                    from exercise e
                                                             left join exercise_log el on e.id = el.exercise_id
-                                                   group by e.id, e.name, e.units_of_measurement, e.is_favourite
+                                                   group by e.id, e.name, e.units_of_measurement, e.is_favourite, e.status
     `);
     return results.map((r) => ExerciseSchema.parse(r));
   }
@@ -44,7 +46,7 @@ export class LibraryRepository extends Repository {
 
   public updateExercise(exercise: UpsertExercisePayload): Promise<void> {
     return this.database.execute(
-      `update exercise set name = :name, units_of_measurement = :unitsOfMeasurement, is_favourite = :isFavourite where id = :id`,
+      `update exercise set name = :name, units_of_measurement = :unitsOfMeasurement, is_favourite = :isFavourite, status = :status where id = :id`,
       toPayload(exercise),
     );
   }

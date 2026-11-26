@@ -18,6 +18,7 @@ interface ExerciseModel {
   name: string;
   unitsOfMeasurement: ExerciseSetType[];
   isFavourite: boolean;
+  status: 'active' | 'archived';
 }
 
 @Component({
@@ -50,7 +51,10 @@ export default class ExerciseEditor {
     this.libraryStore.exercises().find((exercise) => exercise.id === this.id()),
   );
   protected readonly originalName = computed(() => this.originalExercise()?.name);
-
+  protected readonly statuses = [
+    { label: 'Active', value: 'active' },
+    { label: 'Archived', value: 'archived' },
+  ];
   private readonly libraryStore = inject(LibraryStore);
   protected readonly navigateBackUrl = computed(() =>
     this.id() ? ['/exercises', this.id()] : ['/exercises'],
@@ -65,6 +69,7 @@ export default class ExerciseEditor {
     name: '',
     unitsOfMeasurement: [],
     isFavourite: false,
+    status: 'active',
   });
 
   protected readonly form = form(this.model, (schemaPath) => {
@@ -97,6 +102,7 @@ export default class ExerciseEditor {
             name: exercise.name,
             unitsOfMeasurement: exercise.unitsOfMeasurement ?? [],
             isFavourite: exercise.isFavourite,
+            status: exercise.status,
           });
           ref.destroy();
         }
@@ -111,8 +117,8 @@ export default class ExerciseEditor {
 
     const id = this.id() ?? createNanoId();
 
-    const { name, unitsOfMeasurement, isFavourite } = this.model();
-    const exercise: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite };
+    const { name, unitsOfMeasurement, isFavourite, status } = this.model();
+    const exercise: UpsertExercisePayload = { name, id, unitsOfMeasurement, isFavourite, status };
 
     if (isEdit) {
       this.libraryStore.updateExercise(exercise);

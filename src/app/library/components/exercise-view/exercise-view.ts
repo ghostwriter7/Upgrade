@@ -6,13 +6,15 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardTitle } from '@angular/m
 import { ExerciseLogSummary } from '@session/components/exercise-log-summary/exercise-log-summary';
 import { ProgressGallery } from '@session/components/progress-gallery/progress-gallery';
 import { MatDivider } from '@angular/material/list';
-import { MatFabButton } from '@angular/material/button';
+import { MatMiniFabButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { Router, RouterLink } from '@angular/router';
 import { LibraryStore } from '@store/library.store';
 import { SetType } from '@domain/enum/set-type.enum';
 import { MatChip, MatChipSet } from '@angular/material/chips';
 import { Confirm } from '@ui/confirm/confirm';
+import { ExerciseRemover } from '@library/services/exercise-remover';
+import { Status } from '@domain/enum/status.enum';
 
 @Component({
   selector: 'app-exercise-view',
@@ -24,13 +26,13 @@ import { Confirm } from '@ui/confirm/confirm';
     MatCardContent,
     MatCardHeader,
     MatDivider,
-    MatFabButton,
     MatIcon,
     RouterLink,
     MatCardTitle,
     MatChipSet,
     MatChip,
     Confirm,
+    MatMiniFabButton,
   ],
   templateUrl: './exercise-view.html',
   styleUrl: './exercise-view.css',
@@ -42,9 +44,14 @@ export default class ExerciseView {
   public id = input.required<string>();
 
   private readonly libraryStore = inject(LibraryStore);
-  protected readonly confirmDeleteMessage = computed(
-    () => `Are you sure you want to permanently delete "${this.exercise()?.name}"?`,
+  protected readonly isActive = computed(() => this.exercise()?.status === Status.active);
+  protected readonly confirmDeleteMessage = computed(() =>
+    this.hasNoLogs()
+      ? `Are you sure you want to permanently delete "${this.exercise()?.name}"?`
+      : `Do you want to archive "${this.exercise()?.name}"?`,
   );
+  private readonly exerciseRemover = inject(ExerciseRemover);
+  protected readonly deleteIcon = computed(() => (this.hasNoLogs() ? 'delete' : 'archive'));
   protected readonly exercise = computed(() => {
     const exercise = this.libraryStore.exerciseById()[this.id()];
 
@@ -53,6 +60,7 @@ export default class ExerciseView {
     return {
       ...exercise,
       unitsOfMeasurement: (exercise.unitsOfMeasurement ?? []).map((unit) => SetType[unit]),
+      status: Status[exercise.status],
     };
   });
   private readonly queryBus = inject(QueryBus);
@@ -67,7 +75,7 @@ export default class ExerciseView {
   private readonly router = inject(Router);
 
   protected deleteExercise(): void {
-    this.libraryStore.deleteExercise(this.exercise()!);
+    this.exerciseRemover.removeById(this.id()!);
     this.router.navigate(['/exercises']);
   }
 }

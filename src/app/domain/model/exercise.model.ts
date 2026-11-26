@@ -14,9 +14,11 @@ export interface Exercise {
     lastPerformedAt: Temporal.Instant | null;
     lastPerformedHoursAgo: number | null;
   };
+
+  status: 'active' | 'archived';
 }
 
 export type UpsertExercisePayload = Pick<
   Exercise,
-  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite'
+  'name' | 'id' | 'unitsOfMeasurement' | 'isFavourite' | 'status'
 >;

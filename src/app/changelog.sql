@@ -149,3 +149,6 @@ drop table if exists skill;
 
 -- @changeset 10
 alter table session drop column rpe;
+
+-- @changeset 11
+alter table exercise add column status text not null default 'active';

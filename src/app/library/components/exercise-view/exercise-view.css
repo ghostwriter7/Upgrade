@@ -17,6 +17,13 @@
   overflow-y: auto;
 }
 
+.exercise-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: var(--space-3);
+}
+
 .metadata {
   display: flex;
   flex-direction: column;

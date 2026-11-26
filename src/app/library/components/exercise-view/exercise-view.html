@@ -2,28 +2,30 @@
   <app-loader />
 } @else if (exercise(); as exercise) {
   <header class="header">
-
-    @if (hasNoLogs()) {
-      <button matFab extended class="danger" commandfor="confirm" command="show-modal">
-        <mat-icon>delete</mat-icon>
-        Delete
+    @if (isActive()) {
+      <button matMiniFab class="danger" commandfor="confirm" command="show-modal">
+        <mat-icon>{{ deleteIcon() }}</mat-icon>
       </button>
     }
 
-    <button matFab extended [routerLink]="['/exercises', 'edit', id()]">
+    <button matMiniFab [routerLink]="['/exercises', 'edit', id()]">
       <mat-icon>edit</mat-icon>
-      Edit
     </button>
   </header>
 
   <main class="main">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>{{ exercise.name }}</mat-card-title>
+        <div class="exercise-header">
+          <mat-card-title>{{ exercise.name }}</mat-card-title>
 
-        @if (exercise.isFavourite) {
-          <mat-icon class="ml-auto">star</mat-icon>
-        }
+          <mat-chip>
+            {{ exercise.status }}
+          </mat-chip>
+
+          @if (exercise.isFavourite) {
+            <mat-icon class="ml-auto">star</mat-icon>
+          }</div>
 
       </mat-card-header>
       <mat-card-content class="metadata">

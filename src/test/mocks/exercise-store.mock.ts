@@ -10,6 +10,7 @@ const exercise = (id: string, name: string): Exercise => ({
     lastPerformedHoursAgo: null,
   },
   isFavourite: false,
+  status: 'active',
 });
 
 export const createExerciseStoreMock = () => ({

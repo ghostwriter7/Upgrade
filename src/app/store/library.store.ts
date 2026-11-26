@@ -23,6 +23,12 @@ export const LibraryStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withComputed((store) => ({
+    activeExercises: computed(() =>
+      store.exercises().filter((exercise) => exercise.status === 'active'),
+    ),
+    archivedExercises: computed(() =>
+      store.exercises().filter((exercise) => exercise.status === 'archived'),
+    ),
     exerciseNames: computed(
       () => new Set(store.exercises().map((exercise) => exercise.name.toLowerCase())),
     ),

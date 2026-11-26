@@ -1,19 +1,21 @@
-<mat-action-list>
-
-  @if (hasFavouriteExercises()) {
-    <div mat-subheader class="flex-container">
-      <mat-icon>star</mat-icon>
-      Favourite
-    </div>
-    @for (exercise of favouriteExercises(); track exercise.id) {
-      <button mat-list-item (click)="exerciseSelected.emit(exercise.id)">{{ exercise.name }}</button>
-    }
-
-    <mat-divider />
-    <div mat-subheader>All</div>
+@for (entry of entries(); track entry.label) {
+  @if (entry.isVisible) {
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <div class="header">
+            <mat-icon>{{ entry.icon }}</mat-icon>
+            {{  entry.label }}
+          </div>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-action-list>
+          @for (exercise of entry.entries; track exercise.id) {
+            <button mat-list-item (click)="exerciseSelected.emit(exercise.id)">{{ exercise.name }}</button>
+          }
+        </mat-action-list>
+      </mat-card-content>
+    </mat-card>
   }
-
-  @for (exercise of remainingExercises(); track exercise.id) {
-    <button mat-list-item (click)="exerciseSelected.emit(exercise.id)">{{ exercise.name }}</button>
-  }
-</mat-action-list>
+}
