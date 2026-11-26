@@ -1,6 +1,5 @@
 import {
   Component,
-  OnInit,
   WritableSignal,
   computed,
   input,
@@ -22,7 +21,7 @@ import {
   EXERCISE_TYPES,
   ExerciseType,
 } from '@domain/enum/exercise-types.enum';
-import { MatButton, MatFabButton, MatIconButton, MatMiniFabButton } from '@angular/material/button';
+import { MatButton, MatFabButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
 interface SortOption {
@@ -53,21 +52,16 @@ interface SortOption {
     MatButton,
     MatFabButton,
     MatIcon,
-    MatMiniFabButton,
     MatIconButton,
   ],
   templateUrl: './add-exercises.component.html',
   styleUrl: './add-exercises.component.css',
-  host: { '(keydown.escape)': 'closeMenus()' },
 })
-export class AddExercisesComponent implements OnInit {
+export class AddExercisesComponent {
   /* ------------------------------ inputs ------------------------------ */
 
   /** Every exercise the user can pick from. */
   readonly exercises = input.required<readonly ExerciseOption[]>();
-
-  /** Ids ticked when the view opens, in session order. Read once on init. */
-  readonly initialSelectedIds = input<readonly string[]>([]);
 
   /** Optional thresholds; see AddExercisesConfig. */
   readonly config = input<Partial<AddExercisesConfig>>({});
@@ -192,11 +186,6 @@ export class AddExercisesComponent implements OnInit {
   protected readonly isOverdue = (days: number | null) =>
     days !== null && days > this.cfg().overdueDays;
 
-  protected readonly sortPillLabel = computed(() => {
-    const opt = this.sortOptions.find((o) => o.key === this.sortKey())!;
-    return `Sort by ${opt.label.toLowerCase()}, ${this.sortDir() === 'asc' ? opt.asc : opt.desc}`;
-  });
-
   /* ---------------------------- selection ----------------------------- */
 
   protected readonly selectedOrder = computed(
@@ -223,10 +212,6 @@ export class AddExercisesComponent implements OnInit {
     if (count === 1) return 'Add 1 exercise';
     return `Add ${count} exercises`;
   });
-
-  ngOnInit(): void {
-    this.selectedIds.set([...this.initialSelectedIds()]);
-  }
 
   /* ----------------------------- handlers ----------------------------- */
 
