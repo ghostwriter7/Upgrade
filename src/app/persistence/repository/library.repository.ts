@@ -14,6 +14,7 @@ const toPayload = (exercise: UpsertExercisePayload) => ({
     : null,
   isFavourite: exercise.isFavourite,
   status: exercise.status,
+  type: exercise.type,
 });
 
 @Service()
@@ -39,14 +40,14 @@ export class LibraryRepository extends Repository {
 
   public saveExercise(exercise: UpsertExercisePayload): Promise<void> {
     return this.database.execute(
-      `insert into exercise (id, name, units_of_measurement, is_favourite) values (:id, :name, :unitsOfMeasurement, :isFavourite)`,
+      `insert into exercise (id, name, units_of_measurement, is_favourite, type) values (:id, :name, :unitsOfMeasurement, :isFavourite, :type)`,
       toPayload(exercise),
     );
   }
 
   public updateExercise(exercise: UpsertExercisePayload): Promise<void> {
     return this.database.execute(
-      `update exercise set name = :name, units_of_measurement = :unitsOfMeasurement, is_favourite = :isFavourite, status = :status where id = :id`,
+      `update exercise set name = :name, units_of_measurement = :unitsOfMeasurement, is_favourite = :isFavourite, status = :status, type = :type where id = :id`,
       toPayload(exercise),
     );
   }
