@@ -15,6 +15,7 @@ import { MatChip, MatChipSet } from '@angular/material/chips';
 import { Confirm } from '@ui/confirm/confirm';
 import { ExerciseRemover } from '@library/services/exercise-remover';
 import { Status } from '@domain/enum/status.enum';
+import { EXERCISE_TYPE_LABELS } from '@domain/enum/exercise-types.enum';
 
 @Component({
   selector: 'app-exercise-view',
@@ -61,6 +62,7 @@ export default class ExerciseView {
       ...exercise,
       unitsOfMeasurement: (exercise.unitsOfMeasurement ?? []).map((unit) => SetType[unit]),
       status: Status[exercise.status],
+      type: EXERCISE_TYPE_LABELS[exercise.type],
     };
   });
   private readonly queryBus = inject(QueryBus);
