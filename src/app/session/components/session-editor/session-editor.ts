@@ -19,6 +19,9 @@ import { AddExerciseCommand } from '@session/commands/add-exercise/add-exercise.
   templateUrl: './session-editor.html',
   providers: [DialogService],
   styleUrl: './session-editor.css',
+  host: {
+    class: 'page'
+  }
 })
 export default class SessionEditor implements OnInit, OnDestroy {
   public isNew = input(false);
